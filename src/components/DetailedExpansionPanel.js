@@ -11,22 +11,31 @@ import Divider from '@material-ui/core/Divider';
 const styles = theme => ({
   root: {
     position: 'relative',
-    width: '400px',
-    left: '500px',
+    width: '40%',
+    left: '30%',
     right: '300px',
     justifyContent: 'flex-end',
-    alignItems: 'center'
-
+    alignItems: 'center',
   },
+
+  theme: {
+    color: 'rgb(255, 255, 255)',
+    background: 'linear-gradient(20deg, rgba(12, 12, 12, 0.85) 40%, rgba(12, 12, 12, 0.85)) 60%',
+    boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.30)',
+  },
+
   heading: {
+    color: 'rgb(255, 255, 255)',
     fontSize: theme.typography.pxToRem(15),
   },
   secondaryHeading: {
+    color: 'rgb(255, 255, 255)',
     fontSize: theme.typography.pxToRem(15),
     color: theme.palette.text.secondary,
   },
   details: {
     alignItems: 'center',
+    color: 'rgb(255, 255, 255)',
   },
 });
 
@@ -42,36 +51,50 @@ class DetailedExpansionPanel extends React.PureComponent {
     
     return (
       <div className={classes.root}>
-        <ExpansionPanel >
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+
+        <ExpansionPanel className={classes.theme}>
+
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon className={classes.details} />}>
+            
             <div style={{ alignItems: 'center' }} >
               <Typography className={classes.heading}>{panelName}</Typography>
             </div>
+
           </ExpansionPanelSummary>
 
           {(latLngDetail !== '') ?
+
             <ExpansionPanelDetails className={classes.details}>
-              <Typography>{latLngDetail}</Typography>
+              <Typography className={classes.details}> {latLngDetail} </Typography>
             </ExpansionPanelDetails>
+
             :
             null
           }
           {(disBtwDetail !== '') ?
+
             <ExpansionPanelDetails className={classes.details}>
-              <Typography>ระยะห่างระหว่างจุด : {disBtwDetail} เมตร</Typography>
+              <Typography className={classes.details} >
+              ระยะห่างระหว่างจุด : {disBtwDetail} เมตร</Typography>
             </ExpansionPanelDetails>
+
             :
             null
           }
           {(lengthDetail !== '') ?
+
             <ExpansionPanelDetails className={classes.details}>
-              <Typography>
+              
+              <Typography className={classes.details}>
                 ความยาวรวม : {lengthDetail} เมตร
               </Typography>
+
               {(areaDetail !== '') ?
-                <Typography>
+
+                <Typography className={classes.details}>
                   พื้นที่คือ : {areaDetail}
                 </Typography>
+
                 :
                 null
               }

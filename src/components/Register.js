@@ -49,42 +49,60 @@ class Register extends React.PureComponent {
         });
     }
     render() {
-        const { classes } = this.props;
-        return (
 
+        const { classes } = this.props;
+
+        return (
             <div className="loading container wrapper LoginFont">
+               
                 <p className="logo"><img src={logo} className="App-logo" alt="logo" />
+                    
                     <br /> สมัครสมาชิก </p>
+                
                 <div className="inputLogin">
                     <FormControl component="fieldset">
-                        <FormGroup>
+                        <FormGroup className="SetFrame">
                             <Grid container spacing={8} alignItems="flex-end">
+                               
                                 <Grid item>
                                     <AccountCircle />
                                 </Grid>
+                                
                                 <Grid item>
                                     <TextField value={this.state.email} onChange={this.handleChange} name="email" type="email" id="exampleInputEmail1" label="อีเมล" aria-describedby="emailHelp" />
                                 </Grid>
+                           
                             </Grid>
                         </FormGroup>
-                        <FormGroup>
+                        
+                        <FormGroup className="SetFrame">
                             <Grid container spacing={8} alignItems="flex-end">
+                                
                                 <Grid item>
                                     <Lock />
                                 </Grid>
+                                
                                 <Grid item>
                                     <TextField value={this.state.password} onChange={this.handleChange} name="password" type="password" id="exampleInputPassword1" label="ป้อนรหัสผ่าน" />
                                 </Grid>
+
                             </Grid>
                         </FormGroup>
+
                     </FormControl>
+
                 </div>
+
                 <br />
+
                 <div className="LoginButton">
-                    <button type="submit" onClick={this.registerU} className="loginBtn loginBtn--L">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ยืนยัน</button>
-                    <br /><br /><br /><br /><br /><br /><br />
+
+                    <button type="submit" onClick={this.registerU} className="loginBtnforEmail loginBtn--L">ยืนยัน</button>
+                    
                     <Button onClick={() => this.props.changePage('login')} className={classes.button}>ย้อนกลับ</Button>
+               
                 </div>
+              
                 <br />
             </div>
         )

@@ -7,7 +7,7 @@ class Map extends React.PureComponent {
         this.state = {
             isLoad: false,
             zoom: 15,
-            center: { lat: 13.0003076, lng: 100 },
+            center: { lat: 13.7648, lng: 100.5381 },
         }
     }
     componentWillMount() {

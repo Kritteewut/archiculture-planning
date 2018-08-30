@@ -3,15 +3,16 @@ import MyLocation from '@material-ui/icons/MyLocation';
 import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
     LOL: {
         position: 'absolute',
-        bottom: theme.spacing.unit * 5,
-        left: theme.spacing.unit,
-        color: 'white',
-        background: 'linear-gradient(45deg, blue 30%, blue 90%)',
-
+        bottom: theme.spacing.unit * 51,
+        left: theme.spacing.unit * 1.5,
+        color: 'rgb(255, 255, 255)',
+        background: 'linear-gradient(20deg, rgba(37, 37, 37, 0.85) 40%, rgba(0, 43, 161, 0.9)) 60%',
+        boxShadow: '0px 0px 0px 5px rgba(255, 255, 255, 0.60)',
     },
 })
 
@@ -65,9 +66,13 @@ class GeolocatedMe extends React.PureComponent {
         return (
             <div>
                 <Tooltip title="Your Location" placement="right">
-                    <IconButton className={classes.LOL} onClick={this.onGetGeolocation} >
+
+                    <Button variant="fab" className={classes.LOL} onClick={this.onGetGeolocation} >
+
                         <MyLocation />
-                    </IconButton>
+
+                    </Button>
+                    
                 </Tooltip>
             </div>
         )

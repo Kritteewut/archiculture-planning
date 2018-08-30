@@ -18,7 +18,14 @@ import Reset from './Reset';
 const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
+        color: 'rgb(0, 0, 0)',
+        fontSize: '16px',
     },
+
+    Theme: {
+        color: 'rgb(0, 0, 0)',
+    },
+
 });
 
 class Login extends React.PureComponent {
@@ -31,7 +38,7 @@ class Login extends React.PureComponent {
         };
     }
     componentWillMount() {
-        
+
     }
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
@@ -81,49 +88,80 @@ class Login extends React.PureComponent {
         switch (this.state.page) {
             case 'login':
                 return (
+
                     //loading container wrapper LoginFont
                     <div className="loading container wrapper LoginFont">
-                        <p className="logo"><img src={logo} className="App-logo" alt="logo" />
-                            <br /> Ling Map </p>
+
+                        <p className="logo TextWhite">
+
+                            <img src={logo} className="logo App-logo" alt="logo" />
+
+                            <br />
+
+                            Ling Map
+
+                        </p>
+
                         <div className="inputLogin">
+
                             <FormControl component="fieldset">
-                                <FormGroup>
+
+                                <FormGroup className="SetFrame">
+
                                     <Grid container spacing={8} alignItems="flex-end">
-                                        <Grid item>
+
+                                        <Grid className={classes.Theme} item>
                                             <AccountCircle />
                                         </Grid>
-                                        <Grid item>
-                                            <TextField value={this.state.email} onChange={this.handleChange} name="email" type="email" label="อีเมล" />
+
+                                        <Grid className={classes.Theme} item>
+                                            <TextField className="TextWhite" value={this.state.email} onChange={this.handleChange} name="email" type="email" label="อีเมล" />
                                         </Grid>
+
                                     </Grid>
+
                                 </FormGroup>
-                                <FormGroup>
+
+                                <FormGroup className="SetFrame">
+
                                     <Grid container spacing={8} alignItems="flex-end">
-                                        <Grid item>
+
+                                        <Grid className={classes.Theme} item>
                                             <Lock />
                                         </Grid>
+
                                         <Grid item>
                                             <TextField value={this.state.password} onChange={this.handleChange} name="password" type="password" label="ป้อนรหัสผ่าน" />
                                         </Grid>
+
                                     </Grid>
+
                                 </FormGroup>
+
                             </FormControl>
                         </div>
+
                         <br />
+
                         <div className="LoginButton">
-                            <button type="submit" onClick={this.loginEmail} className="loginBtn loginBtn--L">&nbsp;Log In with email</button>
+                            <button type="submit" onClick={this.loginEmail} className="loginBtnforEmail loginBtn--L">&nbsp;Log In with email</button>
+
                             <br />
-                            <p className='Or'> or </p>
+
+                            <p className='Or TextWhite'> or </p>
 
                             <button className="loginBtn loginBtn--facebook" onClick={this.loginFacebook}>Log In with Facebook</button>
                             <button className="loginBtn loginBtn--google" onClick={this.loginGoogle}>Log In with Google</button><br />
+
                         </div>
+
                         <br />
+
                         <div className="regisBtn">
                             <Button onClick={() => this.changePage('register')} className={classes.button}>สมัครสมาชิก</Button>
                             <Button onClick={() => this.changePage('reset')} className={classes.button}>ลืมรหัสผ่าน</Button>
                         </div>
-                        <br /> <br />
+
                     </div>
                 )
             case 'register':

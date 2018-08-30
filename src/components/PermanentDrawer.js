@@ -17,12 +17,13 @@ import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import OverlayOptions from './OverlayOptions';
 
+import './Design.css';
 
 const drawerWidth = '350px'
 
 const styles = theme => ({
     drawerPaper: {
-        position: 'relative',
+        //position: 'relative',
         width: drawerWidth,
     },
 });
@@ -72,10 +73,10 @@ class PermanentDrawer extends React.PureComponent {
                             )
                         })}
                         <Divider />
-                        <button onClick={this.props.onSaveToFirestore}>
+                        <button className="DesignButtonSave" onClick={this.props.onSaveToFirestore}>
                             บันทึก
                     </button>
-                        <button className="logout logout--L" onClick={this.logout}>
+                        <button className="DesignButtonLogout" onClick={this.logout}>
                             logout
                         </button>
                     </div>

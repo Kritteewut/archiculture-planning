@@ -41,30 +41,46 @@ class Reset extends React.PureComponent {
     render() {
 
         return (
+
             <div className="loading container wrapper LoginFont">
+
                 <p className="logo"><img src={logo} className="App-logo" alt="logo" />
+
                     <br /> กรอก Email ที่สมัคร
+
                     </p>
+
                 <div className="inputLogin">
+
                     <FormControl component="fieldset">
-                        <FormGroup>
+                        <FormGroup className="SetFrame">
+
                             <Grid container spacing={8} alignItems="flex-end">
+
                                 <Grid item>
                                     <AccountCircle />
                                 </Grid>
+
                                 <Grid item>
                                     <TextField value={this.state.email} onChange={this.handleChange} name="email" type="email" id="exampleInputEmail" label="อีเมล" />
                                 </Grid>
+
                             </Grid>
+
                         </FormGroup>
                     </FormControl>
+
                 </div>
-                <br /><br /><br />
+
+                <br />
+
                 <div className="LoginButton">
-                    <button type="submit" onClick={this.resetPass} className="loginBtn loginBtn--L">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ยืนยัน</button>
-                    <br /><br /><br /><br /><br /><br /><br /><br />
+
+                    <button type="submit" onClick={this.resetPass} className="loginBtnforEmail loginBtn--L">ยืนยัน</button>
+
                     <Button onClick={() => this.props.changePage('login')}>ย้อนกลับ</Button>
-                </div><br />
+
+                </div>
             </div >
         )
     }

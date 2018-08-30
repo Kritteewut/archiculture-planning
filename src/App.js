@@ -873,7 +873,7 @@ class App extends Component {
           height: '100%',
           width: '100%',
           overflow: 'hidden',
-          position: 'relative',
+          //position: 'relative',
           display: 'flex',
           zIndex: 1,
         }}

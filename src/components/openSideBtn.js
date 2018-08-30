@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
 
 const styles = theme => ({
     Menu: {
         position: 'absolute',
         top: theme.spacing.unit * 10,
-        left: theme.spacing.unit,
-        color: '#FFFFFF',
-        background: 'linear-gradient(45deg, #424242 30%, #585858 90%)',
-        boxShadow: '0 2px 4px 1px hsla(0, 0%, 0%, 0.27)'
-
+        left: theme.spacing.unit * 1.5,
+        color: 'rgb(255, 255, 255)',
+        background: 'linear-gradient(20deg, rgba(37, 37, 37, 0.85) 40%, rgba(0, 43, 161, 0.9)) 60%',
+        boxShadow: '0px 0px 0px 5px rgba(255, 255, 255, 0.60)',
     },
 })
 
@@ -32,10 +32,13 @@ class openSideBtn extends React.PureComponent {
     render() {
         const { classes } = this.props;
         return (
+
             <div >
-                <IconButton className={classes.Menu} onClick={this.onToggleDrawer} >
+
+                <Button variant="fab" className={classes.Menu} onClick={this.onToggleDrawer} >
                     <MenuIcon />
-                </IconButton>
+                </Button>
+                
             </div>
         )
     }

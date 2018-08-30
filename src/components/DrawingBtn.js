@@ -10,37 +10,45 @@ import Place from '@material-ui/icons/Place';
 // import Category from '@material-ui/icons/Category';
 
 const styles = theme => ({
-    buttonGrab: {
+    buttonComplete: {
         position: 'absolute',
-        bottom: theme.spacing.unit * 59,
-        right: theme.spacing.unit,
-        width: '125px'
+        bottom: theme.spacing.unit * 31,
+        left: theme.spacing.unit * 1.5,
+        width: '125px',
+        color: 'rgb(255, 255, 255)',
+        background: 'linear-gradient(20deg, rgba(37, 37, 37, 0.9) 40%, rgba(0, 43, 161, 0.9)) 30%',
+        boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
     },
     buttonPoint: {
         position: 'absolute',
-        bottom: theme.spacing.unit * 51,
-        right: theme.spacing.unit,
-        width: '125px'
+        bottom: theme.spacing.unit * 23,
+        left: theme.spacing.unit * 1.5,
+        width: '125px',
+        color: 'rgb(255, 255, 255)',
+        background: 'linear-gradient(20deg, rgba(37, 37, 37, 0.9) 40%, rgba(37, 37, 37, 0.9)) 60%',
+        boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
     },
     buttonLine: {
         position: 'absolute',
-        bottom: theme.spacing.unit * 44,
-        right: theme.spacing.unit,
-        width: '125px'
+        bottom: theme.spacing.unit * 15,
+        left: theme.spacing.unit * 1.5,
+        width: '125px',
+        color: 'rgb(255, 255, 255)',
+        background: 'linear-gradient(20deg, rgba(37, 37, 37, 0.9) 40%, rgba(37, 37, 37, 0.9)) 60%',
+        boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
 
     },
     buttonPolygon: {
         position: 'absolute',
-        bottom: theme.spacing.unit * 37,
-        right: theme.spacing.unit,
-        width: '125px'
+        bottom: theme.spacing.unit * 7,
+        left: theme.spacing.unit * 1.5,
+        width: '125px',
+        color: 'rgb(255, 255, 255)',
+        background: 'linear-gradient(20deg, rgba(37, 37, 37, 0.9) 40%, rgba(37, 37, 37, 0.9)) 60%',
+        boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
     },
-    buttonMarker: {
-        position: 'absolute',
-        bottom: theme.spacing.unit * 30,
-        right: theme.spacing.unit,
-        width: '125px'
-    },
+
+
     leftIcon: {
         marginRight: theme.spacing.unit,
     },
@@ -51,6 +59,7 @@ const styles = theme => ({
         fontSize: 20,
     },
 });
+
 class IconLabelButtons extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -60,11 +69,11 @@ class IconLabelButtons extends React.PureComponent {
         const { classes } = this.props;
         return (
             <div>
-                <Button variant="contained" color="default" className={classes.buttonGrab}
+                <Button variant="contained" color="default" className={classes.buttonComplete}
                     onClick={() => this.props.onAddListenerGrabBtn()}
                 >
                     <DeleteIcon className={classes.leftIcon} />
-                    Grab
+                    Complete
 
           </Button>
                 <Button variant="contained" color="default" className={classes.buttonPoint}
@@ -85,11 +94,8 @@ class IconLabelButtons extends React.PureComponent {
                     <KeyboardVoiceICon className={classes.leftIcon} />
                     Polygon
           </Button>
-                <Button variant="contained" color="primary" className={classes.buttonMarker}
-                    onClick={() => this.props.onSaveToFirestore()}>
-                    <Place className={classes.leftIcon} />
-                    Marker
-          </Button>
+
+
             </div>
         );
     }
