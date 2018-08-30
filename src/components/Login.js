@@ -1,0 +1,150 @@
+import React, { Component } from 'react';
+import firebase, { auth, provider, provider2 } from '../config/firebase';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import './Login.css';
+import logo from './Picture/Ling logo.png'
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import Lock from '@material-ui/icons/Lock';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import Button from '@material-ui/core/Button';
+import Register from './Register';
+import Reset from './Reset';
+
+
+const styles = theme => ({
+    button: {
+        margin: theme.spacing.unit,
+    },
+});
+
+class Login extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: '',
+            password: '',
+            page: 'login',
+        };
+    }
+    componentWillMount() {
+        
+    }
+    handleChange = (e) => {
+        this.setState({ [e.target.name]: e.target.value });
+    }
+
+    loginEmail = (e) => {
+        e.preventDefault();
+        var self = this
+        var email = this.state.email
+        var password = this.state.password
+        firebase.auth().signInWithEmailAndPassword(email, password).then((result) => {
+            var user = result.user;
+            self.props.onSetUser(user)
+            self.props.onQueryPlanFromFirestore()
+        }).catch((error) => {
+            alert("Username or Password incorrect")
+            console.log(error);
+        });
+    }
+
+    loginFacebook = () => {
+        var self = this
+        auth.signInWithPopup(provider).then(function (result) {
+            var user = result.user;
+            self.props.onSetUser(user)
+            self.props.onQueryPlanFromFirestore()
+        }).catch(function (error) {
+            alert('เกิดข้อผิดพลาด : ', error)
+        });
+    }
+    loginGoogle = () => {
+        var self = this;
+        auth.signInWithPopup(provider2).then(function (result) {
+            var user = result.user;
+            self.props.onSetUser(user)
+            self.props.onQueryPlanFromFirestore()
+        }).catch(function (error) {
+            alert('เกิดข้อผิดพลาด : ', error)
+        });
+
+    }
+    changePage = (page) => {
+        this.setState({ page: page })
+    }
+    render() {
+        const { classes } = this.props;
+        switch (this.state.page) {
+            case 'login':
+                return (
+                    //loading container wrapper LoginFont
+                    <div className="loading container wrapper LoginFont">
+                        <p className="logo"><img src={logo} className="App-logo" alt="logo" />
+                            <br /> Ling Map </p>
+                        <div className="inputLogin">
+                            <FormControl component="fieldset">
+                                <FormGroup>
+                                    <Grid container spacing={8} alignItems="flex-end">
+                                        <Grid item>
+                                            <AccountCircle />
+                                        </Grid>
+                                        <Grid item>
+                                            <TextField value={this.state.email} onChange={this.handleChange} name="email" type="email" label="อีเมล" />
+                                        </Grid>
+                                    </Grid>
+                                </FormGroup>
+                                <FormGroup>
+                                    <Grid container spacing={8} alignItems="flex-end">
+                                        <Grid item>
+                                            <Lock />
+                                        </Grid>
+                                        <Grid item>
+                                            <TextField value={this.state.password} onChange={this.handleChange} name="password" type="password" label="ป้อนรหัสผ่าน" />
+                                        </Grid>
+                                    </Grid>
+                                </FormGroup>
+                            </FormControl>
+                        </div>
+                        <br />
+                        <div className="LoginButton">
+                            <button type="submit" onClick={this.loginEmail} className="loginBtn loginBtn--L">&nbsp;Log In with email</button>
+                            <br />
+                            <p className='Or'> or </p>
+
+                            <button className="loginBtn loginBtn--facebook" onClick={this.loginFacebook}>Log In with Facebook</button>
+                            <button className="loginBtn loginBtn--google" onClick={this.loginGoogle}>Log In with Google</button><br />
+                        </div>
+                        <br />
+                        <div className="regisBtn">
+                            <Button onClick={() => this.changePage('register')} className={classes.button}>สมัครสมาชิก</Button>
+                            <Button onClick={() => this.changePage('reset')} className={classes.button}>ลืมรหัสผ่าน</Button>
+                        </div>
+                        <br /> <br />
+                    </div>
+                )
+            case 'register':
+                return (
+                    <Register
+                        changePage={this.changePage}
+                    />
+                )
+            case 'reset':
+                return (
+                    <Reset
+                        changePage={this.changePage}
+                    />
+                )
+            default: return null
+        }
+    }
+}
+
+Login.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(Login);
