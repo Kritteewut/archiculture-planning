@@ -16,7 +16,8 @@ import ColorPicker from './ColorPicker';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import OverlayOptions from './OverlayOptions';
-
+import DeleteIcon from '@material-ui/icons/Delete';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import './Design.css';
 
 const drawerWidth = '350px'
@@ -40,10 +41,11 @@ class PermanentDrawer extends React.PureComponent {
         firebase.auth().signOut();
         this.props.onSetUserNull()
     }
+    handleDeleteBtnClick = (planId) => {
 
+    }
     renderDrawer = () => {
-        const { classes, user, onSetUser } = this.props;
-
+        const { classes, user, onSetUser, currentPlanData } = this.props;
         return (
             user ?
                 <div>
@@ -57,25 +59,32 @@ class PermanentDrawer extends React.PureComponent {
                     </ListItem>
                     <div>
                         <Divider />
-                        <List>
-                            {this.props.currentPlanData.planName}
-                        </List>
+                        <ListItem>
+                            แปลงที่เลือก : {currentPlanData.planName}
+                        </ListItem>
                         <Divider />
                         {this.props.planData.map(value => {
                             return (
                                 <ListItem
+                                    role={undefined}
                                     button
                                     key={value.planId}
                                     onClick={() => this.props.onSelectCurrentPlanData(value)}>
-                                    <ListItemText primary={value.planName}>
-                                    </ListItemText>
+                                    <ListItemText primary={value.planName} />
+                                    <ListItemSecondaryAction>
+                                        <IconButton aria-label="Delete"
+                                            onClick={() => this.props.onDeletePlan(value.planId)}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+
                                 </ListItem>
                             )
                         })}
                         <Divider />
                         <button className="DesignButtonSave" onClick={this.props.onSaveToFirestore}>
                             บันทึก
-                    </button>
+                        </button>
                         <button className="DesignButtonLogout" onClick={this.logout}>
                             logout
                         </button>
@@ -97,7 +106,7 @@ class PermanentDrawer extends React.PureComponent {
             onSetSelectedIcon,
             overlayOptionsType,
             handleDetailEdit,
-
+            onDeleteOverlay
         } = this.props;
         switch (drawerPage) {
             case 'homePage':
@@ -113,6 +122,8 @@ class PermanentDrawer extends React.PureComponent {
                         onSetSelectedIcon={onSetSelectedIcon}
                         overlayOptionsType={overlayOptionsType}
                         handleDetailEdit={handleDetailEdit}
+                        onDeleteOverlay={onDeleteOverlay}
+
                     />
                 )
         }

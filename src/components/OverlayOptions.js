@@ -55,16 +55,18 @@ class OverlayOptions extends React.PureComponent {
     onToggleOpen = () => {
         this.setState({ isOpen: !this.state.isOpen })
     }
-    onEdit = () => {
+    onEditOverlay = () => {
         const { selectedOverlay } = this.props
         this.setState({
             name: selectedOverlay.overlayName,
             detail: selectedOverlay.overlayDetail,
             isOpen: true,
         })
+    }
+    onDeleteOverlay = (overlayId) => {
 
     }
-   
+
     onSubmitEdit = () => {
         this.props.handleDetailEdit(this.state.name, this.state.detail)
         this.onToggleOpen()
@@ -75,62 +77,65 @@ class OverlayOptions extends React.PureComponent {
         })
     }
     drawOverlayDetail = () => {
-        const { classes, selectedOverlay } = this.props;
+        const { classes, selectedOverlay, onDeleteOverlay } = this.props;
         return (
             <div>
                 ชื่อ : {selectedOverlay.overlayName}
                 <br />
                 รายละเอียด : {selectedOverlay.overlayDetail}
                 <br />
-                <Button variant="contained" size="small" color="primary" className={classes.button} onClick={this.onEdit}>
+                <Button variant="contained" size="small" color="primary" className={classes.button} onClick={this.onEditOverlay}>
                     แก้ไข
                 </Button>
+                <Button variant="contained" size="small" color="secondary" className={classes.button} onClick={() => onDeleteOverlay(selectedOverlay.overlayIndex)}>
+                    ลบ
+                </Button>
                 <Modal
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-                open={this.state.isOpen}
-                onClose={this.onToggleOpen}
-            >
-                <div className={classes.paper}>
-                    <Card className={classes.card}>
-                        <CardMedia
-                            component="img"
-                            className={classes.media}
-                            height="140"
-                            image={farm2}
-                            title="Contemplative Reptile"
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                    open={this.state.isOpen}
+                    onClose={this.onToggleOpen}
+                >
+                    <div className={classes.paper}>
+                        <Card className={classes.card}>
+                            <CardMedia
+                                component="img"
+                                className={classes.media}
+                                height="140"
+                                image={farm2}
+                                title="Contemplative Reptile"
+                            />
+                        </Card>
+                        <TextField
+                            id="with-placeholder"
+                            label="ชื่อ"
+                            className={classes.textField}
+                            margin="normal"
+                            onChange={this.handleChange}
+                            name="name"
+                            value={this.state.name}
                         />
-                    </Card>
-                    <TextField
-                        id="with-placeholder"
-                        label="ชื่อ"
-                        className={classes.textField}
-                        margin="normal"
-                        onChange={this.handleChange}
-                        name="name"
-                        value={this.state.name}
-                    />
-                    <TextField
-                        id="multiline-flexible"
-                        label="รายละเอียด"
-                        multiline
-                        className={classes.textField}
-                        margin="normal"
-                        onChange={this.handleChange}
-                        name="detail"
-                        rowsMax="4"
-                        value={this.state.detail}
+                        <TextField
+                            id="multiline-flexible"
+                            label="รายละเอียด"
+                            multiline
+                            className={classes.textField}
+                            margin="normal"
+                            onChange={this.handleChange}
+                            name="detail"
+                            rowsMax="4"
+                            value={this.state.detail}
 
-                    />
-                    <br />
-                    <Button size="small" color="primary" onClick={this.onSubmitEdit}>
-                        ตกลง
+                        />
+                        <br />
+                        <Button size="small" color="primary" onClick={this.onSubmitEdit}>
+                            ตกลง
         </Button>
-                    <Button size="small" color="primary" onClick={this.onToggleOpen}>
-                        ยกเลิก
+                        <Button size="small" color="primary" onClick={this.onToggleOpen}>
+                            ยกเลิก
         </Button>
-                </div>
-            </Modal>
+                    </div>
+                </Modal>
             </div>
         )
     }

@@ -323,13 +323,12 @@ class App extends Component {
       self.onSetSelectOverlay(marker)
     })
     window.google.maps.event.addListener(marker, 'dragend', function () {
-      let overlayObject = self.state.overlayObject
-      let markerIndex = marker.overlayIndex
-      let overlayIndex = overlayObject.findIndex(overlay => overlay.overlayIndex === markerIndex)
-      let editCoords = []
-      editCoords = [{ lat: marker.getPosition().lat(), lng: marker.getPosition().lng() }]
+      const overlayObject = self.state.overlayObject
+      const markerIndex = marker.overlayIndex
+      const overlayIndex = overlayObject.findIndex(overlay => overlay.overlayIndex === markerIndex)
+      const editCoords = [{ lat: marker.getPosition().lat(), lng: marker.getPosition().lng() }]
       const replaceCoords = update(overlayObject, { [overlayIndex]: { overlayCoords: { $set: editCoords } } })
-      self.setState({ overlayObject: replaceCoords }, () => console.log(overlayObject[overlayIndex].coords, 'ediited coords'))
+      self.setState({ overlayObject: replaceCoords })
     })
   }
   addPolygonListener = (polygon) => {
@@ -620,11 +619,14 @@ class App extends Component {
       return null;
     })
   }
+  onClearMap = () => {
+    this.setState({ overlayObject: [], distanceDetail: [] })
+  }
   onOverlayRedraw = () => {
     const { currentPlanData, overlayObject } = this.state
     let self = this
     const planId = currentPlanData.planId
-    this.setState({ overlayObject: [], distanceDetail: [] })
+    this.onClearMap()
 
     shapesRef.where('planId', '==', planId).get().then(function (querySnapshot) {
       let overlayObject = []
@@ -688,7 +690,7 @@ class App extends Component {
         self.onPolydistanceBtwCompute(value)
         return null;
       })
-      self.setState({ overlayObject, })
+      self.setState({ overlayObject, }, () => console.log(overlayObject))
       self.onFitBounds(overlayObject)
     })
 
@@ -714,17 +716,16 @@ class App extends Component {
     }
   }
   onAddPlan = (planName) => {
-    var self = this
-    var uid = this.state.user.uid
-    var planId = null
-    var date = new Date()
+    const { planData, user } = this.state
+    const self = this
+    const uid = user.uid
     planRef.add({ planName, uid })
       .then(function (docRef) {
-        planId = docRef.id
+        const planId = docRef.id
+        const pushPlan = update(planData, { $push: [{ planName: planName, planId: planId }] })
+        self.setState({ planData: pushPlan })
       })
-    var pushPlan = update(this.state.planData, { $push: [{ planName: planName, planId: planId }] })
-    this.setState({ planData: pushPlan })
-    this.onSelectCurrentPlanData(pushPlan[pushPlan.length - 1])
+
   }
   onSelectCurrentPlanData = (planData) => {
     if (this.state.currentPlanData !== planData) {
@@ -865,6 +866,49 @@ class App extends Component {
   onChaneDrawPage = (page) => {
     this.setState({ drawPage: page })
   }
+  onDeletePlan = (planId) => {
+    const { planData, currentPlanData } = this.state
+    const deleteIndex = planData.findIndex(data => data.planId === planId)
+    const updatePlan = update(planData, { $splice: [[deleteIndex, 1]] })
+    //delete selected plan
+    planRef.doc(planId).delete().then(function () {
+      console.log("Document successfully deleted!");
+    }).catch(function (error) {
+      console.error("Error removing document: ", error);
+    });
+    //delete overlay with its planId 
+    shapesRef.where('planId', '==', planId).get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        doc.ref.delete().then(function () {
+          console.log("Document successfully deleted!");
+        }).catch(function (error) {
+          console.error("Error removing document: ", error);
+        });
+      })
+    })
+    if (planId === currentPlanData.planId) { this.onClearMap() }
+    this.setState({ planData: updatePlan })
+  }
+  onDeleteOverlay = (overlayIndex) => {
+    const { overlayObject, distanceDetail } = this.state
+    const deleteIndex = overlayObject.findIndex(data => data.overlayIndex === overlayIndex)
+    const detailIndex = distanceDetail.findIndex(detail => detail.overlayIndex === overlayIndex)
+    if (overlayObject[deleteIndex].overlayDrawType === 'redraw') {
+      //delete selected overlay
+      shapesRef.doc(overlayIndex).delete().then(function () {
+        console.log("Document successfully deleted!");
+      }).catch(function (error) {
+        console.error("Error removing document: ", error);
+      });
+    }
+    const deleteObject = update(overlayObject, { $splice: [[deleteIndex, 1]] })
+    const deleteDetail = update(distanceDetail, { $splice: [[detailIndex, 1]] })
+    this.setState({
+      overlayObject: deleteObject,
+      distanceDetail: deleteDetail,
+      selectedOverlay: null,
+    })
+  }
   //this is rederrrrr
   render() {
     return (
@@ -890,6 +934,8 @@ class App extends Component {
           onSetSelectedIcon={this.onSetSelectedIcon}
           handleDetailEdit={this.handleDetailEdit}
           onSetUserNull={this.onSetUserNull}
+          onDeletePlan={this.onDeletePlan}
+          onDeleteOverlay={this.onDeleteOverlay}
           {...this.state}
         />
         <Map

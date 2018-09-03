@@ -35,11 +35,6 @@ class Polygon extends React.PureComponent {
             this.polygon.setMap(null)
         }
     }
-    componentDidMount() {
-        if (this.polygon !== false && this.props.isFirstDraw === false) {
-            this.polygon.setOptions({ clickable: false })
-        }
-    }
     onClearPolyVextex = () => {
         this.polyVertex.map(marker => {
             marker.setMap(null)
@@ -60,7 +55,7 @@ class Polygon extends React.PureComponent {
                 clickable: false,
             })
             self.polyVertex.push(marker)
-           // marker.bindTo('position', self.polygon, (key).toString());
+            // marker.bindTo('position', self.polygon, (key).toString());
         })
 
     }

@@ -149,7 +149,7 @@ const images = [
     },
     {
         src: icon_location,
-        title: 'จุด',
+        title: 'จุดตำแหน่ง',
         width: '5%',
         height: '5%',
     },

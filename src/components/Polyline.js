@@ -12,14 +12,8 @@ class Polyline extends React.PureComponent {
             this.polyline.setMap(null)
         }
     }
-    componentDidMount() {
-        if (this.polyline !== false && this.props.isFirstDraw === false) {
-            this.polyline.setOptions({ clickable: false })
-        }
-    }
-
     redrawPolyline = () => {
-        var {
+        const {
             overlayCoords,
             overlayIndex,
             overlayDrawType,

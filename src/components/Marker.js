@@ -4,10 +4,7 @@ import icon_point from './icons/icon_point.png';
 class Marker extends React.PureComponent {
     constructor(props) {
         super(props);
-        this.state = {
-            isRender: false,
-            marker: []
-        }
+        this.state = {}
         this.marker = false
     }
     componentWillUnmount() {
@@ -15,6 +12,7 @@ class Marker extends React.PureComponent {
             this.marker.setMap(null)
         }
     }
+    
     redrawMarker = () => {
         const { overlayCoords, overlayIndex, overlayDrawType, icon, overlayName, overlayDetail, overlayType } = this.props
         if (this.marker === false) {
