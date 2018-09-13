@@ -54,7 +54,7 @@ class App extends Component {
       exampleLineCoords: [],
       userLocationCoords: [],
       planData: [],
-      currentPlanData: [],
+      selectedPlan: null,
       fillColor: '#ffa500',
       strokeColor: '#ff4500',
       user: null,
@@ -533,9 +533,9 @@ class App extends Component {
     this.setState({ areaDetail: rnwString })
   }
   onSaveToFirestore = () => {
-    const { overlayObject, currentPlanData } = this.state
+    const { overlayObject, selectedPlan } = this.state
     let self = this
-    var planId = currentPlanData.planId
+    var planId = selectedPlan.planId
     overlayObject.map((value, key) => {
       let overlayCoords = value.overlayCoords
       let overlayType = value.overlayType
@@ -619,14 +619,13 @@ class App extends Component {
       return null;
     })
   }
-  onClearMap = () => {
+  onClearOverlayFromMap = () => {
     this.setState({ overlayObject: [], distanceDetail: [] })
   }
   onOverlayRedraw = () => {
-    const { currentPlanData, overlayObject } = this.state
+    const { selectedPlan, overlayObject } = this.state
     let self = this
-    const planId = currentPlanData.planId
-    this.onClearMap()
+    const planId = selectedPlan.planId
 
     shapesRef.where('planId', '==', planId).get().then(function (querySnapshot) {
       let overlayObject = []
@@ -683,17 +682,18 @@ class App extends Component {
           default: return null
         }
       })
-      overlayObject.map(value => {
-        if (value.overlayType !== 'marker') {
-          self.onPolydistanceBtwCompute(value)
-        }
-        self.onPolydistanceBtwCompute(value)
-        return null;
-      })
-      self.setState({ overlayObject, }, () => console.log(overlayObject))
-      self.onFitBounds(overlayObject)
+      if (overlayObject.length > 0) {
+        overlayObject.map(value => {
+          if (value.overlayType !== 'marker') {
+            self.onPolydistanceBtwCompute(value)
+          }
+          return null;
+        })
+        const pushObject = update(self.state.overlayObject, { $push: overlayObject })
+        self.setState({ overlayObject: pushObject, }, () => console.log(overlayObject))
+      }
+      self.onFitBounds(self.state.overlayObject)
     })
-
   }
   onQueryPlanFromFirestore = () => {
     // get all plan list from frirestore filter by user ID
@@ -727,15 +727,16 @@ class App extends Component {
       })
 
   }
-  onSelectCurrentPlanData = (planData) => {
-    if (this.state.currentPlanData !== planData) {
+  onSetSelectedPlan = (planData) => {
+    if (this.state.selectedPlan !== planData) {
       this.setState({
-        currentPlanData: planData,
-        isLoading: null,
+        selectedPlan: planData,
       }, () => this.onOverlayRedraw())
     }
   }
-
+  onResetSelectedPlan = () => {
+    this.setState({ selectedPlan: null })
+  }
   onFitBounds = (overlayObject) => {
     if (overlayObject.length > 0) {
       const bounds = new window.google.maps.LatLngBounds();
@@ -867,7 +868,7 @@ class App extends Component {
     this.setState({ drawPage: page })
   }
   onDeletePlan = (planId) => {
-    const { planData, currentPlanData } = this.state
+    const { planData, selectedPlan } = this.state
     const deleteIndex = planData.findIndex(data => data.planId === planId)
     const updatePlan = update(planData, { $splice: [[deleteIndex, 1]] })
     //delete selected plan
@@ -886,7 +887,10 @@ class App extends Component {
         });
       })
     })
-    if (planId === currentPlanData.planId) { this.onClearMap() }
+    if (selectedPlan) {
+      this.onClearOverlayFromMap()
+      this.onResetSelectedPlan()
+    }
     this.setState({ planData: updatePlan })
   }
   onDeleteOverlay = (overlayIndex) => {
@@ -924,9 +928,7 @@ class App extends Component {
       >
         <PermanentDrawer
           onSaveToFirestore={this.onSaveToFirestore}
-          planData={this.state.planData}
-          currentPlanData={this.state.currentPlanData}
-          onSelectCurrentPlanData={this.onSelectCurrentPlanData}
+          onSetSelectedPlan={this.onSetSelectedPlan}
           onSetUser={this.onSetUser}
           onQueryPlanFromFirestore={this.onQueryPlanFromFirestore}
           onChangePolyStrokeColor={this.onChangePolyStrokeColor}
@@ -936,6 +938,7 @@ class App extends Component {
           onSetUserNull={this.onSetUserNull}
           onDeletePlan={this.onDeletePlan}
           onDeleteOverlay={this.onDeleteOverlay}
+          onClearOverlayFromMap={this.onClearOverlayFromMap}
           {...this.state}
         />
         <Map
