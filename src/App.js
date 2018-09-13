@@ -259,13 +259,12 @@ class App extends Component {
     window.google.maps.event.addListener(window.map, 'click', function (event) {
       const lat = event.latLng.lat()
       const lng = event.latLng.lng()
-      const { fillColor, strokeColor, overlayObject } = self.state
-      if (self.state.isFirstDraw === true) {
-        let id = shortid.generate()
+      const { fillColor, strokeColor, overlayObject, isFirstDraw } = self.state
+      if (isFirstDraw) {
         let pushObject = update(overlayObject, {
           $push: [{
             overlayCoords: [{ lat, lng }],
-            overlayIndex: id,
+            overlayIndex: shortid.generate(),
             overlayType: 'polygon',
             overlayDrawType: 'draw',
             fillColor: fillColor,
@@ -728,9 +727,9 @@ class App extends Component {
 
   }
   onSetSelectedPlan = (planData) => {
-      this.setState({
-        selectedPlan: planData,
-      }, () => this.onOverlayRedraw())
+    this.setState({
+      selectedPlan: planData,
+    }, () => this.onOverlayRedraw())
   }
   onResetSelectedPlan = () => {
     this.setState({ selectedPlan: null })

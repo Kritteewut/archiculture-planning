@@ -189,9 +189,9 @@ class PermanentDrawer extends React.PureComponent {
                             )
                         })}
                         <Divider />
-                        <button className="DesignButtonSave" onClick={this.props.onSaveToFirestore}>
+                        <Button className="DesignButtonSave" disabled={selectedPlan ? false : true} onClick={this.props.onSaveToFirestore}>
                             บันทึก
-                        </button>
+                        </Button>
                         <button className="DesignButtonLogout" onClick={this.logout}>
                             logout
                         </button>

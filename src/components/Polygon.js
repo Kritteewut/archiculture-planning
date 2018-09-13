@@ -69,16 +69,17 @@ class Polygon extends React.PureComponent {
         if (this.polygon === false) {
             this.polygon = new window.google.maps.Polygon({
                 path: overlayCoords,
-                map: window.map,
+                map: window.map, 
+                suppressUndo: true,
+                clickable: true,
                 overlayIndex,
                 overlayType,
-                suppressUndo: true,
                 overlayDrawType,
                 strokeColor,
                 fillColor,
-                clickable: true,
                 overlayName,
                 overlayDetail,
+                fillOpacity: 0.1,
             })
             this.props.addPolygonListener(this.polygon)
             //this.polygon.binder = new MVCArrayBinder(this.polygon.getPath())
