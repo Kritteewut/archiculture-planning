@@ -46,35 +46,113 @@ class OverlayOptions extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            isOpen: false,
+            isEditOverlayOpen: false,
             name: '',
             detail: '',
-            isRaise: false
+            isDeleteOverlayOpen: false
         }
     }
-    onToggleOpen = () => {
-        this.setState({ isOpen: !this.state.isOpen })
+    onToggleEditoverlayOpen = () => {
+        this.setState({ isEditOverlayOpen: !this.state.isEditOverlayOpen })
     }
     onEditOverlay = () => {
         const { selectedOverlay } = this.props
         this.setState({
             name: selectedOverlay.overlayName,
             detail: selectedOverlay.overlayDetail,
-            isOpen: true,
+            isEditOverlayOpen: true,
         })
-    }
-    onDeleteOverlay = (overlayId) => {
-
     }
 
     onSubmitEdit = () => {
         this.props.handleDetailEdit(this.state.name, this.state.detail)
-        this.onToggleOpen()
+        this.onToggleEditoverlayOpen()
     }
     handleChange = (event) => {
         this.setState({
             [event.target.name]: event.target.value
         })
+    }
+    renderEditOverlayDetailModal = () => {
+        const { classes, } = this.props
+        return (
+            <Modal
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+                open={this.state.isEditOverlayOpen}
+                onClose={this.onToggleEditoverlayOpen}
+            >
+                <div className={classes.paper}>
+                    <Card className={classes.card}>
+                        <CardMedia
+                            component="img"
+                            className={classes.media}
+                            height="140"
+                            image={farm2}
+                            title="Contemplative Reptile"
+                        />
+                    </Card>
+                    <TextField
+                        id="with-placeholder"
+                        label="ชื่อ"
+                        className={classes.textField}
+                        margin="normal"
+                        onChange={this.handleChange}
+                        name="name"
+                        value={this.state.name}
+                    />
+                    <TextField
+                        id="multiline-flexible"
+                        label="รายละเอียด"
+                        multiline
+                        className={classes.textField}
+                        margin="normal"
+                        onChange={this.handleChange}
+                        name="detail"
+                        rowsMax="4"
+                        value={this.state.detail}
+
+                    />
+                    <br />
+                    <Button size="small" color="primary" onClick={this.onSubmitEdit}>
+                        ตกลง
+                        </Button>
+                    <Button size="small" color="primary" onClick={this.onToggleEditoverlayOpen}>
+                        ยกเลิก
+                        </Button>
+                </div>
+            </Modal>
+        )
+    }
+    onToggleDeleteOverlayOpen = () => {
+        this.setState({ isDeleteOverlayOpen: !this.state.isDeleteOverlayOpen })
+    }
+    handleDeleteClick = () => {
+        this.props.onDeleteOverlay(this.props.selectedOverlay.overlayIndex)
+        this.onToggleDeleteOverlayOpen()
+    }
+    renderDeleteOverlayModal = () => {
+        const { classes } = this.props
+        return (
+            <Modal
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+                open={this.state.isDeleteOverlayOpen}
+                onClose={this.onToggleDeleteOverlayOpen}
+            >
+                <div className={classes.paper}>
+                    <div>
+                        หากลบแล้วจะไม่สามารถกู้คืนได้
+                    </div>
+                    <Button size="small" color="primary" onClick={this.handleDeleteClick}>
+                        ตกลง
+                    </Button>
+                    <Button size="small" color="primary" onClick={this.onToggleDeleteOverlayOpen}>
+                        ยกเลิก
+                    </Button>
+                </div>
+            </Modal>
+        )
     }
     drawOverlayDetail = () => {
         const { classes, selectedOverlay, onDeleteOverlay } = this.props;
@@ -87,60 +165,15 @@ class OverlayOptions extends React.PureComponent {
                 <Button variant="contained" size="small" color="primary" className={classes.button} onClick={this.onEditOverlay}>
                     แก้ไข
                 </Button>
-                <Button variant="contained" size="small" color="secondary" className={classes.button} onClick={() => onDeleteOverlay(selectedOverlay.overlayIndex)}>
+                <Button variant="contained" size="small" color="secondary" className={classes.button} onClick={this.onToggleDeleteOverlayOpen}>
                     ลบ
                 </Button>
-                <Modal
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                    open={this.state.isOpen}
-                    onClose={this.onToggleOpen}
-                >
-                    <div className={classes.paper}>
-                        <Card className={classes.card}>
-                            <CardMedia
-                                component="img"
-                                className={classes.media}
-                                height="140"
-                                image={farm2}
-                                title="Contemplative Reptile"
-                            />
-                        </Card>
-                        <TextField
-                            id="with-placeholder"
-                            label="ชื่อ"
-                            className={classes.textField}
-                            margin="normal"
-                            onChange={this.handleChange}
-                            name="name"
-                            value={this.state.name}
-                        />
-                        <TextField
-                            id="multiline-flexible"
-                            label="รายละเอียด"
-                            multiline
-                            className={classes.textField}
-                            margin="normal"
-                            onChange={this.handleChange}
-                            name="detail"
-                            rowsMax="4"
-                            value={this.state.detail}
-
-                        />
-                        <br />
-                        <Button size="small" color="primary" onClick={this.onSubmitEdit}>
-                            ตกลง
-        </Button>
-                        <Button size="small" color="primary" onClick={this.onToggleOpen}>
-                            ยกเลิก
-        </Button>
-                    </div>
-                </Modal>
+                {this.renderEditOverlayDetailModal()}
+                {this.renderDeleteOverlayModal()}
             </div>
         )
     }
     render() {
-        const { classes, theme } = this.props;
         const {
             onChangePolyStrokeColor,
             onChangePolyFillColor,

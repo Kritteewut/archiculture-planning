@@ -728,11 +728,9 @@ class App extends Component {
 
   }
   onSetSelectedPlan = (planData) => {
-    if (this.state.selectedPlan !== planData) {
       this.setState({
         selectedPlan: planData,
       }, () => this.onOverlayRedraw())
-    }
   }
   onResetSelectedPlan = () => {
     this.setState({ selectedPlan: null })

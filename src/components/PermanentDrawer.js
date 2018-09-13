@@ -64,8 +64,10 @@ class PermanentDrawer extends React.PureComponent {
             this.onToggleMergeOverlayModal()
         }
         else {
-            this.props.onSetSelectedPlan(planData)
-            this.props.onClearOverlayFromMap()
+            if (selectedPlan !== planData) {
+                this.props.onSetSelectedPlan(planData)
+                this.props.onClearOverlayFromMap()
+            }
         }
 
 
@@ -97,7 +99,7 @@ class PermanentDrawer extends React.PureComponent {
                         แปลงที่จะเลือก : {planData ? this.state.planData.planName : ''}
                     </div>
                     <div>
-                        ยังมีรูปร่างที่วาดไว้อยู่ หากต้องการรวมรูปร่างที่วาดไว้กับแปลงที่เลือก ให้กดปุ่มตกลง หากต้องการละทิ้งรูปร่างที่วาดไว้ให้กดปุ่ม ละทิ้ง
+                        ยังมีรูปร่างที่วาดไว้อยู่ หากต้องการรวมรูปร่างที่วาดไว้กับแปลงที่เลือกให้กดปุ่ม ตกลง หากต้องการละทิ้งรูปร่างที่วาดไว้ให้กดปุ่ม ละทิ้ง
                     </div>
                     <Button size="small" color="primary" onClick={this.handleAccecptToMergeOverlay}>
                         ตกลง
@@ -113,7 +115,7 @@ class PermanentDrawer extends React.PureComponent {
         )
     }
     handleDeletePlanClick = (planData) => {
-        this.setState({ planData: planData }, () => { console.log(this.state.planData) })
+        this.setState({ planData: planData })
         this.onToggleDeletePlanModal()
     }
     onToggleDeletePlanModal = () => {
@@ -130,7 +132,7 @@ class PermanentDrawer extends React.PureComponent {
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
                 open={this.state.isDeletePlanOpen}
-                onClose={this.onToggleMergeOverlayModal}
+                onClose={this.onToggleDeletePlanModal}
             >
                 <div className={this.props.classes.paper}>
                     <div>
@@ -165,7 +167,7 @@ class PermanentDrawer extends React.PureComponent {
                     <div>
                         <Divider />
                         <ListItem>
-                            แปลงที่เลือก : {(selectedPlan) ? selectedPlan.planName : 'ยังไม่มีแปลงที่เลือก'}
+                            แปลงที่เลือก : {selectedPlan ? selectedPlan.planName : 'ยังไม่มีแปลงที่เลือก'}
                         </ListItem>
                         <Divider />
                         {this.props.planData.map(value => {
@@ -230,7 +232,6 @@ class PermanentDrawer extends React.PureComponent {
                         overlayOptionsType={overlayOptionsType}
                         handleDetailEdit={handleDetailEdit}
                         onDeleteOverlay={onDeleteOverlay}
-
                     />
                 )
         }
