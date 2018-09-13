@@ -128,7 +128,7 @@ class OverlayOptions extends React.PureComponent {
         this.setState({ isDeleteOverlayOpen: !this.state.isDeleteOverlayOpen })
     }
     handleDeleteClick = () => {
-        this.props.onDeleteOverlay(this.props.selectedOverlay.overlayIndex)
+        this.props.onDeleteOverlay(this.props.selectedOverlay)
         this.onToggleDeleteOverlayOpen()
     }
     renderDeleteOverlayModal = () => {

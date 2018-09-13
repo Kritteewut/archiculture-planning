@@ -183,6 +183,10 @@ class PermanentDrawer extends React.PureComponent {
                                             onClick={() => this.handleDeletePlanClick(value)}>
                                             <DeleteIcon />
                                         </IconButton>
+                                        <IconButton aria-label="Delete"
+                                            onClick={() => this.handleDeletePlanClick(value)}>
+                                            <DeleteIcon />
+                                        </IconButton>
                                     </ListItemSecondaryAction>
 
                                 </ListItem>

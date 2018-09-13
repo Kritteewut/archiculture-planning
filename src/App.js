@@ -89,7 +89,6 @@ class App extends Component {
     // });
   }
   componentWillUnmount() {
-
   }
   onBtnTypeChange = (type) => {
     if (this.state.btnTypeCheck === type) {
@@ -303,7 +302,7 @@ class App extends Component {
   onResetSelectedOverlay = () => {
     this.onResetDetail()
     const { selectedOverlay } = this.state
-    if (selectedOverlay !== null) {
+    if (selectedOverlay) {
       if (selectedOverlay.overlayType === 'polygon' || selectedOverlay.overlayType === 'polyline') {
         selectedOverlay.setOptions({ editable: false, })
         this.setState({ selectedOverlay: null })
@@ -890,25 +889,26 @@ class App extends Component {
     }
     this.setState({ planData: updatePlan })
   }
-  onDeleteOverlay = (overlayIndex) => {
+  onDeleteOverlay = (overlay) => {
     const { overlayObject, distanceDetail } = this.state
+    const overlayIndex = overlay.overlayIndex
     const deleteIndex = overlayObject.findIndex(data => data.overlayIndex === overlayIndex)
-    const detailIndex = distanceDetail.findIndex(detail => detail.overlayIndex === overlayIndex)
+    const deleteObject = update(overlayObject, { $splice: [[deleteIndex, 1]] })
     if (overlayObject[deleteIndex].overlayDrawType === 'redraw') {
-      //delete selected overlay
-      shapesRef.doc(overlayIndex).delete().then(function () {
+      //delete selected overlay from firestore
+      shapesRef.doc(overlay).delete().then(function () {
         console.log("Document successfully deleted!");
       }).catch(function (error) {
         console.error("Error removing document: ", error);
       });
     }
-    const deleteObject = update(overlayObject, { $splice: [[deleteIndex, 1]] })
-    const deleteDetail = update(distanceDetail, { $splice: [[detailIndex, 1]] })
-    this.setState({
-      overlayObject: deleteObject,
-      distanceDetail: deleteDetail,
-      selectedOverlay: null,
-    })
+    if (overlay.overlayType !== 'marker') {
+      const detailIndex = distanceDetail.findIndex(detail => detail.overlayIndex === overlayIndex)
+      const deleteDetail = update(distanceDetail, { $splice: [[detailIndex, 1]] })
+      this.setState({ distanceDetail: deleteDetail, })
+    }
+    this.onResetSelectedOverlay()
+    this.setState({ overlayObject: deleteObject, })
   }
   //this is rederrrrr
   render() {
