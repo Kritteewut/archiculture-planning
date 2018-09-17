@@ -21,6 +21,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import './Design.css';
 import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
+import OpenWith from '@material-ui/icons/OpenWith';
 
 const drawerWidth = '350px'
 
@@ -152,7 +153,7 @@ class PermanentDrawer extends React.PureComponent {
         )
     }
     renderDrawer = () => {
-        const { classes, user, onSetUser, selectedPlan } = this.props;
+        const { classes, user, onSetUser, selectedPlan,onCallFitBounds } = this.props;
         return (
             user ?
                 <div>
@@ -168,6 +169,15 @@ class PermanentDrawer extends React.PureComponent {
                         <Divider />
                         <ListItem>
                             แปลงที่เลือก : {selectedPlan ? selectedPlan.planName : 'ยังไม่มีแปลงที่เลือก'}
+                            <ListItemSecondaryAction> 
+                              <IconButton aria-label="Delete"
+                                disabled={selectedPlan ? false : true}
+                                onClick={onCallFitBounds}
+                            >
+                                <OpenWith />
+                            </IconButton>  
+                            </ListItemSecondaryAction>
+                            
                         </ListItem>
                         <Divider />
                         {this.props.planData.map(value => {
@@ -179,10 +189,6 @@ class PermanentDrawer extends React.PureComponent {
                                     onClick={() => this.handlePlanClick(value)}>
                                     <ListItemText primary={value.planName} />
                                     <ListItemSecondaryAction>
-                                        <IconButton aria-label="Delete"
-                                            onClick={() => this.handleDeletePlanClick(value)}>
-                                            <DeleteIcon />
-                                        </IconButton>
                                         <IconButton aria-label="Delete"
                                             onClick={() => this.handleDeletePlanClick(value)}>
                                             <DeleteIcon />

@@ -23,7 +23,6 @@ class Map extends React.PureComponent {
             streetViewControl: false,
             fullscreenControl: false,
             mapTypeId: 'satellite',
-            tilt: 45,
         })
         this.setState({
             isLoad: true
@@ -44,7 +43,7 @@ class Map extends React.PureComponent {
                 top: 0,
                 left: this.props.left,
                 right: 0,
-                bottom: this.props.bottom,
+                bottom: 0,
                 justifyContent: 'flex-end',
                 transition: '350ms cubic-bezier(0.23, 1, 0.32, 1)',
             }}

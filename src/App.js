@@ -18,6 +18,7 @@ import TransparentMaker from './components/TransparentMaker';
 import shortid from 'shortid'
 import { auth } from './config/firebase'
 import LoadingCircle from './components/LoadingCircle';
+import './components/SearchBoxStyles.css'
 
 const shapesRef = db.collection('shapes')
 const planRef = db.collection('plan')
@@ -57,10 +58,9 @@ class App extends Component {
       strokeColor: '#ff4500',
       user: null,
       selectedColor: '',
-      openSide: false,
+      openSide: true,
       openOption: false,
-      left: '0vw',
-      bottom: '0vw',
+      left: '350px',
       isOverlayOptionsOpen: false,
       overlayOptionsType: '',
       icon: icon_point,
@@ -878,7 +878,7 @@ class App extends Component {
     const deleteObject = update(overlayObject, { $splice: [[deleteIndex, 1]] })
     if (overlayObject[deleteIndex].overlayDrawType === 'redraw') {
       //delete selected overlay from firestore
-      shapesRef.doc(overlay).delete().then(function () {
+      shapesRef.doc(overlayIndex).delete().then(function () {
         console.log("Document successfully deleted!");
       }).catch(function (error) {
         console.error("Error removing document: ", error);
@@ -891,6 +891,9 @@ class App extends Component {
     }
     this.onResetSelectedOverlay()
     this.setState({ overlayObject: deleteObject, })
+  }
+  onCallFitBounds = () => {
+    this.onFitBounds(this.state.overlayObject)
   }
   //this is rederrrrr
   render() {
@@ -905,6 +908,7 @@ class App extends Component {
           zIndex: 1,
         }}
       >
+        <input id="pac-input" className="controls" type="text" placeholder="Find place" />
         <PermanentDrawer
           onSaveToFirestore={this.onSaveToFirestore}
           onSetSelectedPlan={this.onSetSelectedPlan}
@@ -918,11 +922,11 @@ class App extends Component {
           onDeletePlan={this.onDeletePlan}
           onDeleteOverlay={this.onDeleteOverlay}
           onClearOverlayFromMap={this.onClearOverlayFromMap}
+          onCallFitBounds={this.onCallFitBounds}
           {...this.state}
         />
         <Map
           left={this.state.left}
-          bottom={this.state.bottom}
         >
           {this.state.overlayObject.map((value) => {
             const overlayType = value.overlayType
