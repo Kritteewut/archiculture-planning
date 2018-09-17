@@ -40,11 +40,9 @@ function new_script(src) {
 var my_script = new_script('https://maps.googleapis.com/maps/api/js?&libraries=geometry,drawing,places,visualization&key=&callback=initMap');
 //var my_script2 = new_script('https://cdn.rawgit.com/bjornharrtell/jsts/gh-pages/1.0.2/jsts.min.js')
 
-
 class App extends Component {
   constructor(props) {
     super(props)
-    this.testString = 'test'
     this.state = {
       status: 'start',
       btnTypeCheck: '',
@@ -179,8 +177,8 @@ class App extends Component {
     }
   }
   onAddListenerGrabBtn = () => {
-    this.onClearSomeMapEventListener()
     this.onUtilitiesMethod()
+    this.onClearSomeMapEventListener()
     this.onSetDragMapCursor()
     this.setState({
       btnTypeCheck: '',
@@ -832,22 +830,6 @@ class App extends Component {
       left: '0vw',
     });
   };
-  drawDisBtw = (overlayCoords) => {
-    for (var i = 1; i < overlayCoords.length; i++) {
-      let endPoint = overlayCoords[i]
-      let prevEndPoint = overlayCoords[i - 1]
-      let endLatLng = new window.google.maps.LatLng(endPoint);
-      let prevEndLatLng = new window.google.maps.LatLng(prevEndPoint);
-      let midpoint = { lat: (endPoint.lat + prevEndPoint.lat) / 2, lng: (endPoint.lng + prevEndPoint.lng) / 2 }
-      let disBtw = window.google.maps.geometry.spherical.computeDistanceBetween(endLatLng, prevEndLatLng)
-      return (
-        <TransparentMaker
-          midpoint={midpoint}
-          disBtw={disBtw}
-        />
-      )
-    }
-  }
   handleDetailEdit = (name, detail) => {
     const { selectedOverlay, overlayObject } = this.state
     const overlayIndex = selectedOverlay.overlayIndex
@@ -860,7 +842,7 @@ class App extends Component {
     })
     this.setState({ overlayObject: editedDetail })
   }
-  onChaneDrawPage = (page) => {
+  onChangeDrawPage = (page) => {
     this.setState({ drawPage: page })
   }
   onDeletePlan = (planId) => {
@@ -989,7 +971,7 @@ class App extends Component {
           <AddPlanBtn
             onAddPlan={this.onAddPlan}
             user={this.state.user}
-            onChaneDrawPage={this.onChaneDrawPage}
+            onChangeDrawPage={this.onChangeDrawPage}
             handleDrawerOpen={this.handleDrawerOpen}
           />
           {

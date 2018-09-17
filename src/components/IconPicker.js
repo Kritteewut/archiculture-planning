@@ -216,28 +216,30 @@ class IconPicker extends React.PureComponent {
         const { classes } = this.props;
 
         return (
-            images.map(image => (
-                <ButtonBase
-                    focusRipple
-                    key={image.title}
-                    className={classes.image}
-                    focusVisibleClassName={classes.focusVisible}
-                    style={{
-                        width: '8.7vw',
-                    }}
-                    onClick={() => this.props.onSetSelectedIcon(image.src)}
-                >
-
-                    <span
-                        className={classes.imageSrc}
+            <div>
+                {images.map(image => (
+                    <ButtonBase
+                        focusRipple
+                        key={image.title}
+                        className={classes.image}
+                        focusVisibleClassName={classes.focusVisible}
                         style={{
-                            backgroundImage: `url(${image.src})`,
+                            width: '8.7vw',
                         }}
-                    />
-                    <span className={classes.imageButton}>
-                    </span>
-                </ButtonBase>
-            ))
+                        onClick={() => this.props.onSetSelectedIcon(image.src)}
+                    >
+
+                        <span
+                            className={classes.imageSrc}
+                            style={{
+                                backgroundImage: `url(${image.src})`,
+                            }}
+                        />
+                        <span className={classes.imageButton}>
+                        </span>
+                    </ButtonBase>
+                ))}
+            </div>
         );
     }
 }

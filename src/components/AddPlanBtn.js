@@ -118,7 +118,7 @@ class AddPlanBtn extends React.PureComponent {
         } else {
             alert(' กรุณา Login ')
             this.props.handleDrawerOpen()
-            this.props.onChaneDrawPage('homePage')
+            this.props.onChangeDrawPage('homePage')
         }
 
     };
@@ -129,11 +129,12 @@ class AddPlanBtn extends React.PureComponent {
         });
     };
     handleAdd = () => {
-        if (this.state.inputValue === '') {
+        if (!this.state.inputValue.trim()) {
             alert('กรุณากรอกชื่อแปลง')
         } else {
             this.props.onAddPlan(this.state.inputValue)
             this.handleClose()
+            this.props.handleDrawerOpen()
         }
     }
     updateInputValue = (evt) => {

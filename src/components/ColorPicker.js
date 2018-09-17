@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TwitterPicker } from 'react-color';
+import { TwitterPicker, CirclePicker } from 'react-color';
 
 import './Design.css';
 
@@ -50,9 +50,9 @@ class ColorPicker extends React.PureComponent {
 
             <div>
                 <button
-                    onClick={this.handleStrokeColorButtonClick} 
+                    onClick={this.handleStrokeColorButtonClick}
                     className="DesignButtonColor"
-                    >
+                >
                     เปลี่ยนสีเส้น
                     </button>
                 <button
@@ -66,6 +66,9 @@ class ColorPicker extends React.PureComponent {
                     triangle={'hide'}
                     color={pickedColor}
                     colors={colorArray}
+                    onChangeComplete={this.handleChangeComplete}
+                />
+                <CirclePicker
                     onChangeComplete={this.handleChangeComplete}
                 />
             </div>

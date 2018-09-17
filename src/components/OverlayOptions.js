@@ -155,13 +155,30 @@ class OverlayOptions extends React.PureComponent {
         )
     }
     drawOverlayDetail = () => {
-        const { classes, selectedOverlay, onDeleteOverlay } = this.props;
+        const { classes, selectedOverlay, } = this.props;
         return (
             <div>
-                ชื่อ : {selectedOverlay.overlayName}
-                <br />
-                รายละเอียด : {selectedOverlay.overlayDetail}
-                <br />
+                <div>
+                    ชื่อ : {selectedOverlay.overlayName}
+                    <br />
+                </div>
+                <div>
+                    รายละเอียด : {selectedOverlay.overlayDetail}
+                    <br />
+                </div>
+                {
+                    selectedOverlay.overlayType === 'marker' ?
+                        <div>
+                            ตำแหน่ง :
+                            <br />
+                            - lat : {selectedOverlay.getPosition().lat()}
+                            <br />
+                            - lng : {selectedOverlay.getPosition().lng()}
+                            <br />
+                        </div>
+                        :
+                        null
+                }
                 <Button variant="contained" size="small" color="primary" className={classes.button} onClick={this.onEditOverlay}>
                     แก้ไข
                 </Button>
