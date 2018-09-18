@@ -80,11 +80,7 @@ class SearchBox extends React.PureComponent {
 
   render() {
     this.renderSearchBox()
-    return (
-      <div style={{ position: "absolute" }}>
-        <input id="pac-input" className="controls" type="text" placeholder="Find place" />
-      </div>
-    )
+    return (null)
   }
 }
 

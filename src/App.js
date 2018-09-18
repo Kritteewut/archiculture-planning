@@ -18,6 +18,7 @@ import TransparentMaker from './components/TransparentMaker';
 import shortid from 'shortid'
 import { auth } from './config/firebase'
 import LoadingCircle from './components/LoadingCircle';
+import './components/SearchBoxStyles.css'
 
 const shapesRef = db.collection('shapes')
 const planRef = db.collection('plan')
@@ -40,11 +41,9 @@ function new_script(src) {
 var my_script = new_script('https://maps.googleapis.com/maps/api/js?&libraries=geometry,drawing,places,visualization&key=&callback=initMap');
 //var my_script2 = new_script('https://cdn.rawgit.com/bjornharrtell/jsts/gh-pages/1.0.2/jsts.min.js')
 
-
 class App extends Component {
   constructor(props) {
     super(props)
-    this.testString = 'test'
     this.state = {
       status: 'start',
       btnTypeCheck: '',
@@ -59,10 +58,9 @@ class App extends Component {
       strokeColor: '#ff4500',
       user: null,
       selectedColor: '',
-      openSide: false,
+      openSide: true,
       openOption: false,
-      left: '0vw',
-      bottom: '0vw',
+      left: '350px',
       isOverlayOptionsOpen: false,
       overlayOptionsType: '',
       icon: icon_point,
@@ -179,8 +177,8 @@ class App extends Component {
     }
   }
   onAddListenerGrabBtn = () => {
-    this.onClearSomeMapEventListener()
     this.onUtilitiesMethod()
+    this.onClearSomeMapEventListener()
     this.onSetDragMapCursor()
     this.setState({
       btnTypeCheck: '',
@@ -832,22 +830,6 @@ class App extends Component {
       left: '0vw',
     });
   };
-  drawDisBtw = (overlayCoords) => {
-    for (var i = 1; i < overlayCoords.length; i++) {
-      let endPoint = overlayCoords[i]
-      let prevEndPoint = overlayCoords[i - 1]
-      let endLatLng = new window.google.maps.LatLng(endPoint);
-      let prevEndLatLng = new window.google.maps.LatLng(prevEndPoint);
-      let midpoint = { lat: (endPoint.lat + prevEndPoint.lat) / 2, lng: (endPoint.lng + prevEndPoint.lng) / 2 }
-      let disBtw = window.google.maps.geometry.spherical.computeDistanceBetween(endLatLng, prevEndLatLng)
-      return (
-        <TransparentMaker
-          midpoint={midpoint}
-          disBtw={disBtw}
-        />
-      )
-    }
-  }
   handleDetailEdit = (name, detail) => {
     const { selectedOverlay, overlayObject } = this.state
     const overlayIndex = selectedOverlay.overlayIndex
@@ -860,7 +842,7 @@ class App extends Component {
     })
     this.setState({ overlayObject: editedDetail })
   }
-  onChaneDrawPage = (page) => {
+  onChangeDrawPage = (page) => {
     this.setState({ drawPage: page })
   }
   onDeletePlan = (planId) => {
@@ -896,7 +878,7 @@ class App extends Component {
     const deleteObject = update(overlayObject, { $splice: [[deleteIndex, 1]] })
     if (overlayObject[deleteIndex].overlayDrawType === 'redraw') {
       //delete selected overlay from firestore
-      shapesRef.doc(overlay).delete().then(function () {
+      shapesRef.doc(overlayIndex).delete().then(function () {
         console.log("Document successfully deleted!");
       }).catch(function (error) {
         console.error("Error removing document: ", error);
@@ -909,6 +891,27 @@ class App extends Component {
     }
     this.onResetSelectedOverlay()
     this.setState({ overlayObject: deleteObject, })
+  }
+  onCallFitBounds = () => {
+    this.onFitBounds(this.state.overlayObject)
+  }
+  onEditPlanName = (plan, planName) => {
+    const { planData } = this.state
+    const planId = plan.planId
+    const editIndex = planData.findIndex(data => data.planId === planId)
+    const updatePlan = update(planData, { [editIndex]: { planName: { $set: planName } } })
+    this.setState({ planData: updatePlan })
+    //change edited name on firestore
+    planRef.doc(planId).update({
+      planName: planName
+    })
+      .then(function () {
+        console.log("Document successfully updated!");
+      })
+      .catch(function (error) {
+        // The document probably doesn't exist.
+        console.error("Error updating document: ", error);
+      });
   }
   //this is rederrrrr
   render() {
@@ -923,6 +926,7 @@ class App extends Component {
           zIndex: 1,
         }}
       >
+        <input id="pac-input" className="controls" type="text" placeholder="Find place" />
         <PermanentDrawer
           onSaveToFirestore={this.onSaveToFirestore}
           onSetSelectedPlan={this.onSetSelectedPlan}
@@ -936,11 +940,12 @@ class App extends Component {
           onDeletePlan={this.onDeletePlan}
           onDeleteOverlay={this.onDeleteOverlay}
           onClearOverlayFromMap={this.onClearOverlayFromMap}
+          onCallFitBounds={this.onCallFitBounds}
+          onEditPlanName={this.onEditPlanName}
           {...this.state}
         />
         <Map
           left={this.state.left}
-          bottom={this.state.bottom}
         >
           {this.state.overlayObject.map((value) => {
             const overlayType = value.overlayType
@@ -989,7 +994,7 @@ class App extends Component {
           <AddPlanBtn
             onAddPlan={this.onAddPlan}
             user={this.state.user}
-            onChaneDrawPage={this.onChaneDrawPage}
+            onChangeDrawPage={this.onChangeDrawPage}
             handleDrawerOpen={this.handleDrawerOpen}
           />
           {
