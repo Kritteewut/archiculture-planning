@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -12,16 +11,17 @@ import classNames from 'classnames';
 import Pic from './Picture/Ling logo.png';
 import firebase, { auth, provider, provider2 } from '../config/firebase';
 import '../App.css';
-import ColorPicker from './ColorPicker';
 import IconButton from '@material-ui/core/IconButton';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import OverlayOptions from './OverlayOptions';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import './Design.css';
 import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 import OpenWith from '@material-ui/icons/OpenWith';
+import List from '@material-ui/core/List';
+import TextField from '@material-ui/core/TextField';
 
 const drawerWidth = '350px'
 
@@ -40,6 +40,11 @@ const styles = theme => ({
         left: '50%',
         transform: 'translate(-50%, -50%)',
     },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        width: 200,
+    },
 });
 
 class PermanentDrawer extends React.PureComponent {
@@ -49,28 +54,28 @@ class PermanentDrawer extends React.PureComponent {
             planData: null,
             isDeletePlanOpen: false,
             isMergeOverlayOpen: false,
+            isEditPlanOpen: false,
+            selectedPlanIndex: '',
+            planName: '',
         }
-    }
-    componentDidMount() {
-        console.log()
     }
     logout = () => {
         firebase.auth().signOut();
         this.props.onSetUserNull()
     }
-    handlePlanClick = (planData) => {
+    handlePlanClick = (planData, index) => {
         const { selectedPlan, overlayObject } = this.props
         if ((!selectedPlan) && overlayObject.length > 0) {
-            this.setState({ planData: planData })
+            this.setState({ planData: planData, selectedPlanIndex: index })
             this.onToggleMergeOverlayModal()
         }
         else {
             if (selectedPlan !== planData) {
+                this.setState({ selectedPlanIndex: index })
                 this.props.onSetSelectedPlan(planData)
                 this.props.onClearOverlayFromMap()
             }
         }
-
 
     }
     handleAccecptToMergeOverlay = () => {
@@ -119,6 +124,10 @@ class PermanentDrawer extends React.PureComponent {
         this.setState({ planData: planData })
         this.onToggleDeletePlanModal()
     }
+    handleEditPlanClick = (planData) => {
+        this.setState({ planData: planData, planName: planData.planName })
+        this.onToggleEditPlanOpen()
+    }
     onToggleDeletePlanModal = () => {
         this.setState({ isDeletePlanOpen: !this.state.isDeletePlanOpen })
     }
@@ -152,52 +161,109 @@ class PermanentDrawer extends React.PureComponent {
             </Modal>
         )
     }
+    onToggleEditPlanOpen = () => {
+        this.setState({ isEditPlanOpen: !this.state.isEditPlanOpen })
+    }
+    renderEditPlanModal = () => {
+        const { classes } = this.props
+        return (
+            <Modal
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+                open={this.state.isEditPlanOpen}
+                onClose={this.onToggleEditPlanOpen}
+            >
+                <div className={classes.paper}>
+                    แก้ไขชื่อแปลง
+                    <br />
+                    <TextField
+                        id="with-placeholder"
+                        label="ชื่อแปลง"
+                        className={classes.textField}
+                        margin="normal"
+                        onChange={this.handleChange}
+                        name="planName"
+                        value={this.state.planName}
+                    />
+                    <br />
+                    <Button size="small" color="primary" onClick={this.onSubmitEditPlan}>
+                        ตกลง
+                    </Button>
+                    <Button size="small" color="primary" onClick={this.onToggleEditPlanOpen}>
+                        ยกเลิก
+                    </Button>
+                </div>
+            </Modal>
+        )
+    }
+    handleChange = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value
+        })
+    }
+    onSubmitEditPlan = () => {
+        this.props.onEditPlanName(this.state.planData, this.state.planName)
+        this.onToggleEditPlanOpen()
+    }
     renderDrawer = () => {
-        const { classes, user, onSetUser, selectedPlan,onCallFitBounds } = this.props;
+        const { classes, user, onSetUser, selectedPlan, onCallFitBounds } = this.props;
         return (
             user ?
                 <div>
-                    <ListItem>
-                        <Avatar
-                            alt={user.email}
-                            src={user.photoURL || Pic}
-                            className={classNames(classes.bigAvatar)}
-                        />
-                        <ListItemText primary={user.email} secondary={user.displayName} />
-                    </ListItem>
+                    <List>
+                        <ListItem>
+                            <Avatar
+                                alt={user.email}
+                                src={user.photoURL || Pic}
+                                className={classNames(classes.bigAvatar)}
+                            />
+                            <ListItemText primary={user.email} secondary={user.displayName} />
+                        </ListItem>
+                    </List>
                     <div>
                         <Divider />
-                        <ListItem>
-                            แปลงที่เลือก : {selectedPlan ? selectedPlan.planName : 'ยังไม่มีแปลงที่เลือก'}
-                            <ListItemSecondaryAction> 
-                              <IconButton aria-label="Delete"
-                                disabled={selectedPlan ? false : true}
-                                onClick={onCallFitBounds}
-                            >
-                                <OpenWith />
-                            </IconButton>  
-                            </ListItemSecondaryAction>
-                            
-                        </ListItem>
-                        <Divider />
-                        {this.props.planData.map(value => {
-                            return (
-                                <ListItem
-                                    role={undefined}
-                                    button
-                                    key={value.planId}
-                                    onClick={() => this.handlePlanClick(value)}>
-                                    <ListItemText primary={value.planName} />
-                                    <ListItemSecondaryAction>
-                                        <IconButton aria-label="Delete"
-                                            onClick={() => this.handleDeletePlanClick(value)}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
+                        <List>
+                            <ListItem>
+                                แปลงที่เลือก : {selectedPlan ? selectedPlan.planName : 'ยังไม่มีแปลงที่เลือก'}
+                                <ListItemSecondaryAction>
+                                    <IconButton aria-label="Delete"
+                                        disabled={selectedPlan ? false : true}
+                                        onClick={onCallFitBounds}
+                                    >
+                                        <OpenWith />
+                                    </IconButton>
+                                </ListItemSecondaryAction>
 
-                                </ListItem>
-                            )
-                        })}
+                            </ListItem>
+                        </List>
+                        <Divider />
+                        <List>
+                            {this.props.planData.map((plan, index) => {
+                                return (
+                                    <ListItem
+                                        role={undefined}
+                                        button
+                                        key={plan.planId}
+                                        onClick={() => this.handlePlanClick(plan, index)}
+                                        selected={this.state.selectedPlanIndex === index}
+                                    >
+                                        <ListItemText primary={plan.planName} />
+                                        <ListItemSecondaryAction>
+                                            <IconButton aria-label="Edit"
+                                                onClick={() => this.handleEditPlanClick(plan, index)}>
+                                                <EditIcon />
+                                            </IconButton>
+                                            <IconButton aria-label="Delete"
+                                                onClick={() => this.handleDeletePlanClick(plan, index)}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </ListItemSecondaryAction>
+
+                                    </ListItem>
+                                )
+
+                            })}
+                        </List>
                         <Divider />
                         <Button className="DesignButtonSave" disabled={selectedPlan ? false : true} onClick={this.props.onSaveToFirestore}>
                             บันทึก
@@ -207,6 +273,7 @@ class PermanentDrawer extends React.PureComponent {
                         </button>
                         {this.renderMergeOverlayModal()}
                         {this.renderDeletePlanModal()}
+                        {this.renderEditPlanModal()}
                     </div>
                 </div>
                 :

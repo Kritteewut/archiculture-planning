@@ -895,6 +895,24 @@ class App extends Component {
   onCallFitBounds = () => {
     this.onFitBounds(this.state.overlayObject)
   }
+  onEditPlanName = (plan, planName) => {
+    const { planData } = this.state
+    const planId = plan.planId
+    const editIndex = planData.findIndex(data => data.planId === planId)
+    const updatePlan = update(planData, { [editIndex]: { planName: { $set: planName } } })
+    this.setState({ planData: updatePlan })
+    //change edited name on firestore
+    planRef.doc(planId).update({
+      planName: planName
+    })
+      .then(function () {
+        console.log("Document successfully updated!");
+      })
+      .catch(function (error) {
+        // The document probably doesn't exist.
+        console.error("Error updating document: ", error);
+      });
+  }
   //this is rederrrrr
   render() {
     return (
@@ -923,6 +941,7 @@ class App extends Component {
           onDeleteOverlay={this.onDeleteOverlay}
           onClearOverlayFromMap={this.onClearOverlayFromMap}
           onCallFitBounds={this.onCallFitBounds}
+          onEditPlanName={this.onEditPlanName}
           {...this.state}
         />
         <Map
