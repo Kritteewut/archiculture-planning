@@ -22,13 +22,19 @@ import './Design.css';
 import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 
+import grey from '@material-ui/core/colors/grey';
+import red from '@material-ui/core/colors/red';
+
+
 const drawerWidth = '350px'
 
 const styles = theme => ({
+
     drawerPaper: {
         //position: 'relative',
         width: drawerWidth,
     },
+
     paper: {
         position: 'absolute',
         width: theme.spacing.unit * 50,
@@ -39,6 +45,29 @@ const styles = theme => ({
         left: '50%',
         transform: 'translate(-50%, -50%)',
     },
+
+    buttonmargin: {
+        margin: theme.spacing.unit,
+    },
+
+    buttonsave: {
+        color: theme.palette.getContrastText(grey[300]),
+        backgroundColor: grey[200],
+        '&:hover': {
+            backgroundColor: grey[400],
+        },
+    },
+
+    buttonlogout: {
+        color: theme.palette.getContrastText(red[500]),
+        backgroundColor: red[200],
+        '&:hover': {
+            backgroundColor: red[600],
+        },
+    },
+
+
+
 });
 
 class PermanentDrawer extends React.PureComponent {
@@ -183,22 +212,21 @@ class PermanentDrawer extends React.PureComponent {
                                             onClick={() => this.handleDeletePlanClick(value)}>
                                             <DeleteIcon />
                                         </IconButton>
-                                        <IconButton aria-label="Delete"
-                                            onClick={() => this.handleDeletePlanClick(value)}>
-                                            <DeleteIcon />
-                                        </IconButton>
                                     </ListItemSecondaryAction>
 
                                 </ListItem>
                             )
                         })}
                         <Divider />
-                        <Button className="DesignButtonSave" disabled={selectedPlan ? false : true} onClick={this.props.onSaveToFirestore}>
+
+                        <Button variant="contained" color="primary" className={classNames(classes.buttonmargin, classes.buttonlogout)} onClick={this.logout}>
+                            logout
+                        </Button>
+
+                        <Button variant="contained" color="primary" className={classNames(classes.buttonmargin, classes.buttonsave)} disabled={selectedPlan ? false : true} onClick={this.props.onSaveToFirestore}>
                             บันทึก
                         </Button>
-                        <button className="DesignButtonLogout" onClick={this.logout}>
-                            logout
-                        </button>
+
                         {this.renderMergeOverlayModal()}
                         {this.renderDeletePlanModal()}
                     </div>

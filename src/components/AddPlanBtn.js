@@ -44,7 +44,7 @@ const styles = theme => ({
 
     absolute: {
         position: 'absolute',
-        bottom: theme.spacing.unit * 40,
+        top: theme.spacing.unit * 32,
         left: theme.spacing.unit * 1.5 ,
         color: 'rgb(255, 255, 255)',
         background: 'linear-gradient(20deg, rgba(37, 37, 37, 0.85) 40%, rgba(0, 43, 161, 0.9)) 60%',

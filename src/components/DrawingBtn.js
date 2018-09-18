@@ -2,17 +2,24 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import DeleteIcon from '@material-ui/icons/Delete';
+
+// Icon group
+
+import IconComplete from '@material-ui/icons/Check';
+
+import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak';
+
 import Timeline from '@material-ui/icons/Timeline';
-import KeyboardVoiceICon from '@material-ui/icons/KeyboardVoice';
-import SendIcon from '@material-ui/icons/Send';
-import Place from '@material-ui/icons/Place';
+
+import TextureICon from '@material-ui/icons/Texture';
+
+
 // import Category from '@material-ui/icons/Category';
 
 const styles = theme => ({
     buttonComplete: {
         position: 'absolute',
-        bottom: theme.spacing.unit * 31,
+        top: theme.spacing.unit * 43,
         left: theme.spacing.unit * 1.5,
         width: '125px',
         color: 'rgb(255, 255, 255)',
@@ -21,7 +28,7 @@ const styles = theme => ({
     },
     buttonPoint: {
         position: 'absolute',
-        bottom: theme.spacing.unit * 23,
+        top: theme.spacing.unit * 51,
         left: theme.spacing.unit * 1.5,
         width: '125px',
         color: 'rgb(255, 255, 255)',
@@ -30,7 +37,7 @@ const styles = theme => ({
     },
     buttonLine: {
         position: 'absolute',
-        bottom: theme.spacing.unit * 15,
+        top: theme.spacing.unit * 59,
         left: theme.spacing.unit * 1.5,
         width: '125px',
         color: 'rgb(255, 255, 255)',
@@ -40,7 +47,7 @@ const styles = theme => ({
     },
     buttonPolygon: {
         position: 'absolute',
-        bottom: theme.spacing.unit * 7,
+        top: theme.spacing.unit * 67,
         left: theme.spacing.unit * 1.5,
         width: '125px',
         color: 'rgb(255, 255, 255)',
@@ -52,8 +59,8 @@ const styles = theme => ({
     leftIcon: {
         marginRight: theme.spacing.unit,
     },
-    rightIcon: {
-        marginLeft: theme.spacing.unit,
+    pointIcon: {
+        marginRight: theme.spacing.unit*4,
     },
     iconSmall: {
         fontSize: 20,
@@ -72,14 +79,13 @@ class IconLabelButtons extends React.PureComponent {
                 <Button variant="contained" color="default" className={classes.buttonComplete}
                     onClick={() => this.props.onAddListenerGrabBtn()}
                 >
-                    <DeleteIcon className={classes.leftIcon} />
+                    <IconComplete className={classes.leftIcon} />
                     Complete
 
           </Button>
                 <Button variant="contained" color="default" className={classes.buttonPoint}
-                    onClick={() => this.props.onAddListenerMarkerBtn()}
-                >
-                    <SendIcon className={classes.leftIcon} />
+                    onClick={() => this.props.onAddListenerMarkerBtn()}>
+                    <CenterFocusWeakIcon className={classes.leftIcon} />
                     Point
 
           </Button>
@@ -91,7 +97,7 @@ class IconLabelButtons extends React.PureComponent {
           </Button>
                 <Button variant="contained" color="default" className={classes.buttonPolygon}
                     onClick={() => this.props.onAddListenerPolygonBtn()}>
-                    <KeyboardVoiceICon className={classes.leftIcon} />
+                    <TextureICon className={classes.leftIcon} />
                     Polygon
           </Button>
 
