@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-
 class Map extends React.PureComponent {
     constructor(props) {
         super(props);

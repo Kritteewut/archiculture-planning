@@ -12,6 +12,7 @@ import IconLabelButtons from './components/DrawingBtn';
 import PermanentDrawer from './components/PermanentDrawer'
 import { db } from './config/firebase'
 import OpenSide from './components/openSideBtn';
+import OpenSettingMap from './components/OpenSettingMapBtn';
 import icon_point from './components/icons/icon_point.png';
 import DetailedExpansionPanel from './components/DetailedExpansionPanel'
 import TransparentMaker from './components/TransparentMaker';
@@ -1027,6 +1028,11 @@ class App extends Component {
             handleDrawerClose={this.handleDrawerClose}
             openSide={this.state.openSide}
           />
+
+          <OpenSettingMap
+          
+          />
+
         </Map>
       </div>
     );
