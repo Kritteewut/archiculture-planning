@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { TwitterPicker, CirclePicker } from 'react-color';
+import Button from '@material-ui/core/Button';
 
 import './Design.css';
 
@@ -46,6 +47,7 @@ class ColorPicker extends React.PureComponent {
     }
     render() {
         const { pickedColor } = this.state
+
         return (
 
             <div>
