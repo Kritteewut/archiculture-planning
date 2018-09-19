@@ -9,6 +9,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Modal from '@material-ui/core/Modal';
 import farm2 from './Picture/Picfarm2.jpg';
 import TextField from '@material-ui/core/TextField';
+import { throws } from 'assert';
 
 const styles = theme => ({
     drawerPaper: {
@@ -49,8 +50,16 @@ class OverlayOptions extends React.PureComponent {
             isEditOverlayOpen: false,
             name: '',
             detail: '',
-            isDeleteOverlayOpen: false
-        }
+            isDeleteOverlayOpen: false,
+        };
+        this.overlayNameInput = null;
+        this.overlayDetailInput = null
+        this.setOverlayNameInput = element => {
+            this.overlayNameInput = element;
+        };
+        this.setOverlayDetailInput = element => {
+            this.overlayDetailInput = element;
+        };
     }
     onToggleEditoverlayOpen = () => {
         this.setState({ isEditOverlayOpen: !this.state.isEditOverlayOpen })
@@ -100,6 +109,7 @@ class OverlayOptions extends React.PureComponent {
                         onChange={this.handleChange}
                         name="name"
                         value={this.state.name}
+                        inputRef={this.setOverlayNameInput}
                     />
                     <TextField
                         id="multiline-flexible"
@@ -111,7 +121,7 @@ class OverlayOptions extends React.PureComponent {
                         name="detail"
                         rowsMax="4"
                         value={this.state.detail}
-
+                        inputRef={this.setOverlayDetailInput}
                     />
                     <br />
                     <Button size="small" color="primary" onClick={this.onSubmitEdit}>
@@ -197,7 +207,16 @@ class OverlayOptions extends React.PureComponent {
             overlayOptionsType,
             onSetSelectedIcon,
             selectedOverlay,
+            onUndoCoords,
+            isFirstDraw,
+            overlayObject,
+            onUndoDrawingCoords,
         } = this.props
+        //const currentOverlay = overlayObject[overlayObject.length-1]
+        //const currentUndoCoords = currentOverlay.undoCoods
+        //const undoCoordsLength = currentUndoCoords.length 
+        //overlayObject[overlayObject.length-1].undoCoods.length > 1
+
         return (
             <div>
                 {
@@ -208,10 +227,28 @@ class OverlayOptions extends React.PureComponent {
                             />
                         </div>
                         :
-                        <ColorPicker
-                            onChangePolyStrokeColor={onChangePolyStrokeColor}
-                            onChangePolyFillColor={onChangePolyFillColor}
-                        />
+                        <div>
+
+                            <ColorPicker
+                                onChangePolyStrokeColor={onChangePolyStrokeColor}
+                                onChangePolyFillColor={onChangePolyFillColor}
+                            />
+                            {//(undoCoordsLength > 1)
+                                (!isFirstDraw && true) ? 
+                                
+                                <Button
+                                variant="contained"
+                                size="small"
+                                disabled={false}
+                                onClick={onUndoDrawingCoords}
+                            >
+                                Undo
+                            </Button> 
+                            :
+                            null
+                            }
+                           
+                        </div>
                 }
                 {
                     selectedOverlay ?

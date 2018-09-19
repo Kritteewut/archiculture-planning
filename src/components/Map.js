@@ -22,12 +22,17 @@ class Map extends React.PureComponent {
             streetViewControl: false,
             fullscreenControl: false,
             mapTypeId: 'satellite',
+            //hybrid
+            //roadmap
+            //satellite
+            //terrain
         })
         this.setState({
             isLoad: true
         })
-        // window.google.maps.event.addListener(window.map, 'click', function (event) {
-        //     console.log('version is', window.google.maps.version)
+        // window.google.maps.event.addListener(window.map, 'center_changed', function (event) {
+        //     // console.log('version is', window.google.maps.version)
+        //     //console.log(window.map.getCenter())
         // })
     }
 

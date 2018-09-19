@@ -316,15 +316,20 @@ class PermanentDrawer extends React.PureComponent {
         )
     }
     drawerPageRender = () => {
-        const { drawerPage,
+        const { 
+            drawerPage,
             selectedOverlay,
             onChangePolyStrokeColor,
             onChangePolyFillColor,
             onSetSelectedIcon,
             overlayOptionsType,
             handleDetailEdit,
-            onDeleteOverlay
+            onDeleteOverlay,
+            onUndoCoords,
+            isFirstDraw,
+            onUndoDrawingCoords
         } = this.props;
+
         switch (drawerPage) {
             case 'homePage':
                 return (
@@ -340,6 +345,9 @@ class PermanentDrawer extends React.PureComponent {
                         overlayOptionsType={overlayOptionsType}
                         handleDetailEdit={handleDetailEdit}
                         onDeleteOverlay={onDeleteOverlay}
+                        onUndoCoords={onUndoCoords}
+                        isFirstDraw={isFirstDraw}
+                        onUndoDrawingCoords={onUndoDrawingCoords}
                     />
                 )
         }
