@@ -20,7 +20,7 @@ import shortid from 'shortid'
 import { auth } from './config/firebase'
 import LoadingCircle from './components/LoadingCircle';
 import './components/SearchBoxStyles.css'
-
+import { DISPLAY_STRING } from './language/Language'
 const shapesRef = db.collection('shapes')
 const planRef = db.collection('plan')
 function new_script(src) {
@@ -1079,7 +1079,7 @@ class App extends Component {
           />
 
           <OpenSettingMap
-          
+
           />
 
         </Map>

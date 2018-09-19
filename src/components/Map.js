@@ -34,6 +34,16 @@ class Map extends React.PureComponent {
         //     // console.log('version is', window.google.maps.version)
         //     //console.log(window.map.getCenter())
         // })
+        const KEY_WORD = [
+            'ok',
+            'cancle',
+            'discard',
+            'selectedPlan'
+        ]
+        const THAI = {
+            [KEY_WORD[0]]: 'ตกลง'
+        }
+        console.log(KEY_WORD,THAI.ok)
     }
 
     render() {
