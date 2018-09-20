@@ -943,18 +943,22 @@ class App extends Component {
     const currentObject = overlayObject[currentObjectLength]
     const currentCoordsLength = currentObject.overlayCoords.length - 1
     const currentCoords = currentObject[currentCoordsLength]
-    // const undoCoords = currentObject.undoCoords
-    // const beforeCurrentUndoCoordsLength = undoCoords.length - 2
-    // const currentUndoCoordslength = undoCoords.length - 1
-    // const beforeUndoCoords = undoCoords[beforeCurrentUndoCoordsLength]
-    // const currentUndoCoords = undoCoords[currentUndoCoordslength]
-    // const undoOverlay = update(overlayObject, { [currentObjectLength]: { overlayCoords: { $set: beforeUndoCoords } } })
-    // undoOverlay[currentObjectLength].undoCoords.pop()
-    const undoCoords = update(overlayObject, { [currentObjectLength]: { overlayCoords: { $splice: [[currentCoordsLength, 1]] } } })
-    const currentUndoObject = undoCoords[undoCoords.length - 1]
-    currentUndoObject.undoCoords.pop()
-    this.onPolydistanceBtwCompute(currentUndoObject)
-    this.setState({ overlayObject: undoCoords }, () => console.log(overlayObject, 'undo'))
+    const undoCoords = currentObject.undoCoords
+    const beforeCurrentUndoCoordsLength = undoCoords.length - 2
+    const currentUndoCoordslength = undoCoords.length - 1
+    const beforeUndoCoords = undoCoords[beforeCurrentUndoCoordsLength]
+    const currentUndoCoords = undoCoords[currentUndoCoordslength]
+    const undoOverlay = update(overlayObject, { [currentObjectLength]: { overlayCoords: { $set: beforeUndoCoords } } })
+    undoOverlay[currentObjectLength].undoCoords.pop()
+
+
+    //easy to do ieie
+    // const undoCoords = update(overlayObject, { [currentObjectLength]: { overlayCoords: { $splice: [[currentCoordsLength, 1]] } } })
+    // const currentUndoObject = undoCoords[undoCoords.length - 1]
+    // currentUndoObject.undoCoords.pop()
+
+    this.onPolydistanceBtwCompute(undoOverlay[currentObjectLength])
+    this.setState({ overlayObject: undoOverlay }, () => console.log(overlayObject, 'undo'))
   }
   onRedoDrawingCoords = () => {
 
