@@ -21,6 +21,8 @@ import { auth } from './config/firebase'
 import LoadingCircle from './components/LoadingCircle';
 import './components/SearchBoxStyles.css'
 import { DISPLAY_STRING } from './language/Language'
+
+
 const shapesRef = db.collection('shapes')
 const planRef = db.collection('plan')
 function new_script(src) {
@@ -73,6 +75,7 @@ class App extends Component {
       distanceDetail: [],
       drawerPage: 'homePage',
       isLoading: null,
+      drawMode: 'desktop',
     }
   }
   componentWillMount() {
@@ -251,16 +254,15 @@ class App extends Component {
         let pushCoords = update(self.state.overlayObject, { [index]: { overlayCoords: { $push: [clickLatLng] } } })
         const currentOverlay = pushCoords[pushCoords.length - 1]
         const currentCoords = currentOverlay.overlayCoords
-        const currentUndoCoords = currentOverlay.undoCoords
-        currentUndoCoords.push(currentCoords)
+        const pushUndoCoords = update(pushCoords, { [index]: { undoCoords: { $push: [currentCoords] } } })
         const polyline = new window.google.maps.Polyline({
           path: currentCoords,
           overlayType: 'polyline'
         })
         self.onPolyLengthCompute(polyline)
-        self.setState({ overlayObject: pushCoords })
+        self.setState({ overlayObject: pushUndoCoords })
         self.onDrawExampleLine(event)
-        self.onPolydistanceBtwCompute(pushCoords[pushCoords.length - 1])
+        self.onPolydistanceBtwCompute(pushUndoCoords[pushUndoCoords.length - 1])
 
       }
     })
@@ -273,7 +275,6 @@ class App extends Component {
       const clickLatLng = { lat, lng }
       const { fillColor, strokeColor, overlayObject, isFirstDraw } = self.state
       if (isFirstDraw) {
-
         let pushObject = update(overlayObject, {
           $push: [{
             overlayCoords: [clickLatLng],
@@ -295,21 +296,20 @@ class App extends Component {
         })
         self.onDrawExampleLine(event)
       } else {
-        const index = self.state.overlayObject.length - 1
-        const pushCoords = update(self.state.overlayObject, { [index]: { overlayCoords: { $push: [clickLatLng] } } })
+        const index = overlayObject.length - 1
+        const pushCoords = update(overlayObject, { [index]: { overlayCoords: { $push: [clickLatLng] } } })
         const currentOverlay = pushCoords[pushCoords.length - 1]
         const currentCoords = currentOverlay.overlayCoords
-        const currentUndoCoords = currentOverlay.undoCoords
-        currentUndoCoords.push(currentCoords)
+        const pushUndoCoords = update(pushCoords, { [index]: { undoCoords: { $push: [currentCoords] } } })
         const poylgon = new window.google.maps.Polygon({
           path: currentCoords,
           overlayType: 'polygon'
         })
         self.onPolyLengthCompute(poylgon)
         self.onSquereMetersTrans(poylgon)
-        self.setState({ overlayObject: pushCoords }, () => console.log(overlayObject))
+        self.setState({ overlayObject: pushUndoCoords }, () => console.log(self.state.overlayObject))
         self.onDrawExampleLine(event)
-        self.onPolydistanceBtwCompute(pushCoords[pushCoords.length - 1])
+        self.onPolydistanceBtwCompute(pushUndoCoords[pushUndoCoords.length - 1])
       }
     })
   }
@@ -344,6 +344,7 @@ class App extends Component {
       self.handleDrawerOpen()
       self.onSetMarkerOptions()
       self.onSetSelectOverlay(marker)
+      console.log(marker, 'poly')
     })
     window.google.maps.event.addListener(marker, 'dragend', function () {
       const overlayObject = self.state.overlayObject
@@ -362,6 +363,7 @@ class App extends Component {
       self.onSetSelectOverlay(polygon)
       self.onPolyLengthCompute(polygon)
       self.onSquereMetersTrans(polygon)
+      console.log(polygon, 'poly')
     })
     window.google.maps.event.addListener(polygon, 'mouseup', function (event) {
       if (event.vertex !== undefined || event.edge !== undefined) {
@@ -378,6 +380,7 @@ class App extends Component {
       self.onSetPolyOptions()
       self.onSetSelectOverlay(polyline)
       self.onPolyLengthCompute(polyline)
+      console.log(polyline, 'poly')
     })
     window.google.maps.event.addListener(polyline, 'mouseup', function (event) {
       if (event.vertex !== undefined || event.edge !== undefined) {
@@ -534,7 +537,9 @@ class App extends Component {
     this.setState({ lengthDetail: sumLength.toFixed(3) })
   }
   onSquereMetersTrans = (polygon) => {
+
     var area = window.google.maps.geometry.spherical.computeArea(polygon.getPath())
+    //area x 0.00024710538146717 = acre
     let rnwString = ''
     var rai, ngan, wa, raiFraction, nganFraction
 
@@ -862,6 +867,7 @@ class App extends Component {
       overlayName: name,
       overlayDetail: detail,
     })
+
     this.setState({ overlayObject: editedDetail })
   }
   onChangeDrawPage = (page) => {
@@ -936,33 +942,51 @@ class App extends Component {
       });
   }
   onUndoCoords = (overlay) => {
-
+    if (overlay.undoCoords.length > 1) {
+      const { overlayObject } = this.state
+      const overlayIndex = overlay.overlayIndex
+      const overlayType = overlay.overlayType
+      const actionIndex = overlayObject.findIndex(overlay => overlay.overlayIndex === overlayIndex)
+      const undoCoords = overlay.undoCoords
+      const undoCoordsLength = undoCoords.length - 1
+      const lastUndoCoords = undoCoords[undoCoordsLength]
+      const beforeLastUndoCoords = undoCoords[undoCoordsLength - 1]
+      const setUndoCoords = update(overlayObject, { [actionIndex]: { overlayCoords: { $set: beforeLastUndoCoords } } })
+      const pushRedoCoods = update(setUndoCoords, { [actionIndex]: { redoCoords: { $unshift: [lastUndoCoords] } } })
+      const popUndoCoords = update(pushRedoCoods, { [actionIndex]: { undoCoords: { $splice: [[undoCoordsLength, 1]] } } })
+      if (overlayType !== 'marker') {
+        this.onPolydistanceBtwCompute(popUndoCoords[popUndoCoords.length - 1])
+      }
+      this.setState({ overlayObject: popUndoCoords }, () => console.log(this.state.overlayObject, 'undo'))
+    } else {
+      return;
+    }
+  }
+  onRedoCoords = (overlay) => {
+    if (overlay.redoCoords.length > 0) {
+      const { overlayObject } = this.state
+      const overlayIndex = overlay.overlayIndex
+      const overlayType = overlay.overlayType
+      const actionIndex = overlayObject.findIndex(overlay => overlay.overlayIndex === overlayIndex)
+      const redoCoords = overlay.redoCoords
+      const redoCoordsLength = redoCoords.length - 1
+      const lastRedoCoords = redoCoords[redoCoordsLength]
+      const setRedoCoords = update(overlayObject, { [actionIndex]: { overlayCoords: { $set: lastRedoCoords } } })
+    } else {
+      return;
+    }
   }
   onUndoDrawingCoords = () => {
     const { overlayObject } = this.state
     const currentObjectLength = overlayObject.length - 1
     const currentObject = overlayObject[currentObjectLength]
-    const currentCoordsLength = currentObject.overlayCoords.length - 1
-    const currentCoords = currentObject[currentCoordsLength]
-    const undoCoords = currentObject.undoCoords
-    const beforeCurrentUndoCoordsLength = undoCoords.length - 2
-    const currentUndoCoordslength = undoCoords.length - 1
-    const beforeUndoCoords = undoCoords[beforeCurrentUndoCoordsLength]
-    const currentUndoCoords = undoCoords[currentUndoCoordslength]
-    const undoOverlay = update(overlayObject, { [currentObjectLength]: { overlayCoords: { $set: beforeUndoCoords } } })
-    undoOverlay[currentObjectLength].undoCoords.pop()
-
-
-    //easy to do ieie
-    // const undoCoords = update(overlayObject, { [currentObjectLength]: { overlayCoords: { $splice: [[currentCoordsLength, 1]] } } })
-    // const currentUndoObject = undoCoords[undoCoords.length - 1]
-    // currentUndoObject.undoCoords.pop()
-
-    this.onPolydistanceBtwCompute(undoOverlay[currentObjectLength])
-    this.setState({ overlayObject: undoOverlay }, () => console.log(overlayObject, 'undo'))
+    this.onUndoCoords(currentObject)
   }
   onRedoDrawingCoords = () => {
-
+    const { overlayObject } = this.state
+    const currentObjectLength = overlayObject.length - 1
+    const currentObject = overlayObject[currentObjectLength]
+    this.onUndoCoords(currentObject)
   }
   //this is rederrrrr
   render() {
@@ -995,13 +1019,14 @@ class App extends Component {
           onEditPlanName={this.onEditPlanName}
           onUndoCoords={this.onUndoCoords}
           onUndoDrawingCoords={this.onUndoDrawingCoords}
+          onRedoDrawingCoords={this.onRedoDrawingCoords}
           {...this.state}
         />
         <Map
           left={this.state.left}
         >
 
-          {this.state.overlayObject.map((value) => {
+          {this.state.overlayObject.map((value, index) => {
             const overlayType = value.overlayType
             const overlayIndex = value.overlayIndex
             switch (overlayType) {
@@ -1009,6 +1034,7 @@ class App extends Component {
                 return (
                   <Polygon
                     key={overlayIndex}
+                    zIndex={index}
                     {...value}
                     addPolygonListener={this.addPolygonListener}
                     isFirstDraw={this.state.isFirstDraw}
@@ -1019,6 +1045,7 @@ class App extends Component {
                 return (
                   <Polyline
                     key={overlayIndex}
+                    zIndex={index}
                     {...value}
                     isFirstDraw={this.state.isFirstDraw}
                     addPolylineListener={this.addPolylineListener}
@@ -1030,6 +1057,7 @@ class App extends Component {
                   <Marker
                     key={overlayIndex}
                     {...value}
+                    zIndex={index}
                     isFirstDraw={this.state.isFirstDraw}
                     addMarkerListener={this.addMarkerListener}
                   />

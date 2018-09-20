@@ -11,6 +11,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import MountainIcon from '@material-ui/icons/FilterHdr';
 import { withStyles } from '@material-ui/core/styles';
+import icon_point from './icons/icon_point.png'
 
 /* picture */
 import Maplayer0 from './Picture/MapLayer0.jpg';
@@ -102,19 +103,22 @@ const styles = theme => ({
 
 const images = [
     {
-        url: '/Picture/MapLayer0.jpg',
-        title: 'Hybrid',
-        width: '40%',
+        src: icon_point,
+        title: 'จุด1',
+        width: '5%',
+        height: '5%',
     },
     {
-        url: '/static/images/grid-list/burgers.jpg',
-        title: 'Burgers',
-        width: '30%',
+        src: icon_point,
+        title: 'จุด2',
+        width: '5%',
+        height: '5%',
     },
     {
-        url: '/static/images/grid-list/camera.jpg',
-        title: 'Camera',
-        width: '30%',
+        src: icon_point,
+        title: 'จุด3',
+        width: '5%',
+        height: '5%',
     },
 ];
 
@@ -202,8 +206,6 @@ class MenuListComposition extends React.Component {
                                                     </ButtonBase>
                                                 ))}
                                             </Button>
-                                        </MenuList>
-                                        <MenuList>
                                             <Button
                                                 onClick={this.handleClose}>
                                                 {images.map(image => (
@@ -219,7 +221,7 @@ class MenuListComposition extends React.Component {
                                                         <span
                                                             className={classes.imageSrc}
                                                             style={{
-                                                                backgroundImage: `url(${image.url})`,
+                                                                backgroundImage: `url(${image.src})`,
                                                             }}
                                                         />
                                                         <span className={classes.imageBackdrop} />

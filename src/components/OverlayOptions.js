@@ -207,10 +207,9 @@ class OverlayOptions extends React.PureComponent {
             overlayOptionsType,
             onSetSelectedIcon,
             selectedOverlay,
-            onUndoCoords,
             isFirstDraw,
-            overlayObject,
             onUndoDrawingCoords,
+            onRedoDrawingCoords,
         } = this.props
         //const currentOverlay = overlayObject[overlayObject.length-1]
         //const currentUndoCoords = currentOverlay.undoCoods
@@ -234,20 +233,30 @@ class OverlayOptions extends React.PureComponent {
                                 onChangePolyFillColor={onChangePolyFillColor}
                             />
                             {//(undoCoordsLength > 1)
-                                (!isFirstDraw && true) ? 
-                                
-                                <Button
-                                variant="contained"
-                                size="small"
-                                disabled={false}
-                                onClick={onUndoDrawingCoords}
-                            >
-                                Undo
-                            </Button> 
-                            :
-                            null
+                                (!isFirstDraw) ?
+                                    <div>
+                                        <Button
+                                            variant="contained"
+                                            size="small"
+                                            disabled={false}
+                                            onClick={onUndoDrawingCoords}
+                                        >
+                                            Undo
+                                        </Button>
+                                        <Button
+                                            variant="contained"
+                                            size="small"
+                                            disabled={false}
+                                            onClick={onRedoDrawingCoords}
+                                        >
+                                            Redo
+                                        </Button>
+                                    </div>
+
+                                    :
+                                    null
                             }
-                           
+
                         </div>
                 }
                 {

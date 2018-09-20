@@ -12,9 +12,11 @@ class Marker extends React.PureComponent {
             this.marker.setMap(null)
         }
     }
-    
+
     redrawMarker = () => {
-        const { overlayCoords, overlayIndex, overlayDrawType, icon, overlayName, overlayDetail, overlayType } = this.props
+        const { overlayCoords, overlayIndex, overlayDrawType, icon, overlayName, overlayDetail, overlayType,
+            zIndex, undoCoords, redoCoords,
+        } = this.props
         if (this.marker === false) {
             this.marker = new window.google.maps.Marker({
                 position: overlayCoords[0],
@@ -26,13 +28,20 @@ class Marker extends React.PureComponent {
                 draggable: false,
                 overlayName,
                 overlayDetail,
+                zIndex,
+                undoCoords,
+                redoCoords,
             })
             this.props.addMarkerListener(this.marker)
         } else {
             this.marker.setOptions({
+                position: overlayCoords[0],
                 icon,
                 overlayName,
                 overlayDetail,
+                zIndex,
+                undoCoords,
+                redoCoords,
             })
         }
     }

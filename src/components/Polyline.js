@@ -20,7 +20,9 @@ class Polyline extends React.PureComponent {
             strokeColor,
             overlayName,
             overlayDetail,
-            overlayType
+            overlayType,
+            zIndex,
+            undoCoords, redoCoords,
         } = this.props
         if (this.polyline === false) {
             this.polyline = new window.google.maps.Polyline({
@@ -34,8 +36,10 @@ class Polyline extends React.PureComponent {
                 clickable: true,
                 overlayName,
                 overlayDetail,
-                strokeWeight: '5'
-
+                strokeWeight: '5',
+                zIndex,
+                undoCoords, 
+                redoCoords,
             })
             this.props.addPolylineListener(this.polyline)
         }
@@ -45,6 +49,9 @@ class Polyline extends React.PureComponent {
                 strokeColor,
                 overlayName,
                 overlayDetail,
+                zIndex,
+                undoCoords, 
+                redoCoords,
             })
         }
     }

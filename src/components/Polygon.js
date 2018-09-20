@@ -45,7 +45,8 @@ class Polygon extends React.PureComponent {
         const {
             overlayCoords, overlayIndex, overlayDrawType,
             fillColor, strokeColor, overlayName,
-            overlayDetail, overlayType,
+            overlayDetail, overlayType, zIndex, undoCoords, redoCoords,
+
         } = this.props
 
         if (this.polygon === false) {
@@ -54,6 +55,7 @@ class Polygon extends React.PureComponent {
                 map: window.map, 
                 suppressUndo: true,
                 clickable: true,
+                fillOpacity: 0.1,
                 overlayIndex,
                 overlayType,
                 overlayDrawType,
@@ -61,7 +63,9 @@ class Polygon extends React.PureComponent {
                 fillColor,
                 overlayName,
                 overlayDetail,
-                fillOpacity: 0.1,
+                zIndex,
+                undoCoords, redoCoords,
+                
             })
             this.props.addPolygonListener(this.polygon)
             //this.polygon.binder = new MVCArrayBinder(this.polygon.getPath())
@@ -74,6 +78,9 @@ class Polygon extends React.PureComponent {
                 fillColor,
                 overlayName,
                 overlayDetail,
+                zIndex,
+                undoCoords, 
+                redoCoords,
             })
         }
     }
