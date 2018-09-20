@@ -201,8 +201,6 @@ const images = [
         width: '5%',
         height: '5%',
     },
-
-
 ];
 
 class IconPicker extends React.PureComponent {

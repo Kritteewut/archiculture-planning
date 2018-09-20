@@ -22,7 +22,6 @@ import LoadingCircle from './components/LoadingCircle';
 import './components/SearchBoxStyles.css'
 import { DISPLAY_STRING } from './language/Language'
 
-
 const shapesRef = db.collection('shapes')
 const planRef = db.collection('plan')
 function new_script(src) {
@@ -255,14 +254,15 @@ class App extends Component {
         const currentOverlay = pushCoords[pushCoords.length - 1]
         const currentCoords = currentOverlay.overlayCoords
         const pushUndoCoords = update(pushCoords, { [index]: { undoCoords: { $push: [currentCoords] } } })
+        const setRedoCoords = update(pushUndoCoords, { [index]: { redoCoords: { $set: [] } } })
         const polyline = new window.google.maps.Polyline({
           path: currentCoords,
           overlayType: 'polyline'
         })
         self.onPolyLengthCompute(polyline)
-        self.setState({ overlayObject: pushUndoCoords })
+        self.setState({ overlayObject: setRedoCoords })
         self.onDrawExampleLine(event)
-        self.onPolydistanceBtwCompute(pushUndoCoords[pushUndoCoords.length - 1])
+        self.onPolydistanceBtwCompute(setRedoCoords[setRedoCoords.length - 1])
 
       }
     })
@@ -301,15 +301,16 @@ class App extends Component {
         const currentOverlay = pushCoords[pushCoords.length - 1]
         const currentCoords = currentOverlay.overlayCoords
         const pushUndoCoords = update(pushCoords, { [index]: { undoCoords: { $push: [currentCoords] } } })
+        const setRedoCoords = update(pushUndoCoords, { [index]: { redoCoords: { $set: [] } } })
         const poylgon = new window.google.maps.Polygon({
           path: currentCoords,
           overlayType: 'polygon'
         })
         self.onPolyLengthCompute(poylgon)
         self.onSquereMetersTrans(poylgon)
-        self.setState({ overlayObject: pushUndoCoords }, () => console.log(self.state.overlayObject))
+        self.setState({ overlayObject: setRedoCoords }, () => console.log(self.state.overlayObject))
         self.onDrawExampleLine(event)
-        self.onPolydistanceBtwCompute(pushUndoCoords[pushUndoCoords.length - 1])
+        self.onPolydistanceBtwCompute(setRedoCoords[setRedoCoords.length - 1])
       }
     })
   }
@@ -674,6 +675,8 @@ class App extends Component {
                 strokeColor,
                 overlayName,
                 overlayDetail,
+                undoCoords: [],
+                redoCoords: [],
               })
             )
           case 'polyline':
@@ -687,6 +690,8 @@ class App extends Component {
                 strokeColor,
                 overlayName,
                 overlayDetail,
+                undoCoords: [],
+                redoCoords: [],
               })
             )
           case 'marker':
@@ -700,6 +705,8 @@ class App extends Component {
                 icon,
                 overlayName,
                 overlayDetail,
+                undoCoords: [],
+                redoCoords: [],
               })
             )
           default: return null
