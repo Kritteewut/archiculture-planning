@@ -22,6 +22,7 @@ const styles = theme => ({
         flexWrap: 'wrap',
         minWidth: 300,
         width: '100%',
+        zIndex:'1'
     },
     paper: {
         marginRight: theme.spacing.unit * 2,

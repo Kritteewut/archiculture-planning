@@ -12,21 +12,17 @@ import IconLabelButtons from './components/DrawingBtn';
 import PermanentDrawer from './components/PermanentDrawer'
 import { db } from './config/firebase'
 import OpenSide from './components/openSideBtn';
-import OpenSettingMap from './components/OpenSettingMapBtn';
 import icon_point from './components/icons/icon_point.png';
 import DetailedExpansionPanel from './components/DetailedExpansionPanel'
 import TransparentMaker from './components/TransparentMaker';
 import shortid from 'shortid'
 import { auth } from './config/firebase'
 import LoadingCircle from './components/LoadingCircle';
-import './components/SearchBoxStyles.css'
-import { DISPLAY_STRING } from './language/Language'
-
 
 const shapesRef = db.collection('shapes')
 const planRef = db.collection('plan')
 function new_script(src) {
-  console.log('initial google map api load!', src)
+  console.log('initial google map api load!')
   return new Promise(function (resolve, reject) {
     var script = document.createElement('script');
     script.src = src;
@@ -61,9 +57,10 @@ class App extends Component {
       strokeColor: '#ff4500',
       user: null,
       selectedColor: '',
-      openSide: true,
+      openSide: false,
       openOption: false,
-      left: '350px',
+      left: '0vw',
+      bottom: '0vw',
       isOverlayOptionsOpen: false,
       overlayOptionsType: '',
       icon: icon_point,
@@ -75,7 +72,6 @@ class App extends Component {
       distanceDetail: [],
       drawerPage: 'homePage',
       isLoading: null,
-      drawMode: 'desktop',
     }
   }
   componentWillMount() {
@@ -196,19 +192,16 @@ class App extends Component {
       const { isFirstDraw, overlayObject, icon } = self.state
       const lat = event.latLng.lat()
       const lng = event.latLng.lng()
-      const clickLatLng = { lat, lng }
       if (isFirstDraw === true) {
         var coordsPush = update(overlayObject, {
           $push: [{
-            overlayCoords: [clickLatLng],
+            overlayCoords: [{ lat, lng }],
             overlayIndex: shortid.generate(),
             overlayType: 'marker',
             overlayDrawType: 'draw',
             icon: icon,
             overlayName: 'Marker',
             overlayDetail: '-',
-            undoCoords: [[clickLatLng]],
-            redoCoords: [],
           }]
         })
       }
@@ -226,12 +219,12 @@ class App extends Component {
     window.google.maps.event.addListener(window.map, 'click', function (event) {
       const lat = event.latLng.lat()
       const lng = event.latLng.lng()
-      const clickLatLng = { lat, lng }
+
       if (self.state.isFirstDraw === true) {
         const { fillColor, strokeColor } = self.state
         let pushObject = update(self.state.overlayObject, {
           $push: [{
-            overlayCoords: [clickLatLng],
+            overlayCoords: [{ lat, lng }],
             overlayIndex: shortid.generate(),
             overlayType: 'polyline',
             overlayDrawType: 'draw',
@@ -239,8 +232,6 @@ class App extends Component {
             strokeColor: strokeColor,
             overlayName: 'Polyline',
             overlayDetail: '-',
-            undoCoords: [[clickLatLng]],
-            redoCoords: [],
           }]
         })
         self.setState({
@@ -251,18 +242,11 @@ class App extends Component {
         self.onDrawExampleLine(event)
       } else {
         let index = self.state.overlayObject.length - 1
-        let pushCoords = update(self.state.overlayObject, { [index]: { overlayCoords: { $push: [clickLatLng] } } })
-        const currentOverlay = pushCoords[pushCoords.length - 1]
-        const currentCoords = currentOverlay.overlayCoords
-        const pushUndoCoords = update(pushCoords, { [index]: { undoCoords: { $push: [currentCoords] } } })
-        const polyline = new window.google.maps.Polyline({
-          path: currentCoords,
-          overlayType: 'polyline'
-        })
-        self.onPolyLengthCompute(polyline)
-        self.setState({ overlayObject: pushUndoCoords })
+        let pushCoords = update(self.state.overlayObject, { [index]: { overlayCoords: { $push: [{ lat, lng }] } } })
+        //self.onPolyLengthComputeForCoords()
+        self.setState({ overlayObject: pushCoords })
         self.onDrawExampleLine(event)
-        self.onPolydistanceBtwCompute(pushUndoCoords[pushUndoCoords.length - 1])
+        self.onPolydistanceBtwCompute(pushCoords[pushCoords.length - 1])
 
       }
     })
@@ -272,12 +256,11 @@ class App extends Component {
     window.google.maps.event.addListener(window.map, 'click', function (event) {
       const lat = event.latLng.lat()
       const lng = event.latLng.lng()
-      const clickLatLng = { lat, lng }
       const { fillColor, strokeColor, overlayObject, isFirstDraw } = self.state
       if (isFirstDraw) {
         let pushObject = update(overlayObject, {
           $push: [{
-            overlayCoords: [clickLatLng],
+            overlayCoords: [{ lat, lng }],
             overlayIndex: shortid.generate(),
             overlayType: 'polygon',
             overlayDrawType: 'draw',
@@ -285,8 +268,6 @@ class App extends Component {
             strokeColor: strokeColor,
             overlayName: 'Polygon',
             overlayDetail: '-',
-            undoCoords: [[clickLatLng]],
-            redoCoords: [],
           }]
         })
         self.setState({
@@ -296,20 +277,12 @@ class App extends Component {
         })
         self.onDrawExampleLine(event)
       } else {
-        const index = overlayObject.length - 1
-        const pushCoords = update(overlayObject, { [index]: { overlayCoords: { $push: [clickLatLng] } } })
-        const currentOverlay = pushCoords[pushCoords.length - 1]
-        const currentCoords = currentOverlay.overlayCoords
-        const pushUndoCoords = update(pushCoords, { [index]: { undoCoords: { $push: [currentCoords] } } })
-        const poylgon = new window.google.maps.Polygon({
-          path: currentCoords,
-          overlayType: 'polygon'
-        })
-        self.onPolyLengthCompute(poylgon)
-        self.onSquereMetersTrans(poylgon)
-        self.setState({ overlayObject: pushUndoCoords }, () => console.log(self.state.overlayObject))
+        const index = self.state.overlayObject.length - 1
+        const pushCoords = update(self.state.overlayObject, { [index]: { overlayCoords: { $push: [{ lat, lng }] } } })
+        //self.onPolyLengthComputeForCoords()
+        self.setState({ overlayObject: pushCoords })
         self.onDrawExampleLine(event)
-        self.onPolydistanceBtwCompute(pushUndoCoords[pushUndoCoords.length - 1])
+        self.onPolydistanceBtwCompute(pushCoords[pushCoords.length - 1])
       }
     })
   }
@@ -344,7 +317,6 @@ class App extends Component {
       self.handleDrawerOpen()
       self.onSetMarkerOptions()
       self.onSetSelectOverlay(marker)
-      console.log(marker, 'poly')
     })
     window.google.maps.event.addListener(marker, 'dragend', function () {
       const overlayObject = self.state.overlayObject
@@ -361,15 +333,15 @@ class App extends Component {
       self.handleDrawerOpen()
       self.onSetPolyOptions()
       self.onSetSelectOverlay(polygon)
-      self.onPolyLengthCompute(polygon)
-      self.onSquereMetersTrans(polygon)
-      console.log(polygon, 'poly')
+      self.onPolyLengthComputeForOverlay()
+      self.onSquereMetersTrans()
     })
     window.google.maps.event.addListener(polygon, 'mouseup', function (event) {
       if (event.vertex !== undefined || event.edge !== undefined) {
         self.onPolyCoordsEdit(polygon)
-        self.onPolyLengthCompute(polygon)
-        self.onSquereMetersTrans(polygon)
+        self.onPolyLengthComputeForOverlay()
+        // self.onPolydistanceBtwComputeForOverlay()
+        self.onSquereMetersTrans()
       }
     })
   }
@@ -379,18 +351,19 @@ class App extends Component {
       self.handleDrawerOpen()
       self.onSetPolyOptions()
       self.onSetSelectOverlay(polyline)
-      self.onPolyLengthCompute(polyline)
-      console.log(polyline, 'poly')
+      self.onPolyLengthComputeForOverlay()
     })
     window.google.maps.event.addListener(polyline, 'mouseup', function (event) {
       if (event.vertex !== undefined || event.edge !== undefined) {
         self.onPolyCoordsEdit(polyline)
-        self.onPolyLengthCompute(polyline)
+        self.onPolyLengthComputeForOverlay()
+        // self.onPolydistanceBtwComputeForOverlay()
       }
     })
   }
   onDrawExampleLine = (clickEvent) => {
     var self = this
+    let coords = []
     window.google.maps.event.addListener(window.map, 'mousemove', function (event) {
       let mousemoveLat = event.latLng.lat()
       let mousemoveLng = event.latLng.lng()
@@ -526,20 +499,20 @@ class App extends Component {
     }
   }
 
-  onPolyLengthCompute = (poly) => {
-    let sumLength = window.google.maps.geometry.spherical.computeLength(poly.getPath())
-    if ((poly.overlayType === 'polygon') && (poly.getPath().getLength() > 2)) {
-      let end = poly.getPath().getAt(poly.getPath().getLength() - 1)
-      let start = poly.getPath().getAt(0)
+  onPolyLengthComputeForOverlay = () => {
+    var { selectedOverlay } = this.state
+    let sumLength = window.google.maps.geometry.spherical.computeLength(selectedOverlay.getPath())
+    if (selectedOverlay.overlayType === 'polygon') {
+      let end = selectedOverlay.getPath().getAt(selectedOverlay.getPath().getLength() - 1)
+      let start = selectedOverlay.getPath().getAt(0)
       let endTostartDis = window.google.maps.geometry.spherical.computeDistanceBetween(start, end)
       sumLength += endTostartDis
     }
     this.setState({ lengthDetail: sumLength.toFixed(3) })
   }
-  onSquereMetersTrans = (polygon) => {
-
-    var area = window.google.maps.geometry.spherical.computeArea(polygon.getPath())
-    //area x 0.00024710538146717 = acre
+  onSquereMetersTrans = () => {
+    const { selectedOverlay } = this.state
+    var area = window.google.maps.geometry.spherical.computeArea(selectedOverlay.getPath())
     let rnwString = ''
     var rai, ngan, wa, raiFraction, nganFraction
 
@@ -867,7 +840,6 @@ class App extends Component {
       overlayName: name,
       overlayDetail: detail,
     })
-
     this.setState({ overlayObject: editedDetail })
   }
   onChangeDrawPage = (page) => {
@@ -906,7 +878,7 @@ class App extends Component {
     const deleteObject = update(overlayObject, { $splice: [[deleteIndex, 1]] })
     if (overlayObject[deleteIndex].overlayDrawType === 'redraw') {
       //delete selected overlay from firestore
-      shapesRef.doc(overlayIndex).delete().then(function () {
+      shapesRef.doc(overlay).delete().then(function () {
         console.log("Document successfully deleted!");
       }).catch(function (error) {
         console.error("Error removing document: ", error);
@@ -919,74 +891,6 @@ class App extends Component {
     }
     this.onResetSelectedOverlay()
     this.setState({ overlayObject: deleteObject, })
-  }
-  onCallFitBounds = () => {
-    this.onFitBounds(this.state.overlayObject)
-  }
-  onEditPlanName = (plan, planName) => {
-    const { planData } = this.state
-    const planId = plan.planId
-    const editIndex = planData.findIndex(data => data.planId === planId)
-    const updatePlan = update(planData, { [editIndex]: { planName: { $set: planName } } })
-    this.setState({ planData: updatePlan })
-    //change edited name on firestore
-    planRef.doc(planId).update({
-      planName: planName
-    })
-      .then(function () {
-        console.log("Document successfully updated!");
-      })
-      .catch(function (error) {
-        // The document probably doesn't exist.
-        console.error("Error updating document: ", error);
-      });
-  }
-  onUndoCoords = (overlay) => {
-    if (overlay.undoCoords.length > 1) {
-      const { overlayObject } = this.state
-      const overlayIndex = overlay.overlayIndex
-      const overlayType = overlay.overlayType
-      const actionIndex = overlayObject.findIndex(overlay => overlay.overlayIndex === overlayIndex)
-      const undoCoords = overlay.undoCoords
-      const undoCoordsLength = undoCoords.length - 1
-      const lastUndoCoords = undoCoords[undoCoordsLength]
-      const beforeLastUndoCoords = undoCoords[undoCoordsLength - 1]
-      const setUndoCoords = update(overlayObject, { [actionIndex]: { overlayCoords: { $set: beforeLastUndoCoords } } })
-      const pushRedoCoods = update(setUndoCoords, { [actionIndex]: { redoCoords: { $unshift: [lastUndoCoords] } } })
-      const popUndoCoords = update(pushRedoCoods, { [actionIndex]: { undoCoords: { $splice: [[undoCoordsLength, 1]] } } })
-      if (overlayType !== 'marker') {
-        this.onPolydistanceBtwCompute(popUndoCoords[popUndoCoords.length - 1])
-      }
-      this.setState({ overlayObject: popUndoCoords }, () => console.log(this.state.overlayObject, 'undo'))
-    } else {
-      return;
-    }
-  }
-  onRedoCoords = (overlay) => {
-    if (overlay.redoCoords.length > 0) {
-      const { overlayObject } = this.state
-      const overlayIndex = overlay.overlayIndex
-      const overlayType = overlay.overlayType
-      const actionIndex = overlayObject.findIndex(overlay => overlay.overlayIndex === overlayIndex)
-      const redoCoords = overlay.redoCoords
-      const redoCoordsLength = redoCoords.length - 1
-      const lastRedoCoords = redoCoords[redoCoordsLength]
-      const setRedoCoords = update(overlayObject, { [actionIndex]: { overlayCoords: { $set: lastRedoCoords } } })
-    } else {
-      return;
-    }
-  }
-  onUndoDrawingCoords = () => {
-    const { overlayObject } = this.state
-    const currentObjectLength = overlayObject.length - 1
-    const currentObject = overlayObject[currentObjectLength]
-    this.onUndoCoords(currentObject)
-  }
-  onRedoDrawingCoords = () => {
-    const { overlayObject } = this.state
-    const currentObjectLength = overlayObject.length - 1
-    const currentObject = overlayObject[currentObjectLength]
-    this.onUndoCoords(currentObject)
   }
   //this is rederrrrr
   render() {
@@ -1001,7 +905,7 @@ class App extends Component {
           zIndex: 1,
         }}
       >
-        <input id="pac-input" className="controls" type="text" placeholder="Find place" />
+        <input id="pac-input" class="controls" type="text" placeholder="Find Place"/>
         <PermanentDrawer
           onSaveToFirestore={this.onSaveToFirestore}
           onSetSelectedPlan={this.onSetSelectedPlan}
@@ -1015,18 +919,15 @@ class App extends Component {
           onDeletePlan={this.onDeletePlan}
           onDeleteOverlay={this.onDeleteOverlay}
           onClearOverlayFromMap={this.onClearOverlayFromMap}
-          onCallFitBounds={this.onCallFitBounds}
-          onEditPlanName={this.onEditPlanName}
-          onUndoCoords={this.onUndoCoords}
-          onUndoDrawingCoords={this.onUndoDrawingCoords}
-          onRedoDrawingCoords={this.onRedoDrawingCoords}
           {...this.state}
         />
+        
         <Map
           left={this.state.left}
+          bottom={this.state.bottom}
         >
-
-          {this.state.overlayObject.map((value, index) => {
+        
+          {this.state.overlayObject.map((value) => {
             const overlayType = value.overlayType
             const overlayIndex = value.overlayIndex
             switch (overlayType) {
@@ -1034,7 +935,6 @@ class App extends Component {
                 return (
                   <Polygon
                     key={overlayIndex}
-                    zIndex={index}
                     {...value}
                     addPolygonListener={this.addPolygonListener}
                     isFirstDraw={this.state.isFirstDraw}
@@ -1045,7 +945,6 @@ class App extends Component {
                 return (
                   <Polyline
                     key={overlayIndex}
-                    zIndex={index}
                     {...value}
                     isFirstDraw={this.state.isFirstDraw}
                     addPolylineListener={this.addPolylineListener}
@@ -1057,7 +956,6 @@ class App extends Component {
                   <Marker
                     key={overlayIndex}
                     {...value}
-                    zIndex={index}
                     isFirstDraw={this.state.isFirstDraw}
                     addMarkerListener={this.addMarkerListener}
                   />
@@ -1070,7 +968,7 @@ class App extends Component {
             exampleLineCoords={this.state.exampleLineCoords}
             strokeColor={this.state.strokeColor}
           />
-          <SearchBox />
+          
           <GeolocatedMe />
 
           <AddPlanBtn
@@ -1109,12 +1007,11 @@ class App extends Component {
             handleDrawerClose={this.handleDrawerClose}
             openSide={this.state.openSide}
           />
-
-          <OpenSettingMap
-
-          />
-
+           
+          <SearchBox />
+          
         </Map>
+        
       </div>
     );
   }

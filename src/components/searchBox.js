@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import '../components/SearchBoxStyles.css'
 
 class SearchBox extends React.PureComponent {
