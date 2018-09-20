@@ -165,7 +165,7 @@ class OverlayOptions extends React.PureComponent {
         )
     }
     drawOverlayDetail = () => {
-        const { classes, selectedOverlay, } = this.props;
+        const { classes, selectedOverlay, onRedoCoords,onUndoCoords} = this.props;
         return (
             <div>
                 <div>
@@ -194,6 +194,12 @@ class OverlayOptions extends React.PureComponent {
                 </Button>
                 <Button variant="contained" size="small" color="secondary" className={classes.button} onClick={this.onToggleDeleteOverlayOpen}>
                     ลบ
+                </Button>
+                <Button variant="contained" size="small" className={classes.button} onClick={()=>onUndoCoords(selectedOverlay)}>
+                    Undo
+                </Button>
+                <Button variant="contained" size="small" className={classes.button} onClick={()=>onRedoCoords(selectedOverlay)}>
+                    Redo
                 </Button>
                 {this.renderEditOverlayDetailModal()}
                 {this.renderDeleteOverlayModal()}
