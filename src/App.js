@@ -416,8 +416,10 @@ class App extends Component {
       editCoords.push({ lat, lng })
     })
     const replaceCoords = update(this.state.overlayObject, { [overlayIndex]: { overlayCoords: { $set: editCoords } } })
-    this.onPolydistanceBtwCompute(replaceCoords[overlayIndex])
-    this.setState({ overlayObject: replaceCoords })
+    const pushRedoCoords = update(replaceCoords,{[overlayIndex]:{undoCoords:{$push:[editCoords]}}})
+    const setRedoCoords = update(pushRedoCoords,{[overlayIndex]:{redoCoords:{$set:[]}}})
+    this.onPolydistanceBtwCompute(setRedoCoords[overlayIndex])
+    this.setState({ overlayObject: setRedoCoords })
   }
   onSetDrawingCursor = () => {
     window.map.setOptions({ draggableCursor: 'crosshair' })
