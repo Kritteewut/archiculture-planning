@@ -327,7 +327,9 @@ class PermanentDrawer extends React.PureComponent {
             onDeleteOverlay,
             onUndoCoords,
             isFirstDraw,
-            onUndoDrawingCoords
+            onUndoDrawingCoords,
+            onRedoDrawingCoords,
+            onRedoCoords,
         } = this.props;
 
         switch (drawerPage) {
@@ -348,6 +350,8 @@ class PermanentDrawer extends React.PureComponent {
                         onUndoCoords={onUndoCoords}
                         isFirstDraw={isFirstDraw}
                         onUndoDrawingCoords={onUndoDrawingCoords}
+                        onRedoDrawingCoords={onRedoDrawingCoords} 
+                        onRedoCoords={onRedoCoords}
                     />
                 )
         }

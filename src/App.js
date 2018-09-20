@@ -952,7 +952,7 @@ class App extends Component {
       const lastUndoCoords = undoCoords[undoCoordsLength]
       const beforeLastUndoCoords = undoCoords[undoCoordsLength - 1]
       const setUndoCoords = update(overlayObject, { [actionIndex]: { overlayCoords: { $set: beforeLastUndoCoords } } })
-      const pushRedoCoods = update(setUndoCoords, { [actionIndex]: { redoCoords: { $unshift: [lastUndoCoords] } } })
+      const pushRedoCoods = update(setUndoCoords, { [actionIndex]: { redoCoords: { $push: [lastUndoCoords] } } })
       const popUndoCoords = update(pushRedoCoods, { [actionIndex]: { undoCoords: { $splice: [[undoCoordsLength, 1]] } } })
       if (overlayType !== 'marker') {
         this.onPolydistanceBtwCompute(popUndoCoords[popUndoCoords.length - 1])
@@ -972,6 +972,12 @@ class App extends Component {
       const redoCoordsLength = redoCoords.length - 1
       const lastRedoCoords = redoCoords[redoCoordsLength]
       const setRedoCoords = update(overlayObject, { [actionIndex]: { overlayCoords: { $set: lastRedoCoords } } })
+      const pushUndoCoords = update(setRedoCoords, { [actionIndex]: { undoCoords: { $push: [lastRedoCoords] } } })
+      const popRedoCoords = update(pushUndoCoords, { [actionIndex]: { redoCoords: { $splice: [[redoCoordsLength, 1]] } } })
+      if (overlayType !== 'marker') {
+        this.onPolydistanceBtwCompute(popRedoCoords[popRedoCoords.length - 1])
+      }
+      this.setState({ overlayObject: popRedoCoords }, () => console.log(this.state.overlayObject, 'redo'))
     } else {
       return;
     }
@@ -986,7 +992,7 @@ class App extends Component {
     const { overlayObject } = this.state
     const currentObjectLength = overlayObject.length - 1
     const currentObject = overlayObject[currentObjectLength]
-    this.onUndoCoords(currentObject)
+    this.onRedoCoords(currentObject)
   }
   //this is rederrrrr
   render() {
@@ -1020,6 +1026,8 @@ class App extends Component {
           onUndoCoords={this.onUndoCoords}
           onUndoDrawingCoords={this.onUndoDrawingCoords}
           onRedoDrawingCoords={this.onRedoDrawingCoords}
+          onRedoCoords={this.onRedoCoords}
+          onUndoCoords={this.onUndoCoords}
           {...this.state}
         />
         <Map
