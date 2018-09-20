@@ -892,6 +892,74 @@ class App extends Component {
     this.onResetSelectedOverlay()
     this.setState({ overlayObject: deleteObject, })
   }
+  onCallFitBounds = () => {
+    this.onFitBounds(this.state.overlayObject)
+  }
+  onEditPlanName = (plan, planName) => {
+    const { planData } = this.state
+    const planId = plan.planId
+    const editIndex = planData.findIndex(data => data.planId === planId)
+    const updatePlan = update(planData, { [editIndex]: { planName: { $set: planName } } })
+    this.setState({ planData: updatePlan })
+    //change edited name on firestore
+    planRef.doc(planId).update({
+      planName: planName
+    })
+      .then(function () {
+        console.log("Document successfully updated!");
+      })
+      .catch(function (error) {
+        // The document probably doesn't exist.
+        console.error("Error updating document: ", error);
+      });
+  }
+  onUndoCoords = (overlay) => {
+    if (overlay.undoCoords.length > 1) {
+      const { overlayObject } = this.state
+      const overlayIndex = overlay.overlayIndex
+      const overlayType = overlay.overlayType
+      const actionIndex = overlayObject.findIndex(overlay => overlay.overlayIndex === overlayIndex)
+      const undoCoords = overlay.undoCoords
+      const undoCoordsLength = undoCoords.length - 1
+      const lastUndoCoords = undoCoords[undoCoordsLength]
+      const beforeLastUndoCoords = undoCoords[undoCoordsLength - 1]
+      const setUndoCoords = update(overlayObject, { [actionIndex]: { overlayCoords: { $set: beforeLastUndoCoords } } })
+      const pushRedoCoods = update(setUndoCoords, { [actionIndex]: { redoCoords: { $unshift: [lastUndoCoords] } } })
+      const popUndoCoords = update(pushRedoCoods, { [actionIndex]: { undoCoords: { $splice: [[undoCoordsLength, 1]] } } })
+      if (overlayType !== 'marker') {
+        this.onPolydistanceBtwCompute(popUndoCoords[popUndoCoords.length - 1])
+      }
+      this.setState({ overlayObject: popUndoCoords }, () => console.log(this.state.overlayObject, 'undo'))
+    } else {
+      return;
+    }
+  }
+  onRedoCoords = (overlay) => {
+    if (overlay.redoCoords.length > 0) {
+      const { overlayObject } = this.state
+      const overlayIndex = overlay.overlayIndex
+      const overlayType = overlay.overlayType
+      const actionIndex = overlayObject.findIndex(overlay => overlay.overlayIndex === overlayIndex)
+      const redoCoords = overlay.redoCoords
+      const redoCoordsLength = redoCoords.length - 1
+      const lastRedoCoords = redoCoords[redoCoordsLength]
+      const setRedoCoords = update(overlayObject, { [actionIndex]: { overlayCoords: { $set: lastRedoCoords } } })
+    } else {
+      return;
+    }
+  }
+  onUndoDrawingCoords = () => {
+    const { overlayObject } = this.state
+    const currentObjectLength = overlayObject.length - 1
+    const currentObject = overlayObject[currentObjectLength]
+    this.onUndoCoords(currentObject)
+  }
+  onRedoDrawingCoords = () => {
+    const { overlayObject } = this.state
+    const currentObjectLength = overlayObject.length - 1
+    const currentObject = overlayObject[currentObjectLength]
+    this.onUndoCoords(currentObject)
+  }
   //this is rederrrrr
   render() {
     return (
@@ -919,6 +987,11 @@ class App extends Component {
           onDeletePlan={this.onDeletePlan}
           onDeleteOverlay={this.onDeleteOverlay}
           onClearOverlayFromMap={this.onClearOverlayFromMap}
+          onCallFitBounds={this.onCallFitBounds}
+          onEditPlanName={this.onEditPlanName}
+          onUndoCoords={this.onUndoCoords}
+          onUndoDrawingCoords={this.onUndoDrawingCoords}
+          onRedoDrawingCoords={this.onRedoDrawingCoords}
           {...this.state}
         />
         
