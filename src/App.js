@@ -12,6 +12,7 @@ import IconLabelButtons from './components/DrawingBtn';
 import PermanentDrawer from './components/PermanentDrawer'
 import { db } from './config/firebase'
 import OpenSide from './components/openSideBtn';
+import OpenSettingMap from './components/OpenSettingMapBtn';
 import icon_point from './components/icons/icon_point.png';
 import DetailedExpansionPanel from './components/DetailedExpansionPanel'
 import TransparentMaker from './components/TransparentMaker';
@@ -19,7 +20,7 @@ import shortid from 'shortid'
 import { auth } from './config/firebase'
 import LoadingCircle from './components/LoadingCircle';
 import './components/SearchBoxStyles.css'
-
+import { DISPLAY_STRING } from './language/Language'
 const shapesRef = db.collection('shapes')
 const planRef = db.collection('plan')
 function new_script(src) {
@@ -1080,6 +1081,11 @@ class App extends Component {
             handleDrawerClose={this.handleDrawerClose}
             openSide={this.state.openSide}
           />
+
+          <OpenSettingMap
+
+          />
+
         </Map>
       </div>
     );
