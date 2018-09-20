@@ -254,7 +254,7 @@ class App extends Component {
         const currentOverlay = pushCoords[pushCoords.length - 1]
         const currentCoords = currentOverlay.overlayCoords
         const pushUndoCoords = update(pushCoords, { [index]: { undoCoords: { $push: [currentCoords] } } })
-        const setRedoCoords = update(pushUndoCoords,{[index]:{redoCoords:{$set:[]}}})
+        const setRedoCoords = update(pushUndoCoords, { [index]: { redoCoords: { $set: [] } } })
         const polyline = new window.google.maps.Polyline({
           path: currentCoords,
           overlayType: 'polyline'
@@ -301,7 +301,7 @@ class App extends Component {
         const currentOverlay = pushCoords[pushCoords.length - 1]
         const currentCoords = currentOverlay.overlayCoords
         const pushUndoCoords = update(pushCoords, { [index]: { undoCoords: { $push: [currentCoords] } } })
-        const setRedoCoords = update(pushUndoCoords,{[index]:{redoCoords:{$set:[]}}})
+        const setRedoCoords = update(pushUndoCoords, { [index]: { redoCoords: { $set: [] } } })
         const poylgon = new window.google.maps.Polygon({
           path: currentCoords,
           overlayType: 'polygon'
@@ -310,7 +310,7 @@ class App extends Component {
         self.onSquereMetersTrans(poylgon)
         self.setState({ overlayObject: setRedoCoords }, () => console.log(self.state.overlayObject))
         self.onDrawExampleLine(event)
-        self.onPolydistanceBtwCompute(setRedoCoords[setRedoCoords.length - 1])
+        self.onPolydistanceBtwCompute(setRedoCoords[index])
       }
     })
   }
@@ -353,7 +353,9 @@ class App extends Component {
       const overlayIndex = overlayObject.findIndex(overlay => overlay.overlayIndex === markerIndex)
       const editCoords = [{ lat: marker.getPosition().lat(), lng: marker.getPosition().lng() }]
       const replaceCoords = update(overlayObject, { [overlayIndex]: { overlayCoords: { $set: editCoords } } })
-      self.setState({ overlayObject: replaceCoords })
+      const pushUndoCoords = update(replaceCoords, { [overlayIndex]: { undoCoords: { $push: [editCoords] } } })
+      const setRedoCoords = update(pushUndoCoords, { [overlayIndex]: { redoCoords: { $set: [] } } })
+      self.setState({ overlayObject: setRedoCoords }, () => console.log(self.state.overlayObject, 'edit'))
     })
   }
   addPolygonListener = (polygon) => {
@@ -416,8 +418,8 @@ class App extends Component {
       editCoords.push({ lat, lng })
     })
     const replaceCoords = update(this.state.overlayObject, { [overlayIndex]: { overlayCoords: { $set: editCoords } } })
-    const pushRedoCoords = update(replaceCoords,{[overlayIndex]:{undoCoords:{$push:[editCoords]}}})
-    const setRedoCoords = update(pushRedoCoords,{[overlayIndex]:{redoCoords:{$set:[]}}})
+    const pushRedoCoords = update(replaceCoords, { [overlayIndex]: { undoCoords: { $push: [editCoords] } } })
+    const setRedoCoords = update(pushRedoCoords, { [overlayIndex]: { redoCoords: { $set: [] } } })
     this.onPolydistanceBtwCompute(setRedoCoords[overlayIndex])
     this.setState({ overlayObject: setRedoCoords })
   }
@@ -559,7 +561,7 @@ class App extends Component {
     this.setState({ areaDetail: rnwString })
   }
   onSaveToFirestore = () => {
-    const { overlayObject, selectedPlan } = this.state
+    const { overlayObject, selectedPlan, distanceDetail } = this.state
     let self = this
     var planId = selectedPlan.planId
     overlayObject.map((value, key) => {
@@ -581,8 +583,11 @@ class App extends Component {
             fillColor,
             strokeColor,
           }).then(function (doc) {
-            var editOverlayIndex = update(overlayObject, { [key]: { overlayIndex: { $set: doc.id } } })
-            self.setState({ overlayObject: editOverlayIndex })
+            const overlayIndex = value.overlayIndex
+            const detailIndex = distanceDetail.findIndex(detail => detail.overlayIndex === overlayIndex)
+            const updateDetailIndex = update(distanceDetail, { [detailIndex]: { overlayIndex: { $set: doc.id } } })
+            const editOverlayIndex = update(overlayObject, { [key]: { overlayIndex: { $set: doc.id } } })
+            self.setState({ overlayObject: editOverlayIndex, distanceDetail: updateDetailIndex })
           })
         }
         if (value.overlayType === 'polyline') {
@@ -594,8 +599,11 @@ class App extends Component {
             overlayDetail,
             strokeColor,
           }).then(function (doc) {
-            var editOverlayIndex = update(overlayObject, { [key]: { overlayIndex: { $set: doc.id } } })
-            self.setState({ overlayObject: editOverlayIndex })
+            const overlayIndex = value.overlayIndex
+            const detailIndex = distanceDetail.findIndex(detail => detail.overlayIndex === overlayIndex)
+            const updateDetailIndex = update(distanceDetail, { [detailIndex]: { overlayIndex: { $set: doc.id } } })
+            const editOverlayIndex = update(overlayObject, { [key]: { overlayIndex: { $set: doc.id } } })
+            self.setState({ overlayObject: editOverlayIndex, distanceDetail: updateDetailIndex })
           })
         }
         if (value.overlayType === 'marker') {
@@ -677,8 +685,8 @@ class App extends Component {
                 strokeColor,
                 overlayName,
                 overlayDetail,
-                undoCoords:[],
-                redoCoords:[],
+                undoCoords: [overlayCoords],
+                redoCoords: [],
               })
             )
           case 'polyline':
@@ -692,8 +700,8 @@ class App extends Component {
                 strokeColor,
                 overlayName,
                 overlayDetail,
-                undoCoords:[],
-                redoCoords:[],
+                undoCoords: [overlayCoords],
+                redoCoords: [],
               })
             )
           case 'marker':
@@ -707,8 +715,8 @@ class App extends Component {
                 icon,
                 overlayName,
                 overlayDetail,
-                undoCoords:[],
-                redoCoords:[],
+                undoCoords: [overlayCoords],
+                redoCoords: [],
               })
             )
           default: return null
@@ -964,7 +972,7 @@ class App extends Component {
       const pushRedoCoods = update(setUndoCoords, { [actionIndex]: { redoCoords: { $push: [lastUndoCoords] } } })
       const popUndoCoords = update(pushRedoCoods, { [actionIndex]: { undoCoords: { $splice: [[undoCoordsLength, 1]] } } })
       if (overlayType !== 'marker') {
-        this.onPolydistanceBtwCompute(popUndoCoords[popUndoCoords.length - 1])
+        this.onPolydistanceBtwCompute(popUndoCoords[actionIndex])
       }
       this.setState({ overlayObject: popUndoCoords }, () => console.log(this.state.overlayObject, 'undo'))
     } else {
@@ -984,7 +992,7 @@ class App extends Component {
       const pushUndoCoords = update(setRedoCoords, { [actionIndex]: { undoCoords: { $push: [lastRedoCoords] } } })
       const popRedoCoords = update(pushUndoCoords, { [actionIndex]: { redoCoords: { $splice: [[redoCoordsLength, 1]] } } })
       if (overlayType !== 'marker') {
-        this.onPolydistanceBtwCompute(popRedoCoords[popRedoCoords.length - 1])
+        this.onPolydistanceBtwCompute(popRedoCoords[actionIndex])
       }
       this.setState({ overlayObject: popRedoCoords }, () => console.log(this.state.overlayObject, 'redo'))
     } else {

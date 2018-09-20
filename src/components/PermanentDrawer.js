@@ -347,11 +347,12 @@ class PermanentDrawer extends React.PureComponent {
                         overlayOptionsType={overlayOptionsType}
                         handleDetailEdit={handleDetailEdit}
                         onDeleteOverlay={onDeleteOverlay}
-                        onUndoCoords={onUndoCoords}
                         isFirstDraw={isFirstDraw}
                         onUndoDrawingCoords={onUndoDrawingCoords}
-                        onRedoCoords={onRedoCoords}
                         onRedoDrawingCoords={onRedoDrawingCoords}
+                        onRedoCoords={onRedoCoords}
+                        onUndoCoords={onUndoCoords}
+                        
                     />
                 )
         }
