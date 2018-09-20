@@ -48,6 +48,16 @@ class MenuListComposition extends React.Component {
 
         this.setState({ open: false });
     };
+    onSetMapTypeToSatellite = () => {
+        //hybrid
+        //roadmap
+        //satellite
+        //terrain
+        window.map.setMapTypeId('satellite')
+    }
+    onSetMapTypeToRoadmap = () => {
+        window.map.setMapTypeId('roadmap')
+    }
 
     render() {
         const { classes } = this.props;
@@ -77,13 +87,13 @@ class MenuListComposition extends React.Component {
                                 <ClickAwayListener onClickAway={this.handleClose}>
                                     <MenuList>
 
-                                        <MenuItem onClick={this.handleClose}>
+                                        <MenuItem onClick={this.onSetMapTypeToRoadmap}>
                                             <button className="ButtonMaplayer">
                                                 <img src={MapLayer0} className="Maplayer" />
                                             </button>
                                         </MenuItem>
 
-                                        <MenuItem onClick={this.handleClose} >
+                                        <MenuItem onClick={this.onSetMapTypeToSatellite} >
                                             <button className="ButtonMaplayer">
                                                 <img src={MapLayer1} className="Maplayer" />
                                             </button>
