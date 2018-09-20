@@ -11,26 +11,11 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import MountainIcon from '@material-ui/icons/FilterHdr';
 import { withStyles } from '@material-ui/core/styles';
-
-import icon_airport from './icons/icon_airplane.png'
-import icon_alert from './icons/icon_alert.png'
-import icon_bamboo from './icons/icon_bamboo.png'
-import icon_bonsai from './icons/icon_bonsai.png'
-import icon_clock from './icons/icon_clock.png'
-import icon_home from './icons/icon_home.png'
-import icon_location from './icons/icon_location.png'
 import icon_point from './icons/icon_point.png'
-import icon_rain from './icons/icon_rain.png'
-import icon_sakura1 from './icons/icon_sakura1.png'
-import icon_sakura2 from './icons/icon_sakura2.png'
-import icon_sale from './icons/icon_sale.png'
-import icon_snow from './icons/icon_snow.png'
-import icon_star from './icons/icon_star.png'
-import icon_tool1 from './icons/icon_tool1.png'
-import icon_tool2 from './icons/icon_tool2.png'
-import light_bulb_icon from './icons/light_bulb_icon.png'
+
 /* picture */
 import Maplayer0 from './Picture/MapLayer0.jpg';
+
 const styles = theme => ({
     root: {
         display: 'flex',
@@ -117,114 +102,26 @@ const styles = theme => ({
     },
 });
 
-
 const images = [
     {
-        src: Maplayer0,
-        title: 'จุด',
+        src: icon_point,
+        title: 'จุด1',
         width: '5%',
         height: '5%',
     },
     {
-        src: light_bulb_icon,
-        title: 'หลอดไฟ',
+        src: icon_point,
+        title: 'จุด2',
         width: '5%',
         height: '5%',
     },
     {
-        src: icon_airport,
-        title: 'สนามบิน',
+        src: icon_point,
+        title: 'จุด3',
         width: '5%',
         height: '5%',
     },
-    {
-        src: icon_alert,
-        title: 'เตือนภัย',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_bamboo,
-        title: 'เขตป่าไม้',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_bonsai,
-        title: 'เขตสวน',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_clock,
-        title: 'เตือนเวลา',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_home,
-        title: 'บ้าน',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_location,
-        title: 'จุดตำแหน่ง',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_rain,
-        title: 'สภาพอากาศฝนตก',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_sakura1,
-        title: 'ดอกไม้1',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_sakura2,
-        title: 'ดอกไม้2',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_sale,
-        title: 'ขาย',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_snow,
-        title: 'สภาพอากาศหนาว',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_star,
-        title: 'จุดสำคัญ',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_tool1,
-        title: 'จุดแก้ไข1',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_tool2,
-        title: 'จุดแก้ไข2',
-        width: '5%',
-        height: '5%',
-    },
-
-
 ];
-
 
 class MenuListComposition extends React.Component {
     state = {
@@ -275,29 +172,74 @@ class MenuListComposition extends React.Component {
                             >
                                 <Paper>
                                     <ClickAwayListener onClickAway={this.handleClose}>
-                                        <MenuList>
-                                        {images.map(image => (
-                    <ButtonBase
-                        focusRipple
-                        key={image.title}
-                        className={classes.image}
-                        focusVisibleClassName={classes.focusVisible}
-                        style={{
-                            width: '8.7vw',
-                        }}
-                        onClick={() => this.props.onSetSelectedIcon(image.src)}
-                    >
 
-                        <span
-                            className={classes.imageSrc}
-                            style={{
-                                backgroundImage: `url(${image.src})`,
-                            }}
-                        />
-                        <span className={classes.imageButton}>
-                        </span>
-                    </ButtonBase>
-                ))}
+                                        <MenuList>
+                                            <Button
+                                                onClick={this.handleClose}>
+                                                {images.map(image => (
+                                                    <ButtonBase
+                                                        focusRipple
+                                                        key={image.title}
+                                                        className={classes.image}
+                                                        focusVisibleClassName={classes.focusVisible}
+                                                        style={{
+                                                            width: image.width,
+                                                        }}
+                                                    >
+                                                        <span
+                                                            className={classes.imageSrc}
+                                                            style={{
+                                                                backgroundImage: `url(${image.url})`,
+                                                            }}
+                                                        />
+                                                        <span className={classes.imageBackdrop} />
+                                                        <span className={classes.imageButton}>
+                                                            <Typography
+                                                                component="span"
+                                                                variant="subheading"
+                                                                color="inherit"
+                                                                className={classes.imageTitle}
+                                                            >
+                                                                {image.title}
+                                                                <span className={classes.imageMarked} />
+                                                            </Typography>
+                                                        </span>
+                                                    </ButtonBase>
+                                                ))}
+                                            </Button>
+                                            <Button
+                                                onClick={this.handleClose}>
+                                                {images.map(image => (
+                                                    <ButtonBase
+                                                        focusRipple
+                                                        key={image.title}
+                                                        className={classes.image}
+                                                        focusVisibleClassName={classes.focusVisible}
+                                                        style={{
+                                                            width: image.width,
+                                                        }}
+                                                    >
+                                                        <span
+                                                            className={classes.imageSrc}
+                                                            style={{
+                                                                backgroundImage: `url(${image.src})`,
+                                                            }}
+                                                        />
+                                                        <span className={classes.imageBackdrop} />
+                                                        <span className={classes.imageButton}>
+                                                            <Typography
+                                                                component="span"
+                                                                variant="subheading"
+                                                                color="inherit"
+                                                                className={classes.imageTitle}
+                                                            >
+                                                                {image.title}
+                                                                <span className={classes.imageMarked} />
+                                                            </Typography>
+                                                        </span>
+                                                    </ButtonBase>
+                                                ))}
+                                            </Button>
                                         </MenuList>
 
                                     </ClickAwayListener>
