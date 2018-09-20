@@ -10,9 +10,9 @@ const styles = theme => ({
         position: 'absolute',
         top : theme.spacing.unit * 21,
         left: theme.spacing.unit * 1.5,
-        color: 'rgb(255, 255, 255)',
-        background: 'linear-gradient(20deg, rgba(37, 37, 37, 0.85) 40%, rgba(0, 43, 161, 0.9)) 60%',
-        boxShadow: '0px 0px 0px 5px rgba(255, 255, 255, 0.60)',
+        color: 'rgba(0, 0, 0, 0.8)',
+        background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
+        boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
     },
 })
 

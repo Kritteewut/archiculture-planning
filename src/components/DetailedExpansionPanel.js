@@ -19,23 +19,22 @@ const styles = theme => ({
   },
 
   theme: {
-    color: 'rgb(255, 255, 255)',
-    background: 'linear-gradient(20deg, rgba(12, 12, 12, 0.85) 40%, rgba(12, 12, 12, 0.85)) 60%',
-    boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.30)',
+    color: 'rgba(0, 0, 0, 0.8)',
+    background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
   },
 
   heading: {
-    color: 'rgb(255, 255, 255)',
+    color: 'rgb(0, 0, 0)',
     fontSize: theme.typography.pxToRem(15),
   },
   secondaryHeading: {
-    color: 'rgb(255, 255, 255)',
+    color: 'rgb(0, 0, 0)',
     fontSize: theme.typography.pxToRem(15),
     color: theme.palette.text.secondary,
   },
   details: {
     alignItems: 'center',
-    color: 'rgb(255, 255, 255)',
+    color: 'rgb(0, 0, 0)',
   },
 });
 

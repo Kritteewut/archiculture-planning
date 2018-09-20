@@ -254,7 +254,7 @@ class App extends Component {
         const currentOverlay = pushCoords[pushCoords.length - 1]
         const currentCoords = currentOverlay.overlayCoords
         const pushUndoCoords = update(pushCoords, { [index]: { undoCoords: { $push: [currentCoords] } } })
-        const setRedoCoords = update(pushUndoCoords,{[index]:{redoCoords:{$set:[]}}})
+        const setRedoCoords = update(pushUndoCoords, { [index]: { redoCoords: { $set: [] } } })
         const polyline = new window.google.maps.Polyline({
           path: currentCoords,
           overlayType: 'polyline'
@@ -301,7 +301,7 @@ class App extends Component {
         const currentOverlay = pushCoords[pushCoords.length - 1]
         const currentCoords = currentOverlay.overlayCoords
         const pushUndoCoords = update(pushCoords, { [index]: { undoCoords: { $push: [currentCoords] } } })
-        const setRedoCoords = update(pushUndoCoords,{[index]:{redoCoords:{$set:[]}}})
+        const setRedoCoords = update(pushUndoCoords, { [index]: { redoCoords: { $set: [] } } })
         const poylgon = new window.google.maps.Polygon({
           path: currentCoords,
           overlayType: 'polygon'
@@ -675,8 +675,8 @@ class App extends Component {
                 strokeColor,
                 overlayName,
                 overlayDetail,
-                undoCoords:[],
-                redoCoords:[],
+                undoCoords: [],
+                redoCoords: [],
               })
             )
           case 'polyline':
@@ -690,8 +690,8 @@ class App extends Component {
                 strokeColor,
                 overlayName,
                 overlayDetail,
-                undoCoords:[],
-                redoCoords:[],
+                undoCoords: [],
+                redoCoords: [],
               })
             )
           case 'marker':
@@ -705,8 +705,8 @@ class App extends Component {
                 icon,
                 overlayName,
                 overlayDetail,
-                undoCoords:[],
-                redoCoords:[],
+                undoCoords: [],
+                redoCoords: [],
               })
             )
           default: return null
@@ -1004,6 +1004,7 @@ class App extends Component {
   //this is rederrrrr
   render() {
     return (
+      
       <div
         style={{
           height: '100%',
@@ -1011,10 +1012,10 @@ class App extends Component {
           overflow: 'hidden',
           //position: 'relative',
           display: 'flex',
-          zIndex: 1,
+        
         }}
       >
-        <input id="pac-input" className="controls" type="text" placeholder="Find place" />
+        
         <PermanentDrawer
           onSaveToFirestore={this.onSaveToFirestore}
           onSetSelectedPlan={this.onSetSelectedPlan}
@@ -1036,10 +1037,11 @@ class App extends Component {
           onRedoCoords={this.onRedoCoords}
           {...this.state}
         />
+        <input id="pac-input" className="controls" type="text" placeholder="Find place" />
         <Map
           left={this.state.left}
         >
-
+        
           {this.state.overlayObject.map((value, index) => {
             const overlayType = value.overlayType
             const overlayIndex = value.overlayIndex
@@ -1080,12 +1082,11 @@ class App extends Component {
             }
           })
           }
+
           <ExampleLine
             exampleLineCoords={this.state.exampleLineCoords}
             strokeColor={this.state.strokeColor}
           />
-          <SearchBox />
-          <GeolocatedMe />
 
           <AddPlanBtn
             onAddPlan={this.onAddPlan}
@@ -1125,6 +1126,14 @@ class App extends Component {
           />
 
           <OpenSettingMap
+
+          />
+
+          <SearchBox 
+          
+          />
+
+          <GeolocatedMe 
 
           />
 

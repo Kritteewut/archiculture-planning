@@ -22,8 +22,8 @@ const styles = theme => ({
         top: theme.spacing.unit * 43,
         left: theme.spacing.unit * 1.5,
         width: '125px',
-        color: 'rgb(255, 255, 255)',
-        background: 'linear-gradient(20deg, rgba(37, 37, 37, 0.9) 40%, rgba(0, 43, 161, 0.9)) 30%',
+        color: 'rgba(0, 0, 0, 0.8)',
+        background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
         boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
     },
     buttonPoint: {
@@ -31,8 +31,8 @@ const styles = theme => ({
         top: theme.spacing.unit * 51,
         left: theme.spacing.unit * 1.5,
         width: '125px',
-        color: 'rgb(255, 255, 255)',
-        background: 'linear-gradient(20deg, rgba(37, 37, 37, 0.9) 40%, rgba(37, 37, 37, 0.9)) 60%',
+        color: 'rgba(0, 0, 0, 0.8)',
+        background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
         boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
     },
     buttonLine: {
@@ -40,8 +40,8 @@ const styles = theme => ({
         top: theme.spacing.unit * 59,
         left: theme.spacing.unit * 1.5,
         width: '125px',
-        color: 'rgb(255, 255, 255)',
-        background: 'linear-gradient(20deg, rgba(37, 37, 37, 0.9) 40%, rgba(37, 37, 37, 0.9)) 60%',
+        color: 'rgba(0, 0, 0, 0.8)',
+        background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
         boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
 
     },
@@ -50,8 +50,8 @@ const styles = theme => ({
         top: theme.spacing.unit * 67,
         left: theme.spacing.unit * 1.5,
         width: '125px',
-        color: 'rgb(255, 255, 255)',
-        background: 'linear-gradient(20deg, rgba(37, 37, 37, 0.9) 40%, rgba(37, 37, 37, 0.9)) 60%',
+        color: 'rgba(0, 0, 0, 0.8)',
+        background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
         boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
     },
 

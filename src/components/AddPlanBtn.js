@@ -29,7 +29,7 @@ const styles = theme => ({
 
         outline: 'none',
 
-        background: 'linear-gradient(20deg, rgba(20 , 20 , 20 , 0.85) 40%, rgba(20 , 20 , 20, 0.85)) 60%',
+        background: 'linear-gradient(20deg, rgba(255 , 255 , 255 , 0.85) 40%, rgba(255 , 255 , 255, 0.85)) 60%',
         boxShadow: '0px 0px 10px 2px rgba(0 , 0 , 0 , 0.30)',
         borderRadius: 10,
     },
@@ -39,16 +39,16 @@ const styles = theme => ({
     },
 
     textcolor: {
-        color: 'rgb(255, 255, 255)'
+        color: 'rgb(0, 0, 0)'
     },
 
     absolute: {
         position: 'absolute',
         top: theme.spacing.unit * 32,
         left: theme.spacing.unit * 1.5 ,
-        color: 'rgb(255, 255, 255)',
-        background: 'linear-gradient(20deg, rgba(37, 37, 37, 0.85) 40%, rgba(0, 43, 161, 0.9)) 60%',
-        boxShadow: '0px 0px 0px 5px rgba(255, 255, 255, 0.60)',
+        color: 'rgba(0, 0, 0, 0.8)',
+        background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
+        boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
     },
 
     absolute2: {
@@ -71,8 +71,9 @@ const styles = theme => ({
 
     absolute4: {
         position: 'absolute',
-        background: 'rgb(50, 50, 50)',
-        color: 'rgb(255, 255, 255)',
+        color: 'rgba(0, 0, 0, 0.8)',
+        background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
+        boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
         outline: 'none',
         border: 'none',
         borderRadius: 5,

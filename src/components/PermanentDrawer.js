@@ -61,9 +61,9 @@ const styles = theme => ({
 
     buttonlogout: {
         color: theme.palette.getContrastText(red[500]),
-        backgroundColor: red[200],
+        backgroundColor: red[500],
         '&:hover': {
-            backgroundColor: red[600],
+            backgroundColor: red[700],
         },
     },
 
