@@ -973,7 +973,7 @@ class App extends Component {
           zIndex: 1,
         }}
       >
-        <input id="pac-input" class="controls" type="text" placeholder="Find Place"/>
+        <input id="pac-input" className="controls" type="text" placeholder="Find Place"/>
         <PermanentDrawer
           onSaveToFirestore={this.onSaveToFirestore}
           onSetSelectedPlan={this.onSetSelectedPlan}
