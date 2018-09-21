@@ -19,7 +19,8 @@ const styles = theme => ({
 class openSideBtn extends React.PureComponent {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+        }
 
         //this.deleteme = this.deleteme.bind(this)
     }
@@ -30,15 +31,12 @@ class openSideBtn extends React.PureComponent {
             this.props.handleDrawerOpen()
     }
     render() {
-        const { classes } = this.props;
+        const { classes, } = this.props;
         return (
-
             <div >
-
                 <Button variant="fab" className={classes.Menu} onClick={this.onToggleDrawer} >
                     <MenuIcon />
                 </Button>
-                
             </div>
         )
     }

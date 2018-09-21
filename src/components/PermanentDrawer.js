@@ -22,6 +22,7 @@ import Modal from '@material-ui/core/Modal';
 import OpenWith from '@material-ui/icons/OpenWith';
 import List from '@material-ui/core/List';
 import TextField from '@material-ui/core/TextField';
+import RoadmapExample from './RoadmapExample'
 
 import grey from '@material-ui/core/colors/grey';
 import red from '@material-ui/core/colors/red';
@@ -265,43 +266,48 @@ class PermanentDrawer extends React.PureComponent {
                             </ListItem>
                         </List>
                         <Divider />
-                        <List>
-                            {this.props.planData.map((plan, index) => {
-                                return (
-                                    <ListItem
-                                        role={undefined}
-                                        button
-                                        key={plan.planId}
-                                        onClick={() => this.handlePlanClick(plan, index)}
-                                        selected={this.state.selectedPlanIndex === index}
-                                    >
-                                        <ListItemText primary={plan.planName} />
-                                        <ListItemSecondaryAction>
-                                            <IconButton aria-label="Edit"
-                                                onClick={() => this.handleEditPlanClick(plan, index)}>
-                                                <EditIcon />
-                                            </IconButton>
-                                            <IconButton aria-label="Delete"
-                                                onClick={() => this.handleDeletePlanClick(plan, index)}>
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-
-                                    </ListItem>
-                                )
-
-                            })}
-                        </List>
-                        <Divider />
-
                         <Button variant="contained" color="primary" className={classNames(classes.buttonmargin, classes.buttonlogout)} onClick={this.logout}>
                             logout
-</Button>
+                        </Button>
 
                         <Button variant="contained" color="primary" className={classNames(classes.buttonmargin, classes.buttonsave)} disabled={selectedPlan ? false : true} onClick={this.props.onSaveToFirestore}>
                             บันทึก
-</Button>
+                        </Button>
+                        <Divider />
+                        <List>
+                            {
+                                this.props.planData.length > 0 ?
+                                    this.props.planData.map((plan, index) => {
+                                        return (
+                                            <ListItem
+                                                role={undefined}
+                                                button
+                                                key={plan.planId}
+                                                onClick={() => this.handlePlanClick(plan, index)}
+                                                selected={this.state.selectedPlanIndex === index}
+                                            >
+                                                <ListItemText primary={plan.planName} />
+                                                <ListItemSecondaryAction>
+                                                    <IconButton aria-label="Edit"
+                                                        onClick={() => this.handleEditPlanClick(plan, index)}>
+                                                        <EditIcon />
+                                                    </IconButton>
+                                                    <IconButton aria-label="Delete"
+                                                        onClick={() => this.handleDeletePlanClick(plan, index)}>
+                                                        <DeleteIcon />
+                                                    </IconButton>
+                                                </ListItemSecondaryAction>
 
+                                            </ListItem>
+                                        )
+                                    })
+                                    :
+                                    <div>
+                                        ยังไม่มีแปลงที่สร้าง
+                                    </div>
+
+                            }
+                        </List>
                         {this.renderMergeOverlayModal()}
                         {this.renderDeletePlanModal()}
                         {this.renderEditPlanModal()}
@@ -316,7 +322,7 @@ class PermanentDrawer extends React.PureComponent {
         )
     }
     drawerPageRender = () => {
-        const { 
+        const {
             drawerPage,
             selectedOverlay,
             onChangePolyStrokeColor,
@@ -352,9 +358,10 @@ class PermanentDrawer extends React.PureComponent {
                         onRedoDrawingCoords={onRedoDrawingCoords}
                         onRedoCoords={onRedoCoords}
                         onUndoCoords={onUndoCoords}
-                        
+
                     />
                 )
+            default: return;
         }
     }
 

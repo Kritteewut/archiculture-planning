@@ -10,10 +10,11 @@ import MenuList from '@material-ui/core/MenuList';
 import { withStyles } from '@material-ui/core/styles';
 import MapIcon from '@material-ui/icons/FilterHdr';
 
-import MapLayer0 from './Picture/MapLayer0.jpg'
-import MapLayer1 from './Picture/MapLayer1.jpg'
+import Roadmap from './Picture/Roadmap.jpg'
+import Satellite from './Picture/Satellite.jpg'
 
 import './Design.css';
+import { Tooltip } from '@material-ui/core';
 
 const styles = theme => ({
     root: {
@@ -32,10 +33,33 @@ const styles = theme => ({
     },
 });
 
+const mapimages = [
+    {
+        //src: Roadmap,
+        key: ''
+    },
+    {
+        // src: Roadmap,
+        key: ''
+    },
+    {
+        // src: Roadmap,
+        key: ''
+    },
+    {
+        //  src: Roadmap,
+        key: ''
+    },
+]
+
 class MenuListComposition extends React.Component {
-    state = {
-        open: false,
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false
+        }
+        this.Roadmap = null
+    }
 
     handleToggle = () => {
         this.setState(state => ({ open: !state.open }));
@@ -58,24 +82,35 @@ class MenuListComposition extends React.Component {
     onSetMapTypeToRoadmap = () => {
         window.map.setMapTypeId('roadmap')
     }
+    onSetMapTypeId = () => {
+        console.log(window.map)
+        console.log(document.getElementById('RoadmapExample'))
 
+    }
     render() {
         const { classes } = this.props;
         const { open } = this.state;
 
         return (
             <div>
-                <Button
-                    buttonRef={node => {
-                        this.anchorEl = node;
-                    }}
-                    aria-owns={open ? 'menu-list-grow' : null}
-                    aria-haspopup="true"
-                    onClick={this.handleToggle}
-                    variant="fab" className={classes.Menu}
+                <Tooltip
+                    title="Change Map Style"
+                    placement="left"
+                    disableFocusListener
+                    disableTouchListener
                 >
-                    <MapIcon />
-                </Button>
+                    <Button
+                        buttonRef={node => {
+                            this.anchorEl = node;
+                        }}
+                        aria-owns={open ? 'menu-list-grow' : null}
+                        aria-haspopup="true"
+                        onClick={this.handleToggle}
+                        variant="fab" className={classes.Menu}
+                    >
+                        <MapIcon />
+                    </Button>
+                </Tooltip>
                 <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
                     {({ TransitionProps, placement }) => (
                         <Grow
@@ -89,16 +124,15 @@ class MenuListComposition extends React.Component {
 
                                         <MenuItem onClick={this.onSetMapTypeToRoadmap}>
                                             <button className="ButtonMaplayer">
-                                                <img src={MapLayer0} className="Maplayer" />
+                                                <img src={Roadmap} className="Maplayer" />
                                             </button>
                                         </MenuItem>
 
                                         <MenuItem onClick={this.onSetMapTypeToSatellite} >
                                             <button className="ButtonMaplayer">
-                                                <img src={MapLayer1} className="Maplayer" />
+                                                <img src={Satellite} className="Maplayer" />
                                             </button>
                                         </MenuItem>
-
                                     </MenuList>
                                 </ClickAwayListener>
                             </Paper>

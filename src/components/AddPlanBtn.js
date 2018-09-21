@@ -45,7 +45,7 @@ const styles = theme => ({
     absolute: {
         position: 'absolute',
         top: theme.spacing.unit * 32,
-        left: theme.spacing.unit * 1.5 ,
+        left: theme.spacing.unit * 1.5,
         color: 'rgba(0, 0, 0, 0.8)',
         background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
         boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
@@ -62,7 +62,7 @@ const styles = theme => ({
 
     absolute3: {
         position: 'absolute',
-        bottom: theme.spacing.unit * 3 ,
+        bottom: theme.spacing.unit * 3,
         right: theme.spacing.unit * 16,
         color: 'rgb(255, 255, 255)',
         background: 'linear-gradient(20deg, rgba(92, 0, 197, 0.85) 40%, rgba(92, 244, 255, 0.85)) 60%',
@@ -147,7 +147,12 @@ class AddPlanBtn extends React.PureComponent {
         return (
             <div>
 
-                <Tooltip title="Add Plan" placement="left">
+                <Tooltip
+                    title="Add Plan"
+                    placement="right"
+                    disableFocusListener
+                    disableTouchListener
+                >
 
                     <Button variant="fab" className={classes.absolute} onClick={this.handleOpen}>
                         <AddIcon />
@@ -165,7 +170,7 @@ class AddPlanBtn extends React.PureComponent {
 
                         <p className={classes.textcolor}> สร้างแปลนของคุณ </p> <br />
 
-                        <Tooltip title="Close Window" placement="top" >
+                        <Tooltip title="Close Window" placement="bottom" >
 
                             <Button className={classes.absolute2} onClick={this.handleClose}>
                                 ยกเลิก
@@ -173,7 +178,7 @@ class AddPlanBtn extends React.PureComponent {
 
                         </Tooltip>
 
-                        <Tooltip title="Add Plan" placement="top" >
+                        <Tooltip title="Add Plan" placement="bottom" >
 
                             <Button className={classes.absolute3} onClick={this.handleAdd}>
                                 เพิ่ม

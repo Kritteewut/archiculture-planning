@@ -30,7 +30,7 @@ const styles = theme => ({
   secondaryHeading: {
     color: 'rgb(0, 0, 0)',
     fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary,
+    //color: theme.palette.text.secondary,
   },
   details: {
     alignItems: 'center',

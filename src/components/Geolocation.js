@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 const styles = theme => ({
     LOL: {
         position: 'absolute',
-        top : theme.spacing.unit * 21,
+        top: theme.spacing.unit * 21,
         left: theme.spacing.unit * 1.5,
         color: 'rgba(0, 0, 0, 0.8)',
         background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
@@ -65,14 +65,19 @@ class GeolocatedMe extends React.PureComponent {
         const { classes } = this.props;
         return (
             <div>
-                <Tooltip title="Your Location" placement="right">
+                <Tooltip
+                    title="Your Location"
+                    placement="right"
+                    disableFocusListener
+                    disableTouchListener
+                >
 
                     <Button variant="fab" className={classes.LOL} onClick={this.onGetGeolocation} >
 
                         <MyLocation />
 
                     </Button>
-                    
+
                 </Tooltip>
             </div>
         )

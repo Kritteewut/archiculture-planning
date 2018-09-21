@@ -14,27 +14,24 @@ class Map extends React.PureComponent {
     }
     initMap = () => {
         var self = this
-        window.map = new window.google.maps.Map(document.getElementById('map'), {
+        window.map = new window.google.maps.Map(document.getElementById("map"), {
             center: this.state.center,
             zoom: this.state.zoom,
             clickableIcons: false,
             mapTypeControl: false,
             streetViewControl: false,
             fullscreenControl: false,
-            mapTypeId: 'satellite',
-            //hybrid
-            //roadmap
-            //satellite
-            //terrain
+            mapTypeId: 'roadmap',
+            //hybrid sat with detail
+            //roadmap raod
+            //satellite sat
+            //terrain raod wtih terrain
         })
         this.setState({
             isLoad: true
         })
-        // window.google.maps.event.addListener(window.map, 'center_changed', function (event) {
-        //     // console.log('version is', window.google.maps.version)
-        //     //console.log(window.map.getCenter())
-        // })
     }
+
 
     render() {
         var childrenOutput = null;
@@ -51,7 +48,8 @@ class Map extends React.PureComponent {
                 justifyContent: 'flex-end',
                 transition: '350ms cubic-bezier(0.23, 1, 0.32, 1)',
             }}
-                className="Map" id="map" >
+                className="Map"
+                id="map" >
                 {childrenOutput}
             </div>
         );
