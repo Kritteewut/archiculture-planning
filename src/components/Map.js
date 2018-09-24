@@ -21,7 +21,7 @@ class Map extends React.PureComponent {
             mapTypeControl: false,
             streetViewControl: false,
             fullscreenControl: false,
-            mapTypeId: 'roadmap',
+            mapTypeId: 'satellite',
             //hybrid sat with detail
             //roadmap raod
             //satellite sat

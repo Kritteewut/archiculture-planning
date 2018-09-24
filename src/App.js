@@ -48,7 +48,7 @@ class App extends Component {
     super(props)
     this.state = {
       status: 'start',
-      btnTypeCheck: '',
+      drawingBtnType: null,
       overlayObject: [],
       selectedOverlay: null,
       isFirstDraw: true,
@@ -74,7 +74,7 @@ class App extends Component {
       distanceDetail: [],
       drawerPage: 'homePage',
       isLoading: null,
-      drawMode: 'desktop',
+      isDrawInDestopDevice: true,
       shouldSave: false,
     }
   }
@@ -83,29 +83,28 @@ class App extends Component {
     auth.onAuthStateChanged((user) => {
       if (user) { self.setState({ user }, () => self.onQueryPlanFromFirestore()) }
     });
-    console.log('finish')
+    this.onAddBeforeUnloadListener()
+
   }
   componentDidMount() {
-    var self = this
-    if (self.state.shouldSave) {
 
-    }
-    // window.addEventListener("beforeunload", function (event) {
-    //   // Cancel the event as stated by the standard.
-    //   event.preventDefault();
-    //   // Chrome requires returnValue to be set.
-    //   event.returnValue = '';
-    // });
 
   }
   componentWillUnmount() {
   }
-  onBtnTypeChange = (type) => {
-    if (this.state.btnTypeCheck === type) {
-      return true
-    } else {
-      this.setState({ btnTypeCheck: type, panelName: type })
-    }
+  onAddBeforeUnloadListener() {
+    window.addEventListener("beforeunload", function (event) {
+      // Cancel the event as stated by the standard.
+      event.preventDefault();
+      // Chrome requires returnValue to be set.
+      event.returnValue = '5555';
+    });
+  }
+  onDrawingBtnTypeChange = (type) => {
+    this.setState({ drawingBtnType: type, panelName: type })
+  }
+  onToggleDeviceMode = () => {
+    this.setState({ isDrawInDestopDevice: !this.state.isDrawInDestopDevice })
   }
   onExampleLineReset = () => {
     this.setState({ exampleLineCoords: [] })
@@ -113,6 +112,7 @@ class App extends Component {
   onClearSomeMapEventListener = () => {
     window.google.maps.event.clearListeners(window.map, 'click')
     window.google.maps.event.clearListeners(window.map, 'mousemove')
+    window.google.maps.event.clearListeners(window.map, 'center_change')
   }
   addMouseMoveOnMap = () => {
     var self = this
@@ -157,46 +157,41 @@ class App extends Component {
   }
   onAddListenerMarkerBtn = () => {
     this.onUtilitiesMethod()
-    if (!(this.onBtnTypeChange('marker'))) {
-      this.handleDrawerOpen()
-      this.onSetMarkerOptions()
-      this.onClearSomeMapEventListener()
-      this.addMouseMoveOnMap()
-      this.onSetDrawingCursor()
-      this.drawMarker()
-    }
+    this.onDrawingBtnTypeChange('marker')
+    this.onSetDrawingUI()
+    this.onSetMarkerOptions()
+    this.drawMarker()
   }
   onAddListenerPolygonBtn = () => {
     this.onUtilitiesMethod()
-    if (!(this.onBtnTypeChange('polygon'))) {
-      this.handleDrawerOpen()
-      this.onSetPolyOptions()
-      this.onClearSomeMapEventListener()
-      this.addMouseMoveOnMap()
-      this.onSetDrawingCursor()
-      this.drawPolygon()
-    }
+    this.onDrawingBtnTypeChange('polygon')
+    this.onSetDrawingUI()
+    this.onSetPolyOptions()
+    this.drawPolygon()
+
   }
   onAddListenerPolylineBtn = () => {
     this.onUtilitiesMethod()
-    if (!(this.onBtnTypeChange('polyline'))) {
-      this.handleDrawerOpen()
-      this.onSetPolyOptions()
-      this.onClearSomeMapEventListener()
-      this.addMouseMoveOnMap()
-      this.onSetDrawingCursor()
-      this.drawPolyline()
-    }
+    this.onDrawingBtnTypeChange('polyline')
+    this.onSetDrawingUI()
+    this.onSetPolyOptions()
+    this.drawPolyline()
   }
   onAddListenerGrabBtn = () => {
     this.onUtilitiesMethod()
     this.onClearSomeMapEventListener()
     this.onSetDragMapCursor()
     this.setState({
-      btnTypeCheck: '',
+      drawingBtnType: null,
       panelName: 'จับ',
       drawerPage: 'homePage',
     })
+  }
+  onSetDrawingUI() {
+    this.handleDrawerOpen()
+    this.onClearSomeMapEventListener()
+    this.addMouseMoveOnMap()
+    this.onSetDrawingCursor()
   }
   drawMarker = () => {
     var self = this
@@ -222,7 +217,7 @@ class App extends Component {
       }
       self.setState({
         overlayObject: coordsPush,
-        btnTypeCheck: '',
+        drawingBtnType: null,
         isFirstDraw: false,
         shouldSave: true,
       }, () => {
@@ -253,12 +248,12 @@ class App extends Component {
           }]
         })
         self.setState({
-          btnTypeCheck: '',
+          drawingBtnType: null,
           overlayObject: pushObject,
           isFirstDraw: false,
           shouldSave: true,
         })
-        self.onDrawExampleLine(event)
+        self.onDrawExampleLine(event.latLng)
       } else {
         let actionIndex = self.state.overlayObject.length - 1
         let pushCoords = update(self.state.overlayObject, { [actionIndex]: { overlayCoords: { $push: [clickLatLng] } } })
@@ -273,13 +268,14 @@ class App extends Component {
         self.onPolyLengthCompute(polyline)
         self.onPolydistanceBtwCompute(setRedoCoords[actionIndex])
         self.setState({ overlayObject: setRedoCoords })
-        self.onDrawExampleLine(event)
+        self.onDrawExampleLine(event.latLng)
       }
     })
   }
   drawPolygon = () => {
     var self = this
     window.google.maps.event.addListener(window.map, 'click', function (event) {
+      console.log(event.latLng)
       const lat = event.latLng.lat()
       const lng = event.latLng.lng()
       const clickLatLng = { lat, lng }
@@ -300,12 +296,12 @@ class App extends Component {
           }]
         })
         self.setState({
-          btnTypeCheck: '',
+          drawingBtnType: null,
           overlayObject: pushObject,
           isFirstDraw: false,
           shouldSave: true,
         })
-        self.onDrawExampleLine(event)
+        self.onDrawExampleLine(event.latLng)
       } else {
 
         const actionIndex = overlayObject.length - 1
@@ -322,10 +318,12 @@ class App extends Component {
         self.onPolyLengthCompute(poylgon)
         self.onSquereMetersTrans(poylgon)
         self.setState({ overlayObject: setRedoCoords })
-
-        self.onDrawExampleLine(event)
+        self.onDrawExampleLine(event.latLng)
       }
     })
+  }
+  drawOverlayUsing = () => {
+
   }
   onSetSelectOverlay = (overlay) => {
     this.onResetSelectedOverlay()
@@ -406,21 +404,29 @@ class App extends Component {
     })
   }
   onDrawExampleLine = (clickEvent) => {
+    const { isDrawInDestopDevice } = this.state
     var self = this
-    window.google.maps.event.clearListeners(window.map, 'mousemove')
-    window.google.maps.event.addListener(window.map, 'mousemove', function (event) {
-      let mousemoveLat = event.latLng.lat()
-      let mousemoveLng = event.latLng.lng()
-      let clickLat = clickEvent.latLng.lat()
-      let clickLng = clickEvent.latLng.lng()
-      //console.log(clickEvent.latLng)
-      self.setState({
-        exampleLineCoords: [
-          { lat: clickLat, lng: clickLng },
-          { lat: mousemoveLat, lng: mousemoveLng }],
-        disBtwDetail: window.google.maps.geometry.spherical.computeDistanceBetween(clickEvent.latLng, event.latLng).toFixed(3),
+    if (isDrawInDestopDevice) {
+      window.google.maps.event.clearListeners(window.map, 'mousemove')
+      window.google.maps.event.addListener(window.map, 'mousemove', function (event) {
+        let mousemoveLatLng = event.latLng
+        self.setState({
+          exampleLineCoords: [clickEvent, mousemoveLatLng],
+          disBtwDetail: window.google.maps.geometry.spherical.computeDistanceBetween(clickEvent, mousemoveLatLng).toFixed(3),
+        })
       })
-    })
+    } else {
+      window.google.maps.event.clearListeners(window.map, 'center_changed')
+      window.google.maps.event.addListener(window.map, 'center_changed', function () {
+        let mousemoveLatLng = window.getCenter()
+        self.setState({
+          exampleLineCoords: [clickEvent, mousemoveLatLng],
+          disBtwDetail: window.google.maps.geometry.spherical.computeDistanceBetween(clickEvent, mousemoveLatLng).toFixed(3),
+        })
+      })
+
+    }
+
   }
   onPolyCoordsEdit = (polygon) => {
     let overlayObject = this.state.overlayObject
@@ -428,6 +434,7 @@ class App extends Component {
     let overlayIndex = overlayObject.findIndex(overlay => overlay.overlayIndex === polyIndex)
     let editCoords = []
     polygon.getPath().getArray().forEach(element => {
+      console.log(element)
       let lat = element.lat()
       let lng = element.lng()
       editCoords.push({ lat, lng })
@@ -996,14 +1003,11 @@ class App extends Component {
 
       if (overlayType !== 'marker') {
         if (isFirstDraw === false) {
-          // const overlayCoords = overlay.overlayCoords
-          // const overlayCoordsLength = overlay.overlayCoords.length
-          // const lastOverlayCoods = overlayCoords[overlayCoordsLength - 1]
-          // //$splice: [0,1,lastOverlayCoods] 
-          // this.onExampleLineReset()
-          // const setExampleline = update(exampleLineCoords, { $splice: [[0, 1, lastOverlayCoods]] })
-          // this.setState({ exampleLineCoords: setExampleline }, () => console.log(this.state.exampleLineCoords))
-          // // const endLatLng = new window.google.maps.LatLng(lastOverlayCoods)
+          const lastCoords = beforeLastUndoCoords[beforeLastUndoCoords.length - 1]
+          const lastCoordsLatLng = new window.google.maps.LatLng(lastCoords)
+          const setExampleline = update(exampleLineCoords, { 0: { $set: lastCoords } })
+          this.onDrawExampleLine(lastCoordsLatLng)
+          this.setState({ exampleLineCoords: setExampleline })
         }
         this.onPolydistanceBtwCompute(popUndoCoords[actionIndex])
       }
@@ -1014,7 +1018,7 @@ class App extends Component {
   }
   onRedoCoords = (overlay) => {
     if (overlay.redoCoords.length > 0) {
-      const { overlayObject } = this.state
+      const { overlayObject, exampleLineCoords, isFirstDraw } = this.state
       const overlayIndex = overlay.overlayIndex
       const overlayType = overlay.overlayType
       const actionIndex = overlayObject.findIndex(overlay => overlay.overlayIndex === overlayIndex)
@@ -1025,6 +1029,13 @@ class App extends Component {
       const pushUndoCoords = update(setRedoCoords, { [actionIndex]: { undoCoords: { $push: [lastRedoCoords] } } })
       const popRedoCoords = update(pushUndoCoords, { [actionIndex]: { redoCoords: { $splice: [[redoCoordsLength, 1]] } } })
       if (overlayType !== 'marker') {
+        if (isFirstDraw === false) {
+          const lastCoords = lastRedoCoords[lastRedoCoords.length - 1]
+          const lastCoordsLatLng = new window.google.maps.LatLng(lastCoords)
+          const setExampleline = update(exampleLineCoords, { 0: { $set: lastCoords } })
+          this.onDrawExampleLine(lastCoordsLatLng)
+          this.setState({ exampleLineCoords: setExampleline })
+        }
         this.onPolydistanceBtwCompute(popRedoCoords[actionIndex])
       }
       this.setState({ overlayObject: popRedoCoords }, () => console.log(this.state.overlayObject, 'redo'))
@@ -1164,6 +1175,9 @@ class App extends Component {
             onAddListenerPolylineBtn={this.onAddListenerPolylineBtn}
             onAddListenerGrabBtn={this.onAddListenerGrabBtn}
             onSaveToFirestore={this.onSaveToFirestore}
+            onToggleDeviceMode={this.onToggleDeviceMode}
+            //drawingBtnType={this.state.drawingBtnType}
+            {...this.state}
           />
           <DetailedExpansionPanel
             {...this.state}

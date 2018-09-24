@@ -124,13 +124,13 @@ class MenuListComposition extends React.Component {
 
                                         <MenuItem onClick={this.onSetMapTypeToRoadmap}>
                                             <button className="ButtonMaplayer">
-                                                <img src={Roadmap} className="Maplayer" />
+                                                <img src={Roadmap || 'Roadmap'} className="Maplayer" alt='Roadmap' />
                                             </button>
                                         </MenuItem>
 
                                         <MenuItem onClick={this.onSetMapTypeToSatellite} >
                                             <button className="ButtonMaplayer">
-                                                <img src={Satellite} className="Maplayer" />
+                                                <img src={Satellite} className="Maplayer" alt='Satellite' />
                                             </button>
                                         </MenuItem>
                                     </MenuList>
