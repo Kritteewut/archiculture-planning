@@ -21,11 +21,12 @@ import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 import OpenWith from '@material-ui/icons/OpenWith';
 import List from '@material-ui/core/List';
-import TextField from '@material-ui/core/TextField';
-import RoadmapExample from './RoadmapExample'
 
 import grey from '@material-ui/core/colors/grey';
 import red from '@material-ui/core/colors/red';
+import EditPlan from './EditPlan';
+import DeletePlan from './DeletePlan';
+import MergeOverlay from './MergeOverlay';
 
 
 const drawerWidth = '350px'
@@ -84,8 +85,7 @@ class PermanentDrawer extends React.PureComponent {
             isDeletePlanOpen: false,
             isMergeOverlayOpen: false,
             isEditPlanOpen: false,
-            selectedPlanIndex: '',
-            planName: '',
+            selectedPlanIndex: null,
         }
     }
     logout = () => {
@@ -105,137 +105,36 @@ class PermanentDrawer extends React.PureComponent {
                 this.props.onClearOverlayFromMap()
             }
         }
-
-    }
-    handleAccecptToMergeOverlay = () => {
-        this.props.onSetSelectedPlan(this.state.planData)
-        this.onToggleMergeOverlayModal()
-
-    }
-    handleDiscardToMergeOverlay = () => {
-        this.props.onSetSelectedPlan(this.state.planData)
-        this.props.onClearOverlayFromMap()
-        this.onToggleMergeOverlayModal()
     }
     onToggleMergeOverlayModal = () => {
         this.setState({ isMergeOverlayOpen: !this.state.isMergeOverlayOpen })
     }
-    renderMergeOverlayModal = () => {
-        const { planData } = this.state
-        return (
-            <Modal
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-                open={this.state.isMergeOverlayOpen}
-                onClose={this.onToggleMergeOverlayModal}
-            >
-                <div className={this.props.classes.paper}>
-                    <div>
-                        แปลงที่จะเลือก : {planData ? this.state.planData.planName : ''}
-                    </div>
-                    <div>
-                        ยังมีรูปร่างที่วาดไว้อยู่ หากต้องการรวมรูปร่างที่วาดไว้กับแปลงที่เลือกให้กดปุ่ม ตกลง หากต้องการละทิ้งรูปร่างที่วาดไว้ให้กดปุ่ม ละทิ้ง
-                    </div>
-                    <Button size="small" color="primary" onClick={this.handleAccecptToMergeOverlay}>
-                        ตกลง
-                    </Button>
-                    <Button size="small" color="secondary" onClick={this.handleDiscardToMergeOverlay}>
-                        ละทิ้ง
-                    </Button>
-                    <Button size="small" onClick={this.onToggleMergeOverlayModal}>
-                        ยกเลิก
-                    </Button>
-                </div>
-            </Modal>
-        )
+    handleDeleteClick = () => {
+        this.props.onDeleteOverlay(this.props.selectedOverlay)
+        this.props.onToggleDeleteOverlayOpen()
+
     }
     handleDeletePlanClick = (planData) => {
         this.setState({ planData: planData })
         this.onToggleDeletePlanModal()
     }
     handleEditPlanClick = (planData) => {
-        this.setState({ planData: planData, planName: planData.planName })
+        this.setState({ planData: planData })
         this.onToggleEditPlanOpen()
     }
     onToggleDeletePlanModal = () => {
         this.setState({ isDeletePlanOpen: !this.state.isDeletePlanOpen })
     }
-    handleAcceptToDeletePlan = () => {
-        this.props.onDeletePlan(this.state.planData.planId)
-        this.onToggleDeletePlanModal()
-    }
-    renderDeletePlanModal = () => {
-        const { planData } = this.state
-        return (
-            <Modal
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-                open={this.state.isDeletePlanOpen}
-                onClose={this.onToggleDeletePlanModal}
-            >
-                <div className={this.props.classes.paper}>
-                    <div>
-                        แปลงที่จะลบ : {planData ? this.state.planData.planName : ''}
-                    </div>
-                    <div>
-                        หากท่านลบแปลงที่เลือก ข้อมูลทั้งหมดที่ถูกบันทึกไว้จะถูกลบและไม่สามารถกู้คืนได้
-                    </div>
-                    <Button size="small" color="primary" onClick={this.handleAcceptToDeletePlan}>
-                        ตกลง
-                    </Button>
-                    <Button size="small" onClick={this.onToggleDeletePlanModal}>
-                        ยกเลิก
-                    </Button>
-                </div>
-            </Modal>
-        )
-    }
     onToggleEditPlanOpen = () => {
         this.setState({ isEditPlanOpen: !this.state.isEditPlanOpen })
     }
-    renderEditPlanModal = () => {
-        const { classes } = this.props
-        return (
-            <Modal
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-                open={this.state.isEditPlanOpen}
-                onClose={this.onToggleEditPlanOpen}
-            >
-                <div className={classes.paper}>
-                    แก้ไขชื่อแปลง
-                    <br />
-                    <TextField
-                        id="with-placeholder"
-                        label="ชื่อแปลง"
-                        className={classes.textField}
-                        margin="normal"
-                        onChange={this.handleChange}
-                        name="planName"
-                        value={this.state.planName}
-                    />
-                    <br />
-                    <Button size="small" color="primary" onClick={this.onSubmitEditPlan}>
-                        ตกลง
-                    </Button>
-                    <Button size="small" color="primary" onClick={this.onToggleEditPlanOpen}>
-                        ยกเลิก
-                    </Button>
-                </div>
-            </Modal>
-        )
-    }
-    handleChange = (event) => {
-        this.setState({
-            [event.target.name]: event.target.value
-        })
-    }
-    onSubmitEditPlan = () => {
-        this.props.onEditPlanName(this.state.planData, this.state.planName)
-        this.onToggleEditPlanOpen()
+    handleAcceptToDeletePlan = (planId) => {
+        this.props.onDeletePlan(planId)
+        this.setState({selectedPlanIndex: null})
+        this.onToggleDeletePlanModal()
     }
     renderDrawer = () => {
-        const { classes, user, onSetUser, selectedPlan, onCallFitBounds } = this.props;
+        const { classes, user, onSetUser, selectedPlan, onCallFitBounds, onEditPlanName } = this.props;
         return (
             user ?
                 <div>
@@ -280,11 +179,12 @@ class PermanentDrawer extends React.PureComponent {
                                     this.props.planData.map((plan, index) => {
                                         return (
                                             <ListItem
-                                                role={undefined}
                                                 button
                                                 key={plan.planId}
                                                 onClick={() => this.handlePlanClick(plan, index)}
-                                                selected={this.state.selectedPlanIndex === index}
+                                                //selected={this.state.selectedPlanIndex === index}
+                                                disabled={this.state.selectedPlanIndex === index}
+                                                
                                             >
                                                 <ListItemText primary={plan.planName} />
                                                 <ListItemSecondaryAction>
@@ -308,9 +208,25 @@ class PermanentDrawer extends React.PureComponent {
 
                             }
                         </List>
-                        {this.renderMergeOverlayModal()}
-                        {this.renderDeletePlanModal()}
-                        {this.renderEditPlanModal()}
+                        <MergeOverlay
+                            isMergeOverlayOpen={this.state.isMergeOverlayOpen}
+                            onToggleMergeOverlayModal={this.onToggleMergeOverlayModal}
+                            planData={this.state.planData}
+                            onClearOverlayFromMap={this.props.onClearOverlayFromMap}
+                            onSetSelectedPlan={this.props.onSetSelectedPlan}
+                        />
+                        <EditPlan
+                            onToggleEditPlanOpen={this.onToggleEditPlanOpen}
+                            isEditPlanOpen={this.state.isEditPlanOpen}
+                            planData={this.state.planData}
+                            onEditPlanName={onEditPlanName}
+                        />
+                        <DeletePlan
+                            isDeletePlanOpen={this.state.isDeletePlanOpen}
+                            onToggleDeletePlanModal={this.onToggleDeletePlanModal}
+                            planData={this.state.planData}
+                            handleAcceptToDeletePlan={this.handleAcceptToDeletePlan}
+                        />
                     </div>
                 </div>
                 :

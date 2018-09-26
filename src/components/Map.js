@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import './Design.css';
+
 
 class Map extends React.PureComponent {
     constructor(props) {
@@ -30,6 +32,7 @@ class Map extends React.PureComponent {
         this.setState({
             isLoad: true
         })
+
     }
 
 
@@ -40,13 +43,8 @@ class Map extends React.PureComponent {
         }
         return (
             <div style={{
-                position: 'absolute',
-                top: 0,
                 left: this.props.left,
-                right: 0,
-                bottom: 0,
-                justifyContent: 'flex-end',
-                transition: '350ms cubic-bezier(0.23, 1, 0.32, 1)',
+                justifyContent: 'flex-end'
             }}
                 className="Map"
                 id="map" >

@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Tooltip from '@material-ui/core/Tooltip';
+import target_icon from './icons/target_icon.png'
 
 // Icon group
 
@@ -14,6 +15,8 @@ import TextureICon from '@material-ui/icons/Texture';
 import PhoneIcon from '@material-ui/icons/PhoneAndroid';
 import DestopIcon from '@material-ui/icons/PersonalVideo';
 import TargetIcon from '@material-ui/icons/Flare';
+
+import './Design.css';
 
 // import Category from '@material-ui/icons/Category';
 
@@ -72,11 +75,18 @@ const styles = theme => ({
         color: 'rgba(0, 0, 0, 0.8)',
         background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
         boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
-
-        // position: 'relative',
-        // right: '300px',
-        // justifyContent: 'flex-end',
-        // alignItems: 'center',
+    },
+    targetIcon: {
+        position: 'relative',
+        //top: '50%',
+        //bottom: '50%',
+        //left: '45%',
+        top: theme.spacing.unit * 54,
+        left: theme.spacing.unit * 84,
+        //right: '50%'
+        // color: 'rgba(0, 0, 0, 0.8)',
+        // background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
+        // boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
     },
     leftIcon: {
         marginRight: theme.spacing.unit,
@@ -95,15 +105,12 @@ class IconLabelButtons extends React.PureComponent {
         this.state = {}
     }
     handleTargetClick = () => {
-        const { drawingBtnType } = this.props
-        if (drawingBtnType) {
-            window.google.maps.event.trigger(window.map, 'click', window.map.getCenter())
-        } else {
-            //alert('กรุณาเลือกโหมดการวาด')
-        }
+        const { drawingBtnType, drawOverlayUsingTouchScreen } = this.props
+        drawOverlayUsingTouchScreen()
     }
     render() {
-        const { classes, drawingBtnType, isDrawInDestopDevice } = this.props;
+        const { classes, drawingBtnType, isDrawInDesktopDevice, isFirstDraw 
+        } = this.props;
         return (
             <div>
                 <Button
@@ -153,27 +160,51 @@ class IconLabelButtons extends React.PureComponent {
                     color="default"
                     className={classes.buttonToggleDeviceMode}
                     onClick={() => this.props.onToggleDeviceMode()}
+                    disabled={drawingBtnType || !isFirstDraw ? true : false}
                 >
                     {
-                        isDrawInDestopDevice ?
+                        isDrawInDesktopDevice ?
                             <DestopIcon className={classes.leftIcon} />
                             :
                             <PhoneIcon className={classes.leftIcon} />
                     }
 
                     {
-                        isDrawInDestopDevice ?
+                        isDrawInDesktopDevice ?
                             'DESKTOP'
                             :
                             'TUOCH'
                     }
                 </Button>
-                {isDrawInDestopDevice ?
+                {isDrawInDesktopDevice ?
                     null
                     :
-                    <Button variant="fab" className={classes.buttonTarget} onClick={this.handleTargetClick}>
-                        <TargetIcon />
-                    </Button>
+                    <div>
+                        <Button
+                            variant="fab"
+                            className={classes.buttonTarget}
+                            onClick={this.handleTargetClick}
+                            disabled={(drawingBtnType || !isFirstDraw) ? false : true}
+                        >
+                            <TargetIcon />
+
+                        </Button>
+                        {(drawingBtnType || !isFirstDraw) ?
+                            <Button
+                                className={classes.targetIcon}
+                                disabled={true}
+                            >
+                                <img
+                                    src={target_icon}
+                                    alt='Target'
+                                />
+                            </Button>
+                            :
+                            null
+
+                        }
+                    </div>
+
                 }
 
 

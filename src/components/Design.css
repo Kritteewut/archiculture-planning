@@ -232,3 +232,10 @@ List of CSS Design Class
 /* ------------------- Dropdown Group ------------------ */
 
 /* ------------------- Containner Group Group ------------------ */
+.Map{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    transition: 350ms cubic-bezier(0.23, 1, 0.32, 1);
+}

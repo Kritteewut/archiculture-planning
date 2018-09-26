@@ -9,7 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import { withStyles } from '@material-ui/core/styles';
 import MapIcon from '@material-ui/icons/FilterHdr';
-
+import target_icon from './icons/target_icon.png'
 import Roadmap from './Picture/Roadmap.jpg'
 import Satellite from './Picture/Satellite.jpg'
 
@@ -124,7 +124,7 @@ class MenuListComposition extends React.Component {
 
                                         <MenuItem onClick={this.onSetMapTypeToRoadmap}>
                                             <button className="ButtonMaplayer">
-                                                <img src={Roadmap || 'Roadmap'} className="Maplayer" alt='Roadmap' />
+                                                <img src={Roadmap} className="Maplayer" alt='Roadmap' />
                                             </button>
                                         </MenuItem>
 

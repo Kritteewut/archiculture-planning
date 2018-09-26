@@ -5,19 +5,9 @@ import Modal from '@material-ui/core/Modal';
 import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
+import TextField from '@material-ui/core/TextField';
 
 import './Design.css';
-
-function getModalStyle() {
-    const top = 50;
-    const left = 50;
-
-    return {
-        top: `${top}%`,
-        left: `${left}%`,
-        transform: `translate(-${top}%, -${left}%)`,
-    };
-}
 
 const styles = theme => ({
     paper: {
@@ -26,7 +16,9 @@ const styles = theme => ({
         height: theme.spacing.unit * 15,
         padding: theme.spacing.unit * 4,
 
-
+        top: `50%`,
+        left: `50%`,
+        transform: `translate(-50%, -50%)`,
         outline: 'none',
 
         background: 'linear-gradient(20deg, rgba(255 , 255 , 255 , 0.85) 40%, rgba(255 , 255 , 255, 0.85)) 60%',
@@ -104,12 +96,14 @@ class AddPlanBtn extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            open: false,
+            isAddPlanOpen: false,
             inputValue: '',
         };
+        this.addPlanInput = null;
+        this.setAddPlanInput = element => {
+            this.addPlanInput = element;
+        };
     }
-
-
     handleOpen = () => {
         if (this.props.user) {
             this.setState({
@@ -123,18 +117,15 @@ class AddPlanBtn extends React.PureComponent {
         }
 
     };
-    handleClose = () => {
-        this.setState({
-            open: false,
-            inputValue: ''
-        });
+    onToggleAddPlanOpen = () => {
+        this.setState({ isAddPlanOpen: !this.state.isAddPlanOpen });
     };
     handleAdd = () => {
-        if (!this.state.inputValue.trim()) {
+        if (!this.addPlanInput.value.trim()) {
             alert('กรุณากรอกชื่อแปลง')
         } else {
-            this.props.onAddPlan(this.state.inputValue)
-            this.handleClose()
+            this.props.onAddPlan(this.addPlanInput.value)
+            this.onToggleAddPlanOpen()
             this.props.handleDrawerOpen()
         }
     }
@@ -154,7 +145,7 @@ class AddPlanBtn extends React.PureComponent {
                     disableTouchListener
                 >
 
-                    <Button variant="fab" className={classes.absolute} onClick={this.handleOpen}>
+                    <Button variant="fab" className={classes.absolute} onClick={this.onToggleAddPlanOpen}>
                         <AddIcon />
                     </Button>
 
@@ -163,22 +154,32 @@ class AddPlanBtn extends React.PureComponent {
                 <Modal
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
-                    open={this.state.open}
-                    onClose={this.handleClose}
+                    open={this.state.isAddPlanOpen}
+                    onClose={this.onToggleAddPlanOpen}
                 >
-                    <div style={getModalStyle()} className={classes.paper}>
+                    <div className={classes.paper}>
 
                         <p className={classes.textcolor}> สร้างแปลนของคุณ </p> <br />
 
-                        <Tooltip title="Close Window" placement="bottom" >
+                        <Tooltip
+                            title="Close Window"
+                            placement="bottom"
+                            disableFocusListener
+                            disableTouchListener
+                        >
 
-                            <Button className={classes.absolute2} onClick={this.handleClose}>
+                            <Button className={classes.absolute2} onClick={this.onToggleAddPlanOpen}>
                                 ยกเลิก
                             </Button>
 
                         </Tooltip>
 
-                        <Tooltip title="Add Plan" placement="bottom" >
+                        <Tooltip
+                            title="Add Plan"
+                            placement="bottom"
+                            disableFocusListener
+                            disableTouchListener
+                        >
 
                             <Button className={classes.absolute3} onClick={this.handleAdd}>
                                 เพิ่ม
@@ -186,7 +187,11 @@ class AddPlanBtn extends React.PureComponent {
 
                         </Tooltip>
 
-                        <input className={classes.absolute4} value={this.state.inputValue} onChange={evt => this.updateInputValue(evt)} />
+                        <TextField className={classes.absolute4}
+                            defaultValue=''
+                            inputRef={this.setAddPlanInput}
+                            autoFocus={true}
+                        />
                     </div>
 
                 </Modal>
