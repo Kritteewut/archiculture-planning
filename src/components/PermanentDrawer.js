@@ -86,6 +86,7 @@ class PermanentDrawer extends React.PureComponent {
             isMergeOverlayOpen: false,
             isEditPlanOpen: false,
             selectedPlanIndex: null,
+            willSelectIndex: null,
         }
     }
     logout = () => {
@@ -95,7 +96,7 @@ class PermanentDrawer extends React.PureComponent {
     handlePlanClick = (planData, index) => {
         const { selectedPlan, overlayObject } = this.props
         if ((!selectedPlan) && overlayObject.length > 0) {
-            this.setState({ planData: planData, selectedPlanIndex: index })
+            this.setState({ planData: planData, willSelectIndex:index})
             this.onToggleMergeOverlayModal()
         }
         else {
@@ -109,10 +110,21 @@ class PermanentDrawer extends React.PureComponent {
     onToggleMergeOverlayModal = () => {
         this.setState({ isMergeOverlayOpen: !this.state.isMergeOverlayOpen })
     }
+    handleAccecptToMergeOverlay = () => {
+        this.props.onSetSelectedPlan(this.props.planData)
+        this.setState({selectedPlanIndex:this.state.selectedPlanIndex})
+        this.onToggleMergeOverlayModal()
+
+    }
+    handleDiscardToMergeOverlay = () => {
+        this.props.onSetSelectedPlan(this.props.planData)
+        this.setState({selectedPlanIndex:this.state.selectedPlanIndex})
+        this.props.onClearOverlayFromMap()
+        this.onToggleMergeOverlayModal()
+    }
     handleDeleteClick = () => {
         this.props.onDeleteOverlay(this.props.selectedOverlay)
         this.props.onToggleDeleteOverlayOpen()
-
     }
     handleDeletePlanClick = (planData) => {
         this.setState({ planData: planData })
@@ -172,6 +184,9 @@ class PermanentDrawer extends React.PureComponent {
                         <Button variant="contained" color="primary" className={classNames(classes.buttonmargin, classes.buttonsave)} disabled={selectedPlan ? false : true} onClick={this.props.onSaveToFirestore}>
                             บันทึก
                         </Button>
+                        <Button variant="contained" color="primary" className={classNames(classes.buttonmargin, classes.buttonsave)}  onClick={this.props.onToggleDistanceMarker}>
+                            แสดง
+                        </Button>
                         <Divider />
                         <List>
                             {
@@ -214,6 +229,8 @@ class PermanentDrawer extends React.PureComponent {
                             planData={this.state.planData}
                             onClearOverlayFromMap={this.props.onClearOverlayFromMap}
                             onSetSelectedPlan={this.props.onSetSelectedPlan}
+                            handleAccecptToMergeOverlay={this.handleAccecptToMergeOverlay}
+                            handleDiscardToMergeOverlay={this.handleDiscardToMergeOverlay}
                         />
                         <EditPlan
                             onToggleEditPlanOpen={this.onToggleEditPlanOpen}

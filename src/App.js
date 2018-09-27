@@ -20,8 +20,6 @@ import shortid from 'shortid'
 import { auth } from './config/firebase'
 import LoadingCircle from './components/LoadingCircle';
 import './components/SearchBoxStyles.css'
-import { DISPLAY_STRING } from './language/Language'
-import TargetIcon from './components/TargetIcon';
 
 const shapesRef = db.collection('shapes')
 const planRef = db.collection('plan')
@@ -77,6 +75,7 @@ class App extends Component {
       isLoading: null,
       isDrawInDesktopDevice: true,
       shouldSave: false,
+      isDistanceMarkerVisible: true,
     }
   }
   componentWillMount() {
@@ -582,7 +581,7 @@ class App extends Component {
     window.map.setOptions({ draggableCursor: null, draggingCursor: null })
   }
   onPolydistanceBtwCompute = (overlayObject) => {
-    const { distanceDetail } = this.state
+    const { distanceDetail, isDistanceMarkerVisible } = this.state
     const overlayType = overlayObject.overlayType
     const overlayCoords = overlayObject.overlayCoords
     const overlayIndex = overlayObject.overlayIndex
@@ -597,7 +596,8 @@ class App extends Component {
       replaceDetail.push({
         midpoint: { lat: (endPoint.lat + prevEndPoint.lat) / 2, lng: (endPoint.lng + prevEndPoint.lng) / 2 },
         disBtw: window.google.maps.geometry.spherical.computeDistanceBetween(endLatLng, prevEndLatLng),
-        id: shortid.generate()
+        id: shortid.generate(),
+        visible: isDistanceMarkerVisible,
       })
     }
     if (overlayType === 'polygon' && overlayCoords.length > 2) {
@@ -608,7 +608,8 @@ class App extends Component {
       replaceDetail.push({
         midpoint: { lat: (endPoint.lat + startPoint.lat) / 2, lng: (endPoint.lng + startPoint.lng) / 2 },
         disBtw: window.google.maps.geometry.spherical.computeDistanceBetween(endLatLng, startLatLng),
-        id: shortid.generate()
+        id: shortid.generate(),
+        visible: isDistanceMarkerVisible,
       })
     }
     if (detailIndex !== -1) {//new detail or has previus detail
@@ -1191,6 +1192,19 @@ class App extends Component {
     this.onResetSelectedPlan()
     this.onClearOverlayFromMap()
   }
+  onToggleDistanceMarker = () => {
+    const { isDistanceMarkerVisible, distanceDetail } = this.state
+    distanceDetail.forEach((element, index) => {
+      element.detail.forEach((detail, index2) => {
+        var toggleVisible = update(distanceDetail, { [index]: { detail: { [index2]: { visible: { $set: false } } } } })
+        console.log(toggleVisible)
+        this.setState({
+          distanceDetail: toggleVisible,
+          //isDistanceMarkerVisible: !isDistanceMarkerVisible 
+        })
+      })
+    })
+  }
   //this is rederrrrr
   render() {
     return (
@@ -1225,6 +1239,7 @@ class App extends Component {
           onUndoDrawingCoords={this.onUndoDrawingCoords}
           onRedoDrawingCoords={this.onRedoDrawingCoords}
           onRedoCoords={this.onRedoCoords}
+          onToggleDistanceMarker={this.onToggleDistanceMarker}
           {...this.state}
         />
         <input id="pac-input" className="controls" type="text" placeholder="Find place" />
@@ -1293,6 +1308,7 @@ class App extends Component {
                       key={value2.id}
                       midpoint={value2.midpoint}
                       disBtw={value2.disBtw}
+                      visible={value2.visible}
                     />
                   )
                 })

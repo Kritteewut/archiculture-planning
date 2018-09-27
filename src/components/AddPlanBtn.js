@@ -124,9 +124,14 @@ class AddPlanBtn extends React.PureComponent {
         if (!this.addPlanInput.value.trim()) {
             alert('กรุณากรอกชื่อแปลง')
         } else {
-            this.props.onAddPlan(this.addPlanInput.value)
+            if(this.addPlanInput.value.length > 30){
+                alert('ชื่อแปลงของท่านยาวเกินไป')
+            }else{
+               this.props.onAddPlan(this.addPlanInput.value)
             this.onToggleAddPlanOpen()
-            this.props.handleDrawerOpen()
+            this.props.handleDrawerOpen()  
+            }
+           
         }
     }
     updateInputValue = (evt) => {

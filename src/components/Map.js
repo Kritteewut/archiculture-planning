@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './Design.css';
-
+import update from 'immutability-helper';
 
 class Map extends React.PureComponent {
     constructor(props) {
@@ -32,7 +32,6 @@ class Map extends React.PureComponent {
         this.setState({
             isLoad: true
         })
-
     }
 
 
@@ -44,7 +43,7 @@ class Map extends React.PureComponent {
         return (
             <div style={{
                 left: this.props.left,
-                justifyContent: 'flex-end'
+
             }}
                 className="Map"
                 id="map" >

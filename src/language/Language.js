@@ -25,9 +25,10 @@ const KEY_WORD = [
     'add',
 ]
 const THAI = {
-    [KEY_WORD[0]]: 'ตกลง',
+    // [KEY_WORD.ok]: 'ตกลง',
+    // [KEY_WORD.cancle]:'ยกเลิก',
 }
 const ENGLISH = {
-    [KEY_WORD[0]]: 'OK',
+    //[KEY_WORD.ok]: 'OK',
 }
 export const DISPLAY_STRING = THAI

@@ -33,18 +33,10 @@ class MergeOverlay extends React.PureComponent {
         super(props);
         this.state = {}
     }
-    handleAccecptToMergeOverlay = () => {
-        this.props.onSetSelectedPlan(this.props.planData)
-        this.props.onToggleMergeOverlayModal()
-
-    }
-    handleDiscardToMergeOverlay = () => {
-        this.props.onSetSelectedPlan(this.props.planData)
-        this.props.onClearOverlayFromMap()
-        this.props.onToggleMergeOverlayModal()
-    }
     render() {
-        const { planData, onToggleMergeOverlayModal, isMergeOverlayOpen } = this.props
+        const { planData, onToggleMergeOverlayModal, isMergeOverlayOpen ,
+            handleAccecptToMergeOverlay,handleDiscardToMergeOverlay
+        } = this.props
         return (
             <Modal
                 aria-labelledby="simple-modal-title"
@@ -59,10 +51,10 @@ class MergeOverlay extends React.PureComponent {
                     <div>
                         ยังมีรูปร่างที่วาดไว้อยู่ หากต้องการรวมรูปร่างที่วาดไว้กับแปลงที่เลือกให้กดปุ่ม ตกลง หากต้องการละทิ้งรูปร่างที่วาดไว้ให้กดปุ่ม ละทิ้ง
                     </div>
-                    <Button size="small" color="primary" onClick={this.handleAccecptToMergeOverlay}>
+                    <Button size="small" color="primary" onClick={handleAccecptToMergeOverlay}>
                         ตกลง
                     </Button>
-                    <Button size="small" color="secondary" onClick={this.handleDiscardToMergeOverlay}>
+                    <Button size="small" color="secondary" onClick={handleDiscardToMergeOverlay}>
                         ละทิ้ง
                     </Button>
                     <Button size="small" onClick={onToggleMergeOverlayModal}>

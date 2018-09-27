@@ -201,7 +201,6 @@ class IconLabelButtons extends React.PureComponent {
                             </Button>
                             :
                             null
-
                         }
                     </div>
 
