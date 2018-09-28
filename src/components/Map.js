@@ -1,6 +1,6 @@
 import React from 'react';
 import './Design.css';
-import update from 'immutability-helper';
+
 
 class Map extends React.PureComponent {
     constructor(props) {
@@ -32,8 +32,19 @@ class Map extends React.PureComponent {
         this.setState({
             isLoad: true
         })
-    }
+        // setTimeout(this.test2, 5000)
 
+        // window.google.maps.event.addListener(window.map, 'click', function () {
+        //     clearInterval(self.interval)
+        // })
+        // console.log(this.interval)
+    }
+    test = () => {
+        console.log('hi', Math.random())
+    }
+    test2 = () => {
+        this.interval = setInterval(this.test, 1000)
+    }
 
     render() {
         var childrenOutput = null;

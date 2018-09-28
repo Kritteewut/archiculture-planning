@@ -34,7 +34,8 @@ class DeletePlan extends React.PureComponent {
         this.state = {}
     }
     render() {
-        const { classes, planData, isDeletePlanOpen, onToggleDeletePlanModal,handleAcceptToDeletePlan } = this.props
+        const { classes, planData, isDeletePlanOpen,
+            onToggleDeletePlanModal, handleAcceptToDeletePlan } = this.props
         return (
             <Modal
                 aria-labelledby="simple-modal-title"
@@ -49,7 +50,7 @@ class DeletePlan extends React.PureComponent {
                     <div>
                         หากท่านลบแปลงที่เลือก ข้อมูลทั้งหมดที่ถูกบันทึกไว้จะถูกลบและไม่สามารถกู้คืนได้
                     </div>
-                    <Button size="small" color="primary" onClick={()=>handleAcceptToDeletePlan(planData.planId)}>
+                    <Button size="small" color="primary" onClick={() => handleAcceptToDeletePlan(planData.planId)}>
                         ตกลง
                     </Button>
                     <Button size="small" onClick={onToggleDeletePlanModal}>

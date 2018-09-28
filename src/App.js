@@ -37,7 +37,6 @@ function new_script(src) {
     document.body.appendChild(script);
   })
 };
-
 // Promise Interface can ensure load the script only once
 var my_script = new_script('https://maps.googleapis.com/maps/api/js?&libraries=geometry,drawing,places,visualization&key=&callback=initMap');
 //var my_script2 = new_script('https://cdn.rawgit.com/bjornharrtell/jsts/gh-pages/1.0.2/jsts.min.js')
@@ -72,22 +71,24 @@ class App extends Component {
       areaDetail: '',
       distanceDetail: [],
       drawerPage: 'homePage',
-      isLoading: null,
+      isSaving: false,
       isDrawInDesktopDevice: true,
       shouldSave: false,
       isDistanceMarkerVisible: true,
+      isWaitingForUserResult: true,
+      isWaitingForPlanQuery: true,
     }
   }
   componentWillMount() {
     var self = this
     auth.onAuthStateChanged((user) => {
       if (user) { self.setState({ user }, () => self.onQueryPlanFromFirestore()) }
-    });
+      this.setState({ isWaitingForUserResult: false })
+    })
     //this.onAddBeforeUnloadListener()
 
   }
   componentDidMount() {
-
 
   }
   componentWillUnmount() {
@@ -714,9 +715,11 @@ class App extends Component {
     this.setState({ areaDetail: rnwString })
   }
   onSaveToFirestore = () => {
+    this.setState(state => ({ isSaving: !state.isSaving }))
     const { overlayObject, selectedPlan, distanceDetail } = this.state
     let self = this
     var planId = selectedPlan.planId
+    var saveAmount = overlayObject.length
     overlayObject.map((value, key) => {
       let overlayCoords = value.overlayCoords
       let overlayType = value.overlayType
@@ -741,6 +744,7 @@ class App extends Component {
             const updateDetailIndex = update(distanceDetail, { [detailIndex]: { overlayIndex: { $set: doc.id } } })
             const editOverlayIndex = update(overlayObject, { [key]: { overlayIndex: { $set: doc.id } } })
             self.setState({ overlayObject: editOverlayIndex, distanceDetail: updateDetailIndex })
+            saveAmount--
           }).catch(function (error) {
             alert('there is some thing went wrong', error)
           })
@@ -759,6 +763,7 @@ class App extends Component {
             const updateDetailIndex = update(distanceDetail, { [detailIndex]: { overlayIndex: { $set: doc.id } } })
             const editOverlayIndex = update(overlayObject, { [key]: { overlayIndex: { $set: doc.id } } })
             self.setState({ overlayObject: editOverlayIndex, distanceDetail: updateDetailIndex })
+            saveAmount--
           }).catch(function (error) {
             alert('there is some thing went wrong', error)
           })
@@ -774,6 +779,7 @@ class App extends Component {
           }).then(function (doc) {
             var editOverlayIndex = update(overlayObject, { [key]: { overlayIndex: { $set: doc.id } } })
             self.setState({ overlayObject: editOverlayIndex })
+            saveAmount--
           }).catch(function (error) {
             alert('there is some thing went wrong', error)
           })
@@ -787,7 +793,12 @@ class App extends Component {
             overlayDetail,
             strokeColor,
             fillColor,
-          }, { merge: true });
+          }, { merge: true }).then(function (doc) {
+            console.log('merge complere')
+            saveAmount--
+          }).catch(function (error) {
+            alert('there is some thing went wrong', error)
+          });
         }
         if (value.overlayType === 'polyline') {
           shapesRef.doc(value.overlayIndex).set({
@@ -796,7 +807,12 @@ class App extends Component {
             overlayName,
             overlayDetail,
             strokeColor,
-          }, { merge: true });
+          }, { merge: true }).then(function (doc) {
+            console.log('merge complere')
+            saveAmount--
+          }).catch(function (error) {
+            alert('there is some thing went wrong', error)
+          });
         }
         if (value.overlayType === 'marker') {
           shapesRef.doc(value.overlayIndex).set({
@@ -805,12 +821,23 @@ class App extends Component {
             overlayName,
             overlayDetail,
             icon,
-          }, { merge: true });
+          }, { merge: true }).then(function (doc) {
+            console.log('merge complere')
+            saveAmount--
+          }).catch(function (error) {
+            alert('there is some thing went wrong', error)
+          });
         }
 
       }
       return null;
     })
+    var completeSaveCheck = setInterval(() => {
+      if (saveAmount === 0) {
+        this.setState(state => ({ isSaving: !state.isSaving }))
+        clearInterval(completeSaveCheck)
+      }
+    }, 500)
   }
   onClearOverlayFromMap = () => {
     this.setState({ overlayObject: [], distanceDetail: [] })
@@ -909,7 +936,7 @@ class App extends Component {
         })
         self.setState({
           planData: planData,
-          isLoading: 'none',
+          isWaitingForPlanQuery: false
         })
       })
     }
@@ -1048,7 +1075,7 @@ class App extends Component {
     this.setState({ overlayObject: editedDetail })
   }
   onChangeDrawPage = (page) => {
-    this.setState({ drawPage: page })
+    this.setState({ drawerPage: page })
   }
   onDeletePlan = (planId) => {
     const { planData, selectedPlan } = this.state
@@ -1071,8 +1098,10 @@ class App extends Component {
       })
     })
     if (selectedPlan) {
-      this.onClearOverlayFromMap()
-      this.onResetSelectedPlan()
+      if (selectedPlan.planId === planId) {
+        this.onClearOverlayFromMap()
+        this.onResetSelectedPlan()
+      }
     }
     this.setState({ planData: updatePlan })
   }
@@ -1140,7 +1169,23 @@ class App extends Component {
           this.onDrawExampleLine(lastCoordsLatLng)
           this.setState({ exampleLineCoords: setExampleline })
         }
-        this.onPolydistanceBtwCompute(popUndoCoords[actionIndex])
+        const currentObject = popUndoCoords[actionIndex]
+        const currentCoords = currentObject.overlayCoords
+        var poly
+        if (overlayType === 'polygon') {
+          poly = new window.google.maps.Polygon({
+            path: currentCoords,
+            overlayType: 'polygon'
+          })
+          this.onSquereMetersTrans(poly)
+        } else {
+          poly = new window.google.maps.Polyline({
+            path: currentCoords,
+            overlayType: 'polyline'
+          })
+        }
+        this.onPolyLengthCompute(poly)
+        this.onPolydistanceBtwCompute(currentObject)
       }
       this.setState({ overlayObject: popUndoCoords }, () => console.log(this.state.overlayObject, 'undo'))
     } else {
@@ -1167,7 +1212,23 @@ class App extends Component {
           this.onDrawExampleLine(lastCoordsLatLng)
           this.setState({ exampleLineCoords: setExampleline })
         }
-        this.onPolydistanceBtwCompute(popRedoCoords[actionIndex])
+        const currentObject = popRedoCoords[actionIndex]
+        const currentCoords = currentObject.overlayCoords
+        var poly
+        if (overlayType === 'polygon') {
+          poly = new window.google.maps.Polygon({
+            path: currentCoords,
+            overlayType: 'polygon'
+          })
+          this.onSquereMetersTrans(poly)
+        } else {
+          poly = new window.google.maps.Polyline({
+            path: currentCoords,
+            overlayType: 'polyline'
+          })
+        }
+        this.onPolyLengthCompute(poly)
+        this.onPolydistanceBtwCompute(currentObject)
       }
       this.setState({ overlayObject: popRedoCoords }, () => console.log(this.state.overlayObject, 'redo'))
     } else {
@@ -1191,19 +1252,27 @@ class App extends Component {
     this.onResetSelectedOverlay()
     this.onResetSelectedPlan()
     this.onClearOverlayFromMap()
+    this.setState({ planData: [] })
   }
   onToggleDistanceMarker = () => {
-    const { isDistanceMarkerVisible, distanceDetail } = this.state
-    distanceDetail.forEach((element, index) => {
-      element.detail.forEach((detail, index2) => {
-        var toggleVisible = update(distanceDetail, { [index]: { detail: { [index2]: { visible: { $set: false } } } } })
-        console.log(toggleVisible)
-        this.setState({
-          distanceDetail: toggleVisible,
-          //isDistanceMarkerVisible: !isDistanceMarkerVisible 
-        })
+    const { isDistanceMarkerVisible, overlayObject } = this.state
+    if (isDistanceMarkerVisible) {
+      this.setState({
+        distanceDetail: [],
+        isDistanceMarkerVisible: !isDistanceMarkerVisible
       })
-    })
+    } else {
+      this.setState({ isDistanceMarkerVisible: !isDistanceMarkerVisible },
+        () => {
+          overlayObject.forEach((el) => {
+            if (el.overlayType !== 'marker') {
+              this.onPolydistanceBtwCompute(el)
+              console.log(el)
+            }
+          })
+        })
+    }
+
   }
   //this is rederrrrr
   render() {
@@ -1295,9 +1364,9 @@ class App extends Component {
 
           <AddPlanBtn
             onAddPlan={this.onAddPlan}
-            user={this.state.user}
             onChangeDrawPage={this.onChangeDrawPage}
             handleDrawerOpen={this.handleDrawerOpen}
+            {...this.state}
           />
           {
             this.state.distanceDetail.map(value => {
