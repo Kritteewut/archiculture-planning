@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
+// Material-ui Import
 import { withStyles } from '@material-ui/core/styles';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -8,7 +10,10 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Divider from '@material-ui/core/Divider';
 
-const styles = theme => ({
+// CSS Import
+import './DetailedExpansionPanel.css';
+
+/*const styles = theme => ({
   root: {
     position: 'relative',
     width: '40%',
@@ -36,7 +41,7 @@ const styles = theme => ({
     alignItems: 'center',
     color: 'rgb(0, 0, 0)',
   },
-});
+});*/
 
 class DetailedExpansionPanel extends React.PureComponent {
   constructor(props) {
@@ -49,22 +54,22 @@ class DetailedExpansionPanel extends React.PureComponent {
     const { panelName, latLngDetail, lengthDetail, disBtwDetail, areaDetail } = this.props
     
     return (
-      <div className={classes.root}>
+      <div className="Detailroot">
 
-        <ExpansionPanel className={classes.theme}>
+        <ExpansionPanel className="theme">
 
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon className={classes.details} />}>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon className="details" />}>
             
             <div style={{ alignItems: 'center' }} >
-              <Typography className={classes.heading}>{panelName}</Typography>
+              <Typography className="heading">{panelName}</Typography>
             </div>
 
           </ExpansionPanelSummary>
 
           {(latLngDetail !== '') ?
 
-            <ExpansionPanelDetails className={classes.details}>
-              <Typography className={classes.details}> {latLngDetail} </Typography>
+            <ExpansionPanelDetails className="details">
+              <Typography className="details"> {latLngDetail} </Typography>
             </ExpansionPanelDetails>
 
             :
@@ -72,8 +77,8 @@ class DetailedExpansionPanel extends React.PureComponent {
           }
           {(disBtwDetail !== '') ?
 
-            <ExpansionPanelDetails className={classes.details}>
-              <Typography className={classes.details} >
+            <ExpansionPanelDetails className="details">
+              <Typography className="details" >
               ระยะห่างระหว่างจุด : {disBtwDetail} เมตร</Typography>
             </ExpansionPanelDetails>
 
@@ -82,15 +87,15 @@ class DetailedExpansionPanel extends React.PureComponent {
           }
           {(lengthDetail !== '') ?
 
-            <ExpansionPanelDetails className={classes.details}>
+            <ExpansionPanelDetails className="details">
               
-              <Typography className={classes.details}>
+              <Typography className="details">
                 ความยาวรวม : {lengthDetail} เมตร
               </Typography>
 
               {(areaDetail !== '') ?
 
-                <Typography className={classes.details}>
+                <Typography className="details">
                   พื้นที่คือ : {areaDetail}
                 </Typography>
 
@@ -111,4 +116,4 @@ class DetailedExpansionPanel extends React.PureComponent {
 DetailedExpansionPanel.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(DetailedExpansionPanel);
+export default (DetailedExpansionPanel);

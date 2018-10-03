@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-
 import PropTypes from 'prop-types';
+
+// Material-ui Import
 import { withStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 
+// Icon Group
 import icon_airport from './icons/icon_airplane.png'
 import icon_alert from './icons/icon_alert.png'
 import icon_bamboo from './icons/icon_bamboo.png'
@@ -22,7 +24,10 @@ import icon_tool1 from './icons/icon_tool1.png'
 import icon_tool2 from './icons/icon_tool2.png'
 import light_bulb_icon from './icons/light_bulb_icon.png'
 
-const styles = theme => ({
+// CSS Import
+import './IconPicker.css';
+
+/*const styles = theme => ({
     root: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -96,7 +101,7 @@ const styles = theme => ({
         left: 'calc(50% - 9px)',
         transition: theme.transitions.create('opacity'),
     },
-});
+});*/
 
 const images = [
     {
@@ -219,8 +224,8 @@ class IconPicker extends React.PureComponent {
                     <ButtonBase
                         focusRipple
                         key={image.title}
-                        className={classes.image}
-                        focusVisibleClassName={classes.focusVisible}
+                        className="image"
+                        focusVisibleClassName="focusVisible"
                         style={{
                             width: '8.7vw',
                         }}
@@ -228,12 +233,12 @@ class IconPicker extends React.PureComponent {
                     >
 
                         <span
-                            className={classes.imageSrc}
+                            className="imageSrc"
                             style={{
                                 backgroundImage: `url(${image.src})`,
                             }}
                         />
-                        <span className={classes.imageButton}>
+                        <span className="imageButton">
                         </span>
                     </ButtonBase>
                 ))}
@@ -247,4 +252,4 @@ IconPicker.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(IconPicker);
+export default (IconPicker);

@@ -1,9 +1,14 @@
 import React from 'react'
+
+// Material-ui Import
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 
-const styles = theme => ({
+// CSS Import
+import './DeletePlan.css';
+
+/*const styles = theme => ({
     card: {
         maxWidth: 345,
     },
@@ -26,7 +31,7 @@ const styles = theme => ({
         left: '50%',
         transform: 'translate(-50%, -50%)',
     },
-});
+});*/
 
 class DeletePlan extends React.PureComponent {
     constructor(props) {
@@ -42,7 +47,7 @@ class DeletePlan extends React.PureComponent {
                 open={isDeletePlanOpen}
                 onClose={onToggleDeletePlanModal}
             >
-                <div className={classes.paper}>
+                <div className="paper">
                     <div>
                         แปลงที่จะลบ : {planData ? planData.planName : ''}
                     </div>
@@ -61,4 +66,4 @@ class DeletePlan extends React.PureComponent {
     }
 }
 
-export default withStyles(styles)(DeletePlan);
+export default (DeletePlan);

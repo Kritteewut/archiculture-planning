@@ -1,9 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+// Material-ui Import
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-const styles = theme => ({
+// CSS Import
+import './LoadingCircle.css';
+
+/*const styles = theme => ({
     progress: {
         margin: theme.spacing.unit * 2,
         position: 'absolute',
@@ -16,7 +21,7 @@ const styles = theme => ({
         //boxShadow: theme.shadows[5],
         //padding: theme.spacing.unit * 4,
     },
-});
+});*/
 
 class LoadingCircular extends React.PureComponent {
     constructor(props) {
@@ -37,7 +42,7 @@ class LoadingCircular extends React.PureComponent {
 
             >
                 <CircularProgress
-                    className={classes.progress}
+                    className="progress"
                     size={100}
                     color="secondary"
                 />
@@ -51,4 +56,4 @@ LoadingCircular.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(LoadingCircular);
+export default (LoadingCircular);

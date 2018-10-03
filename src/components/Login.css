@@ -208,7 +208,7 @@ List of CSS Design Class
   
   .loginBtn--facebook {
     background-color: #4C69BA;
-    background-image: linear-gradient(rgb(29, 61, 238), rgb(18, 55, 168));
+    background-image: linear-gradient(rgb(29, 61, 238), rgb(29, 61, 238));
     text-shadow: 0 -1px 0 rgb(0, 15, 56);
     width: 92%;
     text-align: center;

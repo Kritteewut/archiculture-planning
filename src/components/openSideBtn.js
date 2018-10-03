@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
+
+// Material-ui Import
 import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
 
-const styles = theme => ({
+// CSS Import
+import './openSideBtn.css';
+
+/*const styles = theme => ({
     Menu: {
         position: 'absolute',
         top: theme.spacing.unit * 10,
@@ -14,7 +19,7 @@ const styles = theme => ({
         background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
         boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
     },
-})
+})*/
 
 class openSideBtn extends React.PureComponent {
     constructor(props) {
@@ -34,7 +39,7 @@ class openSideBtn extends React.PureComponent {
         const { classes, } = this.props;
         return (
             <div >
-                <Button variant="fab" className={classes.Menu} onClick={this.onToggleDrawer} >
+                <Button variant="fab" className="MenuSlide" onClick={this.onToggleDrawer} >
                     <MenuIcon />
                 </Button>
             </div>
@@ -42,4 +47,4 @@ class openSideBtn extends React.PureComponent {
     }
 }
 
-export default withStyles(styles)(openSideBtn)
+export default (openSideBtn)

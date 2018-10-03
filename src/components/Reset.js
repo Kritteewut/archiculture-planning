@@ -1,21 +1,28 @@
 import React, { Component } from 'react';
-import firebase from '../config/firebase';
-import logo from './Picture/Ling logo.png';
-import './Login.css'
 import PropTypes from 'prop-types';
+import firebase from '../config/firebase';
+
+// Material-ui Import
 import { withStyles } from '@material-ui/core/styles';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
-import Grid from '@material-ui/core/Grid';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 
-const styles = theme => ({
+// Icon Group
+import logo from './Picture/Ling logo.png';
+
+// CSS Import
+import './Login.css'
+import './Reset.css'
+
+/*const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
     },
-});
+});*/
 
 class Reset extends React.PureComponent {
     constructor(props) {

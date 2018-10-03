@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
 import { mailFolderListItems, otherMailFolderListItems } from './tileData';
+import firebase, { auth, provider, provider2 } from '../config/firebase';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+
+// Material-ui Import
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import firebase, { auth, provider, provider2 } from '../config/firebase';
 import Avatar from '@material-ui/core/Avatar';
-import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import Pic from './Picture/User-dummy-300x300.png';
 import CardHeader from '@material-ui/core/CardHeader';
 
-const styles = theme => ({
+// Icon Group
+import Pic from './Picture/User-dummy-300x300.png';
+
+// CSS Import
+import './Plans.css';
+
+/*const styles = theme => ({
     toolbar: theme.mixins.toolbar,
     row: {
         display: 'flex',
@@ -30,7 +37,7 @@ const styles = theme => ({
         display: 'flex',
         justifyContent: 'center',
     },
-});
+});*/
 
 class Plans extends React.PureComponent {
 
@@ -57,15 +64,15 @@ class Plans extends React.PureComponent {
     render() {
         const { classes } = this.props;
         return (
-            <div className={classes.toolbar}>
+            <div className="toolbar">
 
 
                 {this.state.user ?
-                    <div className={classes.userName}>
+                    <div className="userName">
                         <Avatar
                             alt={this.state.user.displayName || this.state.user.email}
                             src={this.state.user.photoURL || Pic}
-                            className={classNames(classes.bigAvatar)}
+                            className="bigAvatar"
                         />
                         <Typography variant="title">{this.state.user.displayname || this.state.user.email}  </Typography>
                     </div>
@@ -73,7 +80,7 @@ class Plans extends React.PureComponent {
                     <Avatar
                         alt="No User"
                         src="/static/images/uxceo-128.jpg"
-                        className={classNames(classes.avatar, classes.bigAvatar)}
+                        className="avatar bigAvatar"
                     />
                 }
 
@@ -82,7 +89,7 @@ class Plans extends React.PureComponent {
                 <List>{mailFolderListItems}</List>
                 <Divider />
                 <List>{otherMailFolderListItems}</List>
-                <Button variant="contained" color="secondary" className={classes.button} onClick={this.logout}> logout </Button>
+                <Button variant="contained" color="secondary" className="button" onClick={this.logout}> logout </Button>
             </div>
         );
 
@@ -95,4 +102,4 @@ Plans.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Plans);
+export default (Plans);

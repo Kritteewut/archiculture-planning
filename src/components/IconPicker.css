@@ -1,0 +1,109 @@
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - -
+List of CSS Design Class
+
+- Layer Group 
+
+- Text Group
+
+- Button Group
+
+- Background Group
+
+- Image Group
+
+- Forms Group
+
+- Gridview Group
+
+- Dropdown Group
+- - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/* ------------------- Layer Group ------------------ */
+
+/* ------------------- Text Group ------------------ */
+
+/* ------------------- Button Group ------------------ */
+
+/* ------------------- Background Group ------------------ */
+
+/* ------------------- Image Group ------------------ */
+
+.image {
+    position: relative;
+    height: 8.7vw;
+}
+
+.focusVisible {
+
+}
+
+.imageButton {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: 'theme.palette.common.white';
+}
+
+.imageSrc {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 8.7vw;
+    background-size: cover;
+    background-position: center 40%;
+}
+
+.imageBackdrop {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: 'theme.palette.common.black';
+    opacity: 0.4;
+    transition: 'theme.transitions.create('opacity')';
+    -webkit-transition: 'theme.transitions.create('opacity')';
+    -moz-transition: 'theme.transitions.create('opacity')';
+    -ms-transition: 'theme.transitions.create('opacity')';
+    -o-transition: 'theme.transitions.create('opacity')';
+}
+
+.imageTitle {
+    position: relative;
+    padding: '${theme.spacing.unit * 2}px ${theme.spacing.unit * 4}px ${theme.spacing.unit + 6}px';
+}
+
+.imageMarked {
+    height: 3;
+    width: 18;
+    background-color: 'theme.palette.common.white';
+    position: absolute;
+    bottom: -2px;
+    left: calc(50% - 9px);
+    transition: 'theme.transitions.create('opacity')';
+    -webkit-transition: 'theme.transitions.create('opacity')';
+    -moz-transition: 'theme.transitions.create('opacity')';
+    -ms-transition: 'theme.transitions.create('opacity')';
+    -o-transition: 'theme.transitions.create('opacity')';
+}
+
+/* ------------------- Forms Group ------------------ */
+
+.root {
+    display: flex;
+    flex-wrap: wrap;
+    min-width: 300px;
+    width: 50%;
+    min-height: 200px;
+}
+
+/* ------------------- Gridview Group ------------------ */
+
+/* ------------------- Dropdown Group ------------------ */

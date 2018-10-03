@@ -1,0 +1,123 @@
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - -
+List of CSS Design Class
+
+- Layer Group 
+
+- Text Group
+
+- Button Group
+
+- Background Group
+
+- Image Group
+
+- Forms Group
+
+- Gridview Group
+
+- Dropdown Group
+- - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/* ------------------- Layer Group ------------------ */
+
+/* ------------------- Text Group ------------------ */
+
+/* ------------------- Button Group ------------------ */
+
+.buttonComplete {
+    position: absolute;
+    top: 270px;
+    left: 15px;
+    width: 125px;
+    color: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(20deg, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1)) 30%;
+    box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.60);
+}
+.buttonPoint {
+    position: absolute;
+    top: 330px;
+    left: -110px;
+    width: 125px;
+    color: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(20deg, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1)) 30%;
+    box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.60);
+}
+.buttonLine {
+    position: absolute;
+    top: 390px;
+    left: -235px;
+    width: 125px;
+    color: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(20deg, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1)) 30%;
+    box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.60);
+
+}
+.buttonPolygon {
+    position: absolute;
+    top: 450px;
+    left: -360px;
+    width: 125px;
+    color: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(20deg, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1)) 30%;
+    box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.60);
+}
+.buttonToggleDeviceMode {
+    position: absolute;
+    top: 510px;
+    left: -485px;
+    width: 125px;
+    color: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(20deg, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1)) 30%;
+    box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.60);
+}
+.buttonTarget {
+    position: relative;
+    top: 105px;
+    left: 60px;
+    left: 50%;
+    color: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(20deg, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1)) 30%;
+    box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.60);
+}
+
+/* ------------------- Background Group ------------------ */
+
+/* ------------------- Image Group ------------------ */
+
+.targetIcon {
+    position: relative;
+
+    /*
+    top: 50%;
+    bottom: '50%';
+    left: '45%',
+    */
+
+    top: 54px;
+    left: 84px;
+
+    /*
+    right: 50%;
+    color: rgba(0, 0, 0, 0.8);
+    background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%;
+    box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.60);
+    */
+
+}
+.leftIcon {
+    margin-right: 16px;
+}
+
+.pointIcon {
+    margin-right: 50px;
+}
+
+.iconSmall {
+    font-size: 20;
+}
+
+/* ------------------- Forms Group ------------------ */
+
+/* ------------------- Gridview Group ------------------ */
+
+/* ------------------- Dropdown Group ------------------ */
