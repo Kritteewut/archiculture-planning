@@ -37,7 +37,9 @@ import './EditPlan.css';
 class EditPlan extends React.PureComponent {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            isPlanNameInputError: false
+        }
         this.planNameInput = null;
         this.setPlanNameInput = element => {
             this.planNameInput = element;
@@ -47,14 +49,39 @@ class EditPlan extends React.PureComponent {
         this.props.onEditPlanName(this.props.planData, this.planNameInput.value)
         this.props.onToggleEditPlanOpen()
     }
+    handlePlanNameInputChange = (event) => {
+        const planNameInput = this.planNameInput.value
+        if ((!planNameInput.trim()) || (planNameInput.length > 30)) {
+            this.setState({ isPlanNameInputError: true })
+        } else {
+            this.setState({ isPlanNameInputError: false })
+        }
+    }
+    handleToggleEditPlan = () => {
+        this.props.onToggleEditPlanOpen()
+        this.setState({ isPlanNameInputError: false })
+    }
+    handleCheckHelperText = () => {
+        if (this.planNameInput) {
+            const planNameInput = this.planNameInput.value.trim().length
+            var remainLength = 30 - planNameInput
+            if (remainLength < 0) {
+                remainLength = 0
+            }
+            return `ชืิอแปลงมีความยาวได้สูงสุด 30 ตัวอักษร (${remainLength}`
+        } else {
+            return ''
+        }
+
+    }
     render() {
-        const { classes, isEditPlanOpen, onToggleEditPlanOpen, planData } = this.props
+        const { classes, isEditPlanOpen, planData } = this.props
         return (
             <Modal
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
                 open={isEditPlanOpen}
-                onClose={onToggleEditPlanOpen}
+                onClose={this.handleToggleEditPlan}
             >
                 <div className="paper">
                     แก้ไขชื่อแปลง
@@ -65,15 +92,23 @@ class EditPlan extends React.PureComponent {
                         className="textField"
                         margin="normal"
                         name="planName"
-                        defaultValue={planData ? planData.planName : null}
+                        defaultValue={planData ? planData.planName : ''}
                         inputRef={this.setPlanNameInput}
+                        onChange={this.handlePlanNameInputChange}
                         autoFocus={true}
+                        error={this.state.isPlanNameInputError}
+                        helperText={'ชืิอแปลงมีความยาวได้สูงสุด 30 ตัวอักษร'}
                     />
                     <br />
-                    <Button size="small" color="primary" onClick={this.onSubmitEditPlan}>
+                    <Button
+                        size="small"
+                        color="primary"
+                        onClick={this.onSubmitEditPlan}
+                        disabled={this.state.isPlanNameInputError}
+                    >
                         ตกลง
                     </Button>
-                    <Button size="small" color="primary" onClick={onToggleEditPlanOpen}>
+                    <Button size="small" color="primary" onClick={this.handleToggleEditPlan}>
                         ยกเลิก
                     </Button>
                 </div>

@@ -100,44 +100,43 @@ class AddPlanBtn extends React.PureComponent {
         super(props);
         this.state = {
             isAddPlanOpen: false,
-            inputValue: '',
+            isPlanNameInputError: true,
         };
         this.addPlanInput = null;
         this.setAddPlanInput = element => {
             this.addPlanInput = element;
         };
     }
-    handleOpen = () => {
+
+    onToggleAddPlanOpen = () => {
         if (this.props.user) {
-            this.setState({
-                open: true,
-                inputValue: ''
-            });
+            this.setState({ isAddPlanOpen: !this.state.isAddPlanOpen, });
+            if (!this.state.isPlanNameInputError) {
+                this.setState({ isPlanNameInputError: true })
+            }
         } else {
-            alert(' กรุณา Login ')
             this.props.handleDrawerOpen()
             this.props.onChangeDrawPage('homePage')
+            alert(' กรุณา Login ')
         }
 
-    };
-    onToggleAddPlanOpen = () => {
-        this.setState({ isAddPlanOpen: !this.state.isAddPlanOpen });
-    };
-    handleAdd = () => {
-        if (!this.addPlanInput.value.trim()) {
-            alert('กรุณากรอกชื่อแปลง')
-        } else {
-            this.props.onAddPlan(this.addPlanInput.value)
-            this.onToggleAddPlanOpen()
-            this.props.handleDrawerOpen()
-        }
     }
-    updateInputValue = (evt) => {
-        this.setState({ inputValue: evt.target.value });
+    handleAdd = () => {
+        this.props.onAddPlan(this.addPlanInput.value)
+        this.onToggleAddPlanOpen()
+        this.props.handleDrawerOpen()
+    }
+    handlePlanNameInputChange = (event) => {
+        const addPlanInput = this.addPlanInput.value
+        if ((!addPlanInput.trim()) || (addPlanInput.length > 30)) {
+            this.setState({ isPlanNameInputError: true })
+        } else {
+            this.setState({ isPlanNameInputError: false })
+        }
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, isWaitingForUserResult } = this.props;
         return (
             <div>
 
@@ -147,11 +146,16 @@ class AddPlanBtn extends React.PureComponent {
                     disableFocusListener
                     disableTouchListener
                 >
-
-                    <Button variant="fab" className="absolute" onClick={this.onToggleAddPlanOpen}>
-                        <AddIcon />
-                    </Button>
-
+                    <div >
+                        <Button
+                            variant="fab"
+                            className={classes.absolute}
+                            onClick={this.onToggleAddPlanOpen}
+                            disabled={isWaitingForUserResult ? true : false}
+                        >
+                            <AddIcon />
+                        </Button>
+                    </div>
                 </Tooltip>
 
                 <Modal
@@ -177,23 +181,30 @@ class AddPlanBtn extends React.PureComponent {
 
                         </Tooltip>
 
+
                         <Tooltip
                             title="Add Plan"
                             placement="bottom"
                             disableFocusListener
                             disableTouchListener
                         >
-
-                            <Button className="absolute3" onClick={this.handleAdd}>
-                                เพิ่ม
+                            <div>
+                                <Button
+                                    className={classes.absolute3}
+                                    onClick={this.handleAdd}
+                                    disabled={this.state.isPlanNameInputError}
+                                >
+                                    เพิ่ม
                             </Button>
-
+                            </div>
                         </Tooltip>
 
                         <TextField className="absolute4"
-                            defaultValue=''
                             inputRef={this.setAddPlanInput}
                             autoFocus={true}
+                            error={this.state.isPlanNameInputError}
+                            helperText={'ชืิอแปลงมีความยาวได้สูงสุด 30 ตัวอักษร'}
+                            onChange={this.handlePlanNameInputChange}
                         />
                     </div>
 

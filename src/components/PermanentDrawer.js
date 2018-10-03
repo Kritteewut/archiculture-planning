@@ -44,6 +44,14 @@ const drawerWidth = '350px'
     drawerPaper: {
         //position: 'relative',
         width: drawerWidth,
+        // position: 'absolute',
+        // //width: theme.spacing.unit * 50,
+        // backgroundColor: theme.palette.background.paper,
+        // boxShadow: theme.shadows[5],
+        // padding: theme.spacing.unit * 4,
+        // top: '50%',
+        // left: '50%',
+        // transform: 'translate(-50%, -50%)',
     },
 
     paper: {
@@ -94,6 +102,7 @@ class PermanentDrawer extends React.PureComponent {
             isMergeOverlayOpen: false,
             isEditPlanOpen: false,
             selectedPlanIndex: null,
+            willSelectIndex: null,
         }
     }
     logout = () => {
@@ -103,7 +112,7 @@ class PermanentDrawer extends React.PureComponent {
     handlePlanClick = (planData, index) => {
         const { selectedPlan, overlayObject } = this.props
         if ((!selectedPlan) && overlayObject.length > 0) {
-            this.setState({ planData: planData, selectedPlanIndex: index })
+            this.setState({ planData: planData, willSelectIndex: index })
             this.onToggleMergeOverlayModal()
         }
         else {
@@ -117,10 +126,21 @@ class PermanentDrawer extends React.PureComponent {
     onToggleMergeOverlayModal = () => {
         this.setState({ isMergeOverlayOpen: !this.state.isMergeOverlayOpen })
     }
-    handleDeleteClick = () => {
-        this.props.onDeleteOverlay(this.props.selectedOverlay)
-        this.props.onToggleDeleteOverlayOpen()
+    handleAccecptToMergeOverlay = () => {
+        this.props.onSetSelectedPlan(this.state.planData)
+        this.setState({ selectedPlanIndex: this.state.selectedPlanIndex })
+        this.onToggleMergeOverlayModal()
 
+    }
+    handleDiscardToMergeOverlay = () => {
+        this.props.onSetSelectedPlan(this.state.planData)
+        this.setState({ selectedPlanIndex: this.state.selectedPlanIndex })
+        this.props.onClearOverlayFromMap()
+        this.onToggleMergeOverlayModal()
+    }
+    handleDeleteClick = () => {
+        this.props.onDeleteOverlay(this.state.planData)
+        this.props.onToggleDeleteOverlayOpen()
     }
     handleDeletePlanClick = (planData) => {
         this.setState({ planData: planData })
@@ -137,12 +157,21 @@ class PermanentDrawer extends React.PureComponent {
         this.setState({ isEditPlanOpen: !this.state.isEditPlanOpen })
     }
     handleAcceptToDeletePlan = (planId) => {
+        const { selectedPlan } = this.props
         this.props.onDeletePlan(planId)
-        this.setState({selectedPlanIndex: null})
+        if (selectedPlan) {
+            if (selectedPlan.planId === planId) {
+                this.setState({ selectedPlanIndex: null })
+            }
+        }
+
+
         this.onToggleDeletePlanModal()
     }
     renderDrawer = () => {
-        const { classes, user, onSetUser, selectedPlan, onCallFitBounds, onEditPlanName } = this.props;
+        const { classes, user, onSetUser, selectedPlan, onCallFitBounds,
+            onEditPlanName, isSaving
+        } = this.props;
         return (
             user ?
                 <div>
@@ -177,43 +206,50 @@ class PermanentDrawer extends React.PureComponent {
                             logout
                         </Button>
 
-                        <Button variant="contained" color="primary" className="buttonmargin buttonsave" disabled={selectedPlan ? false : true} onClick={this.props.onSaveToFirestore}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            className={classNames(classes.buttonmargin, classes.buttonsave)}
+                            disabled={(selectedPlan && !isSaving) ? false : true}
+                            onClick={this.props.onSaveToFirestore}>
                             บันทึก
                         </Button>
                         <Divider />
                         <List>
                             {
-                                this.props.planData.length > 0 ?
-                                    this.props.planData.map((plan, index) => {
-                                        return (
-                                            <ListItem
-                                                button
-                                                key={plan.planId}
-                                                onClick={() => this.handlePlanClick(plan, index)}
-                                                //selected={this.state.selectedPlanIndex === index}
-                                                disabled={this.state.selectedPlanIndex === index}
-                                                
-                                            >
-                                                <ListItemText primary={plan.planName} />
-                                                <ListItemSecondaryAction>
-                                                    <IconButton aria-label="Edit"
-                                                        onClick={() => this.handleEditPlanClick(plan, index)}>
-                                                        <EditIcon />
-                                                    </IconButton>
-                                                    <IconButton aria-label="Delete"
-                                                        onClick={() => this.handleDeletePlanClick(plan, index)}>
-                                                        <DeleteIcon />
-                                                    </IconButton>
-                                                </ListItemSecondaryAction>
-
-                                            </ListItem>
-                                        )
-                                    })
-                                    :
+                                this.props.isWaitingForPlanQuery ?
                                     <div>
-                                        ยังไม่มีแปลงที่สร้าง
+                                        กำลังโหลด....
                                     </div>
+                                    :
+                                    this.props.planData.length > 0 ?
+                                        this.props.planData.map((plan, index) => {
+                                            return (
+                                                <ListItem
+                                                    button
+                                                    key={plan.planId}
+                                                    onClick={() => this.handlePlanClick(plan, index)}
+                                                    //selected={this.state.selectedPlanIndex === index}
+                                                    disabled={this.state.selectedPlanIndex === index}
 
+                                                >
+                                                    <ListItemText primary={plan.planName} />
+                                                    <ListItemSecondaryAction>
+                                                        <IconButton aria-label="Edit"
+                                                            onClick={() => this.handleEditPlanClick(plan, index)}>
+                                                            <EditIcon />
+                                                        </IconButton>
+                                                        <IconButton aria-label="Delete"
+                                                            onClick={() => this.handleDeletePlanClick(plan, index)}>
+                                                            <DeleteIcon />
+                                                        </IconButton>
+                                                    </ListItemSecondaryAction>
+
+                                                </ListItem>
+                                            )
+                                        })
+                                        :
+                                        ''
                             }
                         </List>
                         <MergeOverlay
@@ -222,6 +258,8 @@ class PermanentDrawer extends React.PureComponent {
                             planData={this.state.planData}
                             onClearOverlayFromMap={this.props.onClearOverlayFromMap}
                             onSetSelectedPlan={this.props.onSetSelectedPlan}
+                            handleAccecptToMergeOverlay={this.handleAccecptToMergeOverlay}
+                            handleDiscardToMergeOverlay={this.handleDiscardToMergeOverlay}
                         />
                         <EditPlan
                             onToggleEditPlanOpen={this.onToggleEditPlanOpen}
@@ -260,13 +298,12 @@ class PermanentDrawer extends React.PureComponent {
             onUndoDrawingCoords,
             onRedoCoords,
             onRedoDrawingCoords,
+            isLoading
         } = this.props;
 
         switch (drawerPage) {
             case 'homePage':
-                return (
-                    this.renderDrawer()
-                )
+                return (this.renderDrawer())
             case 'option':
                 return (
                     <OverlayOptions
@@ -290,7 +327,7 @@ class PermanentDrawer extends React.PureComponent {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, isWaitingForUserResult } = this.props;
         return (
             <Drawer
                 variant="persistent"
@@ -299,8 +336,14 @@ class PermanentDrawer extends React.PureComponent {
                 classes={{
                     paper: "drawerPaper",
                 }}
+            // className={classes.drawerPaper}
             >
-                {this.drawerPageRender()}
+                {isWaitingForUserResult ?
+                    'กำลังโหลด....'
+                    :
+                    this.drawerPageRender()
+                }
+
             </Drawer>
         );
     }

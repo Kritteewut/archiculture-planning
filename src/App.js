@@ -20,8 +20,6 @@ import shortid from 'shortid'
 import { auth } from './config/firebase'
 import LoadingCircle from './components/LoadingCircle';
 import './components/SearchBoxStyles.css'
-import { DISPLAY_STRING } from './language/Language'
-import TargetIcon from './components/TargetIcon';
 
 const shapesRef = db.collection('shapes')
 const planRef = db.collection('plan')
@@ -39,7 +37,6 @@ function new_script(src) {
     document.body.appendChild(script);
   })
 };
-
 // Promise Interface can ensure load the script only once
 var my_script = new_script('https://maps.googleapis.com/maps/api/js?&libraries=geometry,drawing,places,visualization&key=&callback=initMap');
 //var my_script2 = new_script('https://cdn.rawgit.com/bjornharrtell/jsts/gh-pages/1.0.2/jsts.min.js')
@@ -74,21 +71,24 @@ class App extends Component {
       areaDetail: '',
       distanceDetail: [],
       drawerPage: 'homePage',
-      isLoading: null,
+      isSaving: false,
       isDrawInDesktopDevice: true,
       shouldSave: false,
+      isDistanceMarkerVisible: true,
+      isWaitingForUserResult: true,
+      isWaitingForPlanQuery: true,
     }
   }
   componentWillMount() {
     var self = this
     auth.onAuthStateChanged((user) => {
       if (user) { self.setState({ user }, () => self.onQueryPlanFromFirestore()) }
-    });
+      this.setState({ isWaitingForUserResult: false })
+    })
     //this.onAddBeforeUnloadListener()
 
   }
   componentDidMount() {
-
 
   }
   componentWillUnmount() {
@@ -582,7 +582,7 @@ class App extends Component {
     window.map.setOptions({ draggableCursor: null, draggingCursor: null })
   }
   onPolydistanceBtwCompute = (overlayObject) => {
-    const { distanceDetail } = this.state
+    const { distanceDetail, isDistanceMarkerVisible } = this.state
     const overlayType = overlayObject.overlayType
     const overlayCoords = overlayObject.overlayCoords
     const overlayIndex = overlayObject.overlayIndex
@@ -597,7 +597,8 @@ class App extends Component {
       replaceDetail.push({
         midpoint: { lat: (endPoint.lat + prevEndPoint.lat) / 2, lng: (endPoint.lng + prevEndPoint.lng) / 2 },
         disBtw: window.google.maps.geometry.spherical.computeDistanceBetween(endLatLng, prevEndLatLng),
-        id: shortid.generate()
+        id: shortid.generate(),
+        visible: isDistanceMarkerVisible,
       })
     }
     if (overlayType === 'polygon' && overlayCoords.length > 2) {
@@ -608,7 +609,8 @@ class App extends Component {
       replaceDetail.push({
         midpoint: { lat: (endPoint.lat + startPoint.lat) / 2, lng: (endPoint.lng + startPoint.lng) / 2 },
         disBtw: window.google.maps.geometry.spherical.computeDistanceBetween(endLatLng, startLatLng),
-        id: shortid.generate()
+        id: shortid.generate(),
+        visible: isDistanceMarkerVisible,
       })
     }
     if (detailIndex !== -1) {//new detail or has previus detail
@@ -713,9 +715,11 @@ class App extends Component {
     this.setState({ areaDetail: rnwString })
   }
   onSaveToFirestore = () => {
+    this.setState(state => ({ isSaving: !state.isSaving }))
     const { overlayObject, selectedPlan, distanceDetail } = this.state
     let self = this
     var planId = selectedPlan.planId
+    var saveAmount = overlayObject.length
     overlayObject.map((value, key) => {
       let overlayCoords = value.overlayCoords
       let overlayType = value.overlayType
@@ -740,6 +744,7 @@ class App extends Component {
             const updateDetailIndex = update(distanceDetail, { [detailIndex]: { overlayIndex: { $set: doc.id } } })
             const editOverlayIndex = update(overlayObject, { [key]: { overlayIndex: { $set: doc.id } } })
             self.setState({ overlayObject: editOverlayIndex, distanceDetail: updateDetailIndex })
+            saveAmount--
           }).catch(function (error) {
             alert('there is some thing went wrong', error)
           })
@@ -758,6 +763,7 @@ class App extends Component {
             const updateDetailIndex = update(distanceDetail, { [detailIndex]: { overlayIndex: { $set: doc.id } } })
             const editOverlayIndex = update(overlayObject, { [key]: { overlayIndex: { $set: doc.id } } })
             self.setState({ overlayObject: editOverlayIndex, distanceDetail: updateDetailIndex })
+            saveAmount--
           }).catch(function (error) {
             alert('there is some thing went wrong', error)
           })
@@ -773,6 +779,7 @@ class App extends Component {
           }).then(function (doc) {
             var editOverlayIndex = update(overlayObject, { [key]: { overlayIndex: { $set: doc.id } } })
             self.setState({ overlayObject: editOverlayIndex })
+            saveAmount--
           }).catch(function (error) {
             alert('there is some thing went wrong', error)
           })
@@ -786,7 +793,12 @@ class App extends Component {
             overlayDetail,
             strokeColor,
             fillColor,
-          }, { merge: true });
+          }, { merge: true }).then(function (doc) {
+            console.log('merge complere')
+            saveAmount--
+          }).catch(function (error) {
+            alert('there is some thing went wrong', error)
+          });
         }
         if (value.overlayType === 'polyline') {
           shapesRef.doc(value.overlayIndex).set({
@@ -795,7 +807,12 @@ class App extends Component {
             overlayName,
             overlayDetail,
             strokeColor,
-          }, { merge: true });
+          }, { merge: true }).then(function (doc) {
+            console.log('merge complere')
+            saveAmount--
+          }).catch(function (error) {
+            alert('there is some thing went wrong', error)
+          });
         }
         if (value.overlayType === 'marker') {
           shapesRef.doc(value.overlayIndex).set({
@@ -804,12 +821,23 @@ class App extends Component {
             overlayName,
             overlayDetail,
             icon,
-          }, { merge: true });
+          }, { merge: true }).then(function (doc) {
+            console.log('merge complere')
+            saveAmount--
+          }).catch(function (error) {
+            alert('there is some thing went wrong', error)
+          });
         }
 
       }
       return null;
     })
+    var completeSaveCheck = setInterval(() => {
+      if (saveAmount === 0) {
+        this.setState(state => ({ isSaving: !state.isSaving }))
+        clearInterval(completeSaveCheck)
+      }
+    }, 500)
   }
   onClearOverlayFromMap = () => {
     this.setState({ overlayObject: [], distanceDetail: [] })
@@ -908,7 +936,7 @@ class App extends Component {
         })
         self.setState({
           planData: planData,
-          isLoading: 'none',
+          isWaitingForPlanQuery: false
         })
       })
     }
@@ -1047,7 +1075,7 @@ class App extends Component {
     this.setState({ overlayObject: editedDetail })
   }
   onChangeDrawPage = (page) => {
-    this.setState({ drawPage: page })
+    this.setState({ drawerPage: page })
   }
   onDeletePlan = (planId) => {
     const { planData, selectedPlan } = this.state
@@ -1070,8 +1098,10 @@ class App extends Component {
       })
     })
     if (selectedPlan) {
-      this.onClearOverlayFromMap()
-      this.onResetSelectedPlan()
+      if (selectedPlan.planId === planId) {
+        this.onClearOverlayFromMap()
+        this.onResetSelectedPlan()
+      }
     }
     this.setState({ planData: updatePlan })
   }
@@ -1139,7 +1169,23 @@ class App extends Component {
           this.onDrawExampleLine(lastCoordsLatLng)
           this.setState({ exampleLineCoords: setExampleline })
         }
-        this.onPolydistanceBtwCompute(popUndoCoords[actionIndex])
+        const currentObject = popUndoCoords[actionIndex]
+        const currentCoords = currentObject.overlayCoords
+        var poly
+        if (overlayType === 'polygon') {
+          poly = new window.google.maps.Polygon({
+            path: currentCoords,
+            overlayType: 'polygon'
+          })
+          this.onSquereMetersTrans(poly)
+        } else {
+          poly = new window.google.maps.Polyline({
+            path: currentCoords,
+            overlayType: 'polyline'
+          })
+        }
+        this.onPolyLengthCompute(poly)
+        this.onPolydistanceBtwCompute(currentObject)
       }
       this.setState({ overlayObject: popUndoCoords }, () => console.log(this.state.overlayObject, 'undo'))
     } else {
@@ -1166,7 +1212,23 @@ class App extends Component {
           this.onDrawExampleLine(lastCoordsLatLng)
           this.setState({ exampleLineCoords: setExampleline })
         }
-        this.onPolydistanceBtwCompute(popRedoCoords[actionIndex])
+        const currentObject = popRedoCoords[actionIndex]
+        const currentCoords = currentObject.overlayCoords
+        var poly
+        if (overlayType === 'polygon') {
+          poly = new window.google.maps.Polygon({
+            path: currentCoords,
+            overlayType: 'polygon'
+          })
+          this.onSquereMetersTrans(poly)
+        } else {
+          poly = new window.google.maps.Polyline({
+            path: currentCoords,
+            overlayType: 'polyline'
+          })
+        }
+        this.onPolyLengthCompute(poly)
+        this.onPolydistanceBtwCompute(currentObject)
       }
       this.setState({ overlayObject: popRedoCoords }, () => console.log(this.state.overlayObject, 'redo'))
     } else {
@@ -1190,6 +1252,27 @@ class App extends Component {
     this.onResetSelectedOverlay()
     this.onResetSelectedPlan()
     this.onClearOverlayFromMap()
+    this.setState({ planData: [] })
+  }
+  onToggleDistanceMarker = () => {
+    const { isDistanceMarkerVisible, overlayObject } = this.state
+    if (isDistanceMarkerVisible) {
+      this.setState({
+        distanceDetail: [],
+        isDistanceMarkerVisible: !isDistanceMarkerVisible
+      })
+    } else {
+      this.setState({ isDistanceMarkerVisible: !isDistanceMarkerVisible },
+        () => {
+          overlayObject.forEach((el) => {
+            if (el.overlayType !== 'marker') {
+              this.onPolydistanceBtwCompute(el)
+              console.log(el)
+            }
+          })
+        })
+    }
+
   }
   //this is rederrrrr
   render() {
@@ -1225,6 +1308,7 @@ class App extends Component {
           onUndoDrawingCoords={this.onUndoDrawingCoords}
           onRedoDrawingCoords={this.onRedoDrawingCoords}
           onRedoCoords={this.onRedoCoords}
+          onToggleDistanceMarker={this.onToggleDistanceMarker}
           {...this.state}
         />
         <input id="pac-input" className="controls" type="text" placeholder="Find place" />
@@ -1280,9 +1364,9 @@ class App extends Component {
 
           <AddPlanBtn
             onAddPlan={this.onAddPlan}
-            user={this.state.user}
             onChangeDrawPage={this.onChangeDrawPage}
             handleDrawerOpen={this.handleDrawerOpen}
+            {...this.state}
           />
           {
             this.state.distanceDetail.map(value => {
@@ -1293,6 +1377,7 @@ class App extends Component {
                       key={value2.id}
                       midpoint={value2.midpoint}
                       disBtw={value2.disBtw}
+                      visible={value2.visible}
                     />
                   )
                 })
