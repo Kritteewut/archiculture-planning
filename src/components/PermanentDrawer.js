@@ -82,6 +82,39 @@ const styles = theme => ({
         marginRight: theme.spacing.unit,
         width: 200,
     },
+    bootstrapRoot: {
+        boxShadow: 'none',
+        textTransform: 'none',
+        fontSize: 16,
+        padding: '6px 12px',
+        border: '1px solid',
+        backgroundColor: '#007bff',
+        borderColor: '#007bff',
+        fontFamily: [
+            '-apple-system',
+            'BlinkMacSystemFont',
+            '"Segoe UI"',
+            'Roboto',
+            '"Helvetica Neue"',
+            'Arial',
+            'sans-serif',
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
+        ].join(','),
+        '&:hover': {
+            backgroundColor: '#0069d9',
+            borderColor: '#0062cc',
+        },
+        '&:active': {
+            boxShadow: 'none',
+            backgroundColor: '#0062cc',
+            borderColor: '#005cbf',
+        },
+        '&:focus': {
+            boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+        },
+    },
 
 });
 
@@ -162,7 +195,7 @@ class PermanentDrawer extends React.PureComponent {
     }
     renderDrawer = () => {
         const { classes, user, onSetUser, selectedPlan, onCallFitBounds,
-            onEditPlanName, isSaving
+            onEditPlanName, isSaving, onToggleDistanceMarker, shouldSave
         } = this.props;
         return (
             user ?
@@ -202,10 +235,14 @@ class PermanentDrawer extends React.PureComponent {
                             variant="contained"
                             color="primary"
                             className={classNames(classes.buttonmargin, classes.buttonsave)}
-                            disabled={(selectedPlan && !isSaving) ? false : true}
+                            disabled={(selectedPlan || isSaving) ? false : true}
                             onClick={this.props.onSaveToFirestore}>
                             บันทึก
                         </Button>
+                        <Button variant="contained" color="primary" className={classNames(classes.buttonmargin, classes.bootstrapRoot)} onClick={onToggleDistanceMarker}>
+                            แสดง
+                        </Button>
+
                         <Divider />
                         <List>
                             {
@@ -241,7 +278,7 @@ class PermanentDrawer extends React.PureComponent {
                                             )
                                         })
                                         :
-                                        ''
+                                        'ยังไม่มีแปลงที่สร้าง'
                             }
                         </List>
                         <MergeOverlay
@@ -290,7 +327,8 @@ class PermanentDrawer extends React.PureComponent {
             onUndoDrawingCoords,
             onRedoCoords,
             onRedoDrawingCoords,
-            isLoading
+            fillColor,
+            strokeColor,
         } = this.props;
 
         switch (drawerPage) {
@@ -311,6 +349,8 @@ class PermanentDrawer extends React.PureComponent {
                         onRedoDrawingCoords={onRedoDrawingCoords}
                         onRedoCoords={onRedoCoords}
                         onUndoCoords={onUndoCoords}
+                        fillColor={fillColor}
+                        strokeColor={strokeColor}
 
                     />
                 )

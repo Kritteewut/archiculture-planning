@@ -124,6 +124,8 @@ class OverlayOptions extends React.PureComponent {
             isFirstDraw,
             onUndoDrawingCoords,
             onRedoDrawingCoords,
+            fillColor,
+            strokeColor,
         } = this.props
         return (
             <div>
@@ -140,6 +142,9 @@ class OverlayOptions extends React.PureComponent {
                             <ColorPicker
                                 onChangePolyStrokeColor={onChangePolyStrokeColor}
                                 onChangePolyFillColor={onChangePolyFillColor}
+                                selectedOverlay={selectedOverlay}
+                                fillColor={fillColor}
+                                strokeColor={strokeColor}
                             />
                             {
                                 (!isFirstDraw) ?

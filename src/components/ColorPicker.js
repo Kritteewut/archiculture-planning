@@ -41,15 +41,15 @@ const colorArray = [
    */
 
     /* Circle Color mini */
-  '#000000', '#2E2E2E', '#6E6E6E', '#A4A4A4', '#E6E6E6', '#FFFFFF', //Black
-  '#FF0000', '#FF00FF', '#8000FF', '#0000FF', '#0080FF', '#00FFFF', 
-  '#FF8000', '#FFBF00', '#FFFF00', '#BFFF00', '#00FF00', '#00FFBF', 
+    '#000000', '#2E2E2E', '#6E6E6E', '#A4A4A4', '#E6E6E6', '#FFFFFF', //Black
+    '#FF0000', '#FF00FF', '#8000FF', '#0000FF', '#0080FF', '#00FFFF',
+    '#ffa500', '#FFBF00', '#FFFF00', '#BFFF00', '#00FF00', '#00FFBF',
 ]
 
 class ColorPicker extends React.PureComponent {
     constructor(props) {
         super(props)
-        this.state = { pickedColor: '#ffffff', btnType: 'strokeColor', };
+        this.state = { pickedColor: '#ffa500', btnType: 'strokeColor', };
     }
     handleChangeComplete = (color) => {
         const { btnType } = this.state
@@ -59,7 +59,7 @@ class ColorPicker extends React.PureComponent {
                 return this.props.onChangePolyStrokeColor(color.hex)
             case 'fillColor':
                 return this.props.onChangePolyFillColor(color.hex)
-            default: return null
+            default: return;
         }
     };
     handleStrokeColorButtonClick = () => {
@@ -68,9 +68,16 @@ class ColorPicker extends React.PureComponent {
     handleFillColorButtonClick = () => {
         this.setState({ btnType: 'fillColor', })
     }
+    handleShowSelectedColor = () => {
+        // const { btnType } = this.state
+        // const { fillColor, strokeColor, selectedOverlay, } = this.porps
+        // if (btnType === 'strokeColor') {
+        //     selectedOverlay ? selectedOverlay.strokeColor : strokeColor
+        // } else {
+        //     selectedOverlay ? selectedOverlay.fillColor : fillColor
+        // }
+    }
     render() {
-        const { pickedColor } = this.state
-
         return (
 
             <div>
@@ -96,7 +103,7 @@ class ColorPicker extends React.PureComponent {
 
                 <CirclePicker
                     triangle={'hide'}
-                    color={pickedColor}
+                    color={this.handleShowSelectedColor()}
                     colors={colorArray}
                     onChangeComplete={this.handleChangeComplete}
                 />

@@ -36,12 +36,23 @@ class EditPlan extends React.PureComponent {
             isPlanNameInputError: false
         }
         this.planNameInput = null;
+        this.planDescriptionInput = null
+
+        this.setPlanDescriptionInput = element => {
+            this.planDescriptionInput = element;
+        };
+
         this.setPlanNameInput = element => {
             this.planNameInput = element;
         };
     }
     onSubmitEditPlan = () => {
-        this.props.onEditPlanName(this.props.planData, this.planNameInput.value)
+        var planData = {
+            planId: this.props.planData.planId,
+            planName: this.planNameInput.value,
+            planDescription: this.planDescriptionInput.value,
+        }
+        this.props.onEditPlanName(planData)
         this.props.onToggleEditPlanOpen()
     }
     handlePlanNameInputChange = (event) => {
@@ -92,7 +103,15 @@ class EditPlan extends React.PureComponent {
                         onChange={this.handlePlanNameInputChange}
                         autoFocus={true}
                         error={this.state.isPlanNameInputError}
-                        helperText={'ชืิอแปลงมีความยาวได้สูงสุด 30 ตัวอักษร'}
+                        helperText={'ชื่อแปลงมีความยาวได้สูงสุด 30 ตัวอักษร'}
+                    />
+                    <br />
+                    <TextField className={classes.textField}
+                        label="รายละเอียดแปลง"
+                        inputRef={this.setPlanDescriptionInput}
+                        defaultValue={planData ? planData.planDescription : ''}
+                        multiline
+                        rowsMax="4"
                     />
                     <br />
                     <Button

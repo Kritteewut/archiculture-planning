@@ -1,6 +1,9 @@
 import React from 'react';
 import './Design.css';
 
+import { db } from '../config/firebase'
+import update from 'immutability-helper';
+const planRef = db.collection('plan')
 
 class Map extends React.PureComponent {
     constructor(props) {
@@ -64,3 +67,12 @@ class Map extends React.PureComponent {
     }
 }
 export default Map;
+    //add 'planDescription' field for each value Plan by defualt is '-'
+    // planRef.get().then(function (querySnapshot) {
+    //     querySnapshot.forEach(function (doc) {
+    //         doc.ref.set({
+    //             planDescription: '-'
+    //         }, { merge: true });
+
+    //     })
+    // })

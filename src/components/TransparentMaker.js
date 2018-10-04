@@ -15,27 +15,26 @@ class TransparentMaker extends React.PureComponent {
     }
     redrawTransparentMaker = () => {
         const { midpoint, disBtw, visible } = this.props
+        var label = {
+            text: disBtw.toFixed(3) + ' m',
+            //color: 'black',
+            fontFamily: 'Vast Shadow',
+            fontSize: '20px',
+            //fontWeight: '',
+        }
         if (this.transparentMaker === false) {
             this.transparentMaker = new window.google.maps.Marker({
                 position: midpoint,
                 map: window.map,
                 icon: transparent_icon,
                 clickable: false,
-                label: {
-                    text: disBtw.toFixed(3) + ' m',
-                    //color: 'black',
-                    fontFamily: 'Vast Shadow',
-                    fontSize: '20px',
-                    //fontWeight: '',
-                },
+                label,
                 visible
             })
         } else {
             this.transparentMaker.setOptions({
                 position: midpoint,
-                label: {
-                    text: disBtw.toFixed(3) + ' m',
-                },
+                label,
                 visible
             })
         }

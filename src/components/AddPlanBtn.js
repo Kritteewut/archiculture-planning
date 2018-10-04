@@ -78,8 +78,9 @@ const styles = theme => ({
 
     absolute5: {
         position: 'absolute',
-        background: 'rgb(50, 50, 50)',
-        color: 'rgb(255, 255, 255)',
+        color: 'rgba(0, 0, 0, 0.8)',
+        background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
+        boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
         outline: 'none',
         border: 'none',
         borderRadius: 5,
@@ -89,6 +90,7 @@ const styles = theme => ({
 
         top: theme.spacing.unit * 18,
     },
+
 
 });
 
@@ -100,6 +102,11 @@ class AddPlanBtn extends React.PureComponent {
             isPlanNameInputError: true,
         };
         this.addPlanInput = null;
+        this.planDescriptionInput = null
+
+        this.setPlanDescriptionInput = element => {
+            this.planDescriptionInput = element;
+        };
         this.setAddPlanInput = element => {
             this.addPlanInput = element;
         };
@@ -119,7 +126,11 @@ class AddPlanBtn extends React.PureComponent {
 
     }
     handleAdd = () => {
-        this.props.onAddPlan(this.addPlanInput.value)
+        var planData = {
+            planName: this.addPlanInput.value,
+            planDescription: this.planDescriptionInput.value,
+        }
+        this.props.onAddPlan(planData)
         this.onToggleAddPlanOpen()
         this.props.handleDrawerOpen()
     }
@@ -201,6 +212,12 @@ class AddPlanBtn extends React.PureComponent {
                             error={this.state.isPlanNameInputError}
                             helperText={'ชืิอแปลงมีความยาวได้สูงสุด 30 ตัวอักษร'}
                             onChange={this.handlePlanNameInputChange}
+                        />
+                        <TextField className={classes.absolute5}
+                            inputRef={this.setPlanDescriptionInput}
+                            defaultValue='-'
+                            multiline
+                            rowsMax="4"
                         />
                     </div>
 
