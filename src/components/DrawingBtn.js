@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
+// Material-ui Import
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -7,7 +9,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import target_icon from './icons/target_icon.png'
 
 // Icon group
-
 import IconComplete from '@material-ui/icons/Check';
 import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak';
 import Timeline from '@material-ui/icons/Timeline';
@@ -16,11 +17,13 @@ import PhoneIcon from '@material-ui/icons/PhoneAndroid';
 import DestopIcon from '@material-ui/icons/PersonalVideo';
 import TargetIcon from '@material-ui/icons/Flare';
 
+// CSS Import
 import './Design.css';
+import './DrawingBtn.css';
 
 // import Category from '@material-ui/icons/Category';
 
-const styles = theme => ({
+/*const styles = theme => ({
     buttonComplete: {
         position: 'absolute',
         top: theme.spacing.unit * 43,
@@ -60,7 +63,7 @@ const styles = theme => ({
     },
     buttonToggleDeviceMode: {
         position: 'absolute',
-        top: theme.spacing.unit * 74,
+        top: theme.spacing.unit * 75,
         left: theme.spacing.unit * 1.5,
         width: '125px',
         color: 'rgba(0, 0, 0, 0.8)',
@@ -97,7 +100,7 @@ const styles = theme => ({
     iconSmall: {
         fontSize: 20,
     },
-});
+});*/
 
 class IconLabelButtons extends React.PureComponent {
     constructor(props) {
@@ -111,78 +114,81 @@ class IconLabelButtons extends React.PureComponent {
     render() {
         const { classes, drawingBtnType, isDrawInDesktopDevice, isFirstDraw 
         } = this.props;
+
         return (
             <div>
                 <Button
                     variant="contained"
                     color="default"
-                    className={classes.buttonComplete}
+                    className="buttonComplete"
                     onClick={() => this.props.onAddListenerGrabBtn()}
                 >
-                    <IconComplete className={classes.leftIcon} />
+                    <IconComplete className="leftIcon" />
                     Complete
 
                 </Button>
                 <Button
                     variant="contained"
                     color="default"
-                    className={classes.buttonPoint}
+                    className="buttonPoint"
                     onClick={() => this.props.onAddListenerMarkerBtn()}
                     disabled={(drawingBtnType === 'marker') ? true : false}
                 >
-                    <CenterFocusWeakIcon className={classes.leftIcon} />
+                    <CenterFocusWeakIcon className="leftIcon" />
                     Point
 
                 </Button>
                 <Button
                     variant="contained"
                     color="default"
-                    className={classes.buttonLine}
+                    className="buttonLine"
                     onClick={() => this.props.onAddListenerPolylineBtn()}
                     disabled={(drawingBtnType === 'polyline') ? true : false}
                 >
-                    <Timeline className={classes.leftIcon} />
+                    <Timeline className="leftIcon" />
                     Polyline
 
                 </Button>
                 <Button
                     variant="contained"
                     color="default"
-                    className={classes.buttonPolygon}
+                    className="buttonPolygon"
                     onClick={() => this.props.onAddListenerPolygonBtn()}
                     disabled={(drawingBtnType === 'polygon') ? true : false}
                 >
-                    <TextureICon className={classes.leftIcon} />
+                    <TextureICon className="leftIcon" />
                     Polygon
                 </Button>
+                
                 <Button
                     variant="contained"
                     color="default"
-                    className={classes.buttonToggleDeviceMode}
+                    className="buttonToggleDeviceMode"
                     onClick={() => this.props.onToggleDeviceMode()}
                     disabled={drawingBtnType || !isFirstDraw ? true : false}
                 >
                     {
                         isDrawInDesktopDevice ?
-                            <DestopIcon className={classes.leftIcon} />
+                            <DestopIcon className="leftIcon" />
                             :
-                            <PhoneIcon className={classes.leftIcon} />
+                            <PhoneIcon className="leftIcon" />
                     }
 
                     {
                         isDrawInDesktopDevice ?
                             'DESKTOP'
                             :
-                            'TUOCH'
+                            'TOUCH'
                     }
                 </Button>
+
                 {isDrawInDesktopDevice ?
                     null
                     :
                     <div>
                         <Button
                             variant="fab"
-                            className={classes.buttonTarget}
+                            className="buttonTarget"
                             onClick={this.handleTargetClick}
                             disabled={(drawingBtnType || !isFirstDraw) ? false : true}
                         >
@@ -191,7 +197,7 @@ class IconLabelButtons extends React.PureComponent {
                         </Button>
                         {(drawingBtnType || !isFirstDraw) ?
                             <Button
-                                className={classes.targetIcon}
+                                className="targetIcon"
                                 disabled={true}
                             >
                                 <img
@@ -215,4 +221,4 @@ IconLabelButtons.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(IconLabelButtons);
+export default (IconLabelButtons);

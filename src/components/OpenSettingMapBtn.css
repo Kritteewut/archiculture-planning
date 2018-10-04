@@ -1,0 +1,52 @@
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - -
+List of CSS Design Class
+
+- Layer Group 
+
+- Text Group
+
+- Button Group
+
+- Background Group
+
+- Image Group
+
+- Forms Group
+
+- Gridview Group
+
+- Dropdown Group
+- - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/* ------------------- Layer Group ------------------ */
+
+/* ------------------- Text Group ------------------ */
+
+/* ------------------- Button Group ------------------ */
+
+/* ------------------- Background Group ------------------ */
+
+/* ------------------- Image Group ------------------ */
+
+/* ------------------- Forms Group ------------------ */
+
+.root {
+    display: 'flex',
+}
+
+.paper {
+    margin-right: 'theme.spacing.unit * 2';
+}
+
+.MenuSetmap {
+    position: fixed;
+    left: 90px;
+    top: -256px;
+    color: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%;
+    box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.60);
+}
+
+/* ------------------- Gridview Group ------------------ */
+
+/* ------------------- Dropdown Group ------------------ */

@@ -1,0 +1,65 @@
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - -
+List of CSS Design Class
+
+- Layer Group 
+
+- Text Group
+
+- Button Group
+
+- Background Group
+
+- Image Group
+
+- Forms Group
+
+- Gridview Group
+
+- Dropdown Group
+- - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/* ------------------- Layer Group ------------------ */
+
+/* ------------------- Text Group ------------------ */
+
+.heading {
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+}
+
+.secondaryHeading {
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+  }
+
+/* ------------------- Button Group ------------------ */
+
+/* ------------------- Background Group ------------------ */
+
+.theme {
+    color: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%;
+  }
+
+
+/* ------------------- Image Group ------------------ */
+
+/* ------------------- Forms Group ------------------ */
+
+.Detailroot {
+    position: relative;
+    top: 0px;
+    width: 35%;
+    left: 35%;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+.details {
+    align-items: center;
+    color: rgb(0, 0, 0);
+  }
+
+/* ------------------- Gridview Group ------------------ */
+
+/* ------------------- Dropdown Group ------------------ */

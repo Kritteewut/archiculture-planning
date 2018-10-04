@@ -1,9 +1,14 @@
 import React from 'react'
+
+// Material-ui Import
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 
-const styles = theme => ({
+// CSS Import
+import './MergeOverlay.css';
+
+/*const styles = theme => ({
     card: {
         maxWidth: 345,
     },
@@ -26,7 +31,7 @@ const styles = theme => ({
         left: '50%',
         transform: 'translate(-50%, -50%)',
     },
-});
+});*/
 
 class MergeOverlay extends React.PureComponent {
     constructor(props) {
@@ -44,7 +49,7 @@ class MergeOverlay extends React.PureComponent {
                 open={isMergeOverlayOpen}
                 onClose={onToggleMergeOverlayModal}
             >
-                <div className={this.props.classes.paper}>
+                <div className="paper">
                     <div>
                         แปลงที่จะเลือก : {planData ? planData.planName : ''}
                     </div>
@@ -66,4 +71,4 @@ class MergeOverlay extends React.PureComponent {
     }
 }
 
-export default withStyles(styles)(MergeOverlay);
+export default (MergeOverlay);

@@ -1,37 +1,45 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import firebase, { auth, provider, provider2 } from '../config/firebase';
+
+// Material-ui Import
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Login from './Login';
 import Avatar from '@material-ui/core/Avatar';
-import classNames from 'classnames';
-import Pic from './Picture/Ling logo.png';
-import firebase, { auth, provider, provider2 } from '../config/firebase';
-import '../App.css';
 import IconButton from '@material-ui/core/IconButton';
 import OverlayOptions from './OverlayOptions';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import './Design.css';
 import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 import OpenWith from '@material-ui/icons/OpenWith';
 import List from '@material-ui/core/List';
-
 import grey from '@material-ui/core/colors/grey';
 import red from '@material-ui/core/colors/red';
+
+// Import Group
+import Login from './Login';
 import EditPlan from './EditPlan';
 import DeletePlan from './DeletePlan';
 import MergeOverlay from './MergeOverlay';
 
+// Icon Group
+import Pic from './Picture/Ling logo.png';
+
+// CSS Import
+import '../App.css';
+import './Design.css';
+import './PermanentDrawer.css';
+
 
 const drawerWidth = '350px'
 
-const styles = theme => ({
+/*const styles = theme => ({
 
     drawerPaper: {
         //position: 'relative',
@@ -116,7 +124,7 @@ const styles = theme => ({
         },
     },
 
-});
+});*/
 
 class PermanentDrawer extends React.PureComponent {
     constructor(props) {
@@ -205,7 +213,7 @@ class PermanentDrawer extends React.PureComponent {
                             <Avatar
                                 alt={user.email}
                                 src={user.photoURL || Pic}
-                                className={classNames(classes.bigAvatar)}
+                                className="bigAvatar"
                             />
                             <ListItemText primary={user.email} secondary={user.displayName} />
                         </ListItem>
@@ -227,7 +235,7 @@ class PermanentDrawer extends React.PureComponent {
                             </ListItem>
                         </List>
                         <Divider />
-                        <Button variant="contained" color="primary" className={classNames(classes.buttonmargin, classes.buttonlogout)} onClick={this.logout}>
+                        <Button variant="contained" color="primary" className="buttonmargin buttonlogout" onClick={this.logout}>
                             logout
                         </Button>
 
@@ -366,7 +374,7 @@ class PermanentDrawer extends React.PureComponent {
                 anchor='left'
                 open={this.props.openSide}
                 classes={{
-                    paper: classes.drawerPaper,
+                    paper: "drawerPaper",
                 }}
             // className={classes.drawerPaper}
             >
@@ -385,6 +393,6 @@ PermanentDrawer.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(PermanentDrawer);
+export default (PermanentDrawer);
 
 

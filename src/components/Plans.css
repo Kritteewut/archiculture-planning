@@ -1,0 +1,60 @@
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - -
+List of CSS Design Class
+
+- Layer Group 
+
+- Text Group
+
+- Button Group
+
+- Background Group
+
+- Image Group
+
+- Forms Group
+
+- Gridview Group
+
+- Dropdown Group
+- - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/* ------------------- Layer Group ------------------ */
+
+/* ------------------- Text Group ------------------ */
+
+/* ------------------- Button Group ------------------ */
+
+/* ------------------- Background Group ------------------ */
+
+/* ------------------- Image Group ------------------ */
+
+/* ------------------- Forms Group ------------------ */
+
+.toolbar { 
+    toolbar : 'theme.mixins.toolbar';
+
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+}
+
+.avatar {
+    margin: 0px;
+}
+
+.bigAvatar {
+    margin: 5px;
+    width: 60px;
+    height: 60px;
+}
+
+.userName {
+    display: flex;
+    justify-content: center;
+}
+
+/* ------------------- Gridview Group ------------------ */
+
+/* ------------------- Dropdown Group ------------------ */

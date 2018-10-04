@@ -1,0 +1,71 @@
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - -
+List of CSS Design Class
+
+- Layer Group 
+
+- Text Group
+
+- Button Group
+
+- Background Group
+
+- Image Group
+
+- Forms Group
+
+- Gridview Group
+
+- Dropdown Group
+- - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/* ------------------- Layer Group ------------------ */
+
+/* ------------------- Text Group ------------------ */
+
+.textField {
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 200px;
+}
+
+/* ------------------- Button Group ------------------ */
+
+/* ------------------- Background Group ------------------ */
+
+/* ------------------- Image Group ------------------ */
+
+/* ------------------- Forms Group ------------------ */
+
+.drawerPaper {
+    position: relative;
+    width: 350px;
+    height: 100%;
+}
+
+
+.card {
+    max-width: 350px;
+}
+
+.media {
+    object-fit: cover;
+}
+
+.paper {
+    position: absolute;
+    width: 200px;
+    background-color: rgb(255, 247, 247);
+    box-shadow: rgb(255, 247, 247);
+    padding: 0%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+}
+
+/* ------------------- Gridview Group ------------------ */
+
+/* ------------------- Dropdown Group ------------------ */

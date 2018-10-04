@@ -1,10 +1,15 @@
 import React from 'react'
+
+// Material-ui Import
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
 
-const styles = theme => ({
+// CSS Import
+import './EditPlan.css';
+
+/*const styles = theme => ({
     card: {
         maxWidth: 345,
     },
@@ -27,7 +32,7 @@ const styles = theme => ({
         left: '50%',
         transform: 'translate(-50%, -50%)',
     },
-});
+});*/
 
 class EditPlan extends React.PureComponent {
     constructor(props) {
@@ -89,13 +94,13 @@ class EditPlan extends React.PureComponent {
                 open={isEditPlanOpen}
                 onClose={this.handleToggleEditPlan}
             >
-                <div className={classes.paper}>
+                <div className="paper">
                     แก้ไขชื่อแปลง
                     <br />
                     <TextField
                         id="with-placeholder"
                         label="ชื่อแปลง"
-                        className={classes.textField}
+                        className="textField"
                         margin="normal"
                         name="planName"
                         defaultValue={planData ? planData.planName : ''}
@@ -131,4 +136,4 @@ class EditPlan extends React.PureComponent {
     }
 }
 
-export default withStyles(styles)(EditPlan);
+export default (EditPlan);

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { TwitterPicker, CirclePicker } from 'react-color';
+
+// Material-ui Import
 import Button from '@material-ui/core/Button';
 
+// CSS Import
 import './Design.css';
 
 const colorArray = [

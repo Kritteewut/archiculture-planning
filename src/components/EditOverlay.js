@@ -1,4 +1,6 @@
 import React from 'react'
+
+// Material-ui Import
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import { withStyles } from '@material-ui/core/styles';
@@ -7,7 +9,10 @@ import farm2 from './Picture/Picfarm2.jpg';
 import CardMedia from '@material-ui/core/CardMedia';
 import Modal from '@material-ui/core/Modal';
 
-const styles = theme => ({
+// CSS Import
+import './EditOverlay.css';
+
+/*const styles = theme => ({
     card: {
         maxWidth: 345,
     },
@@ -30,7 +35,7 @@ const styles = theme => ({
         left: '50%',
         transform: 'translate(-50%, -50%)',
     },
-});
+});*/
 
 class EditOverlay extends React.PureComponent {
     constructor(props) {
@@ -58,11 +63,11 @@ class EditOverlay extends React.PureComponent {
                 open={isEditOverlayOpen}
                 onClose={onToggleEditoverlayOpen}
             >
-                <div className={classes.paper}>
-                    <Card className={classes.card}>
+                <div className="paper">
+                    <Card className="classes.card">
                         <CardMedia
                             component="img"
-                            className={classes.media}
+                            className="classes.media"
                             height="140"
                             image={farm2}
                             title="Contemplative Reptile"
@@ -71,7 +76,7 @@ class EditOverlay extends React.PureComponent {
                     <TextField
                         id="with-placeholder"
                         label="ชื่อ"
-                        className={classes.textField}
+                        className="textField"
                         margin="normal"
                         name="name"
                         defaultValue={selectedOverlay.overlayName}
@@ -82,7 +87,7 @@ class EditOverlay extends React.PureComponent {
                         id="multiline-flexible"
                         label="รายละเอียด"
                         multiline
-                        className={classes.textField}
+                        className="textField"
                         margin="normal"
                         name="detail"
                         rowsMax="4"
@@ -102,4 +107,4 @@ class EditOverlay extends React.PureComponent {
     }
 }
 
-export default withStyles(styles)(EditOverlay);
+export default (EditOverlay);

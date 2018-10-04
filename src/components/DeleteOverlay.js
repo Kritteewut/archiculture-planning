@@ -1,9 +1,14 @@
 import React from 'react'
+
+// Material-ui Import
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 
-const styles = theme => ({
+// CSS Import
+import './DeleteOverlay.css';
+
+/*const styles = theme => ({
     card: {
         maxWidth: 345,
     },
@@ -26,7 +31,7 @@ const styles = theme => ({
         left: '50%',
         transform: 'translate(-50%, -50%)',
     },
-});
+});*/
 
 class DeleteOverlay extends React.PureComponent {
     constructor(props) {
@@ -46,7 +51,7 @@ class DeleteOverlay extends React.PureComponent {
                 open={isDeleteOverlayOpen}
                 onClose={onToggleDeleteOverlayOpen}
             >
-                <div className={classes.paper}>
+                <div className="paper">
                     <div>
                         รูปร่างที่จะลบ : {selectedOverlay.overlayName}
                     </div>
@@ -65,4 +70,4 @@ class DeleteOverlay extends React.PureComponent {
     }
 }
 
-export default withStyles(styles)(DeleteOverlay);
+export default (DeleteOverlay);

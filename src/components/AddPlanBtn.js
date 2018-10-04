@@ -1,15 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+
+// Material-ui Import
 import Modal from '@material-ui/core/Modal';
 import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import TextField from '@material-ui/core/TextField';
 
+// CSS Import
+import './AddPlanBtn.css';
 import './Design.css';
 
-const styles = theme => ({
+/*const styles = theme => ({
     paper: {
         position: 'absolute',
         width: theme.spacing.unit * 50,
@@ -91,8 +94,12 @@ const styles = theme => ({
         top: theme.spacing.unit * 18,
     },
 
+<<<<<<< HEAD
 
 });
+=======
+});*/
+>>>>>>> d366376de47134889830536a98059b3c2ee4edec
 
 class AddPlanBtn extends React.PureComponent {
     constructor(props) {
@@ -172,9 +179,9 @@ class AddPlanBtn extends React.PureComponent {
                     open={this.state.isAddPlanOpen}
                     onClose={this.onToggleAddPlanOpen}
                 >
-                    <div className={classes.paper}>
+                    <div className="paper">
 
-                        <p className={classes.textcolor}> สร้างแปลนของคุณ </p> <br />
+                        <p className="textcolor"> สร้างแปลนของคุณ </p> <br />
 
                         <Tooltip
                             title="Close Window"
@@ -183,7 +190,7 @@ class AddPlanBtn extends React.PureComponent {
                             disableTouchListener
                         >
 
-                            <Button className={classes.absolute2} onClick={this.onToggleAddPlanOpen}>
+                            <Button className="absolute2" onClick={this.onToggleAddPlanOpen}>
                                 ยกเลิก
                             </Button>
 
@@ -206,7 +213,8 @@ class AddPlanBtn extends React.PureComponent {
                             </Button>
                             </div>
                         </Tooltip>
-                        <TextField className={classes.absolute4}
+
+                        <TextField className="absolute4"
                             inputRef={this.setAddPlanInput}
                             autoFocus={true}
                             error={this.state.isPlanNameInputError}
@@ -233,4 +241,4 @@ AddPlanBtn.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(AddPlanBtn);;
+export default (AddPlanBtn);;

@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
-import ColorPicker from './ColorPicker';
 import PropTypes from 'prop-types';
+
+// Material-ui Import
 import { withStyles } from '@material-ui/core/styles';
-import IconPicker from './IconPicker';
 import Button from '@material-ui/core/Button';
+
+// Import Group
+import ColorPicker from './ColorPicker';
+import IconPicker from './IconPicker';
 import EditOverlay from './EditOverlay';
 import DeleteOverlay from './DeleteOverlay';
 
-const styles = theme => ({
+// CSS Import
+import './OverlayOptions.css';
+
+/*const styles = theme => ({
     drawerPaper: {
         drawerPaper: {
             position: 'relative',
@@ -37,7 +44,7 @@ const styles = theme => ({
         left: '50%',
         transform: 'translate(-50%, -50%)',
     },
-});
+});*/
 
 class OverlayOptions extends React.PureComponent {
     constructor(props) {
@@ -87,16 +94,16 @@ class OverlayOptions extends React.PureComponent {
                         :
                         null
                 }
-                <Button variant="contained" size="small" color="primary" className={classes.button} onClick={this.onToggleEditoverlayOpen}>
+                <Button variant="contained" size="small" color="primary" className="button" onClick={this.onToggleEditoverlayOpen}>
                     แก้ไข
                 </Button>
-                <Button variant="contained" size="small" color="secondary" className={classes.button} onClick={this.onToggleDeleteOverlayOpen}>
+                <Button variant="contained" size="small" color="secondary" className="button" onClick={this.onToggleDeleteOverlayOpen}>
                     ลบ
                 </Button>
-                <Button variant="contained" size="small" className={classes.button} onClick={() => onUndoCoords(selectedOverlay)}>
+                <Button variant="contained" size="small" className="button" onClick={() => onUndoCoords(selectedOverlay)}>
                     Undo
                 </Button>
-                <Button variant="contained" size="small" className={classes.button} onClick={() => onRedoCoords(selectedOverlay)}>
+                <Button variant="contained" size="small" className="button" onClick={() => onRedoCoords(selectedOverlay)}>
                     Redo
                 </Button>
                 <EditOverlay
@@ -189,4 +196,4 @@ OverlayOptions.propTypes = {
     theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(OverlayOptions);
+export default (OverlayOptions);

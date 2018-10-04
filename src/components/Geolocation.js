@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
+
+// Material-ui Import
 import MyLocation from '@material-ui/icons/MyLocation';
 import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 
-const styles = theme => ({
+// CSS Import
+import './Geolocation.css';
+
+/*const styles = theme => ({
     LOL: {
         position: 'absolute',
         top: theme.spacing.unit * 21,
@@ -14,7 +19,7 @@ const styles = theme => ({
         background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
         boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
     },
-})
+})*/
 
 class GeolocatedMe extends React.PureComponent {
     constructor(props) {
@@ -88,11 +93,7 @@ class GeolocatedMe extends React.PureComponent {
                     disableTouchListener
                 >
 
-                    <Button
-                        variant="fab"
-                        className={classes.LOL}
-                        onClick={this.onGetGeolocation}
-                    >
+                    <Button variant="fab" className="LOL" onClick={this.onGetGeolocation} >
 
                         <MyLocation />
 
@@ -103,4 +104,4 @@ class GeolocatedMe extends React.PureComponent {
         )
     }
 }
-export default withStyles(styles)(GeolocatedMe)
+export default (GeolocatedMe)

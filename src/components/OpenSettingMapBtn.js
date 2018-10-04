@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+// Material-ui Import
 import Button from '@material-ui/core/Button';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
@@ -9,14 +11,18 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import { withStyles } from '@material-ui/core/styles';
 import MapIcon from '@material-ui/icons/FilterHdr';
+import { Tooltip } from '@material-ui/core';
+
+// Icon Group
 import target_icon from './icons/target_icon.png'
 import Roadmap from './Picture/Roadmap.jpg'
 import Satellite from './Picture/Satellite.jpg'
 
+// CSS Import
+import './OpenSettingMapBtn.css';
 import './Design.css';
-import { Tooltip } from '@material-ui/core';
 
-const styles = theme => ({
+/*const styles = theme => ({
     root: {
         display: 'flex',
     },
@@ -31,7 +37,7 @@ const styles = theme => ({
         background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
         boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
     },
-});
+});*/
 
 const mapimages = [
     {
@@ -106,7 +112,7 @@ class MenuListComposition extends React.Component {
                         aria-owns={open ? 'menu-list-grow' : null}
                         aria-haspopup="true"
                         onClick={this.handleToggle}
-                        variant="fab" className={classes.Menu}
+                        variant="fab" className="MenuSetmap"
                     >
                         <MapIcon />
                     </Button>
@@ -148,4 +154,4 @@ MenuListComposition.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(MenuListComposition);
+export default (MenuListComposition);
