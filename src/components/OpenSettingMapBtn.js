@@ -151,7 +151,7 @@ class MenuListComposition extends React.Component {
 }
 
 MenuListComposition.propTypes = {
-    classes: PropTypes.object.isRequired,
+    
 };
 
 export default (MenuListComposition);

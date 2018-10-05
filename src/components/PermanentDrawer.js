@@ -242,12 +242,12 @@ class PermanentDrawer extends React.PureComponent {
                         <Button
                             variant="contained"
                             color="primary"
-                            className={classNames(classes.buttonmargin, classes.buttonsave)}
+                            className={classNames("buttonmargin", "buttonsave")}
                             disabled={(selectedPlan || isSaving) ? false : true}
                             onClick={this.props.onSaveToFirestore}>
                             บันทึก
                         </Button>
-                        <Button variant="contained" color="primary" className={classNames(classes.buttonmargin, classes.bootstrapRoot)} onClick={onToggleDistanceMarker}>
+                        <Button variant="contained" color="primary" className={classNames("buttonmargin", "bootstrapRoot")} onClick={onToggleDistanceMarker}>
                             แสดง
                         </Button>
 
@@ -267,17 +267,22 @@ class PermanentDrawer extends React.PureComponent {
                                                     key={plan.planId}
                                                     onClick={() => this.handlePlanClick(plan, index)}
                                                     //selected={this.state.selectedPlanIndex === index}
-                                                    disabled={this.state.selectedPlanIndex === index}
+                                                    disabled={!plan.isPlanClickable}
+                                                    //this.state.selectedPlanIndex === index
 
                                                 >
                                                     <ListItemText primary={plan.planName} />
                                                     <ListItemSecondaryAction>
                                                         <IconButton aria-label="Edit"
-                                                            onClick={() => this.handleEditPlanClick(plan, index)}>
+                                                            onClick={() => this.handleEditPlanClick(plan, index)}
+                                                            disabled={!plan.isPlanOptionsClickable}
+                                                            >
                                                             <EditIcon />
                                                         </IconButton>
                                                         <IconButton aria-label="Delete"
-                                                            onClick={() => this.handleDeletePlanClick(plan, index)}>
+                                                            onClick={() => this.handleDeletePlanClick(plan, index)}
+                                                            disabled={!plan.isPlanOptionsClickable}
+                                                            >
                                                             <DeleteIcon />
                                                         </IconButton>
                                                     </ListItemSecondaryAction>
@@ -390,7 +395,7 @@ class PermanentDrawer extends React.PureComponent {
 }
 
 PermanentDrawer.propTypes = {
-    classes: PropTypes.object.isRequired,
+    
 };
 
 export default (PermanentDrawer);

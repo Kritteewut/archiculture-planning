@@ -53,7 +53,7 @@ class LoadingCircular extends React.PureComponent {
 }
 
 LoadingCircular.propTypes = {
-    classes: PropTypes.object.isRequired,
+    
 };
 
 export default (LoadingCircular);

@@ -99,7 +99,7 @@ class Plans extends React.PureComponent {
 }
 
 Plans.propTypes = {
-    classes: PropTypes.object.isRequired,
+    
 };
 
 export default (Plans);

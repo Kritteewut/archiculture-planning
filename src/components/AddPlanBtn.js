@@ -94,12 +94,7 @@ import './Design.css';
         top: theme.spacing.unit * 18,
     },
 
-<<<<<<< HEAD
-
-});
-=======
 });*/
->>>>>>> d366376de47134889830536a98059b3c2ee4edec
 
 class AddPlanBtn extends React.PureComponent {
     constructor(props) {
@@ -164,7 +159,7 @@ class AddPlanBtn extends React.PureComponent {
                     <div >
                         <Button
                             variant="fab"
-                            className={classes.absolute}
+                            className="absolute"
                             onClick={this.onToggleAddPlanOpen}
                             disabled={isWaitingForUserResult ? true : false}
                         >
@@ -205,7 +200,7 @@ class AddPlanBtn extends React.PureComponent {
                         >
                             <div>
                                 <Button
-                                    className={classes.absolute3}
+                                    className="absolute3"
                                     onClick={this.handleAdd}
                                     disabled={this.state.isPlanNameInputError}
                                 >
@@ -221,7 +216,7 @@ class AddPlanBtn extends React.PureComponent {
                             helperText={'ชืิอแปลงมีความยาวได้สูงสุด 30 ตัวอักษร'}
                             onChange={this.handlePlanNameInputChange}
                         />
-                        <TextField className={classes.absolute5}
+                        <TextField className="absolute5"
                             inputRef={this.setPlanDescriptionInput}
                             defaultValue='-'
                             multiline
@@ -238,7 +233,7 @@ class AddPlanBtn extends React.PureComponent {
 }
 
 AddPlanBtn.propTypes = {
-    classes: PropTypes.object.isRequired,
+    
 };
 
 export default (AddPlanBtn);;

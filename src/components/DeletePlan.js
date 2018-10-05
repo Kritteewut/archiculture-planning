@@ -39,7 +39,7 @@ class DeletePlan extends React.PureComponent {
         this.state = {}
     }
     render() {
-        const { classes, planData, isDeletePlanOpen,
+        const { planData, isDeletePlanOpen,
             onToggleDeletePlanModal, handleAcceptToDeletePlan } = this.props
         return (
             <Modal

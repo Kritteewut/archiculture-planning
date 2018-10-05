@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 // Material-ui Import
-import { withStyles } from '@material-ui/core/styles';
+
 import ButtonBase from '@material-ui/core/ButtonBase';
 
 // Icon Group
@@ -216,7 +216,7 @@ class IconPicker extends React.PureComponent {
         //this.onIconSelect = this.onIconSelect.bind(this)
     }
     render() {
-        const { classes } = this.props;
+        const {  } = this.props;
 
         return (
             <div>
@@ -249,7 +249,7 @@ class IconPicker extends React.PureComponent {
 
 
 IconPicker.propTypes = {
-    classes: PropTypes.object.isRequired,
+    
 };
 
 export default (IconPicker);

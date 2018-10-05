@@ -1,9 +1,12 @@
 import React from 'react';
 import './Design.css';
 
-import { db } from '../config/firebase'
+import { db, serverTimestamp } from '../config/firebase'
 import update from 'immutability-helper';
 const planRef = db.collection('plan')
+
+//if sort by alfhabet 0-9 => a-z => ก - ฮ
+//if sort by date the lastest day will be at the end of array
 
 class Map extends React.PureComponent {
     constructor(props) {
@@ -40,7 +43,17 @@ class Map extends React.PureComponent {
         // window.google.maps.event.addListener(window.map, 'click', function () {
         //     clearInterval(self.interval)
         // })
-        // console.log(this.interval)
+
+        // var test = [{ name: 'ก' }, { name: 'ค' }, { name: 'ข' }, { name: 'z' }, { name: 'a' }, { name: '1' },]
+        // var result = test.sort(function (a, b) {
+        //     return b.name.localeCompare(a.name)
+        // })
+        // var test = [{ name: 'ก' }, { name: 'ค' }, { name: 'ข' }, { name: 'z' }, { name: 'a' }]
+        // var result = test.sort(function (a, b) {
+        //     return a.name.localeCompare(b.name)
+
+        // })
+        //console.log(result)
     }
     test = () => {
         console.log('hi', Math.random())

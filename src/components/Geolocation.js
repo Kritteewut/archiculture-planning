@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React, { } from 'react';
 
 // Material-ui Import
 import MyLocation from '@material-ui/icons/MyLocation';
-import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';

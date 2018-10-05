@@ -108,11 +108,11 @@ class IconLabelButtons extends React.PureComponent {
         this.state = {}
     }
     handleTargetClick = () => {
-        const { drawingBtnType, drawOverlayUsingTouchScreen } = this.props
+        const { drawOverlayUsingTouchScreen } = this.props
         drawOverlayUsingTouchScreen()
     }
     render() {
-        const { classes, drawingBtnType, isDrawInDesktopDevice, isFirstDraw 
+        const {  drawingBtnType, isDrawInDesktopDevice, isFirstDraw
         } = this.props;
 
         return (
@@ -159,7 +159,7 @@ class IconLabelButtons extends React.PureComponent {
                     <TextureICon className="leftIcon" />
                     Polygon
                 </Button>
-                
+
                 <Button
                     variant="contained"
                     color="default"
@@ -218,7 +218,7 @@ class IconLabelButtons extends React.PureComponent {
     }
 }
 IconLabelButtons.propTypes = {
-    classes: PropTypes.object.isRequired,
+
 };
 
 export default (IconLabelButtons);

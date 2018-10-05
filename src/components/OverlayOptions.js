@@ -192,8 +192,6 @@ class OverlayOptions extends React.PureComponent {
 }
 
 OverlayOptions.propTypes = {
-    classes: PropTypes.object.isRequired,
-    theme: PropTypes.object.isRequired,
 };
 
 export default (OverlayOptions);

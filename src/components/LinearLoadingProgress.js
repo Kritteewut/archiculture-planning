@@ -9,19 +9,18 @@ class LinearLoadingProgress extends React.PureComponent {
     render() {
         const { loadingProgress } = this.props
         return (
-            loadingProgress ?
-                <LinearProgress
-                    style={{
-                        flexGrow: 1,
-                        zIndex: 10,
-                        position: 'relative',
-                        width: '100%',
-                    }}
-                    value={loadingProgress}
-                    variant='determinate'
-                />
-                :
-                null
+
+            <LinearProgress
+                style={{
+                    flexGrow: 1,
+                    zIndex: 10,
+                    position: 'relative',
+                    width: '100%',
+                    display: loadingProgress ? null : 'none'
+                }}
+                value={loadingProgress}
+                variant='determinate'
+            />
         )
     }
 }

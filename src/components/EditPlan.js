@@ -111,7 +111,7 @@ class EditPlan extends React.PureComponent {
                         helperText={'ชื่อแปลงมีความยาวได้สูงสุด 30 ตัวอักษร'}
                     />
                     <br />
-                    <TextField className={classes.textField}
+                    <TextField className="textField"
                         label="รายละเอียดแปลง"
                         inputRef={this.setPlanDescriptionInput}
                         defaultValue={planData ? planData.planDescription : ''}

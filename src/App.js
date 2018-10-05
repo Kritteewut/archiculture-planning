@@ -10,7 +10,7 @@ import AddPlanBtn from './components/AddPlanBtn';
 import GeolocatedMe from './components/Geolocation';
 import IconLabelButtons from './components/DrawingBtn';
 import PermanentDrawer from './components/PermanentDrawer'
-import { db } from './config/firebase'
+import { db, serverTimestamp } from './config/firebase'
 import OpenSide from './components/openSideBtn';
 import OpenSettingMap from './components/OpenSettingMapBtn';
 import icon_point from './components/icons/icon_point.png';
@@ -71,12 +71,17 @@ class App extends Component {
       distanceDetail: [],
       drawerPage: 'homePage',
       isSaving: false,
+      isDeleting: false,
       isDrawInDesktopDevice: true,
       shouldSave: false,
       isDistanceMarkerVisible: true,
       isWaitingForUserResult: true,
       isWaitingForPlanQuery: true,
       loadingProgress: null,
+      saveAmount: 0,
+      finishedSaveAmount: 0,
+      deleteAmount: 0,
+      finishedDeleteAmount: 0,
     }
   }
   componentWillMount() {
@@ -85,20 +90,21 @@ class App extends Component {
       if (user) { self.setState({ user }, () => self.onQueryPlanFromFirestore()) }
       this.setState({ isWaitingForUserResult: false })
     })
-    //this.onAddBeforeUnloadListener()
+
 
   }
   componentDidMount() {
-
+    this.onAddBeforeUnloadListener()
   }
   componentWillUnmount() {
   }
   onAddBeforeUnloadListener() {
+    var self = this
     window.addEventListener("beforeunload", function (event) {
       // Cancel the event as stated by the standard.
       event.preventDefault();
       // Chrome requires returnValue to be set.
-      event.returnValue = '5555';
+      event.returnValue = 'เซฟก่อนไหมพ่อหนุ่ม'
     });
   }
   onDrawingBtnTypeChange = (type) => {
@@ -110,7 +116,7 @@ class App extends Component {
     this.onUtilitiesMethod()
     this.onClearSomeMapEventListener()
   }
-  onExampleLineReset = () => {
+  onClearExampleLine = () => {
     this.setState({ exampleLineCoords: [] })
   }
   onClearSomeMapEventListener = () => {
@@ -149,7 +155,7 @@ class App extends Component {
       this.setState({ isFirstDraw: true }, () => console.log(this.state.overlayObject, 'overlayOb'))
 
     }
-    this.onExampleLineReset()
+    this.onClearExampleLine()
     this.onResetSelectedOverlay()
   }
   onResetDetail = () => {
@@ -436,7 +442,8 @@ class App extends Component {
       const replaceCoords = update(overlayObject, { [overlayIndex]: { overlayCoords: { $set: editCoords } } })
       const pushUndoCoords = update(replaceCoords, { [overlayIndex]: { undoCoords: { $push: [editCoords] } } })
       const setRedoCoords = update(pushUndoCoords, { [overlayIndex]: { redoCoords: { $set: [] } } })
-      self.setState({ overlayObject: setRedoCoords })
+      const setIsOverlaySave = update(setRedoCoords, { [overlayIndex]: { isOverlaySave: { $set: false } } })
+      self.setState({ overlayObject: setIsOverlaySave })
     })
   }
   addPolygonListener = (polygon) => {
@@ -475,6 +482,7 @@ class App extends Component {
   onDrawExampleLine = (clickEvent) => {
     const { isDrawInDesktopDevice } = this.state
     var self = this
+    this.onClearExampleLine()
     if (isDrawInDesktopDevice) {
       window.google.maps.event.clearListeners(window.map, 'mousemove')
       window.google.maps.event.addListener(window.map, 'mousemove', function (event) {
@@ -664,16 +672,13 @@ class App extends Component {
   }
   onSaveToFirestore = () => {
 
-    const { overlayObject, selectedPlan, distanceDetail } = this.state
+    const { selectedPlan, } = this.state
     var self = this
     var planId = selectedPlan.planId
-
-    const shouldSaveOverlay = overlayObject.filter(overlay => overlay.isOverlaySave === false)
+    const shouldSaveOverlay = self.state.overlayObject.filter(overlay => overlay.isOverlaySave === false)
     var saveAmount = shouldSaveOverlay.length
-    var savedAmount = 0
-    console.log(shouldSaveOverlay, 'will save')
     if (saveAmount > 0) {
-      this.setState({ isSaving: true })
+      this.setState({ isSaving: true, loadingProgress: 0, saveAmount, finishedSaveAmount: 0 })
 
       shouldSaveOverlay.forEach((value) => {
         const overlayCoords = value.overlayCoords
@@ -723,19 +728,29 @@ class App extends Component {
             shapesRef
               .add(overlay)
               .then(function (doc) {
-                const updateOverlayIndex = overlayObject.findIndex(overlay => overlay.overlayIndex === overlayIndex)
-                const editOverlayIndex = update(overlayObject, { [updateOverlayIndex]: { overlayIndex: { $set: doc.id } } })
-                const editIsOverlaySave = update(editOverlayIndex, { [updateOverlayIndex]: { isOverlaySave: { $set: true } } })
-                const editOverlayDrawType = update(editIsOverlaySave, { [updateOverlayIndex]: { overlayDrawType: { $set: 'redraw' } } })
-
+                self.setState((state) => {
+                  const updateOverlayIndex = state.overlayObject.findIndex(overlay => overlay.overlayIndex === overlayIndex)
+                  const editOverlayIndex = update(state.overlayObject, { [updateOverlayIndex]: { overlayIndex: { $set: doc.id } } })
+                  const editIsOverlaySave = update(editOverlayIndex, { [updateOverlayIndex]: { isOverlaySave: { $set: true } } })
+                  const editOverlayDrawType = update(editIsOverlaySave, { [updateOverlayIndex]: { overlayDrawType: { $set: 'redraw' } } })
+                  return {
+                    overlayObject: editOverlayDrawType,
+                    loadingProgress: ((state.finishedSaveAmount + 1) / state.saveAmount) * 100,
+                    finishedSaveAmount: (state.finishedSaveAmount + 1),
+                  };
+                }, () => {
+                  console.log('finsh', self.state.finishedSaveAmount, '\n', 'save amount', self.state.saveAmount, '\n', 'load fisg', self.state.loadingProgress)
+                  if (self.state.finishedSaveAmount === self.state.saveAmount) {
+                    self.setState({ isSaving: false, loadingProgress: null, shouldSave: false })
+                  }
+                });
                 if (overlayType === 'polygon' || overlayType === 'polyline') {
-                  const detailIndex = distanceDetail.findIndex(detail => detail.overlayIndex === overlayIndex)
-                  const updateDetailIndex = update(distanceDetail, { [detailIndex]: { overlayIndex: { $set: doc.id } } })
-                  self.setState({ distanceDetail: updateDetailIndex })
+                  self.setState((state) => {
+                    const detailIndex = state.distanceDetail.findIndex(detail => detail.overlayIndex === overlayIndex)
+                    const updateDetailIndex = update(state.distanceDetail, { [detailIndex]: { overlayIndex: { $set: doc.id } } })
+                    return { distanceDetail: updateDetailIndex }
+                  })
                 }
-
-                self.setState({ overlayObject: editOverlayDrawType })
-                savedAmount++
               })
               .catch(function (error) {
                 throw ('there is something went wrong', error)
@@ -743,25 +758,26 @@ class App extends Component {
           } else {
             shapesRef.doc(overlayIndex).set(overlay
               , { merge: true }).then(function () {
-                const updateOverlayIndex = overlayObject.findIndex(overlay => overlay.overlayIndex === overlayIndex)
-                const editIsOverlaySave = update(overlayObject, { [updateOverlayIndex]: { isOverlaySave: { $set: true } } })
-                self.setState({ overlayObject: editIsOverlaySave })
-                savedAmount++
+                self.setState((state) => {
+                  const updateOverlayIndex = state.overlayObject.findIndex(overlay => overlay.overlayIndex === overlayIndex)
+                  const editIsOverlaySave = update(state.overlayObject, { [updateOverlayIndex]: { isOverlaySave: { $set: true } } })
+                  return {
+                    overlayObject: editIsOverlaySave,
+                    loadingProgress: ((state.finishedSaveAmount + 1) / state.saveAmount) * 100,
+                    finishedSaveAmount: (state.finishedSaveAmount + 1)
+                  };
+                }, () => {
+                  if (self.state.finishedSaveAmount === self.state.saveAmount) {
+                    self.setState({ isSaving: false, loadingProgress: null, shouldSave: false })
+                  }
+                });
               }).catch(function (error) {
                 throw ('there is something went wrong', error)
               });
-          }
-        }
-      })
-      var completeSaveCheck = setInterval(() => {
-        //console.log(savedAmount, 'saved')
-        this.setState({ loadingProgress: (savedAmount / saveAmount) * 100 })
-        if (savedAmount === saveAmount) {
-          this.setState({ isSaving: false, loadingProgress: null, shouldSave: false })
-          clearInterval(completeSaveCheck)
-        }
-      }, 500)
-    }
+          };
+        };
+      });
+    };
 
   }
   onClearOverlayFromMap = () => {
@@ -855,26 +871,37 @@ class App extends Component {
       if (!this.state.isWaitingForPlanQuery) {
         this.setState({ isWaitingForPlanQuery: true })
       }
-      let planData = []
+      let unSortplanData = []
       var uid = this.state.user.uid
       var self = this
       planRef.where('uid', '==', uid).get().then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
+          const createPlanDate = doc.data().createPlanDate.toDate()
           const planId = doc.id
           const planName = doc.data().planName
           const planDescription = doc.data().planDescription
-          planData.push({
+          unSortplanData.push({
             planId,
             planName,
             planDescription,
+            createPlanDate,
+            isPlanClickable: true,
+            isPlanOptionsClickable: true
           })
         })
-        self.setState({
-          planData: planData,
-          isWaitingForPlanQuery: false
-        })
+        self.onSortArrayByCreateDate(unSortplanData)
+        self.setState({ isWaitingForPlanQuery: false, })
       })
     }
+  }
+  onSortArrayByCreateDate = (dataArray) => {
+    console.log('before sort', dataArray)
+    const sortedByCreateDate = dataArray.sort(function (a, b) {
+      return b.createPlanDate - a.createPlanDate
+    })
+    this.setState({
+      planData: sortedByCreateDate
+    })
   }
   onAddPlan = (plan) => {
     const { planData, user } = this.state
@@ -882,20 +909,49 @@ class App extends Component {
     const planDescription = plan.planDescription
     const self = this
     const uid = user.uid
-    planRef.add({ planName, planDescription, uid })
+    planRef.add({ planName, planDescription, uid, createPlanDate: serverTimestamp })
       .then(function (docRef) {
         const planId = docRef.id
-        const pushPlan = update(planData, { $push: [{ planId, planName, planDescription }] })
-        self.setState({ planData: pushPlan })
+        //const createPlanDate = docRef.data().createPlanDate
+        docRef.get().then(function (doc) {
+          const createPlanDate = doc.data().createPlanDate.toDate()
+          const pushPlan = update(planData, {
+            $push: [{
+              planId,
+              planName,
+              planDescription,
+              createPlanDate,
+              isPlanClickable: true,
+              isPlanOptionsClickable: true,
+            }]
+          })
+          self.onSortArrayByCreateDate(pushPlan)
+        })
       })
   }
   onSetSelectedPlan = (planData) => {
-    this.setState({
-      selectedPlan: planData,
-    }, () => this.onOverlayRedraw())
+    this.onResetSelectedPlan()
+    const planId = planData.planId
+    const actionIndex = this.state.planData.findIndex(plan => plan.planId === planId)
+    this.setState((state) => {
+      const updatePlanClickable = update(state.planData, { [actionIndex]: { isPlanClickable: { $set: false } } })
+      return {
+        selectedPlan: planData,
+        planData: updatePlanClickable,
+      }
+    }, () => {
+      this.onOverlayRedraw()
+    })
   }
   onResetSelectedPlan = () => {
-    this.setState({ selectedPlan: null })
+    if (this.state.selectedPlan) {
+      const planId = this.state.selectedPlan.planId
+      const actionIndex = this.state.planData.findIndex(plan => plan.planId === planId)
+      this.setState((state) => {
+        const updatePlanClickable = update(state.planData, { [actionIndex]: { isPlanClickable: { $set: true } } })
+        return { selectedPlan: null, planData: updatePlanClickable }
+      })
+    }
   }
   onFitBounds = (overlayObject) => {
     if (overlayObject.length > 0) {
@@ -1016,24 +1072,53 @@ class App extends Component {
     this.setState({ drawerPage: page })
   }
   onDeletePlan = (planId) => {
+    var self = this
     const { planData, selectedPlan } = this.state
-    const deleteIndex = planData.findIndex(data => data.planId === planId)
-    const updatePlan = update(planData, { $splice: [[deleteIndex, 1]] })
-    //delete selected plan
-    planRef.doc(planId).delete().then(function () {
-      console.log("Document successfully deleted!");
-    }).catch(function (error) {
-      console.error("Error removing document: ", error);
-    });
-    //delete overlay with its planId 
-    shapesRef.where('planId', '==', planId).get().then(function (querySnapshot) {
-      querySnapshot.forEach(function (doc) {
-        doc.ref.delete().then(function () {
-          console.log("Document successfully deleted!");
-        }).catch(function (error) {
-          console.error("Error removing document: ", error);
-        });
+    const actionIndex = planData.findIndex(data => data.planId === planId)
+    const updatePlan = update(planData, { $splice: [[actionIndex, 1]] })
+    //delete selected plan from firestore
+    planRef.doc(planId).delete()
+      .then(function () {
+        console.log("Document successfully deleted!");
       })
+      .catch(function (error) {
+        console.error("Error removing document: ", error);
+      });
+    //delete overlay with its planId from firestore
+    shapesRef.where('planId', '==', planId).get().then(function (querySnapshot) {
+      var deleteAmount = querySnapshot.docs.length
+      if (deleteAmount > 0) {
+        self.setState({
+          isDeleting: true,
+          deleteAmount,
+          loadingProgress: 0,
+          finishedDeleteAmount: 0,
+        })
+        querySnapshot.forEach(function (doc) {
+          doc.ref.delete()
+            .then(function () {
+              self.setState((state) => {
+                return {
+                  loadingProgress: ((state.finishedDeleteAmount + 1) / self.state.deleteAmount) * 100,
+                  finishedDeleteAmount: (state.finishedDeleteAmount + 1),
+                };
+              }, () => {
+                if (self.state.finishedDeleteAmount === self.state.deleteAmount) {
+                  self.setState({
+                    isDeleting: false,
+                    loadingProgress: null,
+                    planData: updatePlan
+                  })
+                }
+              });
+            })
+            .catch(function (error) {
+              throw ("Error removing document: ", error);
+            });
+        })
+      } else {
+        self.setState({ planData: updatePlan })
+      }
     })
     if (selectedPlan) {
       if (selectedPlan.planId === planId) {
@@ -1041,7 +1126,11 @@ class App extends Component {
         this.onResetSelectedPlan()
       }
     }
-    this.setState({ planData: updatePlan })
+    this.setState((state) => {
+      const setClickable = update(state.planData, { [actionIndex]: { isPlanClickable: { $set: false } } })
+      const setOptionsClickable = update(setClickable, { [actionIndex]: { isPlanOptionsClickable: { $set: false } } })
+      return { planData: setOptionsClickable }
+    })
   }
   onDeleteOverlay = (overlay) => {
     const { overlayObject, distanceDetail } = this.state

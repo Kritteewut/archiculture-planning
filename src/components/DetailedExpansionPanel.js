@@ -114,6 +114,6 @@ class DetailedExpansionPanel extends React.PureComponent {
 }
 
 DetailedExpansionPanel.propTypes = {
-  classes: PropTypes.object.isRequired,
+  
 };
 export default (DetailedExpansionPanel);
