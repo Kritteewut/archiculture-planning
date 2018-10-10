@@ -52,7 +52,6 @@ class Login extends React.PureComponent {
         firebase.auth().signInWithEmailAndPassword(email, password).then((result) => {
             var user = result.user;
             self.props.onSetUser(user)
-            self.props.onQueryPlanFromFirestore()
         }).catch((error) => {
             alert("Username or Password incorrect")
             console.log(error);
@@ -64,7 +63,6 @@ class Login extends React.PureComponent {
         auth.signInWithPopup(provider).then(function (result) {
             var user = result.user;
             self.props.onSetUser(user)
-            self.props.onQueryPlanFromFirestore()
         }).catch(function (error) {
             alert('เกิดข้อผิดพลาด : ', error)
         });
@@ -74,7 +72,6 @@ class Login extends React.PureComponent {
         auth.signInWithPopup(provider2).then(function (result) {
             var user = result.user;
             self.props.onSetUser(user)
-            self.props.onQueryPlanFromFirestore()
         }).catch(function (error) {
             alert('เกิดข้อผิดพลาด : ', error)
         });
@@ -182,7 +179,7 @@ class Login extends React.PureComponent {
 }
 
 Login.propTypes = {
-    
+
 };
 
 export default withStyles(styles)(Login);

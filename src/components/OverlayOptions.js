@@ -54,6 +54,7 @@ class OverlayOptions extends React.PureComponent {
             name: '',
             detail: '',
             isDeleteOverlayOpen: false,
+            isOverlayTaskOpen: false,
         };
     }
     onToggleEditoverlayOpen = () => {
@@ -69,8 +70,11 @@ class OverlayOptions extends React.PureComponent {
     onToggleDeleteOverlayOpen = () => {
         this.setState({ isDeleteOverlayOpen: !this.state.isDeleteOverlayOpen })
     }
+    onToggleOverlayTaskOpen = () => {
+        this.setState({ onToggleOverlayTaskOpen: !this.state.isOverlayTaskOpen })
+    }
     drawOverlayDetail = () => {
-        const { classes, selectedOverlay, onRedoCoords, onUndoCoords, handleDetailEdit } = this.props;
+        const { selectedOverlay, onRedoCoords, onUndoCoords, handleDetailEdit } = this.props;
         return (
             <div>
                 <div>
@@ -94,6 +98,9 @@ class OverlayOptions extends React.PureComponent {
                         :
                         null
                 }
+                <Button variant="contained" size="small" color="primary" className="button" onClick={this.onToggleOverlayTaskOpen}>
+                    เพิ่มงาน
+                </Button>
                 <Button variant="contained" size="small" color="primary" className="button" onClick={this.onToggleEditoverlayOpen}>
                     แก้ไข
                 </Button>

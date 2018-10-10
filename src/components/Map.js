@@ -38,28 +38,6 @@ class Map extends React.PureComponent {
         this.setState({
             isLoad: true
         })
-        // setTimeout(this.test2, 5000)
-
-        // window.google.maps.event.addListener(window.map, 'click', function () {
-        //     clearInterval(self.interval)
-        // })
-
-        // var test = [{ name: 'ก' }, { name: 'ค' }, { name: 'ข' }, { name: 'z' }, { name: 'a' }, { name: '1' },]
-        // var result = test.sort(function (a, b) {
-        //     return b.name.localeCompare(a.name)
-        // })
-        // var test = [{ name: 'ก' }, { name: 'ค' }, { name: 'ข' }, { name: 'z' }, { name: 'a' }]
-        // var result = test.sort(function (a, b) {
-        //     return a.name.localeCompare(b.name)
-
-        // })
-        //console.log(result)
-    }
-    test = () => {
-        console.log('hi', Math.random())
-    }
-    test2 = () => {
-        this.interval = setInterval(this.test, 1000)
     }
 
     render() {
@@ -84,7 +62,7 @@ export default Map;
     // planRef.get().then(function (querySnapshot) {
     //     querySnapshot.forEach(function (doc) {
     //         doc.ref.set({
-    //             planDescription: '-'
+    //             createPlanDate: new Date()
     //         }, { merge: true });
 
     //     })

@@ -12,7 +12,7 @@ class LinearLoadingProgress extends React.PureComponent {
 
             <LinearProgress
                 style={{
-                    flexGrow: 1,
+                    left: this.props.left,
                     zIndex: 10,
                     position: 'relative',
                     width: '100%',
