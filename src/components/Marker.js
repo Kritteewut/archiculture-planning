@@ -17,6 +17,13 @@ class Marker extends React.PureComponent {
         const { overlayCoords, overlayIndex, overlayDrawType, icon, overlayName, overlayDetail, overlayType,
             zIndex, undoCoords, redoCoords,
         } = this.props
+        var image = {
+            url: icon,
+            //size: new window.google.maps.Size(71, 71),
+            //origin: new window.google.maps.Point(0, 0),
+            anchor: new window.google.maps.Point(15, 15),
+            //scaledSize: new window.google.maps.Size(25, 25)
+        };
         if (this.marker === false) {
             this.marker = new window.google.maps.Marker({
                 position: overlayCoords[0],
@@ -24,7 +31,7 @@ class Marker extends React.PureComponent {
                 map: window.map,
                 overlayType,
                 overlayDrawType,
-                icon,
+                icon: image,
                 draggable: false,
                 overlayName,
                 overlayDetail,
@@ -36,7 +43,7 @@ class Marker extends React.PureComponent {
         } else {
             this.marker.setOptions({
                 position: overlayCoords[0],
-                icon,
+                icon: image,
                 overlayName,
                 overlayDetail,
                 zIndex,

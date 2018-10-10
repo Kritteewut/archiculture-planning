@@ -1,26 +1,45 @@
 import React, { Component } from 'react';
 import update from 'immutability-helper';
+import shortid from 'shortid'
+import { auth } from './config/firebase'
+import { db, serverTimestamp } from './config/firebase'
+
+// Import location
 import Map from './components/Map'
+
 import Marker from './components/Marker';
 import Polygon from './components/Polygon';
 import Polyline from './components/Polyline';
+
 import SearchBox from './components/searchBox';
+import OpenSide from './components/openSideBtn';
+
 import ExampleLine from './components/ExampleLine';
+
 import AddPlanBtn from './components/AddPlanBtn';
 import GeolocatedMe from './components/Geolocation';
 import IconLabelButtons from './components/DrawingBtn';
-import PermanentDrawer from './components/PermanentDrawer'
-import { db, serverTimestamp } from './config/firebase'
-import OpenSide from './components/openSideBtn';
+
+import PermanentDrawer from './components/PermanentDrawer';
+
 import OpenSettingMap from './components/OpenSettingMapBtn';
-import icon_point from './components/icons/icon_point.png';
-import DetailedExpansionPanel from './components/DetailedExpansionPanel'
+
 import TransparentMaker from './components/TransparentMaker';
-import shortid from 'shortid'
-import { auth } from './config/firebase'
-import './components/SearchBoxStyles.css'
 import LinearLoadingProgress from './components/LinearLoadingProgress';
+<<<<<<< HEAD
 import moment from 'moment';
+=======
+import DetailedExpansionPanel from './components/DetailedExpansionPanel';
+import MapCenterFire from './components/MapCenterFire'
+import ToggleDevice from './components/ToggleDevice'
+
+// CSS Import
+import './App.css'
+import './components/SearchBoxStyles.css'
+
+// Logo Import
+import icon_point from './components/icons/icon_point.png';
+>>>>>>> 4b92aaf25171ac09e705e416842f04d8111f1ea4
 
 const shapesRef = db.collection('shapes')
 const planRef = db.collection('plan')
@@ -1445,20 +1464,12 @@ class App extends Component {
   render() {
     return (
 
-      <div
-        style={{
-          height: '100%',
-          width: '100%',
-          overflow: 'hidden',
-          //position: 'relative',
-          display: 'flex',
-
-        }}
-      >
+      <div className="AppFrame">
         <LinearLoadingProgress
           loadingProgress={this.state.loadingProgress}
           left={this.state.left}
         />
+
         <PermanentDrawer
           onSaveToFirestore={this.onSaveToFirestore}
           onSetSelectedPlan={this.onSetSelectedPlan}
@@ -1482,7 +1493,9 @@ class App extends Component {
           onAddTask={this.onAddTask}
           {...this.state}
         />
+
         <input id="pac-input" className="controls" type="text" placeholder="Find place" />
+
         <Map
           left={this.state.left}
         >
@@ -1533,58 +1546,91 @@ class App extends Component {
             strokeColor={this.state.strokeColor}
           />
 
-          <AddPlanBtn
-            onAddPlan={this.onAddPlan}
-            onChangeDrawPage={this.onChangeDrawPage}
-            handleDrawerOpen={this.handleDrawerOpen}
-            {...this.state}
-          />
-          {
-            this.state.distanceDetail.map(value => {
-              return (
-                value.detail.map(value2 => {
-                  return (
-                    <TransparentMaker
-                      key={value2.id}
-                      midpoint={value2.midpoint}
-                      disBtw={value2.disBtw}
-                      visible={value2.visible}
-                    />
-                  )
-                })
-              )
-            })
-          }
-          <IconLabelButtons
-            onAddListenerMarkerBtn={this.onAddListenerMarkerBtn}
-            onAddListenerPolygonBtn={this.onAddListenerPolygonBtn}
-            onAddListenerPolylineBtn={this.onAddListenerPolylineBtn}
-            onAddListenerGrabBtn={this.onAddListenerGrabBtn}
-            onToggleDeviceMode={this.onToggleDeviceMode}
-            drawOverlayUsingTouchScreen={this.drawOverlayUsingTouchScreen}
-            {...this.state}
-          />
-          <DetailedExpansionPanel
-            {...this.state}
-          />
-          <OpenSide
-            handleDrawerOpen={this.handleDrawerOpen}
-            handleDrawerClose={this.handleDrawerClose}
-            openSide={this.state.openSide}
-          />
+          <div className="FrameLeft">
 
-          <OpenSettingMap
+            <AddPlanBtn
+              onAddPlan={this.onAddPlan}
+              onChangeDrawPage={this.onChangeDrawPage}
+              handleDrawerOpen={this.handleDrawerOpen}
+              {...this.state}
+            />
 
-          />
+            {
+              this.state.distanceDetail.map(value => {
+                return (
+                  value.detail.map(value2 => {
+                    return (
+                      <TransparentMaker
+                        key={value2.id}
+                        midpoint={value2.midpoint}
+                        disBtw={value2.disBtw}
+                        visible={value2.visible}
+                      />
+                    )
+                  })
+                )
+              })
+            }
+
+            <IconLabelButtons
+              onAddListenerMarkerBtn={this.onAddListenerMarkerBtn}
+              onAddListenerPolygonBtn={this.onAddListenerPolygonBtn}
+              onAddListenerPolylineBtn={this.onAddListenerPolylineBtn}
+              onAddListenerGrabBtn={this.onAddListenerGrabBtn}
+            />
+
+
+            <OpenSide
+              handleDrawerOpen={this.handleDrawerOpen}
+              handleDrawerClose={this.handleDrawerClose}
+              openSide={this.state.openSide}
+            />
+
+            <SearchBox
+
+            />
+
+            <GeolocatedMe
+              onSetPanelName={this.onSetPanelName}
+            />
+
+            <ToggleDevice
+              onToggleDeviceMode={this.onToggleDeviceMode}
+              {...this.state}
+            />
+
+          </div>
+
+          <div className="FrameRight">
+
+            <OpenSettingMap
+
+            />
+
+          </div>
+
+
 
           <SearchBox
 
           />
 
-          <GeolocatedMe
-            onSetPanelName={this.onSetPanelName}
+          <DetailedExpansionPanel
+            {...this.state}
           />
+
+
+          <div className="FrameCenter">
+
+            <MapCenterFire
+              drawOverlayUsingTouchScreen={this.drawOverlayUsingTouchScreen}
+              {...this.state}
+            />
+          </div>
+
+
         </Map>
+
       </div>
     );
   }

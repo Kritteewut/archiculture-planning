@@ -6,16 +6,13 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Tooltip from '@material-ui/core/Tooltip';
-import target_icon from './icons/target_icon.png'
 
 // Icon group
 import IconComplete from '@material-ui/icons/Check';
 import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak';
 import Timeline from '@material-ui/icons/Timeline';
 import TextureICon from '@material-ui/icons/Texture';
-import PhoneIcon from '@material-ui/icons/PhoneAndroid';
-import DestopIcon from '@material-ui/icons/PersonalVideo';
-import TargetIcon from '@material-ui/icons/Flare';
+
 
 // CSS Import
 import './Design.css';
@@ -107,13 +104,8 @@ class IconLabelButtons extends React.PureComponent {
         super(props);
         this.state = {}
     }
-    handleTargetClick = () => {
-        const { drawOverlayUsingTouchScreen } = this.props
-        drawOverlayUsingTouchScreen()
-    }
     render() {
-        const {  drawingBtnType, isDrawInDesktopDevice, isFirstDraw
-        } = this.props;
+        const { drawingBtnType } = this.props;
 
         return (
             <div>
@@ -159,60 +151,6 @@ class IconLabelButtons extends React.PureComponent {
                     <TextureICon className="leftIcon" />
                     Polygon
                 </Button>
-
-                <Button
-                    variant="contained"
-                    color="default"
-                    className="buttonToggleDeviceMode"
-                    onClick={() => this.props.onToggleDeviceMode()}
-                    disabled={drawingBtnType || !isFirstDraw ? true : false}
-                >
-                    {
-                        isDrawInDesktopDevice ?
-                            <DestopIcon className="leftIcon" />
-                            :
-                            <PhoneIcon className="leftIcon" />
-                    }
-
-                    {
-                        isDrawInDesktopDevice ?
-                            'DESKTOP'
-                            :
-                            'TOUCH'
-                    }
-                </Button>
-
-                {isDrawInDesktopDevice ?
-                    null
-                    :
-                    <div>
-                        <Button
-                            variant="fab"
-                            className="buttonTarget"
-                            onClick={this.handleTargetClick}
-                            disabled={(drawingBtnType || !isFirstDraw) ? false : true}
-                        >
-                            <TargetIcon />
-
-                        </Button>
-                        {(drawingBtnType || !isFirstDraw) ?
-                            <Button
-                                className="targetIcon"
-                                disabled={true}
-                            >
-                                <img
-                                    src={target_icon}
-                                    alt='Target'
-                                />
-                            </Button>
-                            :
-                            null
-                        }
-                    </div>
-
-                }
-
-
             </div>
         );
     }
