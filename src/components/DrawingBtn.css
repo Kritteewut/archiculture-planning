@@ -26,58 +26,95 @@ List of CSS Design Class
 
 .buttonComplete {
     position: absolute;
-    top: 270px;
+    top: 170px;
     left: 15px;
     width: 125px;
     color: rgba(0, 0, 0, 0.8);
     background: linear-gradient(20deg, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1)) 30%;
     box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.60);
+    opacity: 0.9;
 }
+
+.buttonComplete:hover {
+    background: linear-gradient(20deg, rgb(255, 255, 255) 40%, rgba(255, 255, 255, 1)) 30%;
+    opacity: 1; 
+}
+
+
 .buttonPoint {
-    position: absolute;
-    top: 330px;
-    left: -110px;
+    position:solute;
+    top: 190px;
+    left: 15px;
     width: 125px;
     color: rgba(0, 0, 0, 0.8);
     background: linear-gradient(20deg, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1)) 30%;
     box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.60);
+    opacity: 0.9;
 }
+
+.buttonPoint:hover {
+    background: linear-gradient(20deg, rgb(255, 255, 255) 40%, rgba(255, 255, 255, 1)) 30%;
+    opacity: 1; 
+}
+
 .buttonLine {
     position: absolute;
-    top: 390px;
-    left: -235px;
+    top: 210px;
+    left: 15px;
     width: 125px;
     color: rgba(0, 0, 0, 0.8);
     background: linear-gradient(20deg, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1)) 30%;
     box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.60);
-
+    opacity: 0.9;
 }
+
+.buttonLine:hover {
+    background: linear-gradient(20deg, rgb(255, 255, 255) 40%, rgba(255, 255, 255, 1)) 30%;
+    opacity: 1; 
+}
+
 .buttonPolygon {
     position: absolute;
-    top: 450px;
-    left: -360px;
+    top: 230px;
+    left: 15px;
     width: 125px;
     color: rgba(0, 0, 0, 0.8);
     background: linear-gradient(20deg, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1)) 30%;
     box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.60);
+    opacity: 0.9;
 }
+
+.buttonPolygon:hover {
+    background: linear-gradient(20deg, rgb(255, 255, 255) 40%, rgba(255, 255, 255, 1)) 30%;
+    opacity: 1; 
+}
+
 .buttonToggleDeviceMode {
     position: absolute;
-    top: 510px;
-    left: -485px;
+    top: 140px;
+    left: 15px;
     width: 125px;
     color: rgba(0, 0, 0, 0.8);
     background: linear-gradient(20deg, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1)) 30%;
     box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.60);
+    opacity: 0.9;
 }
+
+.buttonToggleDeviceMode:hover {
+    background: linear-gradient(20deg, rgb(255, 255, 255) 40%, rgba(255, 255, 255, 1)) 30%;
+    opacity: 1; 
+}
+
 .buttonTarget {
-    position: relative;
-    top: 105px;
-    left: 60px;
-    left: 50%;
-    color: rgba(0, 0, 0, 0.8);
-    background: linear-gradient(20deg, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1)) 30%;
+    position: absolute;
+    top: -28px;
+    bottom: 0px;
+    left: -23px;
+    right: 0px;
+    color: rgb(0, 0, 0);
+    background: linear-gradient(20deg, rgba(0, 0, 0, 0.1) 40%, rgba(0, 0, 0, 0.1)) 30%;
     box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.60);
+    opacity: 0;
 }
 
 /* ------------------- Background Group ------------------ */
@@ -85,23 +122,12 @@ List of CSS Design Class
 /* ------------------- Image Group ------------------ */
 
 .targetIcon {
-    position: relative;
-
-    /*
-    top: 50%;
-    bottom: '50%';
-    left: '45%',
-    */
-
-    top: 54px;
-    left: 84px;
-
-    /*
-    right: 50%;
-    color: rgba(0, 0, 0, 0.8);
-    background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%;
-    box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.60);
-    */
+    position: absolute;
+    top: -104px;
+    bottom: 0px;
+    left: -50.65px;
+    right: 0px;
+    opacity: 1;
 
 }
 .leftIcon {

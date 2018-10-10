@@ -1,0 +1,82 @@
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - -
+List of CSS Design Class
+
+- Layer Group 
+
+- Text Group
+
+- Button Group
+
+- Background Group
+
+- Image Group
+
+- Forms Group
+
+- Gridview Group
+
+- Dropdown Group
+- - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/* ------------------- Layer Group ------------------ */
+
+.FrameLeft {
+    width: 0px;     /* เมื่อต้องปรับต้องตั้งค่าให้เห็น Frame เป็นปกติก่อน */
+    height: 0px;
+    top: 10%;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    /* Layer Group*/
+    position: absolute;
+    z-index: 0;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+
+.FrameRight {
+    width: 0px;
+    height: 0px;
+    top: 10%;
+    right: 0px;
+    bottom: 0px;
+    /* Layer Group*/
+    position: absolute;
+    cursor: pointer;
+    background-color: rgba(151, 255, 66, 0.548);
+}
+
+.FrameCenter {
+    width: 5px;
+    height: 5px;
+    top: 50%;
+    right: 50%;
+    bottom: 50%;
+    /* Layer Group*/
+    position: absolute;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0);
+    opacity: 1;
+}
+
+/* ------------------- Text Group ------------------ */
+
+/* ------------------- Button Group ------------------ */
+
+/* ------------------- Background Group ------------------ */
+
+/* ------------------- Image Group ------------------ */
+
+/* ------------------- Forms Group ------------------ */
+
+.AppFrame {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+}
+
+/* ------------------- Gridview Group ------------------ */
+
+/* ------------------- Dropdown Group ------------------ */

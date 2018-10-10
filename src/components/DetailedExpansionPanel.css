@@ -49,8 +49,9 @@ List of CSS Design Class
 .Detailroot {
     position: relative;
     top: 0px;
-    width: 35%;
-    left: 35%;
+    width: 40%;
+    left: 30%;
+    right: 30%;
     justify-content: flex-end;
     align-items: center;
   }
