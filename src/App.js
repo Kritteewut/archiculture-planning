@@ -26,9 +26,7 @@ import OpenSettingMap from './components/OpenSettingMapBtn';
 
 import TransparentMaker from './components/TransparentMaker';
 import LinearLoadingProgress from './components/LinearLoadingProgress';
-<<<<<<< HEAD
 import moment from 'moment';
-=======
 import DetailedExpansionPanel from './components/DetailedExpansionPanel';
 import MapCenterFire from './components/MapCenterFire'
 import ToggleDevice from './components/ToggleDevice'
@@ -39,7 +37,6 @@ import './components/SearchBoxStyles.css'
 
 // Logo Import
 import icon_point from './components/icons/icon_point.png';
->>>>>>> 4b92aaf25171ac09e705e416842f04d8111f1ea4
 
 const shapesRef = db.collection('shapes')
 const planRef = db.collection('plan')

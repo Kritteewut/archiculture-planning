@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import firebase, { auth, db } from '../Config/Firebase';
 
 import TaskEdit from './TaskEdit';
 
