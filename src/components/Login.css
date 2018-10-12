@@ -191,7 +191,7 @@ List of CSS Design Class
   }
   
   .loginBtn--google {
-    background: #ff3838;
+    background: #ff6969;
     width: 92%;
     text-align: center;
   }
@@ -203,12 +203,12 @@ List of CSS Design Class
 
   .loginBtn--google:hover,
   .loginBtn--google:focus {
-    background: #ff6060;
+    background: #ff4f4f;
   }
   
   .loginBtn--facebook {
     background-color: #4C69BA;
-    background-image: linear-gradient(rgb(29, 61, 238), rgb(29, 61, 238));
+    background-image: linear-gradient(rgb(52, 75, 202), rgb(52, 75, 202));
     text-shadow: 0 -1px 0 rgb(0, 15, 56);
     width: 92%;
     text-align: center;

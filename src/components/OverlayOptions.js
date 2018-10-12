@@ -94,16 +94,16 @@ class OverlayOptions extends React.PureComponent {
                         :
                         null
                 }
-                <Button variant="contained" size="small" color="primary" className="button" onClick={this.onToggleEditoverlayOpen}>
+                <Button variant="contained" className="buttoneditwork" onClick={this.onToggleEditoverlayOpen}>
                     แก้ไข
                 </Button>
-                <Button variant="contained" size="small" color="secondary" className="button" onClick={this.onToggleDeleteOverlayOpen}>
+                <Button variant="contained" className="buttondeletework" onClick={this.onToggleDeleteOverlayOpen}>
                     ลบ
                 </Button>
-                <Button variant="contained" size="small" className="button" onClick={() => onUndoCoords(selectedOverlay)}>
+                <Button variant="contained" className="buttonundowork" onClick={() => onUndoCoords(selectedOverlay)}>
                     Undo
                 </Button>
-                <Button variant="contained" size="small" className="button" onClick={() => onRedoCoords(selectedOverlay)}>
+                <Button variant="contained" className="buttonredowork" onClick={() => onRedoCoords(selectedOverlay)}>
                     Redo
                 </Button>
                 <EditOverlay
@@ -158,7 +158,7 @@ class OverlayOptions extends React.PureComponent {
                                     <div>
                                         <Button
                                             variant="contained"
-                                            size="small"
+                                            className="buttonundoonwork"
                                             disabled={false}
                                             onClick={onUndoDrawingCoords}
                                         >
@@ -166,7 +166,7 @@ class OverlayOptions extends React.PureComponent {
                                         </Button>
                                         <Button
                                             variant="contained"
-                                            size="small"
+                                            className="buttonredoonwork"
                                             disabled={false}
                                             onClick={onRedoDrawingCoords}
                                         >

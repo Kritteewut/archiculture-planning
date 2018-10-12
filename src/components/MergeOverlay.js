@@ -49,20 +49,22 @@ class MergeOverlay extends React.PureComponent {
                 open={isMergeOverlayOpen}
                 onClose={onToggleMergeOverlayModal}
             >
-                <div className="paper">
+                <div className="paperMergeOverlay">
                     <div>
                         แปลงที่จะเลือก : {planData ? planData.planName : ''}
                     </div>
+                    <br/>
                     <div>
                         ยังมีรูปร่างที่วาดไว้อยู่ หากต้องการรวมรูปร่างที่วาดไว้กับแปลงที่เลือกให้กดปุ่ม ตกลง หากต้องการละทิ้งรูปร่างที่วาดไว้ให้กดปุ่ม ละทิ้ง
                     </div>
-                    <Button size="small" color="primary" onClick={handleAccecptToMergeOverlay}>
+                    <br/>
+                    <Button className="buttoncontinueMOverlay" onClick={handleAccecptToMergeOverlay}>
                         ตกลง
                     </Button>
-                    <Button size="small" color="secondary" onClick={handleDiscardToMergeOverlay}>
+                    <Button className="buttonggMOverlay" onClick={handleDiscardToMergeOverlay}>
                         ละทิ้ง
                     </Button>
-                    <Button size="small" onClick={onToggleMergeOverlayModal}>
+                    <Button className="buttoncancelMOverlay" onClick={onToggleMergeOverlayModal}>
                         ยกเลิก
                     </Button>
                 </div>

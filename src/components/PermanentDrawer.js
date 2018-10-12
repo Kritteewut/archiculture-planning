@@ -235,20 +235,21 @@ class PermanentDrawer extends React.PureComponent {
                             </ListItem>
                         </List>
                         <Divider />
-                        <Button variant="contained" color="primary" className="buttonmargin buttonlogout" onClick={this.logout}>
-                            logout
+
+                        <Button variant="contained" className="buttonshow" onClick={onToggleDistanceMarker}>
+                            แสดง
                         </Button>
 
                         <Button
                             variant="contained"
-                            color="primary"
-                            className={classNames("buttonmargin", "buttonsave")}
+                            className=" buttonsave"
                             disabled={(selectedPlan || isSaving) ? false : true}
                             onClick={this.props.onSaveToFirestore}>
                             บันทึก
                         </Button>
-                        <Button variant="contained" color="primary" className={classNames("buttonmargin", "bootstrapRoot")} onClick={onToggleDistanceMarker}>
-                            แสดง
+                                           
+                        <Button variant="contained" className="buttonmargin buttonlogout" onClick={this.logout}>
+                            logout
                         </Button>
 
                         <Divider />

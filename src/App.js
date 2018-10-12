@@ -110,7 +110,7 @@ class App extends Component {
 
   }
   componentDidMount() {
-    this.onAddBeforeUnloadListener()
+   // this.onAddBeforeUnloadListener()
   }
   componentWillUnmount() {
   }

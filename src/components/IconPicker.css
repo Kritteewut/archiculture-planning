@@ -29,8 +29,12 @@ List of CSS Design Class
 /* ------------------- Image Group ------------------ */
 
 .image {
-    position: relative;
-    height: 8.7vw;
+    position: absolute;
+    margin: 30px;
+
+    width: 100px;
+    height:100px;
+
 }
 
 .focusVisible {
@@ -39,14 +43,18 @@ List of CSS Design Class
 
 .imageButton {
     position: absolute;
+
+    height: 30px;
+    width: 30px;
+
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    color: 'theme.palette.common.white';
 }
 
 .imageSrc {
@@ -68,11 +76,7 @@ List of CSS Design Class
     bottom: 0;
     background-color: 'theme.palette.common.black';
     opacity: 0.4;
-    transition: 'theme.transitions.create('opacity')';
-    -webkit-transition: 'theme.transitions.create('opacity')';
-    -moz-transition: 'theme.transitions.create('opacity')';
-    -ms-transition: 'theme.transitions.create('opacity')';
-    -o-transition: 'theme.transitions.create('opacity')';
+
 }
 
 .imageTitle {
@@ -87,11 +91,7 @@ List of CSS Design Class
     position: absolute;
     bottom: -2px;
     left: calc(50% - 9px);
-    transition: 'theme.transitions.create('opacity')';
-    -webkit-transition: 'theme.transitions.create('opacity')';
-    -moz-transition: 'theme.transitions.create('opacity')';
-    -ms-transition: 'theme.transitions.create('opacity')';
-    -o-transition: 'theme.transitions.create('opacity')';
+
 }
 
 /* ------------------- Forms Group ------------------ */

@@ -34,6 +34,40 @@ List of CSS Design Class
 
 /* ------------------- Background Group ------------------ */
 
+.buttoncontinuedelete {
+    width: 70px;
+    top: 0px;
+    left: 0px;
+    
+    color: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(20deg, rgb(255, 255, 255) 40%, rgb(255, 255, 255)) 30%;
+    box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.6);
+    opacity: 0.9; 
+}
+
+.buttoncontinuedelete:hover {
+    background: linear-gradient(20deg, rgb(151, 149, 255) 40%, rgb(164, 252, 255)) 30%;
+    box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.6);
+    opacity: 1; 
+}
+
+.buttoncanceldelete {
+    width: 70px;
+    top: 0px;
+    left: 5px;
+    
+    color: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(20deg, rgb(255, 255, 255) 40%, rgb(255, 255, 255)) 30%;
+    box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.60);
+    opacity: 0.9; 
+}
+
+.buttoncanceldelete:hover {
+    background: linear-gradient(20deg, rgb(255, 156, 156) 40%, rgb(255, 160, 197)) 30%;
+    box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.6);
+    opacity: 1; 
+}
+
 /* ------------------- Image Group ------------------ */
 
 /* ------------------- Forms Group ------------------ */
@@ -48,19 +82,24 @@ List of CSS Design Class
 }
 
 
-.paper {
+.paperdeleteplan {
     position: absolute;
-    width: 50px;
-    background-color: 'theme.palette.background.paper';
-    box-shadow: 'theme.shadows[5]';
-    padding: 'theme.spacing.unit * 4';
+
+    width: 220px;
+    height:150px;
+
+    margin: auto;
+
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
+    bottom: 50%;
+    left: 16%;
+    right: 16%;
+
+    padding: 40px;
+
+    background: linear-gradient(20deg, rgba(255 , 255 , 255 , 0.85) 40%, rgba(255 , 255 , 255, 0.85)) 60%;
+    box-shadow: 0px 0px 10px 2px rgba(0 , 0 , 0 , 0.30);
+    border-radius: 10px;
 }
 
 

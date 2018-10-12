@@ -159,7 +159,7 @@ class AddPlanBtn extends React.PureComponent {
                     <div >
                         <Button
                             variant="fab"
-                            className="absolute"
+                            className="AddButton"
                             onClick={this.onToggleAddPlanOpen}
                             disabled={isWaitingForUserResult ? true : false}
                         >
@@ -174,56 +174,55 @@ class AddPlanBtn extends React.PureComponent {
                     open={this.state.isAddPlanOpen}
                     onClose={this.onToggleAddPlanOpen}
                 >
-                    <div className="FrameCenterAdd">
-                        <div className="paperadd">
-                            <p className="textcolor"> สร้างแปลนของคุณ </p> <br />
+                    <div className="paperadd">
+                        <p className="textcolor"> สร้างแปลนของคุณ </p> 
 
-                            <Tooltip
-                                title="Close Window"
-                                placement="bottom"
-                                disableFocusListener
-                                disableTouchListener
-                            >
+                        <TextField className="TextAddPlan"
+                            inputRef={this.setAddPlanInput}
+                            autoFocus={true}
+                            error={this.state.isPlanNameInputError}
+                            helperText={'ชืิอแปลงมีความยาวได้สูงสุด 30 ตัวอักษร'}
+                            onChange={this.handlePlanNameInputChange}
+                        />
 
-                                <Button className="absolute2" onClick={this.onToggleAddPlanOpen}>
-                                    ยกเลิก
+                        <TextField className="DataTextPlan"
+                            inputRef={this.setPlanDescriptionInput}
+                            defaultValue='รายละเอียด'
+                            multiline
+                            rowsMax="4"
+                        />
+
+                        <Tooltip
+                            title="Close Window"
+                            placement="bottom"
+                            disableFocusListener
+                            disableTouchListener
+                        >
+
+                            <Button className="CancelButton" onClick={this.onToggleAddPlanOpen}>
+                                ยกเลิก
                             </Button>
 
-                            </Tooltip>
+                        </Tooltip>
 
 
-                            <Tooltip
-                                title="Add Plan"
-                                placement="bottom"
-                                disableFocusListener
-                                disableTouchListener
-                            >
-                                <div>
-                                    <Button
-                                        className="absolute3"
-                                        onClick={this.handleAdd}
-                                        disabled={this.state.isPlanNameInputError}
-                                    >
-                                        เพิ่ม
+                        <Tooltip
+                            title="Add Plan"
+                            placement="bottom"
+                            disableFocusListener
+                            disableTouchListener
+                        >
+                            <div>
+                                <Button
+                                    className="ContinueButton"
+                                    onClick={this.handleAdd}
+                                    disabled={this.state.isPlanNameInputError}
+                                >
+                                    เพิ่ม
                             </Button>
-                                </div>
-                            </Tooltip>
+                            </div>
+                        </Tooltip>
 
-                            <TextField className="absolute4"
-                                inputRef={this.setAddPlanInput}
-                                autoFocus={true}
-                                error={this.state.isPlanNameInputError}
-                                helperText={'ชืิอแปลงมีความยาวได้สูงสุด 30 ตัวอักษร'}
-                                onChange={this.handlePlanNameInputChange}
-                            />
-                            <TextField className="absolute5"
-                                inputRef={this.setPlanDescriptionInput}
-                                defaultValue='-'
-                                multiline
-                                rowsMax="4"
-                            />
-
-                        </div>
                     </div>
 
                 </Modal>
