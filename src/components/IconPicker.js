@@ -227,7 +227,8 @@ class IconPicker extends React.PureComponent {
                         className="image"
                         focusVisibleClassName="focusVisible"
                         style={{
-                            width: '8.7vw',
+                            width: '100px',
+                            height: '100px',
                         }}
                         onClick={() => this.props.onSetSelectedIcon(image.src)}
                     >

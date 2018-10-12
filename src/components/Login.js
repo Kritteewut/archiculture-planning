@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
 import firebase, { auth, provider, provider2 } from '../config/firebase';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import './Login.css';
-import logo from './Picture/Ling logo.png'
-import TextField from '@material-ui/core/TextField';
+
+import Register from './Register';
+import Reset from './Reset';
+
+//material Import
 import Grid from '@material-ui/core/Grid';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import Lock from '@material-ui/icons/Lock';
+import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import Button from '@material-ui/core/Button';
-import Register from './Register';
-import Reset from './Reset';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+
+//Icon import
+import logo from './Picture/Ling logo.png'
+
+// CSS import
+import './Login.css';
 
 
 const styles = theme => ({
@@ -87,7 +94,7 @@ class Login extends React.PureComponent {
                 return (
 
                     //loading container wrapper LoginFont
-                    <div className="loading container wrapper LoginFont">
+                    <div className="container wrapper LoginFont">
 
                         <p className="logo TextWhite">
 
@@ -138,12 +145,12 @@ class Login extends React.PureComponent {
                             </FormControl>
                         </div>
 
-                        <br />
+                        <br /><br />
 
                         <div className="LoginButton">
                             <button type="submit" onClick={this.loginEmail} className="loginBtnforEmail loginBtn--L">&nbsp;Log In with email</button>
 
-                            <br />
+                            <br /><br />
 
                             <p className='Or TextWhite'> or </p>
 

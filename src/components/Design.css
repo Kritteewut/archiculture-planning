@@ -158,21 +158,21 @@ List of CSS Design Class
 .DesignButtonColor {
     /*animation: App-logo-spin infinite 20s linear;*/
     border-radius: 10px;
-    width: 35%;
-    height: 5.2vh;
+    width: 100px;
+    height: 40px;
     color: white;
     margin: 10px;
-    padding: 5px;
+    padding: 0px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    background-color: rgb(180, 180, 180);
+    background-color: rgb(151, 151, 151);
     border: none;
 }
 
 .DesignButtonColor:hover {
-    background-color: rgb(87, 140, 238);
+    background-color: rgb(255, 95, 95);
 }
 
 .ButtonMaplayer {
@@ -225,6 +225,20 @@ List of CSS Design Class
     padding-left: 15%;
     box-shadow: 0 0 15px 0 rgba(51, 51, 51, 0);
     background: rgba(24, 24, 24, 0);
+}
+
+.FrameColor {
+    width: 300px;     /* เมื่อต้องปรับต้องตั้งค่าให้เห็น Frame เป็นปกติก่อน */
+    height: 650px;
+    top: 10px;
+    left: 10px;
+    right: 0px;
+    bottom: 0px;
+    /* Layer Group*/
+    position: absolute;
+    z-index: 0;
+    cursor: pointer;
+    background-color: rgba(55, 0, 255, 0)
 }
 
 /* ------------------- Gridview Group ------------------ */

@@ -111,11 +111,7 @@ class App extends Component {
     })
   }
   componentDidMount() {
-<<<<<<< HEAD
     //this.onAddBeforeUnloadListener()
-=======
-   // this.onAddBeforeUnloadListener()
->>>>>>> 6bf806a10367ce9cec5b8f0dc773836da85e88ff
   }
   componentWillUnmount() {
   }

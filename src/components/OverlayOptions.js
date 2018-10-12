@@ -70,7 +70,7 @@ class OverlayOptions extends React.PureComponent {
     drawOverlayDetail = () => {
         const { selectedOverlay, onRedoCoords, onUndoCoords, handleDetailEdit } = this.props;
         return (
-            <div>
+            <div className="FrameTaskData">
                 <div>
                     ชื่อ : {selectedOverlay.overlayName}
                     <br />
@@ -92,15 +92,10 @@ class OverlayOptions extends React.PureComponent {
                         :
                         null
                 }
-<<<<<<< HEAD
-                <Button variant="contained" size="small" color="primary" className="button" onClick={this.onToggleOverlayTaskOpen}>
-                    จัดการงาน
-=======
-                <Button variant="contained" className="buttoneditwork" className="button" onClick={this.onToggleOverlayTaskOpen}>
+                <Button variant="contained" className="buttonaddwork" onClick={this.onToggleOverlayTaskOpen}>
                     เพิ่มงาน
->>>>>>> 6bf806a10367ce9cec5b8f0dc773836da85e88ff
                 </Button>
-                <Button variant="contained" className="buttoneditwork" className="button" onClick={this.onToggleEditoverlayOpen}>
+                <Button variant="contained" className="buttoneditwork" onClick={this.onToggleEditoverlayOpen}>
                     แก้ไข
                 </Button>
                 <Button variant="contained" className="buttondeletework" onClick={this.onToggleDeleteOverlayOpen}>

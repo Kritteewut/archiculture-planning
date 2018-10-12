@@ -30,22 +30,18 @@ List of CSS Design Class
 
 .image {
     position: absolute;
-    margin: 30px;
+    margin: 80px;
 
-    width: 100px;
-    height:100px;
-
-}
-
-.focusVisible {
+    width: 90px;
+    height:90px;
 
 }
 
 .imageButton {
     position: absolute;
 
-    height: 30px;
-    width: 30px;
+    height: 90px;
+    width: 90px;
 
     left: 0;
     right: 0;
@@ -59,12 +55,15 @@ List of CSS Design Class
 
 .imageSrc {
     position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 8.7vw;
-    background-size: cover;
+    left: 15px;
+    right: auto;
+    top: 15px;
+    bottom: auto;
+
+    width: 90px;
+    height: 90px;
+
+    background-size: 90px;
     background-position: center 40%;
 }
 
@@ -96,7 +95,7 @@ List of CSS Design Class
 
 /* ------------------- Forms Group ------------------ */
 
-.root {
+.rooticon {
     display: flex;
     flex-wrap: wrap;
     min-width: 300px;
