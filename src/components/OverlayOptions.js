@@ -125,6 +125,9 @@ class OverlayOptions extends React.PureComponent {
                     onToggleOverlayTaskOpen={this.onToggleOverlayTaskOpen}
                     selectedOverlay={selectedOverlay}
                     overlayTaskShow={this.props.overlayTaskShow}
+                    onToggleIsTaskDone={this.props.onToggleIsTaskDone}
+                    onFilterTask={this.props.onFilterTask}
+                    filterTaskType={this.props.filterTaskType}
                 />
             </div>
         )

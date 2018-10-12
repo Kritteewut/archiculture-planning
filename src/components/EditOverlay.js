@@ -55,7 +55,7 @@ class EditOverlay extends React.PureComponent {
         this.props.onToggleEditoverlayOpen()
     }
     render() {
-        const { classes, isEditOverlayOpen, onToggleEditoverlayOpen, selectedOverlay } = this.props
+        const {  isEditOverlayOpen, onToggleEditoverlayOpen, selectedOverlay } = this.props
         return (
             <Modal
                 aria-labelledby="simple-modal-title"

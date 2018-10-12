@@ -27,13 +27,12 @@ class TaskDelete extends Component {
     }
 
     render() {
-        const { handleToggleDeleteTask, item, openDelete } = this.props;
+        const { handleToggleDeleteTask, item, isDeleteTaskOpen } = this.props;
 
         return (
             <div>
                 <Dialog
-                    open={openDelete}
-                    onClose={this.handleClose}
+                    open={isDeleteTaskOpen}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >

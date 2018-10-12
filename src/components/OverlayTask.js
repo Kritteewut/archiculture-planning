@@ -52,12 +52,6 @@ class OverlayTask extends Component {
     console.log('menu', menu)
   };
 
-  changeShow = (show) => {
-    this.setState({
-      show: show
-    })
-  };
-
   renderpage = () => {
 
     switch (this.state.page) {
@@ -72,7 +66,8 @@ class OverlayTask extends Component {
 
             <ShowButton
               {...this.state}
-              changeShow={this.changeShow}
+              onFilterTask={this.props.onFilterTask}
+              filterTaskType={this.props.filterTaskType}
 
             />
 
@@ -90,6 +85,7 @@ class OverlayTask extends Component {
               onArrayUpdate={this.onArrayUpdate}
               taskDone={this.taskDone}
               taskBack={this.taskBack}
+              onToggleIsTaskDone={this.props.onToggleIsTaskDone}
             />
 
           </div>

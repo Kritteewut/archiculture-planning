@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import Paper from '@material-ui/core/Paper';
-
+import moment from 'moment';
 import {
     Modal,
     ModalHeader,
@@ -23,6 +23,7 @@ import {
     Label,
     Input,
 } from 'reactstrap';
+import TextField from '@material-ui/core/TextField';
 
 var shortid = require('shortid');
 
@@ -54,6 +55,11 @@ const styles = theme => ({
             padding: theme.spacing.unit * 3,
         },
     },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        width: 200,
+    },
 });
 
 function Transition(props) {
@@ -65,6 +71,25 @@ class TaskEdit extends Component {
         super(props)
         this.state = {
         }
+        this.taskNameInput = null
+        this.setTaskNameInput = element => {
+            this.taskNameInput = element;
+        };
+
+        this.taskSartAtInput = null
+        this.setTaskSartAtInput = element => {
+            this.taskSartAtInput = element;
+        };
+
+        this.taskEndAtInput = null
+        this.setTaskEndAtInput = element => {
+            this.taskEndAtInput = element;
+        };
+
+        this.taskContentInput = null
+        this.setTaskContentInput = element => {
+            this.taskContentInput = element;
+        };
     }
 
     handleChange = (e) => {
@@ -74,66 +99,28 @@ class TaskEdit extends Component {
     }
 
     handleSave() {
-        // var itemRef = db.collection('item').doc(id);
 
-        // var sd = new Date(this.props.startDate);
-
-        // console.log(sd);
-
-        // var ed = new Date(this.props.endDate);
-        // console.log(ed);
-
-        var item = {
-            name: document.getElementById("name").value,
-            content: document.getElementById("content").value,
-            startAt: document.getElementById("startAt").value,
-            endAt: document.getElementById("endAt").value,
-            id: this.props.item.id
+        var task = {
+            name: this.taskNameInput.value,
+            content: this.taskContentInput.value,
+            startAt: new Date(this.taskSartAtInput.value),
+            endAt: this.taskSartAtInput.value,
+            taskId: this.props.task.taskId
         }
-        this.props.editItem(item, this.props.selectedTaskIndex)
+
+        console.log(task)
         this.props.handleToggleEditTask()
-        // this.props.onArrayUpdate(id, item)
-        //itemRef.update(item);
-        //    var TT =  itemRef.doc(this.props.id).get()
-        //         .then(function (hi) {
 
-        //             var isd = new Date(hi.data().startDate.toDate());
-        //             var ied = new Date(hi.data().endDate.toDate());
-        //             var Bes = isd.toDateString();
-        //             var Bee = ied.toDateString();
-        //             var sdstring = moment(Bes).format('YYYY-MM-DD');
-        //             var edstring = moment(Bee).format('YYYY-MM-DD');
-
-        //          var  itemEdit = {
-        //                 description: hi.data().description,
-        //                 startDate: sdstring,
-        //                 endDate: edstring,
-        //                 taskName: hi.data().taskName,
-        //                 id: hi.id,
-        //             }
-        //             TT.update(itemEdit)
-
-        //             //console.log(doc.id, " => ", doc.data());
-        //             console.log(itemRef, 'item Update ได้')
-        //         })
-
-        // .catch(function (error) {
-        //     console.log("Error จ้า: ", error);
-        // });
-
-        // this.setState({
-        // });
     }
 
     render() {
-        const { item, classes, openEdit, handleToggleEditTask } = this.props;
+        const { task, classes, isEditTaskOpen, handleToggleEditTask } = this.props;
 
         return (
             <div>
                 <Dialog
                     fullScreen
-                    open={openEdit}
-                    onClose={this.handleClose}
+                    open={isEditTaskOpen}
                     TransitionComponent={Transition}
 
                 >
@@ -143,7 +130,7 @@ class TaskEdit extends Component {
                                 <CloseIcon />
                             </IconButton>
                             <Typography variant="title" color="inherit" className={classes.flex}>
-                                {item.name}
+                                {task.name}
                             </Typography>
                             <Button color="inherit" onClick={() => this.handleSave()}>
                                 save
@@ -153,50 +140,48 @@ class TaskEdit extends Component {
 
                     <main className={classes.layout}>
                         <Paper className={classes.paper}>
-                            {item.isDone === false ?
-                                <Form>
-                                    <FormGroup>
-                                        <Label for="taskName">ชื่องาน</Label>
-                                        <Input id='name' type="text" name="taskName" defaultValue={item.name} />
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Label for="startDate">วันเริ่มงาน</Label>
-                                        <Input id='startAt' type="date" name="startDate" defaultValue={item.startAt} />
-                                    </FormGroup>
-                                    {' '}
-                                    <FormGroup>
-                                        <Label for="endDate">วันสิ้นสุดงาน</Label>
-                                        <Input id='endAt' type="date" name="endDate" defaultValue={item.endAt} />
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Label for="description">คำอธิบาย</Label>
-                                        <Input id='content' type="textarea" name="description" defaultValue={item.content} />
-                                    </FormGroup>
-                                </Form>
-
-                                :
-
-                                <Form>
-                                    <FormGroup>
-                                        <Label for="taskName">ชื่องาน</Label>
-                                        <Input id='name' type="text" name="taskName" value={item.name} />
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Label for="startDate">วันเริ่มงาน</Label>
-                                        <Input id='startAt' type="text" name="startDate" value={item.startAt} />
-                                    </FormGroup>
-                                    {' '}
-                                    <FormGroup>
-                                        <Label for="endDate">วันสิ้นสุดงาน</Label>
-                                        <Input id='endAt' type="text" name="endDate" value={item.endAt} />
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Label for="description">คำอธิบาย</Label>
-                                        <Input id='content' type="textarea" name="description" value={item.content} />
-                                    </FormGroup>
-                                </Form>
-
-                            }
+                            <TextField
+                                className={classes.textField}
+                                label="ชื่องาน"
+                                margin="normal"
+                                defaultValue={task.name}
+                                inputRef={this.setTaskNameInput}
+                                autoFocus={true}
+                            />
+                            <br />
+                            <TextField
+                                className={classes.textField}
+                                label="รายละเอียด"
+                                margin="normal"
+                                defaultValue={task.content}
+                                inputRef={this.setTaskContentInput}
+                                multiline
+                            />
+                            <br />
+                            <TextField
+                                className={classes.textField}
+                                label="วันเริ่มงาน"
+                                margin="normal"
+                                type="date"
+                                defaultValue={moment(task.startAt).format('YYYY' - 'MM' - 'DD').split('T')[0]}
+                                inputRef={this.setTaskSartAtInput}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                            <br />
+                            <TextField
+                                className={classes.textField}
+                                label="วันสิ้นสุดงาน"
+                                margin="normal"
+                                type="date"
+                                defaultValue={moment(task.endAt).format('YYYY' - 'MM' - 'DD').split('T')[0]}
+                                inputRef={this.setTaskEndAtInput}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                            <br />
                         </Paper>
                     </main>
 
