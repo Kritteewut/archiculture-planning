@@ -203,8 +203,8 @@ class PermanentDrawer extends React.PureComponent {
         this.onToggleDeletePlanModal()
     }
     renderDrawer = () => {
-        const { classes, user, onSetUser, selectedPlan, onCallFitBounds,
-            onEditPlanName, isSaving, onToggleDistanceMarker, shouldSave
+        const { user, onSetUser, selectedPlan, onCallFitBounds,
+            onEditPlanName, isSaving, onToggleDistanceMarker,
         } = this.props;
         return (
             user ?
@@ -249,7 +249,7 @@ class PermanentDrawer extends React.PureComponent {
                         >
                             บันทึก
                         </Button>
-                                           
+
                         <Button variant="contained" className="buttonmargin buttonlogout" onClick={this.logout}>
                             logout
                         </Button>
@@ -315,9 +315,6 @@ class PermanentDrawer extends React.PureComponent {
                             onToggleDeletePlanModal={this.onToggleDeletePlanModal}
                             planData={this.state.planData}
                             handleAcceptToDeletePlan={this.handleAcceptToDeletePlan}
-                        />
-                        <OverlayTask
-                            onAddTask={this.props.onAddTask}
                         />
                     </div>
                 </div>
