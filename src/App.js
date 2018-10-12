@@ -111,11 +111,7 @@ class App extends Component {
     })
   }
   componentDidMount() {
-<<<<<<< HEAD
-    //this.onAddBeforeUnloadListener()
-=======
-   // this.onAddBeforeUnloadListener()
->>>>>>> 6bf806a10367ce9cec5b8f0dc773836da85e88ff
+    // this.onAddBeforeUnloadListener()
   }
   componentWillUnmount() {
   }
@@ -747,6 +743,7 @@ class App extends Component {
           isDone, content, startAt,
           endAt, planId, overlayId, name
         }
+        console.log(addTask, 'asd', taskId, taskSource)
         if (taskSource === 'local') {
           taskRef
             .add(addTask)
@@ -779,7 +776,7 @@ class App extends Component {
                 const updateTaskId = state.overlayTasks.findIndex(task => task.taskId === taskId)
                 const editIsOverlaySave = update(state.overlayTasks, { [updateTaskId]: { isTaskSave: { $set: true } } })
                 return {
-                  overlayObject: editIsOverlaySave,
+                  overlayTasks: editIsOverlaySave,
                   loadingProgress: ((state.finishedSaveAmount + 1) / state.saveAmount) * 100,
                   finishedSaveAmount: (state.finishedSaveAmount + 1)
                 };
@@ -1171,7 +1168,9 @@ class App extends Component {
     const isDone = overlayTasks[actionIndex].isDone
     const updateIsdone = update(overlayTasks, { [actionIndex]: { isDone: { $set: !isDone } } })
     const updateIsTaskSave = update(updateIsdone, { [actionIndex]: { isTaskSave: { $set: false } } })
-    this.setState({ overlayTasks: updateIsTaskSave })
+    this.setState({ overlayTasks: updateIsTaskSave }, () => {
+      this.onFilterTask(this.state.filterTaskType)
+    })
   }
   onSortArrayByCreateDate = (targetState, sortType, dataArray, sortProp) => {
     var sortedByCreateDate = []
@@ -1615,6 +1614,8 @@ class App extends Component {
           onRedoCoords={this.onRedoCoords}
           onToggleDistanceMarker={this.onToggleDistanceMarker}
           onAddTask={this.onAddTask}
+          onToggleIsTaskDone={this.onToggleIsTaskDone}
+          onFilterTask={this.onFilterTask}
           {...this.state}
         />
 

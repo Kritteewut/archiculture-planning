@@ -1,10 +1,10 @@
 import React from 'react';
 import './Design.css';
+import moment from 'moment';
 
 import { db, serverTimestamp } from '../config/firebase'
 import update from 'immutability-helper';
 const planRef = db.collection('plan')
-
 //if sort by alfhabet 0-9 => a-z => ก - ฮ
 //if sort by date the lastest day will be at the end of array
 

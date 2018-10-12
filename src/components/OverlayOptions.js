@@ -92,13 +92,8 @@ class OverlayOptions extends React.PureComponent {
                         :
                         null
                 }
-<<<<<<< HEAD
-                <Button variant="contained" size="small" color="primary" className="button" onClick={this.onToggleOverlayTaskOpen}>
-                    จัดการงาน
-=======
                 <Button variant="contained" className="buttoneditwork" className="button" onClick={this.onToggleOverlayTaskOpen}>
                     เพิ่มงาน
->>>>>>> 6bf806a10367ce9cec5b8f0dc773836da85e88ff
                 </Button>
                 <Button variant="contained" className="buttoneditwork" className="button" onClick={this.onToggleEditoverlayOpen}>
                     แก้ไข
@@ -130,6 +125,9 @@ class OverlayOptions extends React.PureComponent {
                     onToggleOverlayTaskOpen={this.onToggleOverlayTaskOpen}
                     selectedOverlay={selectedOverlay}
                     overlayTaskShow={this.props.overlayTaskShow}
+                    onToggleIsTaskDone={this.props.onToggleIsTaskDone}
+                    onFilterTask={this.props.onFilterTask}
+                    filterTaskType={this.props.filterTaskType}
                 />
             </div>
         )

@@ -51,19 +51,19 @@ class TaskShow extends Component {
         super(props)
         this.state = {
             checked: [1],
-            item: [],
-            openEdit: false,
-            openDelete: false,
+            task: [],
+            isEditTaskOpen: false,
+            isDeleteTaskOpen: false,
             selectedTaskIndex: '',
         }
     }
 
-    handleEditOpen = (value, index) => {
-        this.setState({ item: value, openEdit: true, selectedTaskIndex: index })
+    handleEditOpen = (task, index) => {
+        this.setState({ task: task, isEditTaskOpen: true, selectedTaskIndex: index })
     }
 
     handleToggleEditTask = () => {
-        this.setState({ openEdit: !this.state.openEdit })
+        this.setState({ isEditTaskOpen: !this.state.isEditTaskOpen })
     }
 
     handleToggleDeleteTask = (close) => {
@@ -74,77 +74,34 @@ class TaskShow extends Component {
         this.setState({ item: value, openDelete: true, selectedTaskIndex: index })
     }
 
-    handleToggle = value => () => {
-        const { checked } = this.state;
-        const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
-
-        if (currentIndex === -1) {
-            newChecked.push(value);
-        } else {
-            newChecked.splice(currentIndex, 1);
-        }
-
-        this.setState({
-            checked: newChecked,
-        });
-        console.log(newChecked)
-
-        this.props.taskDone(value)
-    };
-
-    handleToggleHistory = value => () => {
-        const { checked } = this.state;
-        const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
-
-        if (currentIndex === -1) {
-            newChecked.push(value);
-        } else {
-            newChecked.splice(currentIndex, 1);
-        }
-
-        this.setState({
-            checked: newChecked,
-        });
-        console.log(newChecked)
-
-        this.props.taskBack(value)
-    };
-
     render() {
-        const { overlayTaskShow, classes, editItem, deleteItem, itemsHistory, show } = this.props;
+        const { overlayTaskShow, classes, editItem, deleteItem, } = this.props;
         return (
             <div className={classes.root}>
 
                 <main className={classes.layout}>
 
                     <List component="nav">
-                        {overlayTaskShow.map((value, index) => {
+                        {overlayTaskShow.map((task, index) => {
                             return (
                                 <ListItem
-                                    key={value.taskId}
+                                    key={task.taskId}
                                     button
-                                    onClick={() => this.handleEditOpen(value, index)}
+                                    onClick={() => this.handleEditOpen(task, index)}
                                 >
                                     <ListItemText
-                                        primary={value.name}
-                                        secondary={moment(value.startAt).format('ll')} />
-
-                                    {this.props.menu === 'ลบงาน' ?
-                                        <ListItemSecondaryAction>
-                                            <IconButton aria-label="Delete" onClick={() => this.handleDeleteOpen(value, index)}>
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                        :
-                                        <ListItemSecondaryAction>
-                                            <Checkbox
-                                                onChange={this.handleToggle(value)}
-                                                checked={value.isDone}
-                                            />
-                                        </ListItemSecondaryAction>
-                                    }
+                                        primary={task.name}
+                                        secondary={moment(task.startAt).format('ll')}
+                                    />
+                                    <ListItemSecondaryAction>
+                                        <IconButton aria-label="Delete" onClick={() => this.handleDeleteOpen(task, index)}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                        <Checkbox
+                                            onChange={() => this.props.onToggleIsTaskDone(task.taskId)}
+                                            checked={task.isDone}
+                                        />
+                                    </ListItemSecondaryAction>
                                 </ListItem>
                             )
                         }
@@ -156,13 +113,11 @@ class TaskShow extends Component {
                 </main>
                 <TaskEdit
                     handleToggleEditTask={this.handleToggleEditTask}
-                    editItem={editItem}
                     {...this.state}
                 />
 
                 <TaskDelete
                     handleToggleDeleteTask={this.handleToggleDeleteTask}
-                    deleteItem={deleteItem}
                     {...this.state}
                 />
             </div>

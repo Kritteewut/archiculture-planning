@@ -351,6 +351,9 @@ class PermanentDrawer extends React.PureComponent {
                         strokeColor={this.props.strokeColor}
                         onAddTask={this.props.onAddTask}
                         overlayTaskShow={this.props.overlayTaskShow}
+                        onToggleIsTaskDone={this.props.onToggleIsTaskDone}
+                        onFilterTask={this.props.onFilterTask}
+                        filterTaskType={this.props.filterTaskType}
                     />
                 )
             default: return;
