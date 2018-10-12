@@ -94,7 +94,7 @@ class EditPlan extends React.PureComponent {
                 open={isEditPlanOpen}
                 onClose={this.handleToggleEditPlan}
             >
-                <div className="paper">
+                <div className="papereditplan">
                     แก้ไขชื่อแปลง
                     <br />
                     <TextField
@@ -110,7 +110,7 @@ class EditPlan extends React.PureComponent {
                         error={this.state.isPlanNameInputError}
                         helperText={'ชื่อแปลงมีความยาวได้สูงสุด 30 ตัวอักษร'}
                     />
-                    <br />
+                    <br />                    <br />
                     <TextField className="textField"
                         label="รายละเอียดแปลง"
                         inputRef={this.setPlanDescriptionInput}
@@ -118,16 +118,17 @@ class EditPlan extends React.PureComponent {
                         multiline
                         rowsMax="4"
                     />
-                    <br />
+                    <br />                    <br />
                     <Button
-                        size="small"
-                        color="primary"
+                        className="buttoncontinueedit"
                         onClick={this.onSubmitEditPlan}
                         disabled={this.state.isPlanNameInputError}
                     >
                         ตกลง
                     </Button>
-                    <Button size="small" color="primary" onClick={this.handleToggleEditPlan}>
+                    <Button
+                        className="buttoncanceledit"
+                        onClick={this.handleToggleEditPlan}>
                         ยกเลิก
                     </Button>
                 </div>

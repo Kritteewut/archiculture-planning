@@ -44,12 +44,13 @@ List of CSS Design Class
     top: 0px;
     color: rgba(0, 0, 0, 0.8);
     background: linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%;
-    box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.60);
+    box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.60);
     opacity: 0.9; 
 }
 
 .MenuSetmap:hover {
     background: linear-gradient(20deg, rgb(255, 255, 255) 40%, rgba(255, 255, 255, 1)) 30%;
+    box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.60);
     opacity: 1; 
 }
 

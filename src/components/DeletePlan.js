@@ -48,17 +48,19 @@ class DeletePlan extends React.PureComponent {
                 open={isDeletePlanOpen}
                 onClose={onToggleDeletePlanModal}
             >
-                <div className="paper">
+                <div className="paperdeleteplan">
                     <div>
                         แปลงที่จะลบ : {planData ? planData.planName : ''}
                     </div>
+                    <br/>
                     <div>
                         หากท่านลบแปลงที่เลือก ข้อมูลทั้งหมดที่ถูกบันทึกไว้จะถูกลบและไม่สามารถกู้คืนได้
                     </div>
-                    <Button size="small" color="primary" onClick={() => handleAcceptToDeletePlan(planData.planId)}>
+                    <br/>
+                    <Button className="buttoncontinuedelete" onClick={() => handleAcceptToDeletePlan(planData.planId)}>
                         ตกลง
                     </Button>
-                    <Button size="small" onClick={onToggleDeletePlanModal}>
+                    <Button className="buttoncanceldelete" onClick={onToggleDeletePlanModal}>
                         ยกเลิก
                     </Button>
                 </div>

@@ -51,17 +51,19 @@ class DeleteOverlay extends React.PureComponent {
                 open={isDeleteOverlayOpen}
                 onClose={onToggleDeleteOverlayOpen}
             >
-                <div className="paper">
+                <div className="paperDeleteOverlay">
                     <div>
                         รูปร่างที่จะลบ : {selectedOverlay.overlayName}
                     </div>
+                    <br/>
                     <div>
                         หากลบแล้วจะไม่สามารถกู้คืนได้
                     </div>
-                    <Button size="small" color="primary" onClick={this.handleDeleteClick}>
+                    <br/>
+                    <Button className="buttoncontinueOverlay" onClick={this.handleDeleteClick}>
                         ตกลง
                     </Button>
-                    <Button size="small" color="primary" onClick={onToggleDeleteOverlayOpen}>
+                    <Button className="buttoncancelOverlay" onClick={onToggleDeleteOverlayOpen}>
                         ยกเลิก
                     </Button>
                 </div>

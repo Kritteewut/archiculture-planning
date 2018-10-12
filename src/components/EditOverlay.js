@@ -63,7 +63,7 @@ class EditOverlay extends React.PureComponent {
                 open={isEditOverlayOpen}
                 onClose={onToggleEditoverlayOpen}
             >
-                <div className="paper">
+                <div className="papereditoverlay">
                     <Card className="classes.card">
                         <CardMedia
                             component="img"
@@ -94,11 +94,11 @@ class EditOverlay extends React.PureComponent {
                         defaultValue={selectedOverlay.overlayDetail}
                         inputRef={this.setOverlayDetailInput}
                     />
-                    <br />
-                    <Button size="small" color="primary" onClick={this.onSubmitEdit}>
+                    <br /><br/>
+                    <Button className="buttoncontinueOverlay" onClick={this.onSubmitEdit}>
                         ตกลง
                         </Button>
-                    <Button size="small" color="primary" onClick={onToggleEditoverlayOpen}>
+                    <Button className="buttoncancelOverlay" onClick={onToggleEditoverlayOpen}>
                         ยกเลิก
                         </Button>
                 </div>
