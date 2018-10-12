@@ -83,19 +83,23 @@ class Navbar extends Component {
                 return (
                     null
                 );
+            default: return;
         }
 
     }
 
     render() {
-        const { anchorEl } = this.state;
         const { classes, page } = this.props;
         return (
             <div className={classes.root}>
                 <AppBar position="fixed" className={classes.navbar}>
                     <Toolbar>
 
-                        <IconButton onClick={() => this.handleDrawerOpen(true)} className={classes.menuButton} color="inherit" aria-label="Menu">
+                        {/* <IconButton onClick={() => this.handleDrawerOpen(true)} className={classes.menuButton} color="inherit" aria-label="Menu">
+                            <MenuIcon />
+                        </IconButton> */}
+
+                        <IconButton onClick={this.props.onToggleOverlayTaskOpen} className={classes.menuButton} color="inherit" aria-label="Menu">
                             <MenuIcon />
                         </IconButton>
 

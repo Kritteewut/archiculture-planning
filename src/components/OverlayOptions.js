@@ -10,6 +10,7 @@ import ColorPicker from './ColorPicker';
 import IconPicker from './IconPicker';
 import EditOverlay from './EditOverlay';
 import DeleteOverlay from './DeleteOverlay';
+import OverlayTask from './OverlayTask'
 
 // CSS Import
 import './OverlayOptions.css';
@@ -51,8 +52,6 @@ class OverlayOptions extends React.PureComponent {
         super(props);
         this.state = {
             isEditOverlayOpen: false,
-            name: '',
-            detail: '',
             isDeleteOverlayOpen: false,
             isOverlayTaskOpen: false,
         };
@@ -60,18 +59,13 @@ class OverlayOptions extends React.PureComponent {
     onToggleEditoverlayOpen = () => {
         this.setState({ isEditOverlayOpen: !this.state.isEditOverlayOpen })
     }
-    handleChange = (event) => {
-        this.setState({
-            [event.target.name]: event.target.value
-        })
-    }
     renderEditOverlayDetailModal = () => {
     }
     onToggleDeleteOverlayOpen = () => {
         this.setState({ isDeleteOverlayOpen: !this.state.isDeleteOverlayOpen })
     }
     onToggleOverlayTaskOpen = () => {
-        this.setState({ onToggleOverlayTaskOpen: !this.state.isOverlayTaskOpen })
+        this.setState({ isOverlayTaskOpen: !this.state.isOverlayTaskOpen })
     }
     drawOverlayDetail = () => {
         const { selectedOverlay, onRedoCoords, onUndoCoords, handleDetailEdit } = this.props;
@@ -98,8 +92,13 @@ class OverlayOptions extends React.PureComponent {
                         :
                         null
                 }
+<<<<<<< HEAD
+                <Button variant="contained" size="small" color="primary" className="button" onClick={this.onToggleOverlayTaskOpen}>
+                    จัดการงาน
+=======
                 <Button variant="contained" className="buttoneditwork" className="button" onClick={this.onToggleOverlayTaskOpen}>
                     เพิ่มงาน
+>>>>>>> 6bf806a10367ce9cec5b8f0dc773836da85e88ff
                 </Button>
                 <Button variant="contained" className="buttoneditwork" className="button" onClick={this.onToggleEditoverlayOpen}>
                     แก้ไข
@@ -124,6 +123,13 @@ class OverlayOptions extends React.PureComponent {
                     selectedOverlay={selectedOverlay}
                     onToggleDeleteOverlayOpen={this.onToggleDeleteOverlayOpen}
                     onDeleteOverlay={this.props.onDeleteOverlay}
+                />
+                <OverlayTask
+                    {...this.state}
+                    onAddTask={this.props.onAddTask}
+                    onToggleOverlayTaskOpen={this.onToggleOverlayTaskOpen}
+                    selectedOverlay={selectedOverlay}
+                    overlayTaskShow={this.props.overlayTaskShow}
                 />
             </div>
         )

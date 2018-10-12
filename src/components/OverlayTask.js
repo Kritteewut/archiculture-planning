@@ -7,10 +7,16 @@ import Category from './Category';
 import Calendar from './Calendar';
 import History from './History';
 import ShowButton from './ShowButton';
+import Slide from '@material-ui/core/Slide';
+import Dialog from '@material-ui/core/Dialog';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import '../App.css';
+
+function Transition(props) {
+  return <Slide direction="up" {...props} />;
+}
 
 class OverlayTask extends Component {
 
@@ -53,10 +59,16 @@ class OverlayTask extends Component {
   };
 
   renderpage = () => {
+
     switch (this.state.page) {
       case 'งาน':
         return (
-          <div>
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+          >
 
             <ShowButton
               {...this.state}
@@ -65,12 +77,13 @@ class OverlayTask extends Component {
             />
 
             <Input
-              items={this.state.items}
-              addItem={this.addItem}
+              selectedOverlay={this.props.selectedOverlay}
+              onAddTask={this.props.onAddTask}
             />
 
             <TaskShow
               {...this.state}
+              overlayTaskShow={this.props.overlayTaskShow}
               handleEditOpen={this.handleEditOpen}
               editItem={this.editItem}
               deleteItem={this.deleteItem}
@@ -105,34 +118,44 @@ class OverlayTask extends Component {
 
           </div>
         );
+      default: return;
     }
   }
 
   render() {
+    const { isOverlayTaskOpen } = this.props
     return (
-      <div class="App">
+      <div>
+        <Dialog
+          fullScreen
+          open={isOverlayTaskOpen}
+          onClose={this.handleClose}
+          TransitionComponent={Transition}
 
-        <Navbar
-          handleDrawerOpen={this.handleDrawerOpen}
-          changeMenu={this.changeMenu}
-          {...this.state}
-        />
+        >
 
-        <Category
-          handleDrawerOpen={this.handleDrawerOpen}
-          open={this.state.open}
-        />
+          <Navbar
+            handleDrawerOpen={this.handleDrawerOpen}
+            changeMenu={this.changeMenu}
+            onToggleOverlayTaskOpen={this.props.onToggleOverlayTaskOpen}
+            {...this.state}
+          />
 
-        <br /><br /><br />
+          <Category
+            handleDrawerOpen={this.handleDrawerOpen}
+            open={this.state.open}
+          />
 
-        {this.renderpage()}
+          <br /><br /><br />
 
-        <br /><br /><br />
+          {this.renderpage()}
 
-        <Navigation
-          changePage={this.changePage}
-        />
+          <br /><br /><br />
 
+          <Navigation
+            changePage={this.changePage}
+          />
+        </Dialog>
       </div>
     )
   }

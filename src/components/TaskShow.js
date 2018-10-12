@@ -113,17 +113,17 @@ class TaskShow extends Component {
     };
 
     render() {
-        const { items, classes, editItem, deleteItem, itemsHistory, show } = this.props;
+        const { overlayTaskShow, classes, editItem, deleteItem, itemsHistory, show } = this.props;
         return (
             <div className={classes.root}>
 
                 <main className={classes.layout}>
 
                     <List component="nav">
-                        {items.map((value, index) => {
+                        {overlayTaskShow.map((value, index) => {
                             return (
                                 <ListItem
-                                    key={value.id}
+                                    key={value.taskId}
                                     button
                                     onClick={() => this.handleEditOpen(value, index)}
                                 >
@@ -141,7 +141,7 @@ class TaskShow extends Component {
                                         <ListItemSecondaryAction>
                                             <Checkbox
                                                 onChange={this.handleToggle(value)}
-                                                checked={false}
+                                                checked={value.isDone}
                                             />
                                         </ListItemSecondaryAction>
                                     }
@@ -150,48 +150,6 @@ class TaskShow extends Component {
                         }
                         )
                         }
-
-                        <br />
-                        
-                        {show === 'ทั้งหมด' ?
-                            <div>
-                                <Divider />
-                                <Typography variant="caption" gutterBottom>
-                                    งานที่เสร็จแล้ว
-                                </Typography>
-                                <br />
-                                {itemsHistory.map((value, index) => {
-                                    return (
-                                        <ListItem
-                                            key={value.id}
-                                            button
-                                            onClick={() => this.handleEditOpen(value, index)}
-                                        >
-                                            <ListItemText
-                                                className={classes.text}
-                                                primary={value.name}
-                                            />
-
-                                            {this.props.menu === 'ลบงาน' ?
-                                                <ListItemSecondaryAction>
-                                                    <IconButton aria-label="Delete" onClick={() => this.handleDeleteOpen(value, index)}>
-                                                        <DeleteIcon />
-                                                    </IconButton>
-                                                </ListItemSecondaryAction>
-                                                :
-                                                <ListItemSecondaryAction>
-                                                    <Checkbox
-                                                        onChange={this.handleToggleHistory(value)}
-                                                        checked={true}
-                                                    />
-                                                </ListItemSecondaryAction>
-                                            }
-                                        </ListItem>
-                                    )
-                                }
-                                )
-                                }</div> : null}
-
                     </List>
 
 
