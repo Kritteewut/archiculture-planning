@@ -65,19 +65,25 @@ class InputItem extends Component {
             alert('กรุณากรอกชื่องาน')
             this.setState({ name: '', })
         } else {
-            var Task = {
+            const { selectedOverlay } = this.props
+            const overlayId = selectedOverlay.overlayId
+            const overlaySource = selectedOverlay.overlaySource
+            var task = {
                 name: this.state.name,
                 startAt: new Date(),
                 endAt: new Date(),
                 content: '',
                 isDone: false,
-                id: null
+                taskId: shortid.generate(),
+                overlayId,
+                isTaskSave: false,
+                taskSource: 'local',
+                overlaySource,
             }
-            this.props.addItem(Task)
-            this.setState({ name: '', })
+            console.log(task)
+            this.props.onAddTask(task)
+            this.setState({ name: '' })
         }
-
-        // itemTask.push(task)
     }
 
 

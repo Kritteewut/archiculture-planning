@@ -14,8 +14,8 @@ class Marker extends React.PureComponent {
     }
 
     redrawMarker = () => {
-        const { overlayCoords, overlayIndex, overlayDrawType, icon, overlayName, overlayDetail, overlayType,
-            zIndex, undoCoords, redoCoords,
+        const { overlayCoords, overlayId, overlayDrawType, icon, overlayName, overlayDetail, overlayType,
+            zIndex, undoCoords, redoCoords, overlaySource,
         } = this.props
         var image = {
             url: icon,
@@ -27,7 +27,7 @@ class Marker extends React.PureComponent {
         if (this.marker === false) {
             this.marker = new window.google.maps.Marker({
                 position: overlayCoords[0],
-                overlayIndex,
+                overlayId,
                 map: window.map,
                 overlayType,
                 overlayDrawType,
@@ -38,6 +38,7 @@ class Marker extends React.PureComponent {
                 zIndex,
                 undoCoords,
                 redoCoords,
+                overlaySource,
             })
             this.props.addMarkerListener(this.marker)
         } else {
@@ -49,6 +50,7 @@ class Marker extends React.PureComponent {
                 zIndex,
                 undoCoords,
                 redoCoords,
+                overlaySource,
             })
         }
     }

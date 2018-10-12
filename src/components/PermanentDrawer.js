@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import firebase, { auth, provider, provider2 } from '../config/firebase';
+import firebase from '../config/firebase';
 
 // Material-ui Import
-import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
@@ -16,18 +15,16 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Button from '@material-ui/core/Button';
-import Modal from '@material-ui/core/Modal';
 import OpenWith from '@material-ui/icons/OpenWith';
 import List from '@material-ui/core/List';
-import grey from '@material-ui/core/colors/grey';
-import red from '@material-ui/core/colors/red';
+import SaveIcon from '@material-ui/icons/Save';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 // Import Group
 import Login from './Login';
 import EditPlan from './EditPlan';
 import DeletePlan from './DeletePlan';
 import MergeOverlay from './MergeOverlay';
-import OverlayTask from './OverlayTask'
 
 // Icon Group
 import Pic from './Picture/Ling logo.png';
@@ -135,8 +132,6 @@ class PermanentDrawer extends React.PureComponent {
             isDeletePlanOpen: false,
             isMergeOverlayOpen: false,
             isEditPlanOpen: false,
-            selectedPlanIndex: null,
-            willSelectIndex: null,
         }
     }
     logout = () => {
@@ -146,12 +141,11 @@ class PermanentDrawer extends React.PureComponent {
     handlePlanClick = (planData, index) => {
         const { selectedPlan, overlayObject } = this.props
         if ((!selectedPlan) && overlayObject.length > 0) {
-            this.setState({ planData: planData, willSelectIndex: index })
+            this.setState({ planData: planData, })
             this.onToggleMergeOverlayModal()
         }
         else {
             if (selectedPlan !== planData) {
-                this.setState({ selectedPlanIndex: index })
                 this.props.onSetSelectedPlan(planData)
                 this.props.onClearOverlayFromMap()
             }
@@ -162,13 +156,10 @@ class PermanentDrawer extends React.PureComponent {
     }
     handleAccecptToMergeOverlay = () => {
         this.props.onSetSelectedPlan(this.state.planData)
-        this.setState({ selectedPlanIndex: this.state.selectedPlanIndex })
         this.onToggleMergeOverlayModal()
-
     }
     handleDiscardToMergeOverlay = () => {
         this.props.onSetSelectedPlan(this.state.planData)
-        this.setState({ selectedPlanIndex: this.state.selectedPlanIndex })
         this.props.onClearOverlayFromMap()
         this.onToggleMergeOverlayModal()
     }
@@ -191,20 +182,12 @@ class PermanentDrawer extends React.PureComponent {
         this.setState({ isEditPlanOpen: !this.state.isEditPlanOpen })
     }
     handleAcceptToDeletePlan = (planId) => {
-        const { selectedPlan } = this.props
         this.props.onDeletePlan(planId)
-        if (selectedPlan) {
-            if (selectedPlan.planId === planId) {
-                this.setState({ selectedPlanIndex: null })
-            }
-        }
-
-
         this.onToggleDeletePlanModal()
     }
     renderDrawer = () => {
-        const { classes, user, onSetUser, selectedPlan, onCallFitBounds,
-            onEditPlanName, isSaving, onToggleDistanceMarker, shouldSave
+        const { user, onSetUser, selectedPlan, onCallFitBounds,
+            onEditPlanName, isSaving, onToggleDistanceMarker,
         } = this.props;
         return (
             user ?
@@ -245,7 +228,7 @@ class PermanentDrawer extends React.PureComponent {
                             color="primary"
                             className={classNames("buttonmargin", "buttonsave")}
                             disabled={(selectedPlan || isSaving) ? false : true}
-                            onClick={this.props.onSaveToFirestore}
+                            onClick={() => this.props.onSaveToFirestore(selectedPlan)}
                         >
                             บันทึก
                         </Button>
@@ -273,6 +256,23 @@ class PermanentDrawer extends React.PureComponent {
                                                     <ListItemText primary={plan.planName} />
 
                                                     <ListItemSecondaryAction>
+                                                        {/*
+                                                        <IconButton aria-label="Save"
+                                                            onClick={() => this.props.onSaveToFirestore(plan)}
+                                                        //disabled={!plan.isLoading || plan.isSave}
+
+                                                        >
+                                                            
+                                                                !plan.isLoading ?
+                                                                    <SaveIcon />
+                                                                    :
+                                                                    <CircularProgress
+                                                                        variant="static"
+                                                                        value={plan.isLoading}
+                                                                    />
+                                                            
+                                                        </IconButton>
+                                                         */}
                                                         <IconButton aria-label="Edit"
                                                             onClick={() => this.handleEditPlanClick(plan)}
                                                             disabled={!plan.isPlanOptionsClickable}
@@ -315,9 +315,6 @@ class PermanentDrawer extends React.PureComponent {
                             planData={this.state.planData}
                             handleAcceptToDeletePlan={this.handleAcceptToDeletePlan}
                         />
-                        <OverlayTask
-                            onAddTask={this.props.onAddTask}
-                        />
                     </div>
                 </div>
                 :
@@ -329,23 +326,7 @@ class PermanentDrawer extends React.PureComponent {
         )
     }
     drawerPageRender = () => {
-        const {
-            drawerPage,
-            selectedOverlay,
-            onChangePolyStrokeColor,
-            onChangePolyFillColor,
-            onSetSelectedIcon,
-            overlayOptionsType,
-            handleDetailEdit,
-            onDeleteOverlay,
-            onUndoCoords,
-            isFirstDraw,
-            onUndoDrawingCoords,
-            onRedoCoords,
-            onRedoDrawingCoords,
-            fillColor,
-            strokeColor,
-        } = this.props;
+        const { drawerPage, } = this.props;
 
         switch (drawerPage) {
             case 'homePage':
@@ -353,21 +334,22 @@ class PermanentDrawer extends React.PureComponent {
             case 'option':
                 return (
                     <OverlayOptions
-                        selectedOverlay={selectedOverlay}
-                        onChangePolyStrokeColor={onChangePolyStrokeColor}
-                        onChangePolyFillColor={onChangePolyFillColor}
-                        onSetSelectedIcon={onSetSelectedIcon}
-                        overlayOptionsType={overlayOptionsType}
-                        handleDetailEdit={handleDetailEdit}
-                        onDeleteOverlay={onDeleteOverlay}
-                        isFirstDraw={isFirstDraw}
-                        onUndoDrawingCoords={onUndoDrawingCoords}
-                        onRedoDrawingCoords={onRedoDrawingCoords}
-                        onRedoCoords={onRedoCoords}
-                        onUndoCoords={onUndoCoords}
-                        fillColor={fillColor}
-                        strokeColor={strokeColor}
-
+                        selectedOverlay={this.props.selectedOverlay}
+                        onChangePolyStrokeColor={this.props.onChangePolyStrokeColor}
+                        onChangePolyFillColor={this.props.onChangePolyFillColor}
+                        onSetSelectedIcon={this.props.onSetSelectedIcon}
+                        overlayOptionsType={this.props.overlayOptionsType}
+                        handleDetailEdit={this.props.handleDetailEdit}
+                        onDeleteOverlay={this.props.onDeleteOverlay}
+                        isFirstDraw={this.props.isFirstDraw}
+                        onUndoDrawingCoords={this.props.onUndoDrawingCoords}
+                        onRedoDrawingCoords={this.props.onRedoDrawingCoords}
+                        onRedoCoords={this.props.onRedoCoords}
+                        onUndoCoords={this.props.onUndoCoords}
+                        fillColor={this.props.fillColor}
+                        strokeColor={this.props.strokeColor}
+                        onAddTask={this.props.onAddTask}
+                        overlayTaskShow={this.props.overlayTaskShow}
                     />
                 )
             default: return;

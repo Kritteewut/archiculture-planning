@@ -43,8 +43,8 @@ class Polygon extends React.PureComponent {
     }
     redrawPolygon = () => {
         const {
-            overlayCoords, overlayIndex, overlayDrawType,
-            fillColor, strokeColor, overlayName,
+            overlayCoords, overlayId, overlayDrawType,
+            fillColor, strokeColor, overlayName, overlaySource,
             overlayDetail, overlayType, zIndex, undoCoords, redoCoords,
 
         } = this.props
@@ -52,20 +52,20 @@ class Polygon extends React.PureComponent {
         if (this.polygon === false) {
             this.polygon = new window.google.maps.Polygon({
                 path: overlayCoords,
-                map: window.map, 
+                map: window.map,
                 suppressUndo: true,
                 clickable: true,
                 fillOpacity: 0.1,
-                overlayIndex,
+                overlayId,
                 overlayType,
                 overlayDrawType,
                 strokeColor,
                 fillColor,
                 overlayName,
                 overlayDetail,
-                zIndex,
+                zIndex, overlaySource,
                 undoCoords, redoCoords,
-                
+
             })
             this.props.addPolygonListener(this.polygon)
             //this.polygon.binder = new MVCArrayBinder(this.polygon.getPath())
@@ -73,13 +73,9 @@ class Polygon extends React.PureComponent {
         }
         else {
             this.polygon.setOptions({
-                path: overlayCoords,
-                strokeColor,
-                fillColor,
-                overlayName,
-                overlayDetail,
-                zIndex,
-                undoCoords, 
+                path: overlayCoords, strokeColor,
+                fillColor, overlayName, overlayDetail,
+                zIndex, undoCoords, overlaySource,
                 redoCoords,
             })
         }

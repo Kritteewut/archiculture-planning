@@ -58,12 +58,21 @@ class Map extends React.PureComponent {
     }
 }
 export default Map;
-    //add 'planDescription' field for each value Plan by defualt is '-'
-    // planRef.get().then(function (querySnapshot) {
-    //     querySnapshot.forEach(function (doc) {
-    //         doc.ref.set({
-    //             createPlanDate: new Date()
-    //         }, { merge: true });
+//add 'planDescription' field for each value Plan by defualt is '-'
+// planRef.get().then(function (querySnapshot) {
+//     querySnapshot.forEach(function (doc) {
+//         doc.ref.set({
+//             createPlanDate: new Date()
+//         }, { merge: true });
 
-    //     })
-    // })
+//     })
+// })
+
+
+//update example use
+// var test = [{ name: 'one', id: 456 }, { name: 'two', id: 654 }]
+// var temp = update(test, {
+//     0: { name: { $set: 'three' }, id: { $set: 555 } },
+//     1: { id: { $set: 'three' } },
+// })
+// console.log(test, temp)
