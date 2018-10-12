@@ -27,6 +27,7 @@ import Login from './Login';
 import EditPlan from './EditPlan';
 import DeletePlan from './DeletePlan';
 import MergeOverlay from './MergeOverlay';
+import OverlayTask from './OverlayTask'
 
 // Icon Group
 import Pic from './Picture/Ling logo.png';
@@ -244,7 +245,8 @@ class PermanentDrawer extends React.PureComponent {
                             variant="contained"
                             className=" buttonsave"
                             disabled={(selectedPlan || isSaving) ? false : true}
-                            onClick={this.props.onSaveToFirestore}>
+                            onClick={this.props.onSaveToFirestore}
+                        >
                             บันทึก
                         </Button>
                                            
@@ -261,29 +263,27 @@ class PermanentDrawer extends React.PureComponent {
                                     </div>
                                     :
                                     this.props.planData.length > 0 ?
-                                        this.props.planData.map((plan, index) => {
+                                        this.props.planData.map((plan) => {
                                             return (
                                                 <ListItem
                                                     button
                                                     key={plan.planId}
-                                                    onClick={() => this.handlePlanClick(plan, index)}
-                                                    //selected={this.state.selectedPlanIndex === index}
+                                                    onClick={() => this.handlePlanClick(plan)}
                                                     disabled={!plan.isPlanClickable}
-                                                    //this.state.selectedPlanIndex === index
-
                                                 >
                                                     <ListItemText primary={plan.planName} />
+
                                                     <ListItemSecondaryAction>
                                                         <IconButton aria-label="Edit"
-                                                            onClick={() => this.handleEditPlanClick(plan, index)}
+                                                            onClick={() => this.handleEditPlanClick(plan)}
                                                             disabled={!plan.isPlanOptionsClickable}
-                                                            >
+                                                        >
                                                             <EditIcon />
                                                         </IconButton>
                                                         <IconButton aria-label="Delete"
-                                                            onClick={() => this.handleDeletePlanClick(plan, index)}
+                                                            onClick={() => this.handleDeletePlanClick(plan)}
                                                             disabled={!plan.isPlanOptionsClickable}
-                                                            >
+                                                        >
                                                             <DeleteIcon />
                                                         </IconButton>
                                                     </ListItemSecondaryAction>
@@ -315,6 +315,9 @@ class PermanentDrawer extends React.PureComponent {
                             onToggleDeletePlanModal={this.onToggleDeletePlanModal}
                             planData={this.state.planData}
                             handleAcceptToDeletePlan={this.handleAcceptToDeletePlan}
+                        />
+                        <OverlayTask
+                            onAddTask={this.props.onAddTask}
                         />
                     </div>
                 </div>
@@ -396,7 +399,7 @@ class PermanentDrawer extends React.PureComponent {
 }
 
 PermanentDrawer.propTypes = {
-    
+
 };
 
 export default (PermanentDrawer);

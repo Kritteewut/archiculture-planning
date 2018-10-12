@@ -131,6 +131,7 @@ class AddPlanBtn extends React.PureComponent {
         var planData = {
             planName: this.addPlanInput.value,
             planDescription: this.planDescriptionInput.value,
+            createPlanDate: new Date()
         }
         this.props.onAddPlan(planData)
         this.onToggleAddPlanOpen()
@@ -146,7 +147,7 @@ class AddPlanBtn extends React.PureComponent {
     }
 
     render() {
-        const { classes, isWaitingForUserResult } = this.props;
+        const { isWaitingForUserResult } = this.props;
         return (
             <div>
 
