@@ -80,25 +80,13 @@ class OverlayTask extends Component {
               {...this.state}
               overlayTaskShow={this.props.overlayTaskShow}
               handleEditOpen={this.handleEditOpen}
-              editItem={this.editItem}
               deleteItem={this.deleteItem}
               onArrayUpdate={this.onArrayUpdate}
               taskDone={this.taskDone}
               taskBack={this.taskBack}
               onToggleIsTaskDone={this.props.onToggleIsTaskDone}
-            />
-
-          </div>
-        );
-      case 'ประวัติ':
-        return (
-          <div>
-
-            <History
-              {...this.state}
-              deleteItem={this.deleteItem}
-              editItem={this.editItem}
-              taskBack={this.taskBack}
+              onEditTask={this.props.onEditTask}
+              onDeleteTask={this.props.onDeleteTask}
             />
 
           </div>
@@ -108,7 +96,7 @@ class OverlayTask extends Component {
           <div>
 
             <Calendar
-              editItem={this.editItem}
+              overlayTaskShow={this.props.overlayTaskShow}
               {...this.state}
             />
 
@@ -121,38 +109,37 @@ class OverlayTask extends Component {
   render() {
     const { isOverlayTaskOpen } = this.props
     return (
-      <div>
-        <Dialog
-          fullScreen
-          open={isOverlayTaskOpen}
-          onClose={this.handleClose}
-          TransitionComponent={Transition}
+      <Dialog
+        fullScreen
+        open={isOverlayTaskOpen}
+        onClose={this.handleClose}
+        TransitionComponent={Transition}
 
-        >
+      >
 
-          <Navbar
-            handleDrawerOpen={this.handleDrawerOpen}
-            changeMenu={this.changeMenu}
-            onToggleOverlayTaskOpen={this.props.onToggleOverlayTaskOpen}
-            {...this.state}
-          />
+        <Navbar
+          handleDrawerOpen={this.handleDrawerOpen}
+          changeMenu={this.changeMenu}
+          onToggleOverlayTaskOpen={this.props.onToggleOverlayTaskOpen}
+          {...this.state}
+        />
 
-          <Category
-            handleDrawerOpen={this.handleDrawerOpen}
-            open={this.state.open}
-          />
+        <Category
+          handleDrawerOpen={this.handleDrawerOpen}
+          open={this.state.open}
+        />
 
-          <br /><br /><br />
+        <br /><br /><br />
 
-          {this.renderpage()}
+        {this.renderpage()}
 
-          <br /><br /><br />
+        <br /><br /><br />
 
-          <Navigation
-            changePage={this.changePage}
-          />
-        </Dialog>
-      </div>
+        <Navigation
+          changePage={this.changePage}
+        />
+      </Dialog>
+
     )
   }
 }

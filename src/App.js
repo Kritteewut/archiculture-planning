@@ -442,8 +442,7 @@ class App extends Component {
       overlay.setOptions({ draggable: true, animation: window.google.maps.Animation.BOUNCE })
     }
     this.setState({ selectedOverlay: overlay, }, () => {
-      const { filterTaskType } = this.state
-      this.onFilterTask(filterTaskType)
+      this.onFilterTask()
     })
   }
   onResetSelectedOverlay = () => {
@@ -743,7 +742,7 @@ class App extends Component {
           isDone, content, startAt,
           endAt, planId, overlayId, name
         }
-        console.log(addTask, 'asd', taskId, taskSource)
+
         if (taskSource === 'local') {
           taskRef
             .add(addTask)
@@ -770,7 +769,7 @@ class App extends Component {
               throw ('error', error)
             });
         } else {
-          shapesRef.doc(taskId).set(addTask
+          taskRef.doc(taskId).set(addTask
             , { merge: true }).then(function () {
               self.setState((state) => {
                 const updateTaskId = state.overlayTasks.findIndex(task => task.taskId === taskId)
@@ -905,7 +904,7 @@ class App extends Component {
     const changeAmount = localTaskArray.length
     if (changeAmount > 0) {
       this.setState({
-        loadingProgress: 0, saveAmount: changeAmount,
+        loadingProgress: 1, saveAmount: changeAmount,
         finishedSaveAmount: 0,
       })
       localTaskArray.forEach((task) => {
@@ -945,7 +944,7 @@ class App extends Component {
 
   }
   onClearOverlayFromMap = () => {
-    this.setState({ overlayObject: [], distanceDetail: [], unSaveOverlay: [] })
+    this.setState({ overlayObject: [], distanceDetail: [], unSaveOverlay: [], overlayTasks: [] })
   }
   onOverlayRedraw = () => {
     const { selectedPlan } = this.state
@@ -1151,26 +1150,38 @@ class App extends Component {
     const pushTask = update(overlayTasks, {
       $push: [task]
     })
-    this.setState({ overlayTasks: pushTask }, () => {
-      this.onFilterTask(this.state.filterTaskType)
-    })
-
+    this.onUpdateOverlayTasks(pushTask)
   }
   onEditTask = (editTask) => {
     const { overlayTasks } = this.state
     const taskId = editTask.taskId
+    const name = editTask.name
+    const content = editTask.content
+    const startAt = editTask.startAt
+    const endAt = editTask.endAt
     const actionIndex = overlayTasks.findIndex(task => task.taskId === taskId)
-    const updateTask = update(overlayTasks, { [actionIndex]: { $set: editTask } })
+    const updateTask = update(overlayTasks, {
+      [actionIndex]: {
+        name: { $set: name },
+        content: { $set: content },
+        startAt: { $set: startAt },
+        endAt: { $set: endAt },
+        isTaskSave: { $set: false },
+      },
+    })
+    this.onUpdateOverlayTasks(updateTask)
   }
   onToggleIsTaskDone = (taskId) => {
     const { overlayTasks } = this.state
     const actionIndex = overlayTasks.findIndex(task => task.taskId === taskId)
     const isDone = overlayTasks[actionIndex].isDone
-    const updateIsdone = update(overlayTasks, { [actionIndex]: { isDone: { $set: !isDone } } })
-    const updateIsTaskSave = update(updateIsdone, { [actionIndex]: { isTaskSave: { $set: false } } })
-    this.setState({ overlayTasks: updateIsTaskSave }, () => {
-      this.onFilterTask(this.state.filterTaskType)
+    const updateTask = update(overlayTasks, {
+      [actionIndex]: {
+        isDone: { $set: !isDone },
+        isTaskSave: { $set: false }
+      }
     })
+    this.onUpdateOverlayTasks(updateTask)
   }
   onSortArrayByCreateDate = (targetState, sortType, dataArray, sortProp) => {
     var sortedByCreateDate = []
@@ -1188,12 +1199,15 @@ class App extends Component {
       [targetState]: sortedByCreateDate
     })
   }
-  onFilterTask = (filterTaskType) => {
+  onFilterTask = (filterTaskType = this.state.filterTaskType) => {
     const { overlayTasks, selectedOverlay } = this.state
-    this.setState({ filterTaskType })
+    if (filterTaskType !== this.state.filterTaskType) {
+      this.setState({ filterTaskType })
+    }
     switch (filterTaskType) {
       case SHOW_ALL:
         const showAll = overlayTasks.filter(task => task.overlayId === selectedOverlay.overlayId)
+        console.log(showAll)
         return (this.onSortArrayByCreateDate('overlayTaskShow', SORT_BY_LATEST, showAll, 'startAt'));
       case SHOW_ACTIVATE:
         const showActivate = overlayTasks.filter(task => (task.overlayId === selectedOverlay.overlayId) && task.isDone === false)
@@ -1313,13 +1327,18 @@ class App extends Component {
     const { selectedOverlay, overlayObject } = this.state
     const overlayId = selectedOverlay.overlayId
     const editIndex = overlayObject.findIndex(overlay => overlay.overlayId === overlayId)
-    var editedName = update(overlayObject, { [editIndex]: { overlayName: { $set: name } } })
-    var editedDetail = update(editedName, { [editIndex]: { overlayDetail: { $set: detail } } })
+    const updateOverlay = update(overlayObject, {
+      [editIndex]: {
+        overlayName: { $set: name },
+        overlayDetail: { $set: detail },
+        isOverlaySave: { $set: false }
+      }
+    })
     selectedOverlay.setOptions({
       overlayName: name,
       overlayDetail: detail,
     })
-    this.setState({ overlayObject: editedDetail })
+    this.setState({ overlayObject: updateOverlay })
   }
   onChangeDrawPage = (page) => {
     this.setState({ drawerPage: page })
@@ -1355,18 +1374,19 @@ class App extends Component {
   onDeleteOverlay = (overlay) => {
     const { overlayObject, distanceDetail } = this.state
     const overlayId = overlay.overlayId
+    const overlaySource = overlay.overlaySource
     const deleteIndex = overlayObject.findIndex(data => data.overlayId === overlayId)
     const deleteObject = update(overlayObject, { $splice: [[deleteIndex, 1]] })
-    if (overlayObject[deleteIndex].overlaySource = 'server') {
+    if (overlaySource === 'server') {
       //delete selected overlay from firestore
       shapesRef.doc(overlayId).delete().then(function () {
         console.log("Document successfully deleted!");
       }).catch(function (error) {
         console.error("Error removing document: ", error);
       });
-      this.onDeleleteAllTask('overlayId', overlayId)
-    }
 
+    }
+    this.onDeleleteAllTask('overlayId', overlayId)
     if (overlay.overlayType !== 'marker') {
       const detailIndex = distanceDetail.findIndex(detail => detail.overlayId === overlayId)
       const deleteDetail = update(distanceDetail, { $splice: [[detailIndex, 1]] })
@@ -1412,6 +1432,8 @@ class App extends Component {
     })
   }
   onDeleleteAllTask = (fieldProp, id) => {
+    const { overlayTasks } = this.state
+    const filterTask = overlayTasks.filter(task => task[fieldProp] !== id)
     taskRef.where(fieldProp, '==', id).get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
         doc.ref.delete()
@@ -1422,6 +1444,29 @@ class App extends Component {
             throw ('erorr', error)
           })
       })
+    })
+    this.setState({ overlayTasks: filterTask }, () => {
+      console.log(this.state.overlayTasks)
+    })
+  }
+  onDeleteTask = (task) => {
+    const { overlayTasks } = this.state
+    const taskId = task.taskId
+    const taskSource = task.taskSource
+    const deleteIndex = overlayTasks.findIndex(task => task.taskId === taskId)
+    const deleteTask = update(overlayTasks, { $splice: [[deleteIndex, 1]] })
+    if (taskSource === 'server') {
+      taskRef.doc(taskId).delete().then(function () {
+        console.log("Document successfully deleted!");
+      }).catch(function (error) {
+        console.error("Error removing document: ", error);
+      });
+    }
+    this.onUpdateOverlayTasks(deleteTask)
+  }
+  onUpdateOverlayTasks = (updateTasks) => {
+    this.setState({ overlayTasks: updateTasks }, () => {
+      this.onFilterTask()
     })
   }
   onCallFitBounds = () => {
@@ -1616,6 +1661,8 @@ class App extends Component {
           onAddTask={this.onAddTask}
           onToggleIsTaskDone={this.onToggleIsTaskDone}
           onFilterTask={this.onFilterTask}
+          onEditTask={this.onEditTask}
+          onDeleteTask={this.onDeleteTask}
           {...this.state}
         />
 

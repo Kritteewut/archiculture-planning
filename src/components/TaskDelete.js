@@ -21,18 +21,19 @@ class TaskDelete extends Component {
         }
     }
 
-    handleDelete(item, close) {
-        this.props.deleteItem(item)
-        this.props.handleToggleDeleteTask(close)
+    handleDelete() {
+        this.props.onDeleteTask(this.props.task)
+        this.props.handleToggleDeleteTask()
     }
 
     render() {
-        const { handleToggleDeleteTask, item, isDeleteTaskOpen } = this.props;
+        const { handleToggleDeleteTask, isDeleteTaskOpen } = this.props;
 
         return (
             <div>
                 <Dialog
                     open={isDeleteTaskOpen}
+
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
@@ -40,15 +41,15 @@ class TaskDelete extends Component {
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
                             หากลบงานที่เลือกแล้ว จะไม่สามารถกู้คืนได้
-            </DialogContentText>
+                        </DialogContentText>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={() => handleToggleDeleteTask()} color="primary">
                             ยกเลิก
-            </Button>
-                        <Button onClick={() => this.handleDelete(item, false)} color="primary" autoFocus>
+                    </Button>
+                        <Button onClick={() => this.handleDelete()} color="primary" autoFocus>
                             ลบงาน
-            </Button>
+                    </Button>
                     </DialogActions>
                 </Dialog>
             </div>

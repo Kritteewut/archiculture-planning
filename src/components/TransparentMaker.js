@@ -18,7 +18,7 @@ class TransparentMaker extends React.PureComponent {
         var label = {
             text: disBtw.toFixed(3) + ' m',
             color: 'white',
-            fontFamily: 'Vast Shadow',
+            //fontFamily: 'Vast Shadow',
             fontSize: '20px',
             //fontWeight: '',
         }
