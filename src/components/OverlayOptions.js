@@ -93,7 +93,7 @@ class OverlayOptions extends React.PureComponent {
                         null
                 }
                 <Button variant="contained" className="buttonaddwork" onClick={this.onToggleOverlayTaskOpen}>
-                    เพิ่มงาน
+                    จัดการงาน
                 </Button>
                 <Button variant="contained" className="buttoneditwork" onClick={this.onToggleEditoverlayOpen}>
                     แก้ไข
@@ -166,7 +166,7 @@ class OverlayOptions extends React.PureComponent {
                             />
                             {
                                 (!isFirstDraw) ?
-                                    <div>
+                                    <div className="FrameTaskData">
                                         <Button
                                             variant="contained"
                                             className="buttonundoonwork"

@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import { Radio } from 'antd';
 import { SHOW_ALL, SHOW_ACTIVATE,SHOW_COMPLETE } from '../staticValue/SaticString'
 
+//CSS import 
+import './TaskDesign.css';
+
 class ShowButtton extends Component {
+
 
     constructor(props) {
         super(props)
@@ -20,7 +24,10 @@ class ShowButtton extends Component {
 
     render() {
         return (
-            <div>
+            <div style={{
+                margin: 'auto',
+                width: '100%',
+              }}>
                 <Radio.Group value={this.props.filterTaskType} >
                     <Radio.Button value={SHOW_ALL} onClick={() => this.props.onFilterTask(SHOW_ALL)}>ทั้งหมด</Radio.Button>
                     <Radio.Button value={SHOW_ACTIVATE} onClick={() => this.props.onFilterTask(SHOW_ACTIVATE)}>ที่กำลังทำ</Radio.Button>

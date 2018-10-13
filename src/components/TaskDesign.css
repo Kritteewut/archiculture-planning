@@ -23,12 +23,30 @@ List of CSS Design Class
 /* ------------------- Text Group ------------------ */
 
 /* ------------------- Button Group ------------------ */
+.ButtonMoveleft {
+    top: 0px;
+    left: 100%;
+}
 
 /* ------------------- Background Group ------------------ */
 
 /* ------------------- Image Group ------------------ */
 
 /* ------------------- Forms Group ------------------ */
+
+.FrameTask {
+    width: 100%;     /* เมื่อต้องปรับต้องตั้งค่าให้เห็น Frame เป็นปกติก่อน */
+    height: 40px;
+    top: 10%;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    /* Layer Group*/
+    position: absolute;
+    z-index: 0;
+    cursor: pointer;
+    background-color: rgba(255, 0, 0, 1);
+}
 
 /* ------------------- Gridview Group ------------------ */
 

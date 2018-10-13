@@ -202,6 +202,11 @@ class PermanentDrawer extends React.PureComponent {
                             <ListItemText primary={user.email} secondary={user.displayName} />
                         </ListItem>
                     </List>
+
+                    <Button variant="contained" className="buttonmargin buttonlogout" onClick={this.logout}>
+                        logout
+                        </Button>
+
                     <div>
                         <Divider />
                         <List>
@@ -231,10 +236,6 @@ class PermanentDrawer extends React.PureComponent {
                             onClick={() => this.props.onSaveToFirestore(selectedPlan)}
                         >
                             บันทึก
-                        </Button>
-
-                        <Button variant="contained" className="buttonmargin buttonlogout" onClick={this.logout}>
-                            logout
                         </Button>
 
                         <Divider />

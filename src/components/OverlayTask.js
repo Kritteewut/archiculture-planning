@@ -12,7 +12,9 @@ import Dialog from '@material-ui/core/Dialog';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import '../App.css';
+import './OverlayTask.css';
+
+
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -90,6 +92,7 @@ class OverlayTask extends Component {
 
           </div>
         );
+        /*
       case 'ประวัติ':
         return (
           <div>
@@ -103,6 +106,7 @@ class OverlayTask extends Component {
 
           </div>
         );
+        */
       case 'ปฏิทิน':
         return (
           <div>
@@ -121,15 +125,13 @@ class OverlayTask extends Component {
   render() {
     const { isOverlayTaskOpen } = this.props
     return (
-      <div>
-        <Dialog
-          fullScreen
-          open={isOverlayTaskOpen}
-          onClose={this.handleClose}
-          TransitionComponent={Transition}
-
-        >
-
+      <Dialog
+        fullScreen
+        open={isOverlayTaskOpen}
+        onClose={this.handleClose}
+        TransitionComponent={Transition}
+      >
+        <div class="taskApp">
           <Navbar
             handleDrawerOpen={this.handleDrawerOpen}
             changeMenu={this.changeMenu}
@@ -151,8 +153,8 @@ class OverlayTask extends Component {
           <Navigation
             changePage={this.changePage}
           />
-        </Dialog>
-      </div>
+        </div>
+      </Dialog>
     )
   }
 }
