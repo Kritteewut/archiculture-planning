@@ -11,12 +11,18 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
+
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import Assignment from '@material-ui/icons/Assignment';
+import Event from '@material-ui/icons/Event';
+
 import { Radio, Button } from 'antd';
 
 
 const styles = {
     root: {
-        flexGrow: 1,
+        textAlign: 'right',
     },
     flex: {
         flexGrow: 1,
@@ -36,55 +42,58 @@ class Navbar extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            Menu: 'ลบงาน'
+            Menu: 'ลบงาน',
+            value: 0,
         }
     }
 
-    handleDrawerOpen = (open) => {
-        this.props.handleDrawerOpen(open)
-    };
+    // handleDrawerOpen = (open) => {
+    //     this.props.handleDrawerOpen(open)
+    // };
 
     // handleMenuOpen = event => {
     //     this.setState({ anchorEl: event.currentTarget });
     // };
 
-    handleClose = () => {
-        this.setState({ anchorEl: null });
+    // handleClose = () => {
+    //     this.setState({ anchorEl: null });
+    // };
+
+    // handleMenuChange = (e) => {
+    //     this.setState({ size: e.target.value });
+
+    // handleMenu = (menu) => {
+    //     this.setState({ Menu: menu });
+
+    //     this.props.changeMenu(menu)
+
+    handleChange = (event, value) => {
+        this.setState({ value });
     };
 
-    handleMenu = (menu) => {
-        this.setState({ Menu: menu });
-
-        this.props.changeMenu(menu)
-    };
-
-    handleMenuChange = (e) => {
-        this.setState({ size: e.target.value });
+    changePage(page) {
+        this.props.changePage(page)
     }
 
     renderMenu = () => {
-        switch (this.props.page) {
-            case 'งาน':
-                return (
+        const { classes } = this.props;
+        const { value } = this.state;
 
-                    <Radio.Group value={this.props.menu} onChange={this.handleMenuChange}>
-                        <Radio.Button value={'งานเสร็จ'} onClick={() => this.handleMenu('งานเสร็จ')}>งานเสร็จสิ้น</Radio.Button>
-                        <Radio.Button value={'ลบงาน'} onClick={() => this.handleMenu('ลบงาน')}>ลบงาน</Radio.Button>
-                    </Radio.Group>
+        return (
 
-                );
-            case 'ประวัติ':
-                return (
+            <BottomNavigation
+                value={value}
+                onChange={this.handleChange}
+                showLabels
+                className={classes.root}
+            >
+                <BottomNavigationAction key='1' onClick={() => this.changePage('งาน')} label="งาน" icon={<Assignment />} />
+                {/*<BottomNavigationAction key='2' onClick={() => this.changePage('ประวัติ')} label="ประวัติ" icon={<History />} />*/}
+                <BottomNavigationAction key='2' onClick={() => this.changePage('ปฏิทิน')} label="ปฏิทิน" icon={<Event />} />
+            </BottomNavigation>
 
-                    null
+        );
 
-                );
-            case 'ปฏิทิน':
-                return (
-                    null
-                );
-            default: return;
-        }
 
     }
 

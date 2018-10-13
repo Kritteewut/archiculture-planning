@@ -91,23 +91,23 @@ class OverlayTask extends Component {
 
           </div>
         );
-        /*
-      case 'ประวัติ':
-        return (
-          <div>
+      /*
+    case 'ประวัติ':
+      return (
+        <div>
 
-            <History
-              {...this.state}
-              deleteItem={this.deleteItem}
-              editItem={this.editItem}
-              taskBack={this.taskBack}
-              onEditTask={this.props.onEditTask}
-              onDeleteTask={this.props.onDeleteTask}
-            />
+          <History
+            {...this.state}
+            deleteItem={this.deleteItem}
+            editItem={this.editItem}
+            taskBack={this.taskBack}
+            onEditTask={this.props.onEditTask}
+            onDeleteTask={this.props.onDeleteTask}
+          />
 
-          </div>
-        );
-        */
+        </div>
+      );
+      */
       case 'ปฏิทิน':
         return (
           <div>
@@ -131,12 +131,14 @@ class OverlayTask extends Component {
         open={isOverlayTaskOpen}
         onClose={this.handleClose}
         TransitionComponent={Transition}
+
       >
         <div class="taskApp">
           <Navbar
-            handleDrawerOpen={this.handleDrawerOpen}
-            changeMenu={this.changeMenu}
+            // handleDrawerOpen={this.handleDrawerOpen}
+            // changeMenu={this.changeMenu}
             onToggleOverlayTaskOpen={this.props.onToggleOverlayTaskOpen}
+            changePage={this.changePage}
             {...this.state}
           />
 
@@ -151,9 +153,9 @@ class OverlayTask extends Component {
 
           <br /><br /><br />
 
-          <Navigation
+          {/* <Navigation
             changePage={this.changePage}
-          />
+          /> */}
         </div>
       </Dialog>
     )
