@@ -58,24 +58,23 @@ class TaskShow extends Component {
         }
     }
 
-    handleEditOpen = (task, index) => {
-        this.setState({ task: task, isEditTaskOpen: true, selectedTaskIndex: index })
+    handleEditOpen = (task) => {
+        this.setState({ task, isEditTaskOpen: true })
     }
 
     handleToggleEditTask = () => {
         this.setState({ isEditTaskOpen: !this.state.isEditTaskOpen })
     }
 
-    handleToggleDeleteTask = (close) => {
-        this.setState({ openDelete: close })
+    handleDeleteTaskClick = (task) => {
+        this.setState({ task, isDeleteTaskOpen: true })
     }
-
-    handleDeleteOpen = (value, index) => {
-        this.setState({ item: value, openDelete: true, selectedTaskIndex: index })
+    handleToggleDeleteTask = () => {
+        this.setState({ isDeleteTaskOpen: !this.state.isDeleteTaskOpen })
     }
 
     render() {
-        const { overlayTaskShow, classes, editItem, deleteItem, } = this.props;
+        const { overlayTaskShow, classes, } = this.props;
         return (
             <div className={classes.root}>
 
@@ -91,10 +90,10 @@ class TaskShow extends Component {
                                 >
                                     <ListItemText
                                         primary={task.name}
-                                        secondary={moment(task.startAt).format('ll')}
+                                        secondary={'เริ่มงาน : ' + moment(task.startAt).format('ll')}
                                     />
                                     <ListItemSecondaryAction>
-                                        <IconButton aria-label="Delete" onClick={() => this.handleDeleteOpen(task, index)}>
+                                        <IconButton aria-label="Delete" onClick={() => this.handleDeleteTaskClick(task)}>
                                             <DeleteIcon />
                                         </IconButton>
                                         <Checkbox
@@ -104,8 +103,7 @@ class TaskShow extends Component {
                                     </ListItemSecondaryAction>
                                 </ListItem>
                             )
-                        }
-                        )
+                        })
                         }
                     </List>
 
@@ -113,11 +111,13 @@ class TaskShow extends Component {
                 </main>
                 <TaskEdit
                     handleToggleEditTask={this.handleToggleEditTask}
+                    onEditTask={this.props.onEditTask}
                     {...this.state}
                 />
 
                 <TaskDelete
                     handleToggleDeleteTask={this.handleToggleDeleteTask}
+                    onDeleteTask={this.props.onDeleteTask}
                     {...this.state}
                 />
             </div>

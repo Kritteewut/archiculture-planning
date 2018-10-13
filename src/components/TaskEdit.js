@@ -70,6 +70,9 @@ class TaskEdit extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            isEndAtError: false,
+            prevEndAt: null,
+            isStartAtError: false
         }
         this.taskNameInput = null
         this.setTaskNameInput = element => {
@@ -92,29 +95,48 @@ class TaskEdit extends Component {
         };
     }
 
-    handleChange = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
+    handleChange = () => {
+        const startAt = new Date(this.taskSartAtInput.value)
+        const endAt = new Date(this.taskEndAtInput.value)
+        if (+endAt < +startAt || this.taskEndAtInput.value === '') {
+            this.setState({ isEndAtError: true })
+        } else {
+            if (this.state.isEndAtError) {
+                this.setState({ isEndAtError: false })
+            }
+        }
+        // if (+startAt < +endAt || this.taskSartAtInput.value === '') {
+        //     this.setState({ isStartAtError: true })
+        // } else {
+        //     if (this.state.isStartAtError) {
+        //         this.setState({ isStartAtError: false })
+        //     }
+        // }
     }
 
-    handleSave() {
-
+    handleSaveClick() {
         var task = {
             name: this.taskNameInput.value,
             content: this.taskContentInput.value,
             startAt: new Date(this.taskSartAtInput.value),
-            endAt: this.taskSartAtInput.value,
+            endAt: new Date(this.taskEndAtInput.value),
             taskId: this.props.task.taskId
         }
-
-        console.log(task)
+        this.props.onEditTask(task)
         this.props.handleToggleEditTask()
-
     }
-
+    handleCancleClick = () => {
+        if (this.state.isEndAtError || this.state.isStartAtError) {
+            this.setState({ isEndAtError: false, isStartAtError: false })
+        }
+        this.props.handleToggleEditTask()
+    }
+    handleEndAtClick = () => {
+        console.log(this.taskEndAtInput.value)
+        this.setState({ prevEndAt: this.taskEndAtInput.value })
+    }
     render() {
-        const { task, classes, isEditTaskOpen, handleToggleEditTask } = this.props;
+        const { task, classes, isEditTaskOpen } = this.props;
 
         return (
             <div>
@@ -126,13 +148,17 @@ class TaskEdit extends Component {
                 >
                     <AppBar className={classes.appBar}>
                         <Toolbar>
-                            <IconButton color="inherit" onClick={() => handleToggleEditTask()} aria-label="Close">
+                            <IconButton color="inherit" onClick={() => this.handleCancleClick()} aria-label="Close">
                                 <CloseIcon />
                             </IconButton>
                             <Typography variant="title" color="inherit" className={classes.flex}>
                                 {task.name}
                             </Typography>
-                            <Button color="inherit" onClick={() => this.handleSave()}>
+                            <Button
+                                color="inherit"
+                                onClick={() => this.handleSaveClick()}
+                                disabled={this.state.isEndAtError || this.state.isStartAtError}
+                            >
                                 save
                             </Button>
                         </Toolbar>
@@ -151,23 +177,16 @@ class TaskEdit extends Component {
                             <br />
                             <TextField
                                 className={classes.textField}
-                                label="รายละเอียด"
-                                margin="normal"
-                                defaultValue={task.content}
-                                inputRef={this.setTaskContentInput}
-                                multiline
-                            />
-                            <br />
-                            <TextField
-                                className={classes.textField}
                                 label="วันเริ่มงาน"
                                 margin="normal"
                                 type="date"
-                                defaultValue={moment(task.startAt).format('YYYY' - 'MM' - 'DD').split('T')[0]}
+                                defaultValue={getShowDate(task.startAt)}
                                 inputRef={this.setTaskSartAtInput}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={this.state.isStartAtError}
+                                helperText={this.state.isStartAtError ? 'วันเริ่มงานไม่ถูกต้อง' : ''}
                             />
                             <br />
                             <TextField
@@ -175,11 +194,24 @@ class TaskEdit extends Component {
                                 label="วันสิ้นสุดงาน"
                                 margin="normal"
                                 type="date"
-                                defaultValue={moment(task.endAt).format('YYYY' - 'MM' - 'DD').split('T')[0]}
+                                defaultValue={getShowDate(task.endAt)}
                                 inputRef={this.setTaskEndAtInput}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                onChange={this.handleChange}
+                                error={this.state.isEndAtError}
+                                helperText={this.state.isEndAtError ? 'วันสิ้นสุดงานไม่ถูกต้อง' : ''}
+                            //onClick={this.handleEndAtClick}
+                            />
+                            <br />
+                            <TextField
+                                className={classes.textField}
+                                label="รายละเอียด"
+                                margin="normal"
+                                defaultValue={task.content}
+                                inputRef={this.setTaskContentInput}
+                                multiline
                             />
                             <br />
                         </Paper>
@@ -197,3 +229,7 @@ TaskEdit.propTypes = {
 };
 
 export default withStyles(styles)(TaskEdit);
+
+function getShowDate(date) {
+    return moment(date).format('YYYY' - 'MM' - 'DD').split('T')[0]
+}

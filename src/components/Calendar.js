@@ -18,6 +18,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import shortid from 'shortid'
 
 
 const styles = theme => ({
@@ -35,58 +36,53 @@ class CalendarTask extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: moment(),
-            selectedValue: moment(),
             open: false,
-            selectedDate: '',
-            items: [],
+            selectedDate: moment(),
         }
-        this.getListData = this.getListData.bind(this)
-        this.dateCellRender = this.dateCellRender.bind(this)
-        this.monthCellRender = this.monthCellRender.bind(this)
-        this.onSelect = this.onSelect.bind(this)
-        this.onPanelChange = this.onPanelChange.bind(this)
     }
 
-    getListData(value) {
+    getListData = (day) => {
         let listData = []
-        //console.log(this.props.items)
-        this.props.items.map((item) => {
-            var time = moment(new Date(item.startAt)).format('MMMM Do YYYY')
-            var time2 = moment(new Date(value)).format('MMMM Do YYYY')
-
-            if (time === time2) {
-                // console.log(time, 'ตรงกัน', time2)
-                listData.push(
-                    { type: 'warning', content: item.name },
-                )
+        this.props.overlayTaskShow.map((task) => {
+            const startAt = moment(new Date(task.startAt)).format('MMMM Do YYYY')
+            const endAt = moment(new Date(task.endAt)).format('MMMM Do YYYY')
+            const dayInCalendar = moment(new Date(day)).format('MMMM Do YYYY')
+            if (startAt === dayInCalendar) {
+                const taskId = task.taskId
+                if (task.isDone) {
+                    listData.push(
+                        { type: 'success', content: task.name + '(เริ่ม)', taskId, },
+                    )
+                } else {
+                    listData.push(
+                        { type: 'warning', content: task.name + '(เริ่ม)', taskId },
+                    )
+                }
+            }
+            if (endAt === dayInCalendar) {
+                const taskId = task.taskId
+                if (task.isDone) {
+                    listData.push(
+                        { type: 'success', content: task.name + '(สิ้นสุด)', taskId },
+                    )
+                } else {
+                    listData.push(
+                        { type: 'warning', content: task.name + '(สิ้นสุด)', taskId },
+                    )
+                }
             }
         })
-
-        this.props.itemsHistory.map((item) => {
-            var time = moment(new Date(item.startAt)).format('MMMM Do YYYY')
-            var time2 = moment(new Date(value)).format('MMMM Do YYYY')
-
-            if (time === time2) {
-                // console.log(time, 'ตรงกัน', time2)
-                listData.push(
-                    { type: 'success', content: item.name },
-                )
-            }
-        })
-
         return listData || [];
     }
 
-    dateCellRender(value) {
+    dateCellRender = (value) => {
         const listData = this.getListData(value);
-        //console.log(listData)
         return (
             <ul className="events">
                 {
-                    listData.map(item => (
-                        <li key={item.content}>
-                            <Badge status={item.type} text={item.content} />
+                    listData.map(task => (
+                        <li key={task.taskId}>
+                            <Badge status={task.type} text={task.content} />
                         </li>
                     ))
                 }
@@ -94,39 +90,27 @@ class CalendarTask extends Component {
         );
     }
 
-    getMonthData(value) {
-        if (value.month() === 8) {
-            return 1150;
-        }
+    getMonthData = (value) => {
+        // if (value.month() === 8) {
+        //     return 1150;
+        // }
     }
 
-    monthCellRender(value) {
-        const num = this.getMonthData(value);
-        return num ? (
-            <div className="notes-month">
-                <section>{num}</section>
-                <span>Time</span>
-            </div>
-        ) : null;
+    monthCellRender = (value) => {
+        // const num = this.getMonthData(value);
+        // return num ? (
+        //     <div className="notes-month">
+        //         <section>{num}</section>
+        //         <span>Time</span>
+        //     </div>
+        // ) : null;
     }
 
     onSelect = (value) => {
-
-        var selectedDate = value._d
-
-        var D = moment(selectedDate.toDateString()).format('YYYY-MM-DD');
-
         this.setState({
-            value,
-            selectedValue: value,
             open: !this.state.open,
-            selectedDate: D
+            selectedDate: value
         });
-
-        
-        console.log(value._d)
-        console.log(D)
-        console.log(this.props.items)
     }
 
     onPanelChange = (value) => {
@@ -140,14 +124,14 @@ class CalendarTask extends Component {
 
     render() {
 
-        const { items, itemsHistory, classes, editItem } = this.props
-        const { value, selectedValue, selectedDate } = this.state;
+        const { overlayTaskShow } = this.props
+        const { selectedDate } = this.state;
         return (
             <div>
                 <Calendar
                     dateCellRender={this.dateCellRender}
                     monthCellRender={this.monthCellRender}
-                    value={value}
+                    value={selectedDate}
                     onSelect={this.onSelect}
                     onPanelChange={this.onPanelChange}
                 />
@@ -158,46 +142,34 @@ class CalendarTask extends Component {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <DialogTitle id="alert-dialog-title">{'งานวันที่ '}{moment(selectedValue).format('ll')}</DialogTitle>
+                    <DialogTitle id="alert-dialog-title">{'งานวันที่ '}{moment(selectedDate).format('ll')}</DialogTitle>
 
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            {items.map((item) => {
+                            {overlayTaskShow.map((task) => {
+                                const day = getCompareDate(selectedDate)
+                                const endAt = getCompareDate(task.endAt)
+                                const startAt = getCompareDate(task.startAt)
                                 return (
-                                    <div className="calendar">
-                                        {selectedDate === item.startAt ?
-                                            <ListItem
-                                                key={item.id}
-                                                button
-                                            >
-                                                <ListItemText
-                                                    primary={item.name} />
-                                            </ListItem>
-                                            : null
-                                        }
-                                    </div>
+                                    ((day === startAt) || (day === endAt)) ?
+                                        // <ListItem
+                                        //     button
+                                        //     className="calendar"
+                                        //     key={task.taskId}
+                                        // >
+
+                                        //     <ListItemText
+                                        //         primary={task.name}
+                                        //     />
+
+                                        // </ListItem>
+                                        task.name
+
+                                        :
+                                        null
+
                                 )
-                            }
-                            )
-                            }
-                            {itemsHistory.map((item) => {
-                                return (
-                                    <div className="calendar">
-                                        {selectedDate === item.startAt ?
-                                            <ListItem
-                                                key={item.id}
-                                                button
-                                            >
-                                                <ListItemText
-                                                    className={classes.text}
-                                                    primary={item.name}/>
-                                            </ListItem>
-                                            : null
-                                        }
-                                    </div>
-                                )
-                            }
-                            )
+                            })
                             }
                         </DialogContentText>
                     </DialogContent>
@@ -210,7 +182,7 @@ class CalendarTask extends Component {
                     </DialogActions>
                 </Dialog>
 
-                
+
 
             </div>
         )
@@ -221,3 +193,7 @@ CalendarTask.propTypes = {
 };
 
 export default withStyles(styles)(CalendarTask);
+
+function getCompareDate(date) {
+    return moment(date.toString()).format('YYYY-MM-DD')
+}

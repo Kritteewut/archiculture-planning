@@ -82,7 +82,6 @@ class OverlayTask extends Component {
               {...this.state}
               overlayTaskShow={this.props.overlayTaskShow}
               handleEditOpen={this.handleEditOpen}
-              editItem={this.editItem}
               deleteItem={this.deleteItem}
               onArrayUpdate={this.onArrayUpdate}
               taskDone={this.taskDone}
@@ -102,6 +101,8 @@ class OverlayTask extends Component {
               deleteItem={this.deleteItem}
               editItem={this.editItem}
               taskBack={this.taskBack}
+              onEditTask={this.props.onEditTask}
+              onDeleteTask={this.props.onDeleteTask}
             />
 
           </div>
@@ -112,7 +113,7 @@ class OverlayTask extends Component {
           <div>
 
             <Calendar
-              editItem={this.editItem}
+              overlayTaskShow={this.props.overlayTaskShow}
               {...this.state}
             />
 

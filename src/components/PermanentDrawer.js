@@ -249,16 +249,16 @@ class PermanentDrawer extends React.PureComponent {
                                     this.props.planData.length > 0 ?
                                         this.props.planData.map((plan) => {
                                             return (
-                                                <ListItem
-                                                    button
-                                                    key={plan.planId}
-                                                    onClick={() => this.handlePlanClick(plan)}
-                                                    disabled={!plan.isPlanClickable}
-                                                >
-                                                    <ListItemText primary={plan.planName} />
+                                                    <ListItem
+                                                        button
+                                                        key={plan.planId}
+                                                        onClick={() => this.handlePlanClick(plan)}
+                                                        disabled={!plan.isPlanClickable}
+                                                    >
+                                                        <ListItemText primary={plan.planName} />
 
-                                                    <ListItemSecondaryAction>
-                                                        {/*
+                                                        <ListItemSecondaryAction>
+                                                            {/*
                                                         <IconButton aria-label="Save"
                                                             onClick={() => this.props.onSaveToFirestore(plan)}
                                                         //disabled={!plan.isLoading || plan.isSave}
@@ -275,21 +275,20 @@ class PermanentDrawer extends React.PureComponent {
                                                             
                                                         </IconButton>
                                                          */}
-                                                        <IconButton aria-label="Edit"
-                                                            onClick={() => this.handleEditPlanClick(plan)}
-                                                            disabled={!plan.isPlanOptionsClickable}
-                                                        >
-                                                            <EditIcon />
-                                                        </IconButton>
-                                                        <IconButton aria-label="Delete"
-                                                            onClick={() => this.handleDeletePlanClick(plan)}
-                                                            disabled={!plan.isPlanOptionsClickable}
-                                                        >
-                                                            <DeleteIcon />
-                                                        </IconButton>
-                                                    </ListItemSecondaryAction>
-
-                                                </ListItem>
+                                                            <IconButton aria-label="Edit"
+                                                                onClick={() => this.handleEditPlanClick(plan)}
+                                                                disabled={!plan.isPlanOptionsClickable}
+                                                            >
+                                                                <EditIcon />
+                                                            </IconButton>
+                                                            <IconButton aria-label="Delete"
+                                                                onClick={() => this.handleDeletePlanClick(plan)}
+                                                                disabled={!plan.isPlanOptionsClickable}
+                                                            >
+                                                                <DeleteIcon />
+                                                            </IconButton>
+                                                        </ListItemSecondaryAction>
+                                                    </ListItem>
                                             )
                                         })
                                         :
@@ -355,6 +354,8 @@ class PermanentDrawer extends React.PureComponent {
                         onToggleIsTaskDone={this.props.onToggleIsTaskDone}
                         onFilterTask={this.props.onFilterTask}
                         filterTaskType={this.props.filterTaskType}
+                        onEditTask={this.props.onEditTask}
+                        onDeleteTask={this.props.onDeleteTask}
                     />
                 )
             default: return;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Radio } from 'antd';
-import { SHOW_ALL, SHOW_ACTIVATE,SHOW_COMPLETE } from '../staticValue/SaticString'
+import { SHOW_ALL, SHOW_ACTIVATE, SHOW_COMPLETE } from '../staticValue/SaticString'
 
 //CSS import 
 import './TaskDesign.css';
@@ -10,18 +10,8 @@ class ShowButtton extends Component {
 
     constructor(props) {
         super(props)
-        this.state = {
-
-        }
-
+        this.state = {}
     }
-
-    handleShowButton = (menu) => {
-        this.setState({ Menu: menu });
-
-        this.props.changeShow(menu)
-    };
-
     render() {
         return (
             <div style={{

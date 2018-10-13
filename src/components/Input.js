@@ -80,7 +80,6 @@ class InputItem extends Component {
                 taskSource: 'local',
                 overlaySource,
             }
-            console.log(task)
             this.props.onAddTask(task)
             this.setState({ name: '' })
         }

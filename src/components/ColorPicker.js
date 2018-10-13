@@ -31,7 +31,7 @@ const colorArray = [
     '#610B21', '#B40431', '#FF0040', '#FA5882', '#F5A9BC', '#F8E0E6', //PinkRed
     '#610B5E', '#B404AE', '#FF00FF', '#FA58F4', '#F5A9F2', '#F8E0F7', //Pink
     '#380B61', '#5F04B4', '#8000FF', '#AC58FA', '#D0A9F5', '#ECE0F8', //Purple
-    '#0404B4', '#0404B4', '#0000FF', '#5858FA', '#A9A9F5', '#E0E0F8', //Blue
+    '#0404B4', '#0404B5', '#0000FF', '#5858FA', '#A9A9F5', '#E0E0F8', //Blue
     '#0B3861', '#045FB4', '#0080FF', '#58ACFA', '#A9D0F5', '#E0F2F7', //Sky
     '#0B615E', '#04B4AE', '#00FFFF', '#58FAF4', '#A9F5F2', '#E0F8F7', //WhiteSky
     '#0B614B', '#04B486', '#00FFBF', '#58FAD0', '#A9F5E1', '#E0F8F1', //Mint
