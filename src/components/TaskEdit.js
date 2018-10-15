@@ -231,5 +231,6 @@ TaskEdit.propTypes = {
 export default withStyles(styles)(TaskEdit);
 
 function getShowDate(date) {
-    return moment(date).format('YYYY' - 'MM' - 'DD').split('T')[0]
+    var formated = moment(date).format('YYYY' - 'MM' - 'DD').split('T')[0]
+    return formated
 }

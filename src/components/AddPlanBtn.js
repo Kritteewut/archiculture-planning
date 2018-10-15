@@ -101,7 +101,7 @@ class AddPlanBtn extends React.PureComponent {
         super(props);
         this.state = {
             isAddPlanOpen: false,
-            isPlanNameInputError: true,
+            isPlanNameInputError: false,
         };
         this.addPlanInput = null;
         this.planDescriptionInput = null
@@ -116,10 +116,7 @@ class AddPlanBtn extends React.PureComponent {
 
     onToggleAddPlanOpen = () => {
         if (this.props.user) {
-            this.setState({ isAddPlanOpen: !this.state.isAddPlanOpen, });
-            if (!this.state.isPlanNameInputError) {
-                this.setState({ isPlanNameInputError: true })
-            }
+            this.setState({ isAddPlanOpen: !this.state.isAddPlanOpen, isPlanNameInputError: false });
         } else {
             this.props.handleDrawerOpen()
             this.props.onChangeDrawPage('homePage')
@@ -128,14 +125,21 @@ class AddPlanBtn extends React.PureComponent {
 
     }
     handleAdd = () => {
-        var planData = {
-            planName: this.addPlanInput.value,
-            planDescription: this.planDescriptionInput.value,
-            createPlanDate: new Date()
+        const addPlanInput = this.addPlanInput.value
+        if ((!addPlanInput.trim()) || (addPlanInput.length > 30)) {
+            this.setState({ isPlanNameInputError: true })
+        } else {
+            this.setState({ isPlanNameInputError: false })
+            var planData = {
+                planName: this.addPlanInput.value,
+                planDescription: this.planDescriptionInput.value,
+                createPlanDate: new Date()
+            }
+            this.props.onAddPlan(planData)
+            this.onToggleAddPlanOpen()
+            this.props.handleDrawerOpen()
         }
-        this.props.onAddPlan(planData)
-        this.onToggleAddPlanOpen()
-        this.props.handleDrawerOpen()
+
     }
     handlePlanNameInputChange = (event) => {
         const addPlanInput = this.addPlanInput.value
@@ -176,19 +180,19 @@ class AddPlanBtn extends React.PureComponent {
                     onClose={this.onToggleAddPlanOpen}
                 >
                     <div className="paperadd">
-                        <p className="textcolor"> สร้างแปลนของคุณ </p> 
+                        <p className="textcolor"> สร้างแปลนของคุณ </p>
 
                         <TextField className="TextAddPlan"
                             inputRef={this.setAddPlanInput}
                             autoFocus={true}
                             error={this.state.isPlanNameInputError}
-                            helperText={'ชืิอแปลงมีความยาวได้สูงสุด 30 ตัวอักษร'}
+                            helperText={this.state.isPlanNameInputError ? 'ชื่อแปลงต้องมีอย่างน้อย 1 ตัวอักษรแต่ไม่เกิน 30 ตัวอักษร' : ''}
                             onChange={this.handlePlanNameInputChange}
                         />
 
                         <TextField className="DataTextPlan"
                             inputRef={this.setPlanDescriptionInput}
-                            defaultValue='รายละเอียด'
+                            defaultValue=''
                             multiline
                             rowsMax="4"
                         />

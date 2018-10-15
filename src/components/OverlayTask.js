@@ -133,7 +133,7 @@ class OverlayTask extends Component {
         TransitionComponent={Transition}
 
       >
-        <div class="taskApp">
+        <div className="taskApp">
           <Navbar
             // handleDrawerOpen={this.handleDrawerOpen}
             // changeMenu={this.changeMenu}

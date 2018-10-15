@@ -48,7 +48,7 @@ class CalendarTask extends Component {
             const endAt = moment(new Date(task.endAt)).format('MMMM Do YYYY')
             const dayInCalendar = moment(new Date(day)).format('MMMM Do YYYY')
             if (startAt === dayInCalendar) {
-                const taskId = task.taskId
+                const taskId = shortid.generate()
                 if (task.isDone) {
                     listData.push(
                         { type: 'success', content: task.name + '(เริ่ม)', taskId, },
@@ -60,7 +60,7 @@ class CalendarTask extends Component {
                 }
             }
             if (endAt === dayInCalendar) {
-                const taskId = task.taskId
+                const taskId = shortid.generate()
                 if (task.isDone) {
                     listData.push(
                         { type: 'success', content: task.name + '(สิ้นสุด)', taskId },
@@ -123,7 +123,7 @@ class CalendarTask extends Component {
     };
 
     render() {
-
+        console.log(moment().format('MMMM Do YYYY'))
         const { overlayTaskShow } = this.props
         const { selectedDate } = this.state;
         return (
@@ -152,22 +152,9 @@ class CalendarTask extends Component {
                                 const startAt = getCompareDate(task.startAt)
                                 return (
                                     ((day === startAt) || (day === endAt)) ?
-                                        // <ListItem
-                                        //     button
-                                        //     className="calendar"
-                                        //     key={task.taskId}
-                                        // >
-
-                                        //     <ListItemText
-                                        //         primary={task.name}
-                                        //     />
-
-                                        // </ListItem>
-                                        task.name
-
+                                        task.name + ''
                                         :
                                         null
-
                                 )
                             })
                             }
@@ -195,5 +182,5 @@ CalendarTask.propTypes = {
 export default withStyles(styles)(CalendarTask);
 
 function getCompareDate(date) {
-    return moment(date.toString()).format('YYYY-MM-DD')
+    return moment(date).format('MMMM Do YYYY')
 }

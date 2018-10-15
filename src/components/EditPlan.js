@@ -52,13 +52,20 @@ class EditPlan extends React.PureComponent {
         };
     }
     onSubmitEditPlan = () => {
-        var planData = {
-            planId: this.props.planData.planId,
-            planName: this.planNameInput.value,
-            planDescription: this.planDescriptionInput.value,
+        const planNameInput = this.planNameInput.value
+        if ((!planNameInput.trim()) || (planNameInput.length > 30)) {
+            this.setState({ isPlanNameInputError: true })
+        } else {
+            this.setState({ isPlanNameInputError: false })
+            var planData = {
+                planId: this.props.planData.planId,
+                planName: this.planNameInput.value,
+                planDescription: this.planDescriptionInput.value,
+            }
+            this.props.onEditPlanName(planData)
+            this.props.onToggleEditPlanOpen()
         }
-        this.props.onEditPlanName(planData)
-        this.props.onToggleEditPlanOpen()
+
     }
     handlePlanNameInputChange = (event) => {
         const planNameInput = this.planNameInput.value
@@ -72,21 +79,8 @@ class EditPlan extends React.PureComponent {
         this.props.onToggleEditPlanOpen()
         this.setState({ isPlanNameInputError: false })
     }
-    handleCheckHelperText = () => {
-        if (this.planNameInput) {
-            const planNameInput = this.planNameInput.value.trim().length
-            var remainLength = 30 - planNameInput
-            if (remainLength < 0) {
-                remainLength = 0
-            }
-            return `ชืิอแปลงมีความยาวได้สูงสุด 30 ตัวอักษร (${remainLength}`
-        } else {
-            return ''
-        }
-
-    }
     render() {
-        const { classes, isEditPlanOpen, planData } = this.props
+        const { isEditPlanOpen, planData } = this.props
         return (
             <Modal
                 aria-labelledby="simple-modal-title"
@@ -108,7 +102,7 @@ class EditPlan extends React.PureComponent {
                         onChange={this.handlePlanNameInputChange}
                         autoFocus={true}
                         error={this.state.isPlanNameInputError}
-                        helperText={'ชื่อแปลงมีความยาวได้สูงสุด 30 ตัวอักษร'}
+                        helperText={this.state.isPlanNameInputError ? 'ชื่อแปลงต้องมีอย่างน้อย 1 ตัวอักษรแต่ไม่เกิน 30 ตัวอักษร' : ''}
                     />
                     <br />                    <br />
                     <TextField className="textField"
