@@ -33,7 +33,7 @@ class TaskDelete extends Component {
             <div>
                 <Dialog
                     open={isDeleteTaskOpen}
-
+                    onClose={handleToggleDeleteTask}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >

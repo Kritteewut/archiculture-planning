@@ -433,13 +433,16 @@ class App extends Component {
     this.setState({ unSaveOverlay: pushUnSave })
     console.log(pushUnSave)
   }
-  onSetSelectOverlay = (overlay) => {
+  onSetSelectedOverlay = (overlay) => {
     this.onResetSelectedOverlay()
     if (overlay.overlayType === 'polygon' || overlay.overlayType === 'polyline') {
       overlay.setOptions({ editable: true, })
     }
     if (overlay.overlayType === 'marker') {
-      overlay.setOptions({ draggable: true, animation: window.google.maps.Animation.BOUNCE })
+      overlay.setOptions({
+        draggable: true,
+        //animation: window.google.maps.Animation.BOUNCE
+      })
     }
     this.setState({ selectedOverlay: overlay, }, () => {
       this.onFilterTask()
@@ -464,7 +467,7 @@ class App extends Component {
     window.google.maps.event.addListener(marker, 'mousedown', function () {
       self.handleDrawerOpen()
       self.onSetMarkerOptions()
-      self.onSetSelectOverlay(marker)
+      self.onSetSelectedOverlay(marker)
     })
     window.google.maps.event.addListener(marker, 'dragend', function () {
       const overlayObject = self.state.overlayObject
@@ -483,7 +486,7 @@ class App extends Component {
     window.google.maps.event.addListener(polygon, 'click', function () {
       self.handleDrawerOpen()
       self.onSetPolyOptions()
-      self.onSetSelectOverlay(polygon)
+      self.onSetSelectedOverlay(polygon)
       self.onPolyLengthCompute(polygon)
       self.onSquereMetersTrans(polygon)
     })
@@ -500,7 +503,7 @@ class App extends Component {
     window.google.maps.event.addListener(polyline, 'click', function () {
       self.handleDrawerOpen()
       self.onSetPolyOptions()
-      self.onSetSelectOverlay(polyline)
+      self.onSetSelectedOverlay(polyline)
       self.onPolyLengthCompute(polyline)
       console.log(polyline, 'poly')
     })
@@ -944,7 +947,12 @@ class App extends Component {
 
   }
   onClearOverlayFromMap = () => {
-    this.setState({ overlayObject: [], distanceDetail: [], unSaveOverlay: [], overlayTasks: [] })
+    this.setState({
+      overlayObject: [],
+      distanceDetail: [],
+      unSaveOverlay: [],
+      overlayTasks: [],
+    })
   }
   onOverlayRedraw = () => {
     const { selectedPlan } = this.state
@@ -1207,7 +1215,6 @@ class App extends Component {
     switch (filterTaskType) {
       case SHOW_ALL:
         const showAll = overlayTasks.filter(task => task.overlayId === selectedOverlay.overlayId)
-        console.log(showAll)
         return (this.onSortArrayByCreateDate('overlayTaskShow', SORT_BY_LATEST, showAll, 'startAt'));
       case SHOW_ACTIVATE:
         const showActivate = overlayTasks.filter(task => (task.overlayId === selectedOverlay.overlayId) && task.isDone === false)
@@ -1283,7 +1290,11 @@ class App extends Component {
     })
   }
   onSetUserNull = () => {
-    this.setState({ user: null })
+    this.setState({
+      user: null,
+      planData: [],
+      unSaveOverlay: [],
+    })
     this.onClearEverthing()
   }
   onSetMarkerOptions = () => {
@@ -1478,7 +1489,16 @@ class App extends Component {
     const planId = plan.planId
     const planDescription = plan.planDescription
     const editIndex = planData.findIndex(data => data.planId === planId)
-    const updatePlan = update(planData, { [editIndex]: { planName: { $set: planName, planDescription } } })
+    const updatePlan = update(planData, {
+      [editIndex]: {
+        planName: {
+          $set: planName
+        },
+        planDescription: {
+          $set: planDescription
+        }
+      }
+    })
     this.setState({ planData: updatePlan })
     //update edited name and description on firestore
     planRef.doc(planId).update({
@@ -1600,7 +1620,7 @@ class App extends Component {
     this.onResetSelectedOverlay()
     this.onResetSelectedPlan()
     this.onClearOverlayFromMap()
-    this.setState({ planData: [] })
+    this.onClearSomeMapEventListener()
   }
 
   //toggle entire visible of distance between vertex of polygon and polyline

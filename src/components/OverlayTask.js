@@ -87,6 +87,7 @@ class OverlayTask extends Component {
               taskDone={this.taskDone}
               taskBack={this.taskBack}
               onToggleIsTaskDone={this.props.onToggleIsTaskDone}
+              onEditTask={this.props.onEditTask}
             />
 
           </div>

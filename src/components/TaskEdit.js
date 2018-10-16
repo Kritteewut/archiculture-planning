@@ -114,7 +114,7 @@ class TaskEdit extends Component {
         // }
     }
 
-    handleSaveClick() {
+    handleSaveClick = () => {
         var task = {
             name: this.taskNameInput.value,
             content: this.taskContentInput.value,
@@ -132,7 +132,7 @@ class TaskEdit extends Component {
         this.props.handleToggleEditTask()
     }
     handleEndAtClick = () => {
-        console.log(this.taskEndAtInput.value)
+        //console.log(this.taskEndAtInput.value)
         this.setState({ prevEndAt: this.taskEndAtInput.value })
     }
     render() {
