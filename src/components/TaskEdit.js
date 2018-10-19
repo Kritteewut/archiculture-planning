@@ -13,19 +13,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import Paper from '@material-ui/core/Paper';
 import moment from 'moment';
-import {
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Form,
-    FormGroup,
-    Label,
-    Input,
-} from 'reactstrap';
 import TextField from '@material-ui/core/TextField';
-
-var shortid = require('shortid');
 
 const styles = theme => ({
     appBar: {
@@ -66,7 +54,7 @@ function Transition(props) {
     return <Slide direction="up" {...props} />;
 }
 
-class TaskEdit extends Component {
+class TaskEdit extends React.PureComponent {
     constructor(props) {
         super(props)
         this.state = {
@@ -99,27 +87,35 @@ class TaskEdit extends Component {
         const startAt = new Date(this.taskSartAtInput.value)
         const endAt = new Date(this.taskEndAtInput.value)
         if (+endAt < +startAt || this.taskEndAtInput.value === '') {
-            this.setState({ isEndAtError: true })
-        } else {
+            this.setState({ isEndAtError: true, })
+        }
+        else {
             if (this.state.isEndAtError) {
                 this.setState({ isEndAtError: false })
             }
         }
-        // if (+startAt < +endAt || this.taskSartAtInput.value === '') {
-        //     this.setState({ isStartAtError: true })
-        // } else {
-        //     if (this.state.isStartAtError) {
-        //         this.setState({ isStartAtError: false })
-        //     }
-        // }
+
+        if (+startAt > +endAt || this.taskSartAtInput.value === '') {
+            this.setState({ isStartAtError: true,})
+        }
+        else {
+            if (this.state.isStartAtError) {
+                this.setState({ isStartAtError: false })
+            }
+        }
     }
 
     handleSaveClick = () => {
+        if (this.taskSartAtInput.value === '' || this.taskEndAtInput.value === '') {
+            return;
+        }
+        const startAt = new Date(this.taskSartAtInput.value)
+        const endAt = new Date(this.taskEndAtInput.value)
         var task = {
             name: this.taskNameInput.value,
             content: this.taskContentInput.value,
-            startAt: new Date(this.taskSartAtInput.value),
-            endAt: new Date(this.taskEndAtInput.value),
+            startAt,
+            endAt,
             taskId: this.props.task.taskId
         }
         this.props.onEditTask(task)
@@ -131,9 +127,27 @@ class TaskEdit extends Component {
         }
         this.props.handleToggleEditTask()
     }
-    handleEndAtClick = () => {
-        //console.log(this.taskEndAtInput.value)
-        this.setState({ prevEndAt: this.taskEndAtInput.value })
+    getShowDate = (date) => {
+        //(1)because of Material UI <TextFiled> accecpt date format 'YYYY-MM-DDThh:mm' with optional millisecond but just let's it go
+        //incoming date format be like => YYYY-MM-DDTh:mm; eg. 2018-02-12T7:30
+
+        //split date at 'T'(got an array with 2 element) result => result['YYYY-MM-DD', 'h:mm']
+        var YMD = moment(date).format().split('T')[0]
+
+        //result will be like 'h:mm' eg. 7:33, 12:02
+        var time = moment(date).format('LT')
+
+        //due (1) so you have to re-format it when is not fit with requirment
+        //result will be like result => result[h,mm]
+        var hr = time.split(':')[0]
+        //convert string to integer
+        var integerHr = parseInt(hr, 10)
+        if (integerHr < 10) {
+            //add '0' so from 7:20 become 07:20
+            time = `0${time}`
+        }
+        var formated = `${YMD}T${time}`
+        return formated
     }
     render() {
         const { task, classes, isEditTaskOpen } = this.props;
@@ -179,12 +193,13 @@ class TaskEdit extends Component {
                                 className={classes.textField}
                                 label="วันเริ่มงาน"
                                 margin="normal"
-                                type="date"
-                                defaultValue={getShowDate(task.startAt)}
+                                type="datetime-local"
+                                defaultValue={this.getShowDate(task.startAt)}
                                 inputRef={this.setTaskSartAtInput}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                onChange={this.handleChange}
                                 error={this.state.isStartAtError}
                                 helperText={this.state.isStartAtError ? 'วันเริ่มงานไม่ถูกต้อง' : ''}
                             />
@@ -193,8 +208,8 @@ class TaskEdit extends Component {
                                 className={classes.textField}
                                 label="วันสิ้นสุดงาน"
                                 margin="normal"
-                                type="date"
-                                defaultValue={getShowDate(task.endAt)}
+                                type="datetime-local"
+                                defaultValue={this.getShowDate(task.endAt)}
                                 inputRef={this.setTaskEndAtInput}
                                 InputLabelProps={{
                                     shrink: true,
@@ -202,7 +217,6 @@ class TaskEdit extends Component {
                                 onChange={this.handleChange}
                                 error={this.state.isEndAtError}
                                 helperText={this.state.isEndAtError ? 'วันสิ้นสุดงานไม่ถูกต้อง' : ''}
-                            //onClick={this.handleEndAtClick}
                             />
                             <br />
                             <TextField
@@ -229,8 +243,3 @@ TaskEdit.propTypes = {
 };
 
 export default withStyles(styles)(TaskEdit);
-
-function getShowDate(date) {
-    var formated = moment(date).format('YYYY' - 'MM' - 'DD').split('T')[0]
-    return formated
-}

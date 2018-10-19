@@ -20,7 +20,7 @@ function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
 
-class OverlayTask extends Component {
+class OverlayTask extends React.PureComponent {
 
   constructor(props) {
     super(props)
@@ -92,23 +92,6 @@ class OverlayTask extends Component {
 
           </div>
         );
-      /*
-    case 'ประวัติ':
-      return (
-        <div>
-
-          <History
-            {...this.state}
-            deleteItem={this.deleteItem}
-            editItem={this.editItem}
-            taskBack={this.taskBack}
-            onEditTask={this.props.onEditTask}
-            onDeleteTask={this.props.onDeleteTask}
-          />
-
-        </div>
-      );
-      */
       case 'ปฏิทิน':
         return (
           <div>
@@ -136,27 +119,17 @@ class OverlayTask extends Component {
       >
         <div className="taskApp">
           <Navbar
-            // handleDrawerOpen={this.handleDrawerOpen}
-            // changeMenu={this.changeMenu}
             onToggleOverlayTaskOpen={this.props.onToggleOverlayTaskOpen}
             changePage={this.changePage}
             {...this.state}
           />
-
           <Category
             handleDrawerOpen={this.handleDrawerOpen}
             open={this.state.open}
           />
-
           <br /><br /><br />
-
           {this.renderpage()}
-
           <br /><br /><br />
-
-          {/* <Navigation
-            changePage={this.changePage}
-          /> */}
         </div>
       </Dialog>
     )

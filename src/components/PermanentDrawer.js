@@ -17,8 +17,6 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Button from '@material-ui/core/Button';
 import OpenWith from '@material-ui/icons/OpenWith';
 import List from '@material-ui/core/List';
-import SaveIcon from '@material-ui/icons/Save';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 // Import Group
 import Login from './Login';
@@ -187,7 +185,7 @@ class PermanentDrawer extends React.PureComponent {
     }
     renderDrawer = () => {
         const { user, onSetUser, selectedPlan, onCallFitBounds,
-            onEditPlanName, isSaving, onToggleDistanceMarker,
+            onEditPlanName, isSaving, onToggleDistanceMarker, isDistanceMarkerVisible
         } = this.props;
         return (
             user ?
@@ -226,7 +224,7 @@ class PermanentDrawer extends React.PureComponent {
                         <Divider />
 
                         <Button variant="contained" className="buttonshow" onClick={onToggleDistanceMarker}>
-                            แสดงระยะ
+                            {isDistanceMarkerVisible ? 'ปิดระยะ' : 'แสดงระยะ'}
                         </Button>
 
                         <Button

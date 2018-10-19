@@ -431,7 +431,6 @@ class App extends Component {
     }
     const pushUnSave = update(this.state.unSaveOverlay, { $push: [data] })
     this.setState({ unSaveOverlay: pushUnSave })
-    console.log(pushUnSave)
   }
   onSetSelectedOverlay = (overlay) => {
     this.onResetSelectedOverlay()
@@ -522,9 +521,11 @@ class App extends Component {
       window.google.maps.event.clearListeners(window.map, 'mousemove')
       window.google.maps.event.addListener(window.map, 'mousemove', function (event) {
         let mousemoveLatLng = event.latLng
+        var LatLngString = `lattitude :  ${event.latLng.lat().toFixed(4)}   ,   longtitude : ${event.latLng.lng().toFixed(4)}`
         self.setState({
           exampleLineCoords: [clickEvent, mousemoveLatLng],
           disBtwDetail: window.google.maps.geometry.spherical.computeDistanceBetween(clickEvent, mousemoveLatLng).toFixed(3),
+          latLngDetail: LatLngString,
         })
       })
     } else {

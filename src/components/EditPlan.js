@@ -2,9 +2,9 @@ import React from 'react'
 
 // Material-ui Import
 import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
+import moment from 'moment';
 
 // CSS Import
 import './EditPlan.css';
@@ -67,7 +67,7 @@ class EditPlan extends React.PureComponent {
         }
 
     }
-    handlePlanNameInputChange = (event) => {
+    handlePlanNameInputChange = () => {
         const planNameInput = this.planNameInput.value
         if ((!planNameInput.trim()) || (planNameInput.length > 30)) {
             this.setState({ isPlanNameInputError: true })
@@ -112,6 +112,16 @@ class EditPlan extends React.PureComponent {
                         multiline
                         rowsMax="4"
                     />
+                     <br />                    <br />
+                    <TextField className="textField"
+                        label="วันที่สร้างแปลง"
+                        inputRef={this.setPlanDescriptionInput}
+                        defaultValue={planData ? moment(planData.createPlanDate).format('ll') : ''}
+                        multiline
+                        rowsMax="4"
+                        disabled
+                    />
+
                     <br />                    <br />
                     <Button
                         className="buttoncontinueedit"

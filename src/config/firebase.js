@@ -35,4 +35,5 @@ db.enablePersistence()
         }
     });
 // Subsequent queries will use persistence, if it was enabled successfully
+
 export default firebase;

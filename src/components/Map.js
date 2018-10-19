@@ -2,7 +2,7 @@ import React from 'react';
 import './Design.css';
 import moment from 'moment';
 
-import { db, serverTimestamp } from '../config/firebase'
+import { db } from '../config/firebase'
 import update from 'immutability-helper';
 const planRef = db.collection('plan')
 //if sort by alfhabet 0-9 => a-z => ก - ฮ
@@ -67,12 +67,3 @@ export default Map;
 
 //     })
 // })
-
-
-//update example use
-// var test = [{ name: 'one', id: 456 }, { name: 'two', id: 654 }]
-// var temp = update(test, {
-//     0: { name: { $set: 'three' }, id: { $set: 555 } },
-//     1: { id: { $set: 'three' } },
-// })
-// console.log(test, temp)

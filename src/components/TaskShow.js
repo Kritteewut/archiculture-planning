@@ -9,15 +9,11 @@ import TaskDelete from './TaskDelete';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Paper from '@material-ui/core/Paper';
-import FormatListBulleted from '@material-ui/icons/FormatListBulleted';
-import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
+import EditIcon from '@material-ui/icons/Edit';
 
 import './TaskShow.css';
 import 'moment/locale/th';
@@ -45,7 +41,7 @@ const styles = theme => ({
 
 });
 
-class TaskShow extends Component {
+class TaskShow extends React.PureComponent {
 
     constructor(props) {
         super(props)
@@ -81,21 +77,29 @@ class TaskShow extends Component {
                 <main className={classes.layout}>
 
                     <List component="nav">
-                        {overlayTaskShow.map((task, index) => {
+                        {overlayTaskShow.map((task) => {
                             return (
                                 <ListItem
                                     key={task.taskId}
                                     button
-                                    onClick={() => this.handleEditOpen(task, index)}
+                                    onClick={() => this.props.onToggleIsTaskDone(task.taskId)}
                                 >
                                     <ListItemText
                                         primary={task.name}
                                         secondary={'เริ่มงาน : ' + moment(task.startAt).format('ll')}
                                     />
                                     <ListItemSecondaryAction>
+
+                                        <IconButton aria-label="Edit"
+                                            onClick={() => this.handleEditOpen(task)}
+                                        >
+                                            <EditIcon />
+                                        </IconButton>
+
                                         <IconButton aria-label="Delete" onClick={() => this.handleDeleteTaskClick(task)}>
                                             <DeleteIcon />
                                         </IconButton>
+
                                         <Checkbox
                                             onChange={() => this.props.onToggleIsTaskDone(task.taskId)}
                                             checked={task.isDone}
