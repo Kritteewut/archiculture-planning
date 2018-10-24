@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import update from 'immutability-helper';
 import shortid from 'shortid'
 import { auth } from './config/firebase'
-import { db, serverTimestamp } from './config/firebase'
+import {
+  shapesRef,
+  planRef,
+  taskRef,
+  planMemberRef,
+} from './config/firebase'
 
 // Import location
 import Map from './components/Map'
@@ -40,10 +45,6 @@ import icon_point from './components/icons/icon_point.png';
 //Value import 
 import { SORT_BY_NEWEST, SORT_BY_LATEST, SHOW_ALL, SHOW_COMPLETE, SHOW_ACTIVATE } from './staticValue/SaticString'
 
-const shapesRef = db.collection('shapes')
-const planRef = db.collection('plan')
-const taskRef = db.collection('overlayTask')
-
 function new_script(src) {
   console.log('initial google map api load!', src)
   return new Promise(function (resolve, reject) {
@@ -75,6 +76,7 @@ class App extends Component {
       exampleLineCoords: [],
       userLocationCoords: [],
       planData: [],
+      colPlans: [],
       selectedPlan: null,
       fillColor: '#ffa500',
       strokeColor: '#ff4500',
@@ -96,6 +98,7 @@ class App extends Component {
       isDistanceMarkerVisible: true,
       isWaitingForUserResult: true,
       isWaitingForPlanQuery: true,
+      isWaitingForColPlanQuery: true,
       loadingProgress: null,
       filterTaskType: SHOW_ALL,
       tempPlan: null,
@@ -716,22 +719,18 @@ class App extends Component {
     const saveTaskAmount = shouldSaveTask.length
     console.log(shouldSaveOverlay, 'save', shouldSaveTask)
     if (saveOverlayAmount > 0 || saveTaskAmount > 0) {
-      this.setState({
-        loadingProgress: 0, saveAmount: saveOverlayAmount + saveTaskAmount,
-        finishedSaveAmount: 0, isSaving: true,
+      const updatePlanIndex = this.state.planData.findIndex(plan => plan.planId === planId)
+      this.setState((state) => {
+        const upDateSaveProgressPlan = update(state.planData, {
+          [updatePlanIndex]: {
+            isLoading: { $set: true },
+            isPlanOptionsClickable: { $set: false },
+            loadingAmount: { $set: saveOverlayAmount + saveTaskAmount },
+            loadingProgress: { $set: 0 },
+          }
+        })
+        return { planData: upDateSaveProgressPlan }
       })
-      // self.setState((state) => {
-      //   const updatePlanIndex = state.planData.findIndex(plan => plan.planId === planId)
-      //   const upDateSaveProgressPlan = update(state.planData, {
-      //     [updatePlanIndex]: {
-      //       isLoading: { $set: true },
-      //       isPlanOptionsClickable: { $set: false },
-      //       loadingAmount: { $set: 0 },
-      //       loadingProgress: { $set: 0 },
-      //     }
-      //   })
-      //   return { planData: upDateSaveProgressPlan }
-      // })
 
       shouldSaveTask.forEach((task) => {
         const isDone = task.isDone
@@ -844,27 +843,42 @@ class App extends Component {
               .then(function (doc) {
                 const id = doc.id
                 self.setState((state) => {
+                  const { loadingProgress, loadingAmount } = state.planData[updatePlanIndex]
+                  if (loadingProgress === loadingAmount) {
+                    self.onChangeOverlayTaskIndex()
+                    const upDateSaveProgressPlan = update(state.planData, {
+                      [updatePlanIndex]: {
+                        isPlanOptionsClickable: { $set: false },
+                        isLoading: { $set: false },
+                        loadingProgress: { $set: null },
+                      }
+                    })
+                    return { planData: upDateSaveProgressPlan }
+                  } else {
+                    const upDateSaveProgressPlan = update(state.planData, {
+                      [updatePlanIndex]: {
+                        loadingProgress: { $set: loadingProgress + 1 },
+                      }
+                    })
+                    if (state.selectedPlan.planId === planId) {
+                      
+                     }
+                    return { planData: upDateSaveProgressPlan }
+                  }
+
+                })
+                self.setState((state) => {
                   const updateOverlayIndex = state.overlayObject.findIndex(overlay => overlay.overlayId === overlayId)
 
                   const unpdateUnSaveOverlayIndex = state.unSaveOverlay.findIndex(overlay => overlay.unsaveIndex === overlayId)
                   const editSaveIndex = update(state.unSaveOverlay, { [unpdateUnSaveOverlayIndex]: { saveIndex: { $set: id } } })
-
                   const editOverlayIndex = update(state.overlayObject, { [updateOverlayIndex]: { overlayIndex: { $set: id } } })
                   const editIsOverlaySave = update(editOverlayIndex, { [updateOverlayIndex]: { isOverlaySave: { $set: true } } })
                   const editOverlaySource = update(editIsOverlaySave, { [updateOverlayIndex]: { overlaySource: { $set: 'server' } } })
                   return {
                     overlayObject: editOverlaySource,
                     unSaveOverlay: editSaveIndex,
-                    loadingProgress: ((state.finishedSaveAmount + 1) / state.saveAmount) * 100,
-                    finishedSaveAmount: (state.finishedSaveAmount + 1),
                   };
-                }, () => {
-                  console.log(self.state.unSaveOverlay)
-                  //console.log('finsh', self.state.finishedSaveAmount, '\n', 'save amount', self.state.saveAmount, '\n', 'load fisg', self.state.loadingProgress)
-                  if (self.state.finishedSaveAmount === self.state.saveAmount) {
-                    self.setState({ isSaving: false, loadingProgress: null, shouldSave: false })
-                    self.onChangeOverlayTaskIndex()
-                  }
                 });
                 if (overlayType === 'polygon' || overlayType === 'polyline') {
                   self.setState((state) => {
@@ -1024,34 +1038,67 @@ class App extends Component {
           default: return null
         }
       })
-      if (overlayObject.length > 0) {
-        overlayObject.forEach(value => {
-          if (value.overlayType !== 'marker') {
-            self.onPolydistanceBtwCompute(value)
-          }
-        })
-        const pushObject = update(self.state.overlayObject, { $push: overlayObject })
-        self.setState({ overlayObject: pushObject, }, () => console.log(overlayObject))
-        self.onFitBounds(pushObject)
-      }
+      overlayObject.forEach(value => {
+        if (value.overlayType !== 'marker') {
+          self.onPolydistanceBtwCompute(value)
+        }
+      })
+      const pushObject = update(self.state.overlayObject, { $push: overlayObject })
+      self.setState({ overlayObject: pushObject, })
+      self.onFitBounds(pushObject)
     })
   }
   onQueryPlanFromFirestore = () => {
     // get all plan list from frirestore filter by user ID
-    if (this.state.user) {
-      if (!this.state.isWaitingForPlanQuery) {
-        this.setState({ isWaitingForPlanQuery: true })
-      }
-      let unSortplanData = []
-      var uid = this.state.user.uid
-      var self = this
-      planRef.where('uid', '==', uid).get().then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {
-          const createPlanDate = doc.data().createPlanDate.toDate()
-          const planId = doc.id
-          const planName = doc.data().planName
-          const planDescription = doc.data().planDescription
-          const plan = { planId, planName, planDescription, createPlanDate, }
+    if (!this.state.user) {
+      return;
+    }
+    if (!this.state.isWaitingForPlanQuery) {
+      this.setState({ isWaitingForPlanQuery: true })
+    }
+    let unSortplanData = []
+    var uid = this.state.user.uid
+    var self = this
+    planRef.where('uid', '==', uid).get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        const createPlanDate = doc.data().createPlanDate.toDate()
+        const planId = doc.id
+        const planName = doc.data().planName
+        const planDescription = doc.data().planDescription
+        const plan = { planId, planName, planDescription, createPlanDate, }
+        unSortplanData.push({
+          isPlanClickable: true,
+          isPlanOptionsClickable: true,
+          isLoading: false,
+          isSave: true,
+          loadingAmount: 0,
+          loadingProgress: null,
+          unSaveOverlay: [],
+          ...plan
+        })
+      })
+      self.onSortArrayByCreateDate('planData', SORT_BY_NEWEST, unSortplanData, 'createPlanDate')
+      self.setState({ isWaitingForPlanQuery: false, })
+    }).catch(function (error) {
+      throw ('There is something went wrong', error)
+    })
+
+  }
+  onQueryPlanMemberFromFirestore = () => {
+    if (!this.state.user) {
+      return;
+    }
+    if (!this.state.isWaitingForColPlanQuery) {
+      this.setState({ isWaitingForColPlanQuery: true })
+    }
+    let unSortplanData = []
+    var uid = this.state.user.uid
+    var self = this
+    planMemberRef.where('memberId', '==', uid).get().then(function (querySnapshot) {
+      var queryAmount = querySnapshot.size
+      querySnapshot.forEach(function (doc) {
+        const { planId } = doc.data()
+        planRef.doc(planId).get().then(function (doc2) {
           unSortplanData.push({
             isPlanClickable: true,
             isPlanOptionsClickable: true,
@@ -1060,15 +1107,20 @@ class App extends Component {
             loadingAmount: 0,
             loadingProgress: null,
             unSaveOverlay: [],
-            ...plan
+            ...doc.data(),
+            ...doc2.data(),
           })
+          queryAmount--
+          if (queryAmount === 0) {
+            self.setState({ isWaitingForColPlanQuery: false, })
+            self.onSortArrayByCreateDate('colPlans', SORT_BY_NEWEST, unSortplanData, 'createPlanDate')
+          }
         })
-        self.onSortArrayByCreateDate('planData', SORT_BY_NEWEST, unSortplanData, 'createPlanDate')
-        self.setState({ isWaitingForPlanQuery: false, })
-      }).catch(function (error) {
-        throw ('There is something went wrong', error)
       })
-    }
+
+    }).catch(function (error) {
+      throw ('There is something went wrong', error)
+    })
   }
   onAddPlan = (plan) => {
     const { planData, user } = this.state
@@ -1100,12 +1152,22 @@ class App extends Component {
   onSetSelectedPlan = (planData) => {
     this.onResetSelectedPlan()
     const planId = planData.planId
-    const actionIndex = this.state.planData.findIndex(plan => plan.planId === planId)
     this.setState((state) => {
-      const updatePlanClickable = update(state.planData, { [actionIndex]: { isPlanClickable: { $set: false } } })
-      return {
-        selectedPlan: planData,
-        planData: updatePlanClickable,
+      const actionIndex = this.state.planData.findIndex(plan => plan.planId === planId)
+      const colIndex = this.state.colPlans.findIndex(plan => plan.planId === planId)
+      if (actionIndex !== -1) {
+        const updatePlanClickable = update(state.planData, { [actionIndex]: { isPlanClickable: { $set: false } } })
+        return {
+          selectedPlan: planData,
+          planData: updatePlanClickable,
+        }
+      }
+      if (colIndex !== -1) {
+        const updatePlanClickable = update(state.colPlans, { [colIndex]: { isPlanClickable: { $set: false } } })
+        return {
+          selectedPlan: planData,
+          colPlans: updatePlanClickable,
+        }
       }
     }, () => {
       this.onOverlayRedraw()
@@ -1116,9 +1178,16 @@ class App extends Component {
     if (this.state.selectedPlan) {
       const planId = this.state.selectedPlan.planId
       const actionIndex = this.state.planData.findIndex(plan => plan.planId === planId)
+      const colIndex = this.state.colPlans.findIndex(plan => plan.planId === planId)
       this.setState((state) => {
-        const updatePlanClickable = update(state.planData, { [actionIndex]: { isPlanClickable: { $set: true } } })
-        return { selectedPlan: null, planData: updatePlanClickable }
+        if (actionIndex !== -1) {
+          const updatePlanClickable = update(state.planData, { [actionIndex]: { isPlanClickable: { $set: true } } })
+          return { selectedPlan: null, planData: updatePlanClickable }
+        }
+        if (colIndex !== -1) {
+          const updatePlanClickable = update(state.colPlans, { [colIndex]: { isPlanClickable: { $set: true } } })
+          return { selectedPlan: null, colPlans: updatePlanClickable }
+        }
       })
     }
   }
@@ -1288,6 +1357,7 @@ class App extends Component {
   onSetUser = (user) => {
     this.setState({ user: user }, () => {
       this.onQueryPlanFromFirestore()
+      this.onQueryPlanMemberFromFirestore()
     })
   }
   onSetUserNull = () => {
@@ -1295,6 +1365,9 @@ class App extends Component {
       user: null,
       planData: [],
       unSaveOverlay: [],
+      colPlans: [],
+      selectedOverlay: null,
+      selectedPlan: null,
     })
     this.onClearEverthing()
   }
@@ -1618,8 +1691,8 @@ class App extends Component {
   }
   onClearEverthing = () => {
     this.onResetDetail()
-    this.onResetSelectedOverlay()
-    this.onResetSelectedPlan()
+    // this.onResetSelectedOverlay()
+    // this.onResetSelectedPlan() 
     this.onClearOverlayFromMap()
     this.onClearSomeMapEventListener()
   }
@@ -1638,27 +1711,46 @@ class App extends Component {
           temp1 = update(distanceDetail, { [index]: { detail: { [index2]: { visible: { $set: !isDistanceMarkerVisible } } } } })
         }
         else {
-          //update visible depend on temp1, distanceDetail remain the same
+          //update visible depend on temp1, this.state.distanceDetail  remain the same
           temp2 = update(temp1, { [index]: { detail: { [index2]: { visible: { $set: !isDistanceMarkerVisible } } } } })
           //swicth value for use in next round of loop
           temp1 = temp2
         }
       });
     });
-    //muted state
     this.setState((state) => {
       return { distanceDetail: temp2, isDistanceMarkerVisible: !state.isDistanceMarkerVisible };
     });
+  }
+  onAddPlanMember = (data) => {
+    const { planId, memberId } = data
+    planMemberRef
+      .where('planId', '==', planId)
+      .where('memberId', '==', memberId)
+      .get()
+      .then(function (querySnapshot) {
+        if (querySnapshot.empty) {
+          console.log("mai meee");
+          planMemberRef.add(data)
+            .then(function (doc) {
+              console.log('added!')
+            }).
+            catch(function (error) {
+              throw ('whoops!', error)
+            })
+        } else {
+          alert('ผู้ใช้งานนี้เป็นสมาชิกของแปลงนี้อยู่แล้ว')
+        }
+      })
+      .catch(function (error) {
+        console.log("Error getting document:", error);
+      });
   }
 
   render() {
     return (
 
       <div className="AppFrame">
-        <LinearLoadingProgress
-          loadingProgress={this.state.loadingProgress}
-          left={this.state.left}
-        />
         <PermanentDrawer
           onSaveToFirestore={this.onSaveToFirestore}
           onSetSelectedPlan={this.onSetSelectedPlan}
@@ -1684,6 +1776,7 @@ class App extends Component {
           onFilterTask={this.onFilterTask}
           onEditTask={this.onEditTask}
           onDeleteTask={this.onDeleteTask}
+          onAddPlanMember={this.onAddPlanMember}
           {...this.state}
         />
 

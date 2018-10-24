@@ -19,6 +19,7 @@ export const settings = {/* your settings... */ timestampsInSnapshots: true };
 export const auth = firebase.auth();
 export const provider = new firebase.auth.FacebookAuthProvider();
 export const provider2 = new firebase.auth.GoogleAuthProvider();
+
 db.settings(settings);
 db.enablePersistence()
     .catch(function (err) {
@@ -34,6 +35,10 @@ db.enablePersistence()
             alert('The current browser does not support all of the features required to enable persistence.')
         }
     });
+    export const shapesRef = db.collection('shapes')
+export const planRef = db.collection('plan')
+export const taskRef = db.collection('overlayTask')
+export const planMemberRef = db.collection('planMember')
 // Subsequent queries will use persistence, if it was enabled successfully
 
 export default firebase;

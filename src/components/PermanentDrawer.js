@@ -17,6 +17,14 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Button from '@material-ui/core/Button';
 import OpenWith from '@material-ui/icons/OpenWith';
 import List from '@material-ui/core/List';
+import ListSubheader from '@material-ui/core/ListSubheader'
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import MyPlan from '@material-ui/icons/Person';
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import Collapse from '@material-ui/core/Collapse'
+import ColPlan from '@material-ui/icons/Group';
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 // Import Group
 import Login from './Login';
@@ -32,96 +40,6 @@ import '../App.css';
 import './Design.css';
 import './PermanentDrawer.css';
 
-
-const drawerWidth = '350px'
-
-/*const styles = theme => ({
-
-    drawerPaper: {
-        //position: 'relative',
-        width: drawerWidth,
-        // position: 'absolute',
-        // //width: theme.spacing.unit * 50,
-        // backgroundColor: theme.palette.background.paper,
-        // boxShadow: theme.shadows[5],
-        // padding: theme.spacing.unit * 4,
-        // top: '50%',
-        // left: '50%',
-        // transform: 'translate(-50%, -50%)',
-    },
-
-    paper: {
-        position: 'absolute',
-        width: theme.spacing.unit * 50,
-        backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing.unit * 4,
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-    },
-
-    buttonmargin: {
-        margin: theme.spacing.unit,
-    },
-
-    buttonsave: {
-        color: theme.palette.getContrastText(grey[300]),
-        backgroundColor: grey[200],
-        '&:hover': {
-            backgroundColor: grey[400],
-        },
-    },
-
-    buttonlogout: {
-        color: theme.palette.getContrastText(red[500]),
-        backgroundColor: red[500],
-        '&:hover': {
-            backgroundColor: red[700],
-        },
-    },
-
-    textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: 200,
-    },
-    bootstrapRoot: {
-        boxShadow: 'none',
-        textTransform: 'none',
-        fontSize: 16,
-        padding: '6px 12px',
-        border: '1px solid',
-        backgroundColor: '#007bff',
-        borderColor: '#007bff',
-        fontFamily: [
-            '-apple-system',
-            'BlinkMacSystemFont',
-            '"Segoe UI"',
-            'Roboto',
-            '"Helvetica Neue"',
-            'Arial',
-            'sans-serif',
-            '"Apple Color Emoji"',
-            '"Segoe UI Emoji"',
-            '"Segoe UI Symbol"',
-        ].join(','),
-        '&:hover': {
-            backgroundColor: '#0069d9',
-            borderColor: '#0062cc',
-        },
-        '&:active': {
-            boxShadow: 'none',
-            backgroundColor: '#0062cc',
-            borderColor: '#005cbf',
-        },
-        '&:focus': {
-            boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
-        },
-    },
-
-});*/
-
 class PermanentDrawer extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -130,6 +48,8 @@ class PermanentDrawer extends React.PureComponent {
             isDeletePlanOpen: false,
             isMergeOverlayOpen: false,
             isEditPlanOpen: false,
+            isMyPlanOpen: true,
+            isColPlanOpen: true,
         }
     }
     logout = () => {
@@ -183,9 +103,15 @@ class PermanentDrawer extends React.PureComponent {
         this.props.onDeletePlan(planId)
         this.onToggleDeletePlanModal()
     }
+    onToggleMyplan = () => {
+        this.setState({ isMyPlanOpen: !this.state.isMyPlanOpen })
+    }
+    onToggleColPlan = () => {
+        this.setState({ isColPlanOpen: !this.state.isColPlanOpen })
+    }
     renderDrawer = () => {
         const { user, onSetUser, selectedPlan, onCallFitBounds,
-            onEditPlanName, isSaving, onToggleDistanceMarker, isDistanceMarkerVisible
+            onEditPlanName, onToggleDistanceMarker, isDistanceMarkerVisible
         } = this.props;
         return (
             user ?
@@ -197,13 +123,15 @@ class PermanentDrawer extends React.PureComponent {
                                 src={user.photoURL || Pic}
                                 className="bigAvatar"
                             />
-                            <ListItemText primary={user.email} secondary={user.displayName} />
+                            <ListItemText primary={user.email}
+                                secondary={user.uid}
+                            />
                         </ListItem>
                     </List>
 
                     <Button variant="contained" className="buttonmargin buttonlogout" onClick={this.logout}>
                         logout
-                        </Button>
+                    </Button>
 
                     <div>
                         <Divider />
@@ -229,69 +157,115 @@ class PermanentDrawer extends React.PureComponent {
 
                         <Button
                             variant="contained"
-                            className=" buttonsave"
-                            disabled={(selectedPlan || isSaving) ? false : true}
+                            className="buttonsave"
+                            disabled={(selectedPlan) ? selectedPlan.isLoading : true}
                             onClick={() => this.props.onSaveToFirestore(selectedPlan)}
                         >
                             บันทึก
                         </Button>
 
                         <Divider />
-                        <List>
-                            {
-                                this.props.isWaitingForPlanQuery ?
-                                    <div>
-                                        กำลังโหลด....
-                                    </div>
-                                    :
-                                    this.props.planData.length > 0 ?
-                                        this.props.planData.map((plan) => {
-                                            return (
-                                                <ListItem
-                                                    button
-                                                    key={plan.planId}
-                                                    onClick={() => this.handlePlanClick(plan)}
-                                                    disabled={!plan.isPlanClickable}
-                                                >
-                                                    <ListItemText primary={plan.planName} />
-
-                                                    <ListItemSecondaryAction>
-                                                        {/*
-                                                        <IconButton aria-label="Save"
-                                                            onClick={() => this.props.onSaveToFirestore(plan)}
-                                                        //disabled={!plan.isLoading || plan.isSave}
-
-                                                        >
-                                                            
-                                                                !plan.isLoading ?
-                                                                    <SaveIcon />
-                                                                    :
-                                                                    <CircularProgress
-                                                                        variant="static"
-                                                                        value={plan.isLoading}
-                                                                    />
-                                                            
-                                                        </IconButton>
-                                                         */}
-                                                        <IconButton aria-label="Edit"
-                                                            onClick={() => this.handleEditPlanClick(plan)}
-                                                            disabled={!plan.isPlanOptionsClickable}
-                                                        >
-                                                            <EditIcon />
-                                                        </IconButton>
-                                                        <IconButton aria-label="Delete"
-                                                            onClick={() => this.handleDeletePlanClick(plan)}
-                                                            disabled={!plan.isPlanOptionsClickable}
-                                                        >
-                                                            <DeleteIcon />
-                                                        </IconButton>
-                                                    </ListItemSecondaryAction>
-                                                </ListItem>
-                                            )
-                                        })
+                        <List
+                            component="nav"
+                            subheader={<ListSubheader component="div">รายการแปลง</ListSubheader>}
+                        >
+                            <ListItem
+                                button
+                                onClick={this.onToggleMyplan}
+                            >
+                                <ListItemIcon>
+                                    <MyPlan />
+                                </ListItemIcon>
+                                <ListItemText inset primary="แปลงของฉัน" />
+                                {this.state.isMyPlanOpen ? <ExpandLess /> : <ExpandMore />}
+                            </ListItem>
+                            <Collapse in={this.state.isMyPlanOpen} timeout="auto" unmountOnExit>
+                                {
+                                    this.props.isWaitingForPlanQuery ?
+                                        <div>
+                                            กำลังโหลด....
+                                        </div>
                                         :
-                                        'ยังไม่มีแปลงที่สร้าง'
-                            }
+                                        <List component="div" disablePadding>
+
+                                            {this.props.planData.length > 0 ?
+                                                this.props.planData.map((plan) => {
+                                                    return (
+                                                        <ListItem
+                                                            button
+                                                            key={plan.planId}
+                                                            onClick={() => this.handlePlanClick(plan)}
+                                                            disabled={!plan.isPlanClickable || plan.isLoading}
+                                                        >
+                                                            <ListItemText primary={plan.planName} />
+                                                            <ListItemSecondaryAction>
+                                                                {
+                                                                    plan.loadingProgress ? <CircularProgress variant="static" value={(plan.loadingProgress / plan.loadingAmount) * 100} /> : null
+                                                                }
+                                                                <IconButton aria-label="Edit"
+                                                                    onClick={() => this.handleEditPlanClick(plan)}
+                                                                    disabled={!plan.isPlanOptionsClickable}
+                                                                >
+                                                                    <EditIcon />
+                                                                </IconButton>
+                                                                <IconButton aria-label="Delete"
+                                                                    onClick={() => this.handleDeletePlanClick(plan)}
+                                                                    disabled={!plan.isPlanOptionsClickable}
+                                                                >
+                                                                    <DeleteIcon />
+                                                                </IconButton>
+                                                            </ListItemSecondaryAction>
+                                                        </ListItem>
+                                                    )
+                                                })
+                                                :
+                                                'ยังไม่มีแปลงที่สร้าง'}
+                                        </List>
+                                }
+                            </Collapse>
+                            <Divider />
+                            <ListItem
+                                button
+                                onClick={this.onToggleColPlan}
+                            >
+                                <ListItemIcon>
+                                    <ColPlan />
+                                </ListItemIcon>
+                                <ListItemText inset primary="แปลงของผู้อื่น" />
+                                {this.state.isColPlanOpen ? <ExpandLess /> : <ExpandMore />}
+                            </ListItem>
+                            <Collapse in={this.state.isColPlanOpen} timeout="auto" unmountOnExit>
+                                {
+                                    this.props.isWaitingForColPlanQuery ?
+                                        <div>
+                                            กำลังโหลด....
+                                        </div>
+                                        :
+                                        <List component="div" disablePadding>
+
+                                            {
+                                                this.props.colPlans.length > 0 ?
+                                                    this.props.colPlans.map((plan) => {
+                                                        return (
+                                                            <ListItem
+                                                                button
+                                                                key={plan.planId}
+                                                                onClick={() => this.handlePlanClick(plan)}
+                                                                disabled={!plan.isPlanClickable}
+                                                            >
+                                                                <ListItemText primary={plan.planName} />
+                                                            </ListItem>
+                                                        )
+                                                    })
+                                                    :
+                                                    'ยังไม่มีแปลงของผู้อื่น'
+
+                                            }
+                                        </List>
+                                }
+                            </Collapse>
+                            <Divider />
+
                         </List>
                         <MergeOverlay
                             isMergeOverlayOpen={this.state.isMergeOverlayOpen}
@@ -307,6 +281,9 @@ class PermanentDrawer extends React.PureComponent {
                             isEditPlanOpen={this.state.isEditPlanOpen}
                             planData={this.state.planData}
                             onEditPlanName={onEditPlanName}
+                            onAddPlanMember={this.props.onAddPlanMember}
+                            user={user}
+
                         />
                         <DeletePlan
                             isDeletePlanOpen={this.state.isDeletePlanOpen}

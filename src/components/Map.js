@@ -2,7 +2,7 @@ import React from 'react';
 import './Design.css';
 import moment from 'moment';
 
-import { db } from '../config/firebase'
+import { db, planMemberRef } from '../config/firebase'
 import update from 'immutability-helper';
 const planRef = db.collection('plan')
 //if sort by alfhabet 0-9 => a-z => ก - ฮ
@@ -65,5 +65,15 @@ export default Map;
 //             createPlanDate: new Date()
 //         }, { merge: true });
 
+//     })
+// })
+
+
+
+
+// db.collection('collaboratorPlan').add({ planId: 'test' }).then(function (doc) {
+//     db.collection('collaboratorPlan').doc(doc.id).collection('member').add({
+//         uid: 'MskwQ85zmkMAYCWGTeLWAjclrbu2',
+//         role: 'owner'
 //     })
 // })

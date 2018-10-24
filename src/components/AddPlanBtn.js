@@ -154,7 +154,6 @@ class AddPlanBtn extends React.PureComponent {
         const { isWaitingForUserResult } = this.props;
         return (
             <div>
-
                 <Tooltip
                     title="Add Plan"
                     placement="right"
@@ -172,7 +171,6 @@ class AddPlanBtn extends React.PureComponent {
                         </Button>
                     </div>
                 </Tooltip>
-
                 <Modal
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"

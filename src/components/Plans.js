@@ -19,50 +19,15 @@ import Pic from './Picture/User-dummy-300x300.png';
 // CSS Import
 import './Plans.css';
 
-/*const styles = theme => ({
-    toolbar: theme.mixins.toolbar,
-    row: {
-        display: 'flex',
-        justifyContent: 'center',
-    },
-    avatar: {
-        margin: 0,
-    },
-    bigAvatar: {
-        margin: 5,
-        width: 60,
-        height: 60,
-    },
-    userName: {
-        display: 'flex',
-        justifyContent: 'center',
-    },
-});*/
-
 class Plans extends React.PureComponent {
-
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
         };
-        this.logout = this.logout.bind(this);
+
     }
-
-
-    logout() {
-        this.props.logout()
-    }
-
-    componentDidMount() {
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                this.setState({ user });
-            }
-        });
-    }
-
     render() {
-        const { classes } = this.props;
+        const { } = this.props;
         return (
             <div className="toolbar">
 
@@ -99,7 +64,7 @@ class Plans extends React.PureComponent {
 }
 
 Plans.propTypes = {
-    
+
 };
 
 export default (Plans);
