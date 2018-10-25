@@ -95,6 +95,7 @@ class App extends Component {
       tempPlan: null,
       saveAmount: null,
       unSaveOverlay: [],
+      isFirstQuery: true,
     }
   }
   componentWillMount() {
@@ -145,10 +146,10 @@ class App extends Component {
   onUtilitiesMethod = () => {
     const { isFirstDraw, overlayObject, distanceDetail, selectedPlan, user } = this.state
     const self = this
-    const currentOverlay = overlayObject[overlayObject.length - 1]
-    const coordsLength = currentOverlay.overlayCoords.length
-    const overlayType = currentOverlay.overlayType
     if (isFirstDraw === false) {
+      const currentOverlay = overlayObject[overlayObject.length - 1]
+      const coordsLength = currentOverlay.overlayCoords.length
+      const overlayType = currentOverlay.overlayType
       if ((overlayType === 'polygon' && coordsLength < 3) || (overlayType === 'polyline' && coordsLength < 2)) {
         let spliceCoords = update(overlayObject, { $splice: [[overlayObject.length - 1, 1]] })
         let spliceDetail = update(distanceDetail, { $splice: [[distanceDetail.length - 1, 1]] })
@@ -165,7 +166,7 @@ class App extends Component {
         })
       } else {
         if (selectedPlan) {
-          const  planId  = selectedPlan.planId
+          const planId = selectedPlan.planId
           const editorId = user.uid
           var overlay
           const { overlayCoords, overlayDetail, overlayName,
@@ -878,62 +879,40 @@ class App extends Component {
     overlayRef.where('planId', '==', planId).get().then(function (querySnapshot) {
       let overlayObject = []
       querySnapshot.forEach(function (doc) {
-        let overlayCoords = doc.data().overlayCoords
+        const { overlayCoords, overlayType } = doc.data()
         let overlayId = doc.id
-        let overlayType = doc.data().overlayType
-        let overlayName = doc.data().overlayName
-        let overlayDetail = doc.data().overlayDetail
-        let fillColor = doc.data().fillColor
-        let strokeColor = doc.data().strokeColor
-        let icon = doc.data().icon
         switch (overlayType) {
           case 'polygon':
             return (
               overlayObject.push({
-                overlayCoords,
-                overlayId,
-                overlayType,
                 overlaySource: 'server',
-                planId,
-                fillColor,
-                strokeColor,
-                overlayName,
-                overlayDetail,
                 undoCoords: [overlayCoords],
                 redoCoords: [],
                 isOverlaySave: true,
+                overlayId,
+                ...doc.data(),
               })
             )
           case 'polyline':
             return (
               overlayObject.push({
-                overlayCoords,
                 overlayId,
-                overlayType,
                 overlaySource: 'server',
-                planId,
-                strokeColor,
-                overlayName,
-                overlayDetail,
                 undoCoords: [overlayCoords],
                 redoCoords: [],
                 isOverlaySave: true,
+                ...doc.data(),
               })
             )
           case 'marker':
             return (
               overlayObject.push({
-                overlayCoords,
                 overlayId,
-                overlayType,
                 overlaySource: 'server',
-                planId,
-                icon,
-                overlayName,
-                overlayDetail,
                 undoCoords: [overlayCoords],
                 redoCoords: [],
                 isOverlaySave: true,
+                ...doc.data(),
               })
             )
           default: return null
@@ -1184,6 +1163,9 @@ class App extends Component {
   }
   onFilterTask = (filterTaskType = this.state.filterTaskType) => {
     const { overlayTasks, selectedOverlay } = this.state
+    if (!selectedOverlay) {
+      return;
+    }
     if (filterTaskType !== this.state.filterTaskType) {
       this.setState({ filterTaskType })
     }
@@ -1656,20 +1638,37 @@ class App extends Component {
     overlayRef.where("planId", "==", this.state.selectedPlan.planId)
       .onSnapshot(function (snapshot) {
         snapshot.docChanges().forEach(function (change) {
-          const { editorId } = change.doc.data()
+          const { editorId, overlayCoords } = change.doc.data()
+          const overlayId = change.doc.id
+          const actionIndex = self.state.overlayObject.findIndex(overlay => overlay.overlayId === overlayId)
+          const data = {
+            overlaySource: 'server',
+            undoCoords: [overlayCoords],
+            redoCoords: [],
+            isOverlaySave: true,
+            overlayId,
+            ...change.doc.data(),
+          }
           if (change.type === "added") {
-            if (editorId !== self.state.user.uid) {
-              console.log("New city: ", change.doc.data());
+            if (self.state.isFirstQuery) {
+              self.setState({ isFirstQuery: false })
+            } else {
+              if (editorId !== self.state.user.uid) {
+                const pushOverlay = update(self.state.overlayObject, { $push: [data] })
+                self.setState({ overlayObject: pushOverlay })
+              }
             }
           }
           if (change.type === "modified") {
             if (editorId !== self.state.user.uid) {
-              console.log("Modified city: ", change.doc.data());
+              const pushOverlay = update(self.state.overlayObject, { [actionIndex]: { $set: data } })
+              self.setState({ overlayObject: pushOverlay })
             }
           }
           if (change.type === "removed") {
             if (editorId !== self.state.user.uid) {
-              console.log("Removed city: ", change.doc.data());
+              const pushOverlay = update(self.state.overlayObject, { $splice: [[actionIndex, 1]] })
+              self.setState({ overlayObject: pushOverlay })
             }
           }
         });
@@ -1678,12 +1677,13 @@ class App extends Component {
       });
   }
   onRemoveRealTimeUpdateListener = () => {
-    const planId = this.state.selectedPlan.planId
+    this.setState({ isFirstQuery: true })
     var unsubscribe = overlayRef
       .onSnapshot(function () { });
     // ...
     // Stop listening to changes
     unsubscribe();
+
   }
   render() {
     return (
