@@ -12,31 +12,6 @@ import Modal from '@material-ui/core/Modal';
 // CSS Import
 import './EditOverlay.css';
 
-/*const styles = theme => ({
-    card: {
-        maxWidth: 345,
-    },
-    media: {
-        // ⚠️ object-fit is not supported by IE11.
-        objectFit: 'cover',
-    },
-    textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: 200,
-    },
-    paper: {
-        position: 'absolute',
-        width: theme.spacing.unit * 50,
-        backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing.unit * 4,
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-    },
-});*/
-
 class EditOverlay extends React.PureComponent {
     constructor(props) {
         super(props);

@@ -184,8 +184,7 @@ class EditPlan extends React.PureComponent {
                                 label="ID ผู้ใช้"
                                 className="textField"
                                 margin="normal"
-                                name="planName"
-                                label="ID ผู้ใช้"
+                                name="memberId"
                                 inputRef={this.setMemberIdInput}
                             />
                             <form className="root" autoComplete="off">
@@ -204,7 +203,7 @@ class EditPlan extends React.PureComponent {
                                         }}
 
                                     >
-                                        <MenuItem value={'manager'}>ผู้ดูแล</MenuItem>
+                                        <MenuItem value={'editor'}>ผู้แก้ไข</MenuItem>
                                         <MenuItem value={'viewer'}>ผู้เข้าชม</MenuItem>
                                     </Select>
                                 </FormControl>

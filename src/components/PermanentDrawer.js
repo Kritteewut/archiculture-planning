@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import firebase from '../config/firebase';
 
 // Material-ui Import
@@ -23,8 +21,8 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import MyPlan from '@material-ui/icons/Person';
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import Collapse from '@material-ui/core/Collapse'
-import ColPlan from '@material-ui/icons/Group';
 import CircularProgress from '@material-ui/core/CircularProgress'
+import ViewOnly from '@material-ui/icons/Visibility'
 
 // Import Group
 import Login from './Login';
@@ -198,23 +196,38 @@ class PermanentDrawer extends React.PureComponent {
                                                             disabled={!plan.isPlanClickable || plan.isLoading}
                                                         >
                                                             <ListItemText primary={plan.planName} />
-                                                            <ListItemSecondaryAction>
-                                                                {
-                                                                    plan.loadingProgress ? <CircularProgress variant="static" value={(plan.loadingProgress / plan.loadingAmount) * 100} /> : null
-                                                                }
-                                                                <IconButton aria-label="Edit"
-                                                                    onClick={() => this.handleEditPlanClick(plan)}
-                                                                    disabled={!plan.isPlanOptionsClickable}
-                                                                >
-                                                                    <EditIcon />
-                                                                </IconButton>
-                                                                <IconButton aria-label="Delete"
-                                                                    onClick={() => this.handleDeletePlanClick(plan)}
-                                                                    disabled={!plan.isPlanOptionsClickable}
-                                                                >
-                                                                    <DeleteIcon />
-                                                                </IconButton>
-                                                            </ListItemSecondaryAction>
+                                                            {
+                                                                plan.memberRole === 'editor' ?
+                                                                    <ListItemSecondaryAction>
+                                                                        {plan.loadingProgress ? <CircularProgress variant="static" value={(plan.loadingProgress / plan.loadingAmount) * 100} /> : null}
+                                                                        < IconButton aria-label="Edit"
+                                                                            onClick={() => this.handleEditPlanClick(plan)}
+                                                                            disabled={!plan.isPlanOptionsClickable}
+                                                                        >
+                                                                            <EditIcon />
+                                                                        </IconButton>
+                                                                        <IconButton aria-label="Delete"
+                                                                            onClick={() => this.handleDeletePlanClick(plan)}
+                                                                            disabled={!plan.isPlanOptionsClickable}
+                                                                        >
+                                                                            <DeleteIcon />
+                                                                        </IconButton>
+
+                                                                    </ListItemSecondaryAction>
+                                                                    :
+                                                                    <ListItemSecondaryAction>
+                                                                        <IconButton 
+                                                                        aria-label="ViewOnly"
+                                                                        disabled={true}
+                                                                        >
+                                                                            <ViewOnly />
+                                                                        </IconButton>
+
+                                                                    </ListItemSecondaryAction>
+                                                            }
+
+
+
                                                         </ListItem>
                                                     )
                                                 })
@@ -224,48 +237,6 @@ class PermanentDrawer extends React.PureComponent {
                                 }
                             </Collapse>
                             <Divider />
-                            <ListItem
-                                button
-                                onClick={this.onToggleColPlan}
-                            >
-                                <ListItemIcon>
-                                    <ColPlan />
-                                </ListItemIcon>
-                                <ListItemText inset primary="แปลงของผู้อื่น" />
-                                {this.state.isColPlanOpen ? <ExpandLess /> : <ExpandMore />}
-                            </ListItem>
-                            <Collapse in={this.state.isColPlanOpen} timeout="auto" unmountOnExit>
-                                {
-                                    this.props.isWaitingForColPlanQuery ?
-                                        <div>
-                                            กำลังโหลด....
-                                        </div>
-                                        :
-                                        <List component="div" disablePadding>
-
-                                            {
-                                                this.props.colPlans.length > 0 ?
-                                                    this.props.colPlans.map((plan) => {
-                                                        return (
-                                                            <ListItem
-                                                                button
-                                                                key={plan.planId}
-                                                                onClick={() => this.handlePlanClick(plan)}
-                                                                disabled={!plan.isPlanClickable}
-                                                            >
-                                                                <ListItemText primary={plan.planName} />
-                                                            </ListItem>
-                                                        )
-                                                    })
-                                                    :
-                                                    'ยังไม่มีแปลงของผู้อื่น'
-
-                                            }
-                                        </List>
-                                }
-                            </Collapse>
-                            <Divider />
-
                         </List>
                         <MergeOverlay
                             isMergeOverlayOpen={this.state.isMergeOverlayOpen}

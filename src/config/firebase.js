@@ -35,7 +35,7 @@ db.enablePersistence()
             alert('The current browser does not support all of the features required to enable persistence.')
         }
     });
-    export const shapesRef = db.collection('shapes')
+export const overlayRef = db.collection('overlay')
 export const planRef = db.collection('plan')
 export const taskRef = db.collection('overlayTask')
 export const planMemberRef = db.collection('planMember')

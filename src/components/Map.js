@@ -1,10 +1,9 @@
 import React from 'react';
 import './Design.css';
 import moment from 'moment';
-
-import { db, planMemberRef } from '../config/firebase'
+import firebase from 'firebase'
+import { db, planMemberRef, planRef } from '../config/firebase'
 import update from 'immutability-helper';
-const planRef = db.collection('plan')
 //if sort by alfhabet 0-9 => a-z => ก - ฮ
 //if sort by date the lastest day will be at the end of array
 
@@ -58,6 +57,7 @@ class Map extends React.PureComponent {
     }
 }
 export default Map;
+
 //add 'planDescription' field for each value Plan by defualt is '-'
 // planRef.get().then(function (querySnapshot) {
 //     querySnapshot.forEach(function (doc) {
@@ -68,12 +68,21 @@ export default Map;
 //     })
 // })
 
+// planRef.get().then(function (querySnapshot) {
+//     querySnapshot.forEach(function (doc) {
+//         const memberId = doc.data().uid
+//         const planId = doc.id
+//         const memberRole = 'editor'
+//         const data = { memberId, planId, memberRole }
+//         planMemberRef.add(data)
+//     })
+// })
 
-
-
-// db.collection('collaboratorPlan').add({ planId: 'test' }).then(function (doc) {
-//     db.collection('collaboratorPlan').doc(doc.id).collection('member').add({
-//         uid: 'MskwQ85zmkMAYCWGTeLWAjclrbu2',
-//         role: 'owner'
+//delete field in data base dont forget to *import firebase*
+// planRef.get().then(function (querySnapshot) {
+//     querySnapshot.forEach(function (doc) {
+//         planRef.doc(doc.id).update({
+//             uid: firebase.firestore.FieldValue.delete()
+//         });
 //     })
 // })

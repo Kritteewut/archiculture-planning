@@ -92,13 +92,13 @@ class OverlayOptions extends React.PureComponent {
                         :
                         null
                 }
-                <Button variant="contained" className="buttonaddwork" onClick={this.onToggleOverlayTaskOpen}>
+                <Button variant="contained" className="buttonaddwork" onClick={this.onToggleOverlayTaskOpen} disabled={selectedOverlay.overlaySource === 'server' ? false : true}>
                     จัดการงาน
                 </Button>
-                <Button variant="contained" className="buttoneditwork" onClick={this.onToggleEditoverlayOpen}>
+                <Button variant="contained" className="buttoneditwork" onClick={this.onToggleEditoverlayOpen} disabled={selectedOverlay.overlaySource === 'server' ? false : true}>
                     แก้ไข
                 </Button>
-                <Button variant="contained" className="buttondeletework" onClick={this.onToggleDeleteOverlayOpen}>
+                <Button variant="contained" className="buttondeletework" onClick={this.onToggleDeleteOverlayOpen} disabled={selectedOverlay.overlaySource === 'server' ? false : true}>
                     ลบ
                 </Button>
                 <Button variant="contained" className="buttonundowork" onClick={() => onUndoCoords(selectedOverlay)}>
