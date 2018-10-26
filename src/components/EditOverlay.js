@@ -26,11 +26,14 @@ class EditOverlay extends React.PureComponent {
         };
     }
     onSubmitEdit = () => {
-        this.props.handleDetailEdit(this.overlayNameInput.value, this.overlayDetailInput.value)
+        const overlayName = this.overlayNameInput.value
+        const overlayDetail = this.overlayDetailInput.value
+        const editData = { overlayName, overlayDetail }
+        this.props.onEditOverlayDetail(editData)
         this.props.onToggleEditoverlayOpen()
     }
     render() {
-        const {  isEditOverlayOpen, onToggleEditoverlayOpen, selectedOverlay } = this.props
+        const { isEditOverlayOpen, onToggleEditoverlayOpen, selectedOverlay } = this.props
         return (
             <Modal
                 aria-labelledby="simple-modal-title"
@@ -69,7 +72,7 @@ class EditOverlay extends React.PureComponent {
                         defaultValue={selectedOverlay.overlayDetail}
                         inputRef={this.setOverlayDetailInput}
                     />
-                    <br /><br/>
+                    <br /><br />
                     <Button className="buttoncontinueOverlay" onClick={this.onSubmitEdit}>
                         ตกลง
                         </Button>

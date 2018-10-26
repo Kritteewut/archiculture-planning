@@ -109,7 +109,7 @@ class PermanentDrawer extends React.PureComponent {
     }
     renderDrawer = () => {
         const { user, onSetUser, selectedPlan, onCallFitBounds,
-            onEditPlanName, onToggleDistanceMarker, isDistanceMarkerVisible
+             onToggleDistanceMarker, isDistanceMarkerVisible
         } = this.props;
         return (
             user ?
@@ -216,9 +216,9 @@ class PermanentDrawer extends React.PureComponent {
                                                                     </ListItemSecondaryAction>
                                                                     :
                                                                     <ListItemSecondaryAction>
-                                                                        <IconButton 
-                                                                        aria-label="ViewOnly"
-                                                                        disabled={true}
+                                                                        <IconButton
+                                                                            aria-label="ViewOnly"
+                                                                            disabled={true}
                                                                         >
                                                                             <ViewOnly />
                                                                         </IconButton>
@@ -251,9 +251,9 @@ class PermanentDrawer extends React.PureComponent {
                             onToggleEditPlanOpen={this.onToggleEditPlanOpen}
                             isEditPlanOpen={this.state.isEditPlanOpen}
                             planData={this.state.planData}
-                            onEditPlanName={onEditPlanName}
+                            onEditPlanName={this.props.onEditPlanName}
                             onAddPlanMember={this.props.onAddPlanMember}
-                            user={user}
+                            user={this.props.user}
 
                         />
                         <DeletePlan
@@ -281,12 +281,13 @@ class PermanentDrawer extends React.PureComponent {
             case 'option':
                 return (
                     <OverlayOptions
+                        selectedPlan={this.props.selectedPlan}
                         selectedOverlay={this.props.selectedOverlay}
                         onChangePolyStrokeColor={this.props.onChangePolyStrokeColor}
                         onChangePolyFillColor={this.props.onChangePolyFillColor}
                         onSetSelectedIcon={this.props.onSetSelectedIcon}
                         overlayOptionsType={this.props.overlayOptionsType}
-                        handleDetailEdit={this.props.handleDetailEdit}
+                        onEditOverlayDetail={this.props.onEditOverlayDetail}
                         onDeleteOverlay={this.props.onDeleteOverlay}
                         isFirstDraw={this.props.isFirstDraw}
                         onUndoDrawingCoords={this.props.onUndoDrawingCoords}

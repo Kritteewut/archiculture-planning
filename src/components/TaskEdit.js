@@ -96,7 +96,7 @@ class TaskEdit extends React.PureComponent {
         }
 
         if (+startAt > +endAt || this.taskSartAtInput.value === '') {
-            this.setState({ isStartAtError: true,})
+            this.setState({ isStartAtError: true, })
         }
         else {
             if (this.state.isStartAtError) {
@@ -109,16 +109,20 @@ class TaskEdit extends React.PureComponent {
         if (this.taskSartAtInput.value === '' || this.taskEndAtInput.value === '') {
             return;
         }
+        const { task } = this.props
         const startAt = new Date(this.taskSartAtInput.value)
         const endAt = new Date(this.taskEndAtInput.value)
-        var task = {
+        var Edittask = {
             name: this.taskNameInput.value,
             content: this.taskContentInput.value,
             startAt,
             endAt,
-            taskId: this.props.task.taskId
         }
-        this.props.onEditTask(task)
+        const data = {
+            ...task,
+            ...Edittask,
+        }
+        this.props.onEditTask(data)
         this.props.handleToggleEditTask()
     }
     handleCancleClick = () => {

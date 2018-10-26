@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 const radix = 10
 
@@ -24,21 +24,21 @@ class Polygon extends React.PureComponent {
         })
     }
     redrawVertex = () => {
-        if (this.polyVertex.length > 0) {
-            this.onClearPolyVextex()
-        }
-        var marker
-        var self = this
-        this.polygon.getPath().getArray().map((coords, key) => {
-            marker = new window.google.maps.Marker({
-                position: coords,
-                map: window.map,
-                draggable: false,
-                clickable: false,
-            })
-            self.polyVertex.push(marker)
-            // marker.bindTo('position', self.polygon, (key).toString());
-        })
+        // if (this.polyVertex.length > 0) {
+        //     this.onClearPolyVextex()
+        // }
+        // var marker
+        // var self = this
+        // this.polygon.getPath().getArray().map((coords, key) => {
+        //     marker = new window.google.maps.Marker({
+        //         position: coords,
+        //         map: window.map,
+        //         draggable: false,
+        //         clickable: false,
+        //     })
+        //     self.polyVertex.push(marker)
+        //     // marker.bindTo('position', self.polygon, (key).toString());
+        // })
 
     }
     redrawPolygon = () => {

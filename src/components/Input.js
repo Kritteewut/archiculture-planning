@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import purple from '@material-ui/core/colors/purple';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
-import update from 'immutability-helper';
 var shortid = require('shortid');
 
 
@@ -51,34 +50,24 @@ class InputItem extends Component {
             isDone: false,
             id: null,
         }
-        this.handleOnchange = this.handleOnchange.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
     }
 
-    handleOnchange(e) {
+    handleOnchange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         })
     }
-    handleSubmit() {
+    handleSubmit = () => {
         if (!this.state.name.trim()) {
             alert('กรุณากรอกชื่องาน')
             this.setState({ name: '', })
         } else {
-            const { selectedOverlay } = this.props
-            const overlayId = selectedOverlay.overlayId
-            const overlaySource = selectedOverlay.overlaySource
             var task = {
                 name: this.state.name,
                 startAt: new Date(),
                 endAt: new Date(),
                 content: '',
                 isDone: false,
-                taskId: shortid.generate(),
-                overlayId,
-                isTaskSave: false,
-                taskSource: 'local',
-                overlaySource,
             }
             this.props.onAddTask(task)
             this.setState({ name: '' })

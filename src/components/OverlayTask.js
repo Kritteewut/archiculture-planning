@@ -74,6 +74,7 @@ class OverlayTask extends React.PureComponent {
             />
 
             <Input
+              selectedPlan={this.props.selectedPlan}
               selectedOverlay={this.props.selectedOverlay}
               onAddTask={this.props.onAddTask}
             />
@@ -88,6 +89,7 @@ class OverlayTask extends React.PureComponent {
               taskBack={this.taskBack}
               onToggleIsTaskDone={this.props.onToggleIsTaskDone}
               onEditTask={this.props.onEditTask}
+              onDeleteTask={this.props.onDeleteTask}
             />
 
           </div>

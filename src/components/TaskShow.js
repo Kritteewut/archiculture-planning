@@ -82,7 +82,7 @@ class TaskShow extends React.PureComponent {
                                 <ListItem
                                     key={task.taskId}
                                     button
-                                    onClick={() => this.props.onToggleIsTaskDone(task.taskId)}
+                                    onClick={() => this.props.onToggleIsTaskDone(task)}
                                 >
                                     <ListItemText
                                         primary={task.name}
@@ -101,7 +101,7 @@ class TaskShow extends React.PureComponent {
                                         </IconButton>
 
                                         <Checkbox
-                                            onChange={() => this.props.onToggleIsTaskDone(task.taskId)}
+                                            onChange={() => this.props.onToggleIsTaskDone(task)}
                                             checked={task.isDone}
                                         />
                                     </ListItemSecondaryAction>

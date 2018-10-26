@@ -195,6 +195,8 @@ class App extends Component {
                   overlayId: { $set: doc.id },
                   overlaySource: { $set: 'server' },
                   isOverlaySave: { $set: true },
+                  editorId: { $set: editorId },
+                  planId: { $set: planId },
                 }
               })
               if (overlayType === 'polygon' || overlayType === 'polyline') {
@@ -749,6 +751,7 @@ class App extends Component {
     var editorId = this.state.user.uid
     const shouldSaveOverlay = self.state.overlayObject.filter(overlay => overlay.isOverlaySave === false)
     var saveOverlayAmount = shouldSaveOverlay.length
+    console.log(this.state.overlayObject, 'overlay')
     console.log(shouldSaveOverlay, 'save')
     if (saveOverlayAmount > 0) {
       const updatePlanIndex = this.state.planData.findIndex(plan => plan.planId === planId)
@@ -924,7 +927,7 @@ class App extends Component {
         }
       })
       const pushObject = update(self.state.overlayObject, { $push: overlayObject })
-      self.setState({ overlayObject: pushObject, })
+      self.setState({ overlayObject: pushObject, }, () => { console.log('query overlay', pushObject) })
       self.onFitBounds(pushObject)
     })
   }
@@ -1049,12 +1052,10 @@ class App extends Component {
     const planId = planData.planId
     this.setState((state) => {
       const actionIndex = this.state.planData.findIndex(plan => plan.planId === planId)
-      if (actionIndex !== -1) {
-        const updatePlanClickable = update(state.planData, { [actionIndex]: { isPlanClickable: { $set: false } } })
-        return {
-          selectedPlan: planData,
-          planData: updatePlanClickable,
-        }
+      const updatePlanClickable = update(state.planData, { [actionIndex]: { isPlanClickable: { $set: false } } })
+      return {
+        selectedPlan: planData,
+        planData: updatePlanClickable,
       }
     }, () => {
       this.onQueryOverlayFromFirestore()
@@ -1098,8 +1099,6 @@ class App extends Component {
           taskId,
           overlayId,
           planId,
-          taskSource: 'server',
-          isTaskSave: true
         })
       });
       self.setState({ overlayTasks: unSortOverlayTasks })
@@ -1108,42 +1107,52 @@ class App extends Component {
     })
   }
   onAddTask = (task) => {
-    const { overlayTasks } = this.state
-    const pushTask = update(overlayTasks, {
-      $push: [task]
+    var self = this
+    const { overlayTasks, selectedOverlay, selectedPlan, user } = this.state
+    const { overlayId } = selectedOverlay
+    const { planId } = selectedPlan
+    const editorId = user.uid
+    const data = { overlayId, planId, editorId, ...task }
+    taskRef.add(data).then(function (doc) {
+      const taskId = doc.id
+      const pushTask = update(overlayTasks, {
+        $push: [{ taskId, ...data }]
+      })
+      self.onUpdateOverlayTasks(pushTask)
+    }).catch(function (erorr) {
+      throw ('whoops!', erorr)
     })
-    this.onUpdateOverlayTasks(pushTask)
+
   }
   onEditTask = (editTask) => {
+    var self = this
     const { overlayTasks } = this.state
-    const taskId = editTask.taskId
-    const name = editTask.name
-    const content = editTask.content
-    const startAt = editTask.startAt
-    const endAt = editTask.endAt
-    const actionIndex = overlayTasks.findIndex(task => task.taskId === taskId)
-    const updateTask = update(overlayTasks, {
-      [actionIndex]: {
-        name: { $set: name },
-        content: { $set: content },
-        startAt: { $set: startAt },
-        endAt: { $set: endAt },
-        isTaskSave: { $set: false },
-      },
-    })
-    this.onUpdateOverlayTasks(updateTask)
+    const { taskId } = editTask
+    taskRef.doc(taskId).set(editTask
+      , { merge: true }).then(function () {
+        const actionIndex = overlayTasks.findIndex(task => task.taskId === taskId)
+        const updateTask = update(overlayTasks, { [actionIndex]: { $set: editTask } })
+        self.onUpdateOverlayTasks(updateTask)
+      }).catch(function (erorr) {
+        throw ('whoops!', erorr)
+      })
   }
-  onToggleIsTaskDone = (taskId) => {
+  onToggleIsTaskDone = (task) => {
+    var self = this
     const { overlayTasks } = this.state
-    const actionIndex = overlayTasks.findIndex(task => task.taskId === taskId)
-    const isDone = overlayTasks[actionIndex].isDone
-    const updateTask = update(overlayTasks, {
-      [actionIndex]: {
-        isDone: { $set: !isDone },
-        isTaskSave: { $set: false }
-      }
-    })
-    this.onUpdateOverlayTasks(updateTask)
+    const { isDone, taskId } = task
+    planRef.doc(taskId).set({ isDone }
+      , { merge: true }).then(function () {
+        const actionIndex = overlayTasks.findIndex(task => task.taskId === taskId)
+        const updateTask = update(overlayTasks, {
+          [actionIndex]: {
+            isDone: { $set: !isDone },
+          }
+        })
+        self.onUpdateOverlayTasks(updateTask)
+      }).catch(function (erorr) {
+        throw ('whoops!', erorr)
+      })
   }
   onSortArrayByCreateDate = (targetState, sortType, dataArray, sortProp) => {
     var sortedByCreateDate = []
@@ -1295,22 +1304,30 @@ class App extends Component {
       left: '0vw',
     });
   };
-  handleDetailEdit = (name, detail) => {
-    const { selectedOverlay, overlayObject } = this.state
-    const overlayId = selectedOverlay.overlayId
-    const editIndex = overlayObject.findIndex(overlay => overlay.overlayId === overlayId)
-    const updateOverlay = update(overlayObject, {
-      [editIndex]: {
-        overlayName: { $set: name },
-        overlayDetail: { $set: detail },
-        isOverlaySave: { $set: false }
-      }
-    })
-    selectedOverlay.setOptions({
-      overlayName: name,
-      overlayDetail: detail,
-    })
-    this.setState({ overlayObject: updateOverlay })
+  onEditOverlayDetail = (editData) => {
+    var self = this
+    const { selectedOverlay, overlayObject, user } = this.state
+    const { overlayId } = selectedOverlay
+    const { overlayName, overlayDetail } = editData
+    const editorId = user.uid
+    const data = { editorId, overlayName, overlayDetail }
+    overlayRef.doc(overlayId).set(data
+      , { merge: true }).then(function () {
+        const editIndex = overlayObject.findIndex(overlay => overlay.overlayId === overlayId)
+        const updateOverlay = update(overlayObject, {
+          [editIndex]: {
+            overlayName: { $set: overlayName },
+            overlayDetail: { $set: overlayDetail },
+            editorId: { $set: editorId },
+          }
+        })
+        const updateSelectedOverlay = update(selectedOverlay, {
+          overlayName: { $set: overlayName },
+          overlayDetail: { $set: overlayDetail },
+          editorId: { $set: editorId },
+        })
+        self.setState({ overlayObject: updateOverlay, selectedOverlay: updateSelectedOverlay })
+      })
   }
   onChangeDrawPage = (page) => {
     this.setState({ drawerPage: page })
@@ -1344,28 +1361,41 @@ class App extends Component {
     })
   }
   onDeleteOverlay = (overlay) => {
-    const { overlayObject, distanceDetail } = this.state
-    const overlayId = overlay.overlayId
-    const overlaySource = overlay.overlaySource
-    const deleteIndex = overlayObject.findIndex(data => data.overlayId === overlayId)
-    const deleteObject = update(overlayObject, { $splice: [[deleteIndex, 1]] })
+    var self = this
+    const { overlayObject, distanceDetail, user } = this.state
+    const { overlayId, overlaySource, overlayType } = overlay
+    const editorId = user.uid
+    const deleteIndex = overlayObject.findIndex(overlay => overlay.overlayId === overlayId)
     if (overlaySource === 'server') {
       //delete selected overlay from firestore
-      overlayRef.doc(overlayId).delete().then(function () {
-        console.log("Document successfully deleted!");
-      }).catch(function (error) {
-        console.error("Error removing document: ", error);
-      });
+      overlayRef.doc(overlayId).set({ editorId }
+        , { merge: true }).then(function () {
+          overlayRef.doc(overlayId).delete().then(function () {
+            self.onResetSelectedOverlay()
+            const deleteObject = update(overlayObject, { $splice: [[deleteIndex, 1]] })
+            self.onDeleleteAllTask('overlayId', overlayId)
+            if (overlayType !== 'marker') {
+              const detailIndex = self.state.distanceDetail.findIndex(detail => detail.overlayId === overlayId)
+              const deleteDetail = update(self.state.distanceDetail, { $splice: [[detailIndex, 1]] })
+              self.setState({ distanceDetail: deleteDetail, })
+            }
+            self.setState({ overlayObject: deleteObject, drawerPage: 'homePage' })
+          }).catch(function (error) {
+            console.error("Error removing document: ", error);
+          });
+        })
 
+    } else {
+      this.onResetSelectedOverlay()
+      const deleteObject = update(overlayObject, { $splice: [[deleteIndex, 1]] })
+      this.setState({ overlayObject: deleteObject, drawerPage: 'homePage' })
+      if (overlay.overlayType !== 'marker') {
+        const detailIndex = distanceDetail.findIndex(detail => detail.overlayId === overlayId)
+        const deleteDetail = update(distanceDetail, { $splice: [[detailIndex, 1]] })
+        this.setState({ distanceDetail: deleteDetail, })
+      }
     }
-    this.onDeleleteAllTask('overlayId', overlayId)
-    if (overlay.overlayType !== 'marker') {
-      const detailIndex = distanceDetail.findIndex(detail => detail.overlayId === overlayId)
-      const deleteDetail = update(distanceDetail, { $splice: [[detailIndex, 1]] })
-      this.setState({ distanceDetail: deleteDetail, })
-    }
-    this.onResetSelectedOverlay()
-    this.setState({ overlayObject: deleteObject, drawerPage: 'homePage' })
+
   }
   onDeleteAllOverlay = (planId) => {
     overlayRef.where('planId', '==', planId).get().then(function (querySnapshot) {
@@ -1422,19 +1452,17 @@ class App extends Component {
     })
   }
   onDeleteTask = (task) => {
+    var self = this
     const { overlayTasks } = this.state
     const taskId = task.taskId
-    const taskSource = task.taskSource
-    const deleteIndex = overlayTasks.findIndex(task => task.taskId === taskId)
-    const deleteTask = update(overlayTasks, { $splice: [[deleteIndex, 1]] })
-    if (taskSource === 'server') {
-      taskRef.doc(taskId).delete().then(function () {
-        console.log("Document successfully deleted!");
-      }).catch(function (error) {
-        console.error("Error removing document: ", error);
-      });
-    }
-    this.onUpdateOverlayTasks(deleteTask)
+    taskRef.doc(taskId).delete().then(function () {
+      const deleteIndex = overlayTasks.findIndex(task => task.taskId === taskId)
+      const deleteTask = update(overlayTasks, { $splice: [[deleteIndex, 1]] })
+      self.onUpdateOverlayTasks(deleteTask)
+    }).catch(function (error) {
+      console.error("Error removing document: ", error);
+    });
+
   }
   onUpdateOverlayTasks = (updateTasks) => {
     this.setState({ overlayTasks: updateTasks }, () => {
@@ -1637,8 +1665,12 @@ class App extends Component {
     var self = this
     overlayRef.where("planId", "==", this.state.selectedPlan.planId)
       .onSnapshot(function (snapshot) {
+        var queryAmount = snapshot.size
+        if (queryAmount === 0) {
+          self.setState({ isFirstQuery: false })
+        }
         snapshot.docChanges().forEach(function (change) {
-          const { editorId, overlayCoords } = change.doc.data()
+          const { editorId, overlayCoords, overlayType } = change.doc.data()
           const overlayId = change.doc.id
           const actionIndex = self.state.overlayObject.findIndex(overlay => overlay.overlayId === overlayId)
           const data = {
@@ -1651,24 +1683,52 @@ class App extends Component {
           }
           if (change.type === "added") {
             if (self.state.isFirstQuery) {
-              self.setState({ isFirstQuery: false })
+              queryAmount--
+              if (queryAmount === 0) {
+                self.setState({ isFirstQuery: false })
+              }
             } else {
               if (editorId !== self.state.user.uid) {
                 const pushOverlay = update(self.state.overlayObject, { $push: [data] })
-                self.setState({ overlayObject: pushOverlay })
+                if (overlayType !== 'marker') {
+                  self.onPolydistanceBtwCompute(data)
+                }
+                self.setState({ overlayObject: pushOverlay }, () => { console.log(self.state.overlayObject) })
               }
             }
           }
           if (change.type === "modified") {
             if (editorId !== self.state.user.uid) {
+              if (self.state.selectedOverlay) {
+                if (self.state.selectedOverlay.overlayId === overlayId) {
+                  const updateSelectedOverlay = update(self.state.selectedOverlay, {
+                    $set: {
+                      ...self.state.selectedOverlay,
+                      ...change.doc.data(),
+                    }
+                  })
+                  self.setState({ selectedOverlay: updateSelectedOverlay })
+                }
+              }
               const pushOverlay = update(self.state.overlayObject, { [actionIndex]: { $set: data } })
               self.setState({ overlayObject: pushOverlay })
             }
           }
           if (change.type === "removed") {
             if (editorId !== self.state.user.uid) {
+              if (self.state.selectedOverlay) {
+                if (self.state.selectedOverlay.overlayId === overlayId) {
+                  self.setState({ selectedOverlay: null, drawerPage: 'homePage' })
+                }
+              }
+              if (overlayType !== 'marker') {
+                const detailIndex = self.state.distanceDetail.findIndex(detail => detail.overlayId === overlayId)
+                const deleteDetail = update(self.state.distanceDetail, { $splice: [[detailIndex, 1]] })
+                self.setState({ distanceDetail: deleteDetail, })
+              }
               const pushOverlay = update(self.state.overlayObject, { $splice: [[actionIndex, 1]] })
               self.setState({ overlayObject: pushOverlay })
+
             }
           }
         });
@@ -1697,7 +1757,7 @@ class App extends Component {
           onChangePolyStrokeColor={this.onChangePolyStrokeColor}
           onChangePolyFillColor={this.onChangePolyFillColor}
           onSetSelectedIcon={this.onSetSelectedIcon}
-          handleDetailEdit={this.handleDetailEdit}
+          onEditOverlayDetail={this.onEditOverlayDetail}
           onSetUserNull={this.onSetUserNull}
           onDeletePlan={this.onDeletePlan}
           onDeleteOverlay={this.onDeleteOverlay}

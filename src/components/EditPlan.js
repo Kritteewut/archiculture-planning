@@ -178,11 +178,11 @@ class EditPlan extends React.PureComponent {
                             <DialogContentText id="alert-dialog-slide-description">
                                 กรอก ID ผู้ใช้งานที่ต้องการเพิ่ม
                             </DialogContentText>
-                            <TextField className="textField"
+                            <TextField
+                                className="textField"
                                 autoFocus={true}
                                 id="user-id"
                                 label="ID ผู้ใช้"
-                                className="textField"
                                 margin="normal"
                                 name="memberId"
                                 inputRef={this.setMemberIdInput}
