@@ -4,6 +4,7 @@ import firebase from '../config/firebase';
 // Material-ui Import
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
+import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
@@ -14,13 +15,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Button from '@material-ui/core/Button';
 import OpenWith from '@material-ui/icons/OpenWith';
-import List from '@material-ui/core/List';
 import ListSubheader from '@material-ui/core/ListSubheader'
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import MyPlan from '@material-ui/icons/Person';
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import Collapse from '@material-ui/core/Collapse'
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import CircularProgress from '@material-ui/core/CircularProgress'
 import ViewOnly from '@material-ui/icons/Visibility'
 
@@ -46,8 +42,6 @@ class PermanentDrawer extends React.PureComponent {
             isDeletePlanOpen: false,
             isMergeOverlayOpen: false,
             isEditPlanOpen: false,
-            isMyPlanOpen: true,
-            isColPlanOpen: true,
         }
     }
     logout = () => {
@@ -79,15 +73,12 @@ class PermanentDrawer extends React.PureComponent {
         this.props.onClearOverlayFromMap()
         this.onToggleMergeOverlayModal()
     }
-    handleDeleteClick = () => {
-        this.props.onDeleteOverlay(this.state.planData)
-        this.props.onToggleDeleteOverlayOpen()
-    }
     handleDeletePlanClick = (planData) => {
         this.setState({ planData: planData })
         this.onToggleDeletePlanModal()
     }
     handleEditPlanClick = (planData) => {
+        this.props.onAddRealTimePlanMemberUpdateListener(planData)
         this.setState({ planData: planData })
         this.onToggleEditPlanOpen()
     }
@@ -101,15 +92,9 @@ class PermanentDrawer extends React.PureComponent {
         this.props.onDeletePlan(planId)
         this.onToggleDeletePlanModal()
     }
-    onToggleMyplan = () => {
-        this.setState({ isMyPlanOpen: !this.state.isMyPlanOpen })
-    }
-    onToggleColPlan = () => {
-        this.setState({ isColPlanOpen: !this.state.isColPlanOpen })
-    }
     renderDrawer = () => {
         const { user, onSetUser, selectedPlan, onCallFitBounds,
-             onToggleDistanceMarker, isDistanceMarkerVisible
+            onToggleDistanceMarker, isDistanceMarkerVisible
         } = this.props;
         return (
             user ?
@@ -121,12 +106,16 @@ class PermanentDrawer extends React.PureComponent {
                                 src={user.photoURL || Pic}
                                 className="bigAvatar"
                             />
-                            <ListItemText primary={user.email}
-                                secondary={user.uid}
-                            />
+                            <ListItemText
+                                primary={user.displayName}
+                            >
+                            </ListItemText>
                         </ListItem>
+                        <CopyToClipboard text={user.uid}
+                            onCopy={() => alert('coppied to clip baord')}>
+                            <span>ID ผู้ใช้ {user.uid}</span>
+                        </CopyToClipboard>
                     </List>
-
                     <Button variant="contained" className="buttonmargin buttonlogout" onClick={this.logout}>
                         logout
                     </Button>
@@ -164,80 +153,65 @@ class PermanentDrawer extends React.PureComponent {
 
                         <Divider />
                         <List
-                            component="nav"
+                            component="div"
+                            disablePadding
                             subheader={<ListSubheader component="div">รายการแปลง</ListSubheader>}
                         >
-                            <ListItem
-                                button
-                                onClick={this.onToggleMyplan}
-                            >
-                                <ListItemIcon>
-                                    <MyPlan />
-                                </ListItemIcon>
-                                <ListItemText inset primary="แปลงของฉัน" />
-                                {this.state.isMyPlanOpen ? <ExpandLess /> : <ExpandMore />}
-                            </ListItem>
-                            <Collapse in={this.state.isMyPlanOpen} timeout="auto" unmountOnExit>
-                                {
-                                    this.props.isWaitingForPlanQuery ?
-                                        <div>
-                                            กำลังโหลด....
-                                        </div>
-                                        :
-                                        <List component="div" disablePadding>
+                            {this.props.isWaitingForPlanQuery ?
+                                <div>
+                                    กำลังโหลด....
+                                </div>
+                                :
+                                this.props.planData.length > 0 ?
+                                    this.props.planData.map((plan) => {
+                                        return (
+                                            <ListItem
+                                                button
+                                                key={plan.planId}
+                                                onClick={() => this.handlePlanClick(plan)}
+                                                disabled={!plan.isPlanClickable || plan.isLoading}
+                                            >
+                                                <ListItemText primary={plan.planName} />
+                                                {
+                                                    plan.memberRole === 'editor' ?
+                                                        <ListItemSecondaryAction>
+                                                            {plan.loadingProgress ? <CircularProgress variant="static" value={(plan.loadingProgress / plan.loadingAmount) * 100} /> : null}
+                                                            < IconButton aria-label="Edit"
+                                                                onClick={() => this.handleEditPlanClick(plan)}
+                                                                disabled={!plan.isPlanOptionsClickable}
+                                                            >
+                                                                <EditIcon />
+                                                            </IconButton>
+                                                            <IconButton aria-label="Delete"
+                                                                onClick={() => this.handleDeletePlanClick(plan)}
+                                                                disabled={!plan.isPlanOptionsClickable}
+                                                            >
+                                                                <DeleteIcon />
+                                                            </IconButton>
 
-                                            {this.props.planData.length > 0 ?
-                                                this.props.planData.map((plan) => {
-                                                    return (
-                                                        <ListItem
-                                                            button
-                                                            key={plan.planId}
-                                                            onClick={() => this.handlePlanClick(plan)}
-                                                            disabled={!plan.isPlanClickable || plan.isLoading}
-                                                        >
-                                                            <ListItemText primary={plan.planName} />
-                                                            {
-                                                                plan.memberRole === 'editor' ?
-                                                                    <ListItemSecondaryAction>
-                                                                        {plan.loadingProgress ? <CircularProgress variant="static" value={(plan.loadingProgress / plan.loadingAmount) * 100} /> : null}
-                                                                        < IconButton aria-label="Edit"
-                                                                            onClick={() => this.handleEditPlanClick(plan)}
-                                                                            disabled={!plan.isPlanOptionsClickable}
-                                                                        >
-                                                                            <EditIcon />
-                                                                        </IconButton>
-                                                                        <IconButton aria-label="Delete"
-                                                                            onClick={() => this.handleDeletePlanClick(plan)}
-                                                                            disabled={!plan.isPlanOptionsClickable}
-                                                                        >
-                                                                            <DeleteIcon />
-                                                                        </IconButton>
+                                                        </ListItemSecondaryAction>
+                                                        :
+                                                        <ListItemSecondaryAction>
+                                                            <IconButton
+                                                                aria-label="ViewOnly"
+                                                                disabled={true}
+                                                            >
+                                                                <ViewOnly />
+                                                            </IconButton>
 
-                                                                    </ListItemSecondaryAction>
-                                                                    :
-                                                                    <ListItemSecondaryAction>
-                                                                        <IconButton
-                                                                            aria-label="ViewOnly"
-                                                                            disabled={true}
-                                                                        >
-                                                                            <ViewOnly />
-                                                                        </IconButton>
-
-                                                                    </ListItemSecondaryAction>
-                                                            }
+                                                        </ListItemSecondaryAction>
+                                                }
 
 
 
-                                                        </ListItem>
-                                                    )
-                                                })
-                                                :
-                                                'ยังไม่มีแปลงที่สร้าง'}
-                                        </List>
-                                }
-                            </Collapse>
-                            <Divider />
+                                            </ListItem>
+                                        )
+                                    })
+                                    :
+                                    'ยังไม่มีแปลงที่สร้าง'
+                            }
                         </List>
+
                         <MergeOverlay
                             isMergeOverlayOpen={this.state.isMergeOverlayOpen}
                             onToggleMergeOverlayModal={this.onToggleMergeOverlayModal}
@@ -254,6 +228,8 @@ class PermanentDrawer extends React.PureComponent {
                             onEditPlanName={this.props.onEditPlanName}
                             onAddPlanMember={this.props.onAddPlanMember}
                             user={this.props.user}
+                            planMember={this.props.planMember}
+                            isWaitingForPlanMemberQuery={this.props.isWaitingForPlanMemberQuery}
 
                         />
                         <DeletePlan

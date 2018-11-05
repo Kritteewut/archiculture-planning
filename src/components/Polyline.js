@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 class Polyline extends React.PureComponent {
 
@@ -13,43 +13,21 @@ class Polyline extends React.PureComponent {
         }
     }
     redrawPolyline = () => {
-        const {
-            overlayCoords, overlayId, overlaySource,
-            overlayDrawType, strokeColor,
-            overlayName, overlayDetail,
-            overlayType, zIndex,
-            undoCoords, redoCoords,
-        } = this.props
+        const {   overlayCoords, } = this.props
         if (this.polyline === false) {
             this.polyline = new window.google.maps.Polyline({
                 path: overlayCoords,
                 map: window.map,
-                overlayId,
-                overlayType,
                 suppressUndo: true,
-                overlayDrawType,
-                strokeColor,
-                clickable: true,
-                overlayName,
-                overlayDetail,
                 strokeWeight: '5',
-                zIndex,
-                undoCoords,
-                redoCoords,
-                overlaySource,
+                ...this.props,
             })
             this.props.addPolylineListener(this.polyline)
         }
         else {
             this.polyline.setOptions({
                 path: overlayCoords,
-                strokeColor,
-                overlayName,
-                overlayDetail,
-                zIndex,
-                undoCoords,
-                redoCoords,
-                overlaySource,
+                ...this.props,
             })
         }
     }

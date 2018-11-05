@@ -1,12 +1,6 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-
+import React from 'react';
 // Material-ui Import
 import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Tooltip from '@material-ui/core/Tooltip';
-
 // Icon group
 import IconComplete from '@material-ui/icons/Check';
 import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak';

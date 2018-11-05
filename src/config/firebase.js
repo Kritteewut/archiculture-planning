@@ -21,24 +21,25 @@ export const provider = new firebase.auth.FacebookAuthProvider();
 export const provider2 = new firebase.auth.GoogleAuthProvider();
 
 db.settings(settings);
-db.enablePersistence()
-    .catch(function (err) {
-        if (err.code == 'failed-precondition') {
-            // Multiple tabs open, persistence can only be enabled
-            // in one tab at a a time.
-            // ...
-            alert('Multiple tabs open, persistence can only be enabled in one tab at a a time.')
-        } else if (err.code == 'unimplemented') {
-            // The current browser does not support all of the
-            // features required to enable persistence
-            // ...
-            alert('The current browser does not support all of the features required to enable persistence.')
-        }
-    });
+// db.enablePersistence().catch(function (err) {
+//     if (err.code == 'failed-precondition') {
+//         // Multiple tabs open, persistence can only be enabled
+//         // in one tab at a a time.
+//         // ...
+//         alert('Multiple tabs open, persistence can only be enabled in one tab at a a time.')
+//     } else if (err.code == 'unimplemented') {
+//         // The current browser does not support all of the
+//         // features required to enable persistence
+//         // ...
+//         alert('The current browser does not support all of the features required to enable persistence.')
+//     }
+// });
+// Subsequent queries will use persistence, if it was enabled successfully
+
 export const overlayRef = db.collection('overlay')
 export const planRef = db.collection('plan')
 export const taskRef = db.collection('overlayTask')
 export const planMemberRef = db.collection('planMember')
-// Subsequent queries will use persistence, if it was enabled successfully
+export const userRef =  db.collection('user')
 
 export default firebase;

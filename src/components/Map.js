@@ -37,6 +37,14 @@ class Map extends React.PureComponent {
         this.setState({
             isLoad: true
         })
+        // var test = moment(new Date()).format('LT');   // 12:11 PM
+        // var tes = moment(new Date).format('l');    // 11/2/2018
+        // console.log(test, tes)
+        // var t = moment(tes, test).format('lll')
+        // console.log(t)
+        // var test = new Date()
+        // console.log(test)
+        // console.log(test.toDateString())
     }
 
     render() {

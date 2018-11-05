@@ -73,10 +73,15 @@ class ColorPicker extends React.PureComponent {
         this.setState({ btnType: 'fillColor', })
     }
     handleShowSelectedColor = () => {
-        // const { btnType } = this.state
-        // const { fillColor, strokeColor, selectedOverlay, } = this.porps
+        const { btnType } = this.state
+        const { fillColor, strokeColor, selectedOverlay, } = this.porps
+        switch (btnType) {
+            case ('strokeColor'): return selectedOverlay ? selectedOverlay.strokeColor : strokeColor
+            case ('fillColor'): return selectedOverlay ? selectedOverlay.fillColor : fillColor
+            default: return;
+        }
         // if (btnType === 'strokeColor') {
-        //     selectedOverlay ? selectedOverlay.strokeColor : strokeColor
+
         // } else {
         //     selectedOverlay ? selectedOverlay.fillColor : fillColor
         // }
@@ -94,7 +99,7 @@ class ColorPicker extends React.PureComponent {
 
                 <CirclePicker
                     triangle={'hide'}
-                    color={this.handleShowSelectedColor()}
+                    //color={this.handleShowSelectedColor}
                     colors={colorArray}
                     onChangeComplete={this.handleChangeComplete}
                 />

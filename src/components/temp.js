@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 
-class extends React.PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-
-        }
-        //this.deleteme = this.deleteme.bind(this)
+class Temp extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      test: ''
     }
-    render() {
-        return (null)
-    }
+    //this.deleteme = this.deleteme.bind(this)
+  }
+  render() { 
+    return (null)
+  }
 }
-export default null
+export default Temp
 
 {/*
  var overlayType = overlayCoords[overlayCoords.length - 1].overlayType

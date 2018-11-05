@@ -71,7 +71,11 @@ class Login extends React.PureComponent {
             var user = result.user;
             self.props.onSetUser(user)
         }).catch(function (error) {
-            alert('เกิดข้อผิดพลาด : ', error)
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log(errorCode)
+            console.log(errorMessage)
         });
     }
     loginGoogle = () => {
@@ -80,7 +84,7 @@ class Login extends React.PureComponent {
             var user = result.user;
             self.props.onSetUser(user)
         }).catch(function (error) {
-            alert('เกิดข้อผิดพลาด : ', error)
+            console('เกิดข้อผิดพลาด : ', error)
         });
 
     }

@@ -1,8 +1,6 @@
-import React, { Component } from 'react';
-
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import AppBar from '@material-ui/core/AppBar';
@@ -14,6 +12,8 @@ import Slide from '@material-ui/core/Slide';
 import Paper from '@material-ui/core/Paper';
 import moment from 'moment';
 import TextField from '@material-ui/core/TextField';
+import { DateFormatInput } from 'material-ui-next-pickers'
+import TimeInput from 'material-ui-time-picker'
 
 const styles = theme => ({
     appBar: {
@@ -60,7 +60,11 @@ class TaskEdit extends React.PureComponent {
         this.state = {
             isEndAtError: false,
             prevEndAt: null,
-            isStartAtError: false
+            isStartAtError: false,
+            startAtTime: new Date(),
+            startAtDate: new Date(),
+            endAtTime: new Date(),
+            endAtDate: new Date(),
         }
         this.taskNameInput = null
         this.setTaskNameInput = element => {
@@ -82,41 +86,40 @@ class TaskEdit extends React.PureComponent {
             this.taskContentInput = element;
         };
     }
-
-    handleChange = () => {
-        const startAt = new Date(this.taskSartAtInput.value)
-        const endAt = new Date(this.taskEndAtInput.value)
-        if (+endAt < +startAt || this.taskEndAtInput.value === '') {
-            this.setState({ isEndAtError: true, })
-        }
-        else {
-            if (this.state.isEndAtError) {
-                this.setState({ isEndAtError: false })
-            }
-        }
-
-        if (+startAt > +endAt || this.taskSartAtInput.value === '') {
-            this.setState({ isStartAtError: true, })
-        }
-        else {
-            if (this.state.isStartAtError) {
-                this.setState({ isStartAtError: false })
-            }
-        }
+    componentWillReceiveProps(props) {
+        this.setState({
+            startAtTime: props.task.startAt,
+            startAtDate: props.task.startAt,
+            endAtTime: props.task.endAt,
+            endAtDate: props.task.endAt,
+        })
+    }
+    onStartAtDateChange = (startAtDate) => {
+        this.setState({ startAtDate })
+    }
+    onStartAtTimeChange = (startAtTime) => {
+        this.setState({ startAtTime })
+    }
+    onEndAtDateChange = (endAtDate) => {
+        this.setState({ endAtDate })
+    }
+    onEndAtTimeChange = (endAtTime) => {
+        this.setState({ endAtTime })
+    }
+    onCompareDateTime = () => {
+        var test = moment(new Date());
+        var test2 = moment(new Date());
+        console.log(test.isBefore(test2))
     }
 
     handleSaveClick = () => {
-        if (this.taskSartAtInput.value === '' || this.taskEndAtInput.value === '') {
-            return;
-        }
         const { task } = this.props
-        const startAt = new Date(this.taskSartAtInput.value)
-        const endAt = new Date(this.taskEndAtInput.value)
+        const { startAtDate, endAtDate } = this.state
         var Edittask = {
             name: this.taskNameInput.value,
             content: this.taskContentInput.value,
-            startAt,
-            endAt,
+            startAt: startAtDate,
+            endAt: endAtDate,
         }
         const data = {
             ...task,
@@ -131,31 +134,8 @@ class TaskEdit extends React.PureComponent {
         }
         this.props.handleToggleEditTask()
     }
-    getShowDate = (date) => {
-        //(1)because of Material UI <TextFiled> accecpt date format 'YYYY-MM-DDThh:mm' with optional millisecond but just let's it go
-        //incoming date format be like => YYYY-MM-DDTh:mm; eg. 2018-02-12T7:30
-
-        //split date at 'T'(got an array with 2 element) result => result['YYYY-MM-DD', 'h:mm']
-        var YMD = moment(date).format().split('T')[0]
-
-        //result will be like 'h:mm' eg. 7:33, 12:02
-        var time = moment(date).format('LT')
-
-        //due (1) so you have to re-format it when is not fit with requirment
-        //result will be like result => result[h,mm]
-        var hr = time.split(':')[0]
-        //convert string to integer
-        var integerHr = parseInt(hr, 10)
-        if (integerHr < 10) {
-            //add '0' so from 7:20 become 07:20
-            time = `0${time}`
-        }
-        var formated = `${YMD}T${time}`
-        return formated
-    }
     render() {
         const { task, classes, isEditTaskOpen } = this.props;
-
         return (
             <div>
                 <Dialog
@@ -195,36 +175,6 @@ class TaskEdit extends React.PureComponent {
                             <br />
                             <TextField
                                 className={classes.textField}
-                                label="วันเริ่มงาน"
-                                margin="normal"
-                                type="datetime-local"
-                                defaultValue={this.getShowDate(task.startAt)}
-                                inputRef={this.setTaskSartAtInput}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                onChange={this.handleChange}
-                                error={this.state.isStartAtError}
-                                helperText={this.state.isStartAtError ? 'วันเริ่มงานไม่ถูกต้อง' : ''}
-                            />
-                            <br />
-                            <TextField
-                                className={classes.textField}
-                                label="วันสิ้นสุดงาน"
-                                margin="normal"
-                                type="datetime-local"
-                                defaultValue={this.getShowDate(task.endAt)}
-                                inputRef={this.setTaskEndAtInput}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                onChange={this.handleChange}
-                                error={this.state.isEndAtError}
-                                helperText={this.state.isEndAtError ? 'วันสิ้นสุดงานไม่ถูกต้อง' : ''}
-                            />
-                            <br />
-                            <TextField
-                                className={classes.textField}
                                 label="รายละเอียด"
                                 margin="normal"
                                 defaultValue={task.content}
@@ -232,6 +182,39 @@ class TaskEdit extends React.PureComponent {
                                 multiline
                             />
                             <br />
+                            <DateFormatInput
+                                okToConfirm={true}
+                                dialog={true}
+                                name='date'
+                                value={this.state.startAtDate}
+                                onChange={this.onStartAtDateChange}
+                            />
+                            <br />
+                            <TimeInput
+                                mode='24h'
+                                value={this.state.startAtTime}
+                                onChange={this.onStartAtTimeChange}
+                                cancelLabel='ยกเลิก'
+                                okLabel='ตกลง'
+                            />
+                            <br />
+                            <DateFormatInput
+                                okToConfirm={true}
+                                dialog={true}
+                                name='date'
+                                value={this.state.endAtDate}
+                                onChange={this.onEndAtDateChange}
+                            />
+                            <br />
+                            <TimeInput
+                                mode='24h'
+                                value={this.state.endAtTime}
+                                onChange={this.onEndAtTimeChange}
+                                cancelLabel='ยกเลิก'
+                                okLabel='ตกลง'
+                                label="ชื่องาน"
+                            />
+
                         </Paper>
                     </main>
 
