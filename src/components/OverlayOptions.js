@@ -1,10 +1,6 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-
+import React from 'react';
 // Material-ui Import
-import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-
 // Import Group
 import ColorPicker from './ColorPicker';
 import IconPicker from './IconPicker';
@@ -68,7 +64,7 @@ class OverlayOptions extends React.PureComponent {
         this.setState({ isOverlayTaskOpen: !this.state.isOverlayTaskOpen })
     }
     drawOverlayDetail = () => {
-        const { selectedOverlay, onRedoCoords, onUndoCoords, handleDetailEdit } = this.props;
+        const { selectedOverlay, onRedoCoords, onUndoCoords } = this.props;
         return (
             <div className="FrameTaskData">
                 <div>

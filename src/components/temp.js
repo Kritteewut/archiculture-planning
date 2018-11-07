@@ -1,14 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 class Temp extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      test: ''
-    }
-    //this.deleteme = this.deleteme.bind(this)
+    this.state = {}
   }
-  render() { 
+  render() {
     return (null)
   }
 }

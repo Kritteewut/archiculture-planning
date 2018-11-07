@@ -3,7 +3,6 @@ import React, { } from 'react';
 // Material-ui Import
 import MyLocation from '@material-ui/icons/MyLocation';
 import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 
 // CSS Import
@@ -52,7 +51,7 @@ class GeolocatedMe extends React.PureComponent {
                                 title: addDress,
                             })
                             self.addUserMarkerListener(self.userLocationMarker)
-                            var panelName = `ตำแหน่งของท่านคือ : ${addDress}, ความคาดเคลื่อน : ${accuracy} เมตร`
+                            var panelName = `ตำแหน่งของท่านคือ : ${addDress}, ความคลาดเคลื่อน : ${accuracy} เมตร`
                             self.props.onSetPanelName(panelName)
                         } else {
                             alert('เกิดข้อผิดพลาดในการหาข้อมูลตำแหน่งสถานที่ของท่าน', status)
@@ -81,8 +80,6 @@ class GeolocatedMe extends React.PureComponent {
     }
 
     render() {
-
-        const { classes } = this.props;
         return (
             <div>
                 <Tooltip

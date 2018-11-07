@@ -9,8 +9,6 @@ import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 var shortid = require('shortid');
 
-
-
 const styles = theme => ({
     container: {
         margin: 'auto',
@@ -43,12 +41,6 @@ class InputItem extends Component {
         super(props)
         this.state = {
             name: '',
-            task: '',
-            startAt: new Date(),
-            endAt: new Date(),
-            content: '',
-            isDone: false,
-            id: null,
         }
     }
 
@@ -64,10 +56,9 @@ class InputItem extends Component {
         } else {
             var task = {
                 name: this.state.name,
-                startAt: new Date(),
-                endAt: new Date(),
                 content: '',
                 isDone: false,
+                addTaskDate: new Date(),
             }
             this.props.onAddTask(task)
             this.setState({ name: '' })

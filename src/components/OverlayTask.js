@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Input from './Input';
+import Input from './AddTask';
 import Navigation from './Navigation'
 import TaskShow from './TaskShow';
 import Navbar from './Navbar';

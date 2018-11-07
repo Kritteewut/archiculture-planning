@@ -15,7 +15,7 @@ import Polyline from './components/Polyline';
 import SearchBox from './components/searchBox';
 import OpenSide from './components/openSideBtn';
 import ExampleLine from './components/ExampleLine';
-import AddPlanBtn from './components/AddPlanBtn';
+import AddPlan from './components/AddPlan';
 import GeolocatedMe from './components/Geolocation';
 import IconLabelButtons from './components/DrawingBtn';
 import PermanentDrawer from './components/PermanentDrawer';
@@ -24,13 +24,14 @@ import TransparentMaker from './components/TransparentMaker';
 import DetailedExpansionPanel from './components/DetailedExpansionPanel';
 import MapCenterFire from './components/MapCenterFire'
 import ToggleDevice from './components/ToggleDevice'
+import MapHeading from './components/MapHeading'
 // CSS Import
 import './App.css'
 import './components/SearchBoxStyles.css'
 // Logo Import
 import icon_point from './components/icons/icon_point.png';
 //Value import 
-import { SORT_BY_NEWEST, SORT_BY_LATEST, SHOW_ALL, SHOW_COMPLETE, SHOW_ACTIVATE } from './staticValue/SaticString'
+import { SORT_BY_NEWEST, SORT_BY_LATEST, SHOW_ALL, SHOW_COMPLETE, SHOW_ACTIVATE, SHOW_OVERVIEW, SHOW_TODAY } from './staticValue/SaticString'
 
 class App extends Component {
   constructor(props) {
@@ -69,6 +70,7 @@ class App extends Component {
       isWaitingForPlanQuery: true,
       isWaitingForPlanMemberQuery: true,
       filterTaskType: SHOW_ALL,
+      overlAllFiltertask: SHOW_OVERVIEW,
       saveAmount: null,
       unSaveOverlay: [],
       isFirstOverlayQuery: true,
@@ -467,7 +469,6 @@ class App extends Component {
   }
   onSetSelectedOverlay = (overlay) => {
     this.onResetSelectedOverlay()
-    console.log(overlay)
     if (overlay.overlayType === 'polygon' || overlay.overlayType === 'polyline') {
       overlay.setOptions({ editable: true, })
     }
@@ -871,11 +872,10 @@ class App extends Component {
       this.setState({ isWaitingForPlanQuery: true })
     }
     let unSortplanData = []
-    var queryAmount
     var uid = this.state.user.uid
     var self = this
     planMemberRef.where('memberId', '==', uid).get().then(function (querySnapshot) {
-      queryAmount = querySnapshot.size
+      var queryAmount = querySnapshot.size
       if (queryAmount === 0) {
         self.setState({ isWaitingForPlanQuery: false, })
       } else {
@@ -883,7 +883,7 @@ class App extends Component {
           const { planId } = doc.data()
           planRef.doc(planId).get().then(function (doc2) {
             const createPlanDate = doc2.data().createPlanDate.toDate()
-            const { planName, planDescription } = doc2.data()
+            const lastModifiedDate = doc2.data().lastModifiedDate.toDate()
             unSortplanData.push({
               isPlanClickable: true,
               isPlanOptionsClickable: true,
@@ -891,12 +891,10 @@ class App extends Component {
               isSave: true,
               loadingAmount: 0,
               loadingProgress: null,
-              unSaveOverlay: [],
-              createPlanDate,
-              planName,
-              planDescription,
               ...doc.data(),
-
+              ...doc2.data(),
+              createPlanDate,
+              lastModifiedDate,
             })
             queryAmount--
             if (queryAmount === 0) {
@@ -912,13 +910,9 @@ class App extends Component {
   }
   onAddPlan = (plan) => {
     const { planData, user } = this.state
-    const planName = plan.planName
-    const planDescription = plan.planDescription
-    const createPlanDate = plan.createPlanDate
     const self = this
     const uid = user.uid
-    const addPlan = { planName, planDescription, createPlanDate }
-    planRef.add(addPlan)
+    planRef.add(plan)
       .then(function (docRef) {
         const planId = docRef.id
         const data = { planId, memberId: uid, memberRole: 'editor' }
@@ -931,9 +925,8 @@ class App extends Component {
             isSave: true,
             loadingAmount: 0,
             loadingProgress: null,
-            unSaveOverlay: [],
             planId,
-            ...addPlan,
+            ...plan,
             ...data,
           }]
         })
@@ -973,7 +966,6 @@ class App extends Component {
     taskRef.add(data).catch(function (erorr) {
       throw ('whoops!', erorr)
     })
-
   }
   onEditTask = (editTask) => {
     const { taskId } = editTask
@@ -1008,12 +1000,25 @@ class App extends Component {
   }
   onFilterTask = (filterTaskType = this.state.filterTaskType) => {
     const { overlayTasks, selectedOverlay } = this.state
+    //const overlAllFiltertask = this.state.overlAllFiltertask
     if (!selectedOverlay) {
       return;
     }
     if (filterTaskType !== this.state.filterTaskType) {
       this.setState({ filterTaskType })
     }
+    // if (overlAllFiltertask !== this.state.overlAllFiltertask) {
+    //   this.setState({ overlAllFiltertask })
+    // }
+    // var overAllFilter
+    // if (overlAllFiltertask === SHOW_OVERVIEW) {
+    //   overAllFilter = overlayTasks
+    // } else {
+    //   if (overlAllFiltertask === SHOW_TODAY) {
+    //     overAllFilter = overlayTasks
+    //   }
+    // }
+
     switch (filterTaskType) {
       case SHOW_ALL:
         const showAll = overlayTasks.filter(task => task.overlayId === selectedOverlay.overlayId)
@@ -1057,13 +1062,6 @@ class App extends Component {
       })
     })
   }
-  addUserMarkerListener = (marker) => {
-    var self = this
-    window.google.maps.event.addListener(marker, 'click', function () {
-      self.setState({ userLocationCoords: [] })
-    })
-  }
-
   onChangePolyStrokeColor = (color) => {
     var { selectedOverlay, overlayObject } = this.state
     if (selectedOverlay) {
@@ -1592,13 +1590,12 @@ class App extends Component {
     taskRef.where("planId", "==", this.state.selectedPlan.planId)
       .onSnapshot(function (snapshot) {
         snapshot.docChanges().forEach(function (change) {
-          const startAt = change.doc.data().startAt.toDate();
-          const endAt = change.doc.data().endAt.toDate();
+          const addTaskDate = change.doc.data().addTaskDate.toDate();
           const taskId = change.doc.id
           const actionIndex = self.state.overlayTasks.findIndex(task => task.taskId === taskId)
           const data = {
             ...change.doc.data(),
-            taskId, startAt, endAt
+            taskId, addTaskDate
           }
           var updateTask
           if (change.type === "added") {
@@ -1747,7 +1744,7 @@ class App extends Component {
             strokeColor={this.state.strokeColor}
           />
           <div className="FrameLeft">
-            <AddPlanBtn
+            <AddPlan
               onAddPlan={this.onAddPlan}
               onChangeDrawPage={this.onChangeDrawPage}
               handleDrawerOpen={this.handleDrawerOpen}
@@ -1799,6 +1796,7 @@ class App extends Component {
           <DetailedExpansionPanel
             {...this.state}
           />
+          {/* <MapHeading /> */}
           <div className="FrameCenter">
             <MapCenterFire
               drawOverlayUsingTouchScreen={this.drawOverlayUsingTouchScreen}

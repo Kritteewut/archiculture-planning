@@ -14,6 +14,7 @@ import moment from 'moment';
 import TextField from '@material-ui/core/TextField';
 import { DateFormatInput } from 'material-ui-next-pickers'
 import TimeInput from 'material-ui-time-picker'
+import TaskRepetition from './TaskRepetition';
 
 const styles = theme => ({
     appBar: {
@@ -59,12 +60,10 @@ class TaskEdit extends React.PureComponent {
         super(props)
         this.state = {
             isEndAtError: false,
-            prevEndAt: null,
             isStartAtError: false,
-            startAtTime: new Date(),
-            startAtDate: new Date(),
-            endAtTime: new Date(),
-            endAtDate: new Date(),
+            taskRepetition: null,
+            taskDueDate: new Date(),
+            taskDueTime: new Date(),
         }
         this.taskNameInput = null
         this.setTaskNameInput = element => {
@@ -88,10 +87,10 @@ class TaskEdit extends React.PureComponent {
     }
     componentWillReceiveProps(props) {
         this.setState({
-            startAtTime: props.task.startAt,
-            startAtDate: props.task.startAt,
-            endAtTime: props.task.endAt,
-            endAtDate: props.task.endAt,
+            taskDueDate: props.task.taskDueDate,
+            taskDueTime: props.task.taskDueDate,
+            taskRepetition: props.task.taskRepetition,
+            isTaskRepetition: props.task.isTaskRepetition,
         })
     }
     onStartAtDateChange = (startAtDate) => {
@@ -100,10 +99,10 @@ class TaskEdit extends React.PureComponent {
     onStartAtTimeChange = (startAtTime) => {
         this.setState({ startAtTime })
     }
-    onEndAtDateChange = (endAtDate) => {
+    onDueDateChange = (endAtDate) => {
         this.setState({ endAtDate })
     }
-    onEndAtTimeChange = (endAtTime) => {
+    onDueTimeChange = (endAtTime) => {
         this.setState({ endAtTime })
     }
     onCompareDateTime = () => {
@@ -111,7 +110,6 @@ class TaskEdit extends React.PureComponent {
         var test2 = moment(new Date());
         console.log(test.isBefore(test2))
     }
-
     handleSaveClick = () => {
         const { task } = this.props
         const { startAtDate, endAtDate } = this.state
@@ -134,15 +132,21 @@ class TaskEdit extends React.PureComponent {
         }
         this.props.handleToggleEditTask()
     }
+    onSetDueDate = () => {
+        this.setState({ taskDueDate: new Date(), taskDueTime: new Date() })
+    }
+    onSetTaskRepetition = (taskRepetition) => {
+        this.setState({ taskRepetition, taskDueDate: null })
+    }
     render() {
         const { task, classes, isEditTaskOpen } = this.props;
+        const { taskRepetition, taskDueDate } = this.state
         return (
             <div>
                 <Dialog
                     fullScreen
                     open={isEditTaskOpen}
                     TransitionComponent={Transition}
-
                 >
                     <AppBar className={classes.appBar}>
                         <Toolbar>
@@ -171,6 +175,7 @@ class TaskEdit extends React.PureComponent {
                                 defaultValue={task.name}
                                 inputRef={this.setTaskNameInput}
                                 autoFocus={true}
+                                name='taskName'
                             />
                             <br />
                             <TextField
@@ -180,45 +185,44 @@ class TaskEdit extends React.PureComponent {
                                 defaultValue={task.content}
                                 inputRef={this.setTaskContentInput}
                                 multiline
+                                name={'taskDescription'}
                             />
                             <br />
-                            <DateFormatInput
-                                okToConfirm={true}
-                                dialog={true}
-                                name='date'
-                                value={this.state.startAtDate}
-                                onChange={this.onStartAtDateChange}
+                            <TaskRepetition
+                                onSetTaskRepetition={this.onSetTaskRepetition}
                             />
-                            <br />
-                            <TimeInput
-                                mode='24h'
-                                value={this.state.startAtTime}
-                                onChange={this.onStartAtTimeChange}
-                                cancelLabel='ยกเลิก'
-                                okLabel='ตกลง'
-                            />
-                            <br />
-                            <DateFormatInput
-                                okToConfirm={true}
-                                dialog={true}
-                                name='date'
-                                value={this.state.endAtDate}
-                                onChange={this.onEndAtDateChange}
-                            />
-                            <br />
-                            <TimeInput
-                                mode='24h'
-                                value={this.state.endAtTime}
-                                onChange={this.onEndAtTimeChange}
-                                cancelLabel='ยกเลิก'
-                                okLabel='ตกลง'
-                                label="ชื่องาน"
-                            />
-
+                            {
+                                taskRepetition ?
+                                    null
+                                    :
+                                    taskDueDate ?
+                                        <div>
+                                            <DateFormatInput
+                                                okToConfirm={true}
+                                                dialog={true}
+                                                name='date'
+                                                value={this.state.taskDueDate}
+                                                onChange={this.onDueDateChange}
+                                            />
+                                            <br />
+                                            <TimeInput
+                                                mode='24h'
+                                                value={this.state.taskDueTime}
+                                                onChange={this.onDueTimeChange}
+                                                cancelLabel='ยกเลิก'
+                                                okLabel='ตกลง'
+                                                label="ชื่องาน"
+                                            />
+                                        </div >
+                                        :
+                                        <Button
+                                            onClick={this.onSetDueDate}
+                                        >
+                                            ไม่มีการกำหนดวันสิ้นสุด
+                                        </Button>
+                            }
                         </Paper>
                     </main>
-
-
                 </Dialog>
             </div>
         )

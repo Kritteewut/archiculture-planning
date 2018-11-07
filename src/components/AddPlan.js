@@ -12,91 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import './AddPlanBtn.css';
 import './Design.css';
 
-/*const styles = theme => ({
-    paper: {
-        position: 'absolute',
-        width: theme.spacing.unit * 50,
-        height: theme.spacing.unit * 15,
-        padding: theme.spacing.unit * 4,
-
-        top: `50%`,
-        left: `50%`,
-        transform: `translate(-50%, -50%)`,
-        outline: 'none',
-
-        background: 'linear-gradient(20deg, rgba(255 , 255 , 255 , 0.85) 40%, rgba(255 , 255 , 255, 0.85)) 60%',
-        boxShadow: '0px 0px 10px 2px rgba(0 , 0 , 0 , 0.30)',
-        borderRadius: 10,
-    },
-
-    fab: {
-        margin: theme.spacing.unit * 2,
-    },
-
-    textcolor: {
-        color: 'rgb(0, 0, 0)'
-    },
-
-    absolute: {
-        position: 'absolute',
-        top: theme.spacing.unit * 32,
-        left: theme.spacing.unit * 1.5,
-        color: 'rgba(0, 0, 0, 0.8)',
-        background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
-        boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
-    },
-
-    absolute2: {
-        position: 'absolute',
-        bottom: theme.spacing.unit * 3,
-        right: theme.spacing.unit * 5.5,
-        color: 'rgb(255, 255, 255)',
-        background: 'linear-gradient(20deg, rgba(131, 0, 39, 0.85) 40%, rgba(255, 73, 49, 0.85)) 60%',
-        boxShadow: '0px 0px 10px 2px rgba(40, 40, 40, 0.30)',
-    },
-
-    absolute3: {
-        position: 'absolute',
-        bottom: theme.spacing.unit * 3,
-        right: theme.spacing.unit * 16,
-        color: 'rgb(255, 255, 255)',
-        background: 'linear-gradient(20deg, rgba(92, 0, 197, 0.85) 40%, rgba(92, 244, 255, 0.85)) 60%',
-        boxShadow: '0px 0px 10px 2px rgba(40, 40, 40, 0.30)',
-    },
-
-    absolute4: {
-        position: 'absolute',
-        color: 'rgba(0, 0, 0, 0.8)',
-        background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
-        boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
-        outline: 'none',
-        border: 'none',
-        borderRadius: 5,
-
-        padding: '7px 7px',
-        width: '80%',
-
-        top: theme.spacing.unit * 9,
-    },
-
-    absolute5: {
-        position: 'absolute',
-        color: 'rgba(0, 0, 0, 0.8)',
-        background: 'linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%',
-        boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
-        outline: 'none',
-        border: 'none',
-        borderRadius: 5,
-
-        padding: '7px 7px',
-        width: '80%',
-
-        top: theme.spacing.unit * 18,
-    },
-
-});*/
-
-class AddPlanBtn extends React.PureComponent {
+class AddPlan extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -133,7 +49,8 @@ class AddPlanBtn extends React.PureComponent {
             var planData = {
                 planName: this.addPlanInput.value,
                 planDescription: this.planDescriptionInput.value,
-                createPlanDate: new Date()
+                createPlanDate: new Date(),
+                lastModifiedDate: new Date(),
             }
             this.props.onAddPlan(planData)
             this.onToggleAddPlanOpen()
@@ -236,8 +153,8 @@ class AddPlanBtn extends React.PureComponent {
     }
 }
 
-AddPlanBtn.propTypes = {
+AddPlan.propTypes = {
 
 };
 
-export default (AddPlanBtn);;
+export default (AddPlan);;

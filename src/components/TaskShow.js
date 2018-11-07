@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
 import moment from 'moment';
 import TaskEdit from './TaskEdit';
 import TaskDelete from './TaskDelete';
-
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -46,11 +44,9 @@ class TaskShow extends React.PureComponent {
     constructor(props) {
         super(props)
         this.state = {
-            checked: [1],
             task: [],
             isEditTaskOpen: false,
             isDeleteTaskOpen: false,
-            selectedTaskIndex: '',
         }
     }
 
@@ -86,7 +82,7 @@ class TaskShow extends React.PureComponent {
                                 >
                                     <ListItemText
                                         primary={task.name}
-                                        secondary={'เริ่มงาน : ' + moment(task.startAt).format('ll')}
+                                        secondary={'วันที่เพิ่มงาน : ' + moment(task.addTaskDate).format('ll')}
                                     />
                                     <ListItemSecondaryAction>
 
