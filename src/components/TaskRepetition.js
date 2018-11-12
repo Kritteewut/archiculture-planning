@@ -63,13 +63,13 @@ class TaskRepetition extends React.PureComponent {
       repetitionType: 'daily',
       repetitionDueType: 'forever',
       taskStartDate: new Date(),
-      taskStartTime: new Date(),
       taskDueDate: new Date(),
-      taskDueTime: new Date(),
       repetitionUnit: 1,
       repetitionTimes: 1,
       repetitionCountUnit: 'วัน',
-      repetitionDayInWeek: this.getShowDay(moment().format('dddd'))
+      repetitionDayInWeek: this.getShowDay(moment().format('dddd')),
+      isTaskStartDateError: false,
+      isTaskDueDateError: false,
     }
   }
   componentWillReceiveProps(props) {
@@ -77,13 +77,7 @@ class TaskRepetition extends React.PureComponent {
       this.setState({
         taskRepetitionSwitch: true,
         ...props.taskRepetition,
-        taskStartTime: props.taskRepetition.taskStartDate,
       })
-      if (props.taskRepetition.repetitionDueType === 'untilDate') {
-        this.setState({
-          taskDueTime: props.taskRepetition.taskDueDate,
-        })
-      }
       switch (props.repetitionType) {
         case 'daily': return this.setState({ repetitionCountUnit: 'วัน' })
         case 'weekly': return this.setState({ repetitionCountUnit: 'อาทิตย์' })
@@ -93,13 +87,26 @@ class TaskRepetition extends React.PureComponent {
       }
     }
   }
-  handleTaskRepetitionToggle = () => {
-    this.setState({ isTaskRepetitionOpen: !this.state.isTaskRepetitionOpen })
+  handleTaskRepetitionClose = () => {
+    this.setState({
+      taskRepetitionSwitch: false,
+      isTaskRepetitionOpen: false,
+      repetitionType: 'daily',
+      repetitionDueType: 'forever',
+      taskStartDate: new Date(),
+      taskDueDate: new Date(),
+      repetitionUnit: 1,
+      repetitionTimes: 1,
+      repetitionCountUnit: 'วัน',
+      repetitionDayInWeek: this.getShowDay(moment().format('dddd'))
+    })
+  }
+  handleTaskRepetitionOpen = () => {
+    this.setState({ isTaskRepetitionOpen: true })
   }
   handleSubmitEditTaskRepetition = () => {
-    const { taskRepetitionSwitch, repetitionType, repetitionDueType, repetitionUnit, taskStartDate, taskStartTime } = this.state
-    var format = this.onCombineDateTime(taskStartDate, taskStartTime)
-    var taskRepetition = { repetitionType, repetitionDueType, repetitionUnit, taskStartDate: format }
+    const { taskRepetitionSwitch, repetitionType, repetitionDueType, repetitionUnit, taskStartDate } = this.state
+    var taskRepetition = { repetitionType, repetitionDueType, repetitionUnit, taskStartDate }
     if (taskRepetitionSwitch) {
       switch (repetitionType) {
         //case 'daily': break;
@@ -115,9 +122,8 @@ class TaskRepetition extends React.PureComponent {
       switch (repetitionDueType) {
         // case 'forever': break;
         case 'untilDate':
-          const { taskDueDate, taskDueTime } = this.state
-          const formatTaskDueDate = this.onCombineDateTime(taskDueDate, taskDueTime)
-          taskRepetition = { taskDueDate: formatTaskDueDate, ...taskRepetition }
+          const { taskDueDate } = this.state
+          taskRepetition = { taskDueDate, ...taskRepetition }
           break;
         case 'times':
           const { repetitionTimes } = this.state
@@ -131,7 +137,7 @@ class TaskRepetition extends React.PureComponent {
     } else {
       this.props.onSetTaskRepetition(null)
     }
-    this.handleTaskRepetitionToggle()
+    this.handleTaskRepetitionClose()
   }
   handleTaskRepetitionSwitch = (event) => {
     this.setState({ [event.target.name]: event.target.checked })
@@ -139,9 +145,6 @@ class TaskRepetition extends React.PureComponent {
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
-  onDateTimeChange = name => dateTime => {
-    this.setState({ [name]: dateTime })
-  }
   onRepetitionUnitChange = (event) => {
     var RawRePetitionUnit = event.target.value
     var props = event.target.name
@@ -159,13 +162,23 @@ class TaskRepetition extends React.PureComponent {
   }
   onChangeRepetitionType = (event) => {
     const repetitionType = event.target.value
+    var repetitionCountUnit
     switch (repetitionType) {
-      case 'daily': return this.setState({ repetitionCountUnit: 'วัน', repetitionType, taskRepetitionSwitch: true })
-      case 'weekly': return this.setState({ repetitionCountUnit: 'อาทิตย์', repetitionType, taskRepetitionSwitch: true })
-      case 'monthly': return this.setState({ repetitionCountUnit: 'เดือน', repetitionType, taskRepetitionSwitch: true })
-      case 'yearly': return this.setState({ repetitionCountUnit: 'ปี', repetitionType, taskRepetitionSwitch: true })
-      default: return;
+      case 'daily': repetitionCountUnit = 'วัน'
+        break;
+      case 'weekly': repetitionCountUnit = 'อาทิตย์'
+        break;
+      case 'monthly': repetitionCountUnit = 'เดือน'
+        break;
+      case 'yearly': repetitionCountUnit = 'ปี'
+        break;
+      default: break;
     }
+    this.setState({ repetitionCountUnit, repetitionType })
+    this.onCheckTaskStartDateError()
+  }
+  onCheckTaskStartDateError = () => {
+
   }
   onDayCheckChange = (repetitionDayInWeek) => {
     if (repetitionDayInWeek.length === 0) {
@@ -182,13 +195,25 @@ class TaskRepetition extends React.PureComponent {
       }
     })
   }
-  onCombineDateTime = (date, time) => {
+  onDateChange = name => date => {
+    var format = this.onFormatedDateTime(date, this.state[name])
+    this.setState({ [name]: format }, () => {
+
+    })
+  }
+  onTimeChange = name => time => {
+    var format = this.onFormatedDateTime(this.state[name], time)
+    this.setState({ [name]: format }, () => {
+
+    })
+  }
+  onFormatedDateTime = (date, time) => {
     var format = moment(date).minute(moment(time).minute())
     format = moment(format).hours(moment(time).hours()).toDate()
     return format
   }
   renderRepetitionDueType = () => {
-    const { repetitionDueType, taskDueDate, taskDueTime, } = this.state
+    const { repetitionDueType, taskDueDate } = this.state
     const { classes } = this.props
     switch (repetitionDueType) {
       case 'forever': return
@@ -199,16 +224,17 @@ class TaskRepetition extends React.PureComponent {
             dialog={true}
             name='date'
             value={taskDueDate}
-            onChange={this.onDateTimeChange('taskDueDate')}
+            onChange={this.onDateChange('taskDueDate')}
           />
           <br />
           <TimeInput
             mode='24h'
-            value={taskDueTime}
-            onChange={this.onDateTimeChange('taskDueTime')}
+            value={taskDueDate}
+            onChange={this.onTimeChange('taskDueDate')}
             cancelLabel='ยกเลิก'
             okLabel='ตกลง'
             label="ชื่องาน"
+            error={this.state.isTaskDueDateError}
           />
         </div>
       )
@@ -235,12 +261,12 @@ class TaskRepetition extends React.PureComponent {
   }
   render() {
     const { classes } = this.props
-    const { taskStartDate, taskStartTime, taskRepetitionSwitch } = this.state
+    const { taskStartDate, taskRepetitionSwitch } = this.state
 
     return (
       <div>
         <Button
-          onClick={this.handleTaskRepetitionToggle}
+          onClick={this.handleTaskRepetitionOpen}
         >
           {
             taskRepetitionSwitch ?
@@ -253,7 +279,7 @@ class TaskRepetition extends React.PureComponent {
         </Button>
         <Dialog
           open={this.state.isTaskRepetitionOpen}
-          onClose={this.handleTaskRepetitionToggle}
+          onClose={this.handleTaskRepetitionClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
@@ -311,16 +337,18 @@ class TaskRepetition extends React.PureComponent {
                   dialog={true}
                   name='date'
                   value={taskStartDate}
-                  onChange={this.onDateTimeChange('taskStartDate')}
+                  onChange={this.onDateChange('taskStartDate')}
+
                 />
                 <br />
                 <TimeInput
                   mode='24h'
-                  value={taskStartTime}
-                  onChange={this.onDateTimeChange('taskStartTime')}
+                  value={taskStartDate}
+                  onChange={this.onTimeChange('taskStartDate')}
                   cancelLabel='ยกเลิก'
                   okLabel='ตกลง'
                   label="ชื่องาน"
+                  error={this.state.isTaskStartDateError}
                 />
                 <FormControl
                   className={classNames(classes.margin, classes.withoutLabel, classes.textField)}
@@ -366,10 +394,11 @@ class TaskRepetition extends React.PureComponent {
             {taskRepetitionSwitch ? this.renderRepetitionDueType() : null}
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleTaskRepetitionToggle} color="primary">
-              ยกเลิก
-            </Button>
-            <Button onClick={this.handleSubmitEditTaskRepetition} color="primary" autoFocus>
+            <Button
+              onClick={this.handleSubmitEditTaskRepetition}
+              color="primary" autoFocus
+              disabled={this.state.isTaskDueDateError || this.state.isTaskStartDateError}
+            >
               ตกลง
             </Button>
           </DialogActions>

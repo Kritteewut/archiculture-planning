@@ -86,17 +86,20 @@ class TaskEdit extends React.PureComponent {
             }
         }
     }
-    onStartAtDateChange = (startAtDate) => {
-        this.setState({ startAtDate })
+    onDueDateChange = (date) => {
+        const { taskDueDate } = this.state
+        var format = this.onFormatedDateTime(date, taskDueDate)
+        this.setState({ taskDueDate: format })
     }
-    onStartAtTimeChange = (startAtTime) => {
-        this.setState({ startAtTime })
+    onDueTimeChange = (time) => {
+        const { taskDueDate } = this.state
+        var format = this.onFormatedDateTime(taskDueDate, time)
+        this.setState({ taskDueDate: format })
     }
-    onDueDateChange = (endAtDate) => {
-        this.setState({ endAtDate })
-    }
-    onDueTimeChange = (endAtTime) => {
-        this.setState({ endAtTime })
+    onFormatedDateTime = (date, time) => {
+        var format = moment(date).minute(moment(time).minute())
+        format = moment(format).hours(moment(time).hours()).toDate()
+        return format
     }
     onCompareDateTime = () => {
         var test = moment(new Date());
@@ -125,21 +128,21 @@ class TaskEdit extends React.PureComponent {
         this.props.handleToggleEditTask()
     }
     onSetDueDate = () => {
-        this.setState({ taskDueDate: new Date(), taskDueTime: new Date() })
+        this.setState({ taskDueDate: new Date() })
     }
     onSetTaskRepetition = (taskRepetition) => {
         this.setState({ taskRepetition, })
         console.log(taskRepetition)
     }
     onSetDueDateNull = () => {
-        this.setState({ taskDueDate: null, taskDueTime: null })
+        this.setState({ taskDueDate: null })
     }
     onResetState = () => {
-        this.state = {
+        this.setState({
             taskRepetition: null,
             taskDueDate: null,
             taskDueTime: null,
-        }
+        })
     }
     render() {
         const { task, classes, isEditTaskOpen } = this.props;
@@ -210,7 +213,7 @@ class TaskEdit extends React.PureComponent {
                                             <br />
                                             <TimeInput
                                                 mode='24h'
-                                                value={this.state.taskDueTime}
+                                                value={this.state.taskDueDate}
                                                 onChange={this.onDueTimeChange}
                                                 cancelLabel='ยกเลิก'
                                                 okLabel='ตกลง'
