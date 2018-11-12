@@ -961,15 +961,13 @@ class App extends Component {
     const { selectedOverlay, selectedPlan, user } = this.state
     const { overlayId } = selectedOverlay
     const { planId } = selectedPlan
-    const editorId = user.uid
-    const data = { overlayId, planId, editorId, ...task }
+    const data = { overlayId, planId, ...task }
     taskRef.add(data).catch(function (erorr) {
       throw ('whoops!', erorr)
     })
   }
   onEditTask = (editTask) => {
     const { taskId } = editTask
-    console.log(editTask)
     taskRef.doc(taskId).set(editTask
       , { merge: true }).catch(function (erorr) {
         throw ('whoops!', erorr)
@@ -1590,12 +1588,31 @@ class App extends Component {
     taskRef.where("planId", "==", this.state.selectedPlan.planId)
       .onSnapshot(function (snapshot) {
         snapshot.docChanges().forEach(function (change) {
-          const addTaskDate = change.doc.data().addTaskDate.toDate();
-          const taskId = change.doc.id
+          var { taskDueDate, taskRepetition } = change.doc.data()
+          var addTaskDate = change.doc.data().addTaskDate.toDate();
+          var taskId = change.doc.id
           const actionIndex = self.state.overlayTasks.findIndex(task => task.taskId === taskId)
-          const data = {
+          var data = {
             ...change.doc.data(),
             taskId, addTaskDate
+          }
+          if (taskDueDate) {
+            taskDueDate = taskDueDate.toDate()
+            data = { ...data, taskDueDate }
+          }
+          if (taskRepetition) {
+            var { repetitionDueType, taskStartDate } = taskRepetition
+            taskStartDate = taskStartDate.toDate()
+            data.taskRepetition.taskStartDate = taskStartDate
+            switch (repetitionDueType) {
+              case 'untilDate':
+                var { taskDueDate } = taskRepetition
+                var taskDueDate = taskDueDate.toDate()
+                data.taskRepetition.taskDueDate = taskDueDate
+                break;
+              default:
+                break;
+            }
           }
           var updateTask
           if (change.type === "added") {

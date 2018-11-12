@@ -8,25 +8,26 @@ class DateTimePicker extends React.PureComponent {
         this.state = {}
     }
     render() {
-        const { date, time } = this.props
+        const { taskDueDate, taskDueTime } = this.props
         return (
             <div>
                 <DateFormatInput
                     okToConfirm={true}
                     dialog={true}
                     name='date'
-                    value={date}
-                    onChange={this.props.onChangeDate}
+                    value={taskDueDate}
+                    onChange={this.props.onDueDateChange}
                 />
                 <br />
                 <TimeInput
                     mode='24h'
-                    value={time}
-                    onChange={this.props.onChangeTime}
+                    value={taskDueTime}
+                    onChange={this.props.onDueTimeChange}
                     cancelLabel='ยกเลิก'
                     okLabel='ตกลง'
+                    label="ชื่องาน"
                 />
-            </div>
+            </div >
         )
     }
 }

@@ -59,39 +59,32 @@ class TaskEdit extends React.PureComponent {
     constructor(props) {
         super(props)
         this.state = {
-            isEndAtError: false,
-            isStartAtError: false,
             taskRepetition: null,
-            taskDueDate: new Date(),
-            taskDueTime: new Date(),
+            taskDueDate: null,
+            taskDueTime: null,
         }
         this.taskNameInput = null
         this.setTaskNameInput = element => {
             this.taskNameInput = element;
         };
-
-        this.taskSartAtInput = null
-        this.setTaskSartAtInput = element => {
-            this.taskSartAtInput = element;
-        };
-
-        this.taskEndAtInput = null
-        this.setTaskEndAtInput = element => {
-            this.taskEndAtInput = element;
-        };
-
         this.taskContentInput = null
         this.setTaskContentInput = element => {
             this.taskContentInput = element;
         };
     }
     componentWillReceiveProps(props) {
-        this.setState({
-            taskDueDate: props.task.taskDueDate,
-            taskDueTime: props.task.taskDueDate,
-            taskRepetition: props.task.taskRepetition,
-            isTaskRepetition: props.task.isTaskRepetition,
-        })
+        if (props.task.taskRepetition) {
+            this.setState({
+                taskRepetition: props.task.taskRepetition
+            })
+        } else {
+            if (props.task.taskDueDate) {
+                this.setState({
+                    taskDueDate: props.task.taskDueDate,
+                    taskDueTime: props.task.taskDueDate,
+                })
+            }
+        }
     }
     onStartAtDateChange = (startAtDate) => {
         this.setState({ startAtDate })
@@ -112,12 +105,12 @@ class TaskEdit extends React.PureComponent {
     }
     handleSaveClick = () => {
         const { task } = this.props
-        const { startAtDate, endAtDate } = this.state
+        const { taskDueDate, taskRepetition } = this.state
         var Edittask = {
             name: this.taskNameInput.value,
             content: this.taskContentInput.value,
-            startAt: startAtDate,
-            endAt: endAtDate,
+            taskRepetition,
+            taskDueDate,
         }
         const data = {
             ...task,
@@ -125,18 +118,28 @@ class TaskEdit extends React.PureComponent {
         }
         this.props.onEditTask(data)
         this.props.handleToggleEditTask()
+        this.onResetState()
     }
     handleCancleClick = () => {
-        if (this.state.isEndAtError || this.state.isStartAtError) {
-            this.setState({ isEndAtError: false, isStartAtError: false })
-        }
+        this.onResetState()
         this.props.handleToggleEditTask()
     }
     onSetDueDate = () => {
         this.setState({ taskDueDate: new Date(), taskDueTime: new Date() })
     }
     onSetTaskRepetition = (taskRepetition) => {
-        this.setState({ taskRepetition, taskDueDate: null })
+        this.setState({ taskRepetition, })
+        console.log(taskRepetition)
+    }
+    onSetDueDateNull = () => {
+        this.setState({ taskDueDate: null, taskDueTime: null })
+    }
+    onResetState = () => {
+        this.state = {
+            taskRepetition: null,
+            taskDueDate: null,
+            taskDueTime: null,
+        }
     }
     render() {
         const { task, classes, isEditTaskOpen } = this.props;
@@ -159,7 +162,6 @@ class TaskEdit extends React.PureComponent {
                             <Button
                                 color="inherit"
                                 onClick={() => this.handleSaveClick()}
-                                disabled={this.state.isEndAtError || this.state.isStartAtError}
                             >
                                 save
                             </Button>
@@ -190,6 +192,7 @@ class TaskEdit extends React.PureComponent {
                             <br />
                             <TaskRepetition
                                 onSetTaskRepetition={this.onSetTaskRepetition}
+                                {...this.state}
                             />
                             {
                                 taskRepetition ?
@@ -213,6 +216,11 @@ class TaskEdit extends React.PureComponent {
                                                 okLabel='ตกลง'
                                                 label="ชื่องาน"
                                             />
+                                            <Button
+                                                onClick={this.onSetDueDateNull}
+                                            >
+                                                ยกเลิกการกำหนดวันสิ้นสุด
+                                        </Button>
                                         </div >
                                         :
                                         <Button
