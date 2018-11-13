@@ -11,6 +11,11 @@ import './EditPlan.css';
 import PlanMember from './PlanMember';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import IconButton from '@material-ui/core/IconButton';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ListSubheader from '@material-ui/core/ListSubheader'
+import DeletePlanMember from './DeletePlanMember';
 
 class EditPlan extends React.PureComponent {
     constructor(props) {
@@ -19,6 +24,8 @@ class EditPlan extends React.PureComponent {
             isPlanNameInputError: false,
             isAddColOpen: false,
             memberRole: ' ',
+            member: {},
+            isDeletePlanMemberOpen: false,
         }
         this.planNameInput = null;
         this.planDescriptionInput = null
@@ -48,7 +55,6 @@ class EditPlan extends React.PureComponent {
             this.props.onEditPlanName(planData)
             this.props.onToggleEditPlanOpen()
         }
-
     }
     handlePlanNameInputChange = () => {
         const planNameInput = this.planNameInput.value
@@ -61,6 +67,13 @@ class EditPlan extends React.PureComponent {
     handleToggleEditPlan = () => {
         this.props.onToggleEditPlanOpen()
         this.setState({ isPlanNameInputError: false })
+    }
+    handleDeletePlanMemberClick = (member) => {
+        this.setState({ member })
+        this.onToggleDeletePlanMemberOpen()
+    }
+    onToggleDeletePlanMemberOpen = () => {
+        this.setState({ isDeletePlanMemberOpen: !this.state.isDeletePlanMemberOpen })
     }
 
     render() {
@@ -78,22 +91,42 @@ class EditPlan extends React.PureComponent {
                         onAddPlanMember={this.props.onAddPlanMember}
                         planData={planData}
                     />
-                    {this.props.isWaitingForPlanMemberQuery ?
-                        'กำลังโหลด'
-                        :
-                        this.props.planMember.map((member) => {
-                            return (
-                                <ListItem
-                                    key={member.memberId}
-                                >
-                                    <ListItemText
-                                        primary={member.displayName}
-                                        secondary={member.memberRole}
-                                    />
-                                </ListItem>
-                            )
-                        })
-                    }
+                    <List
+                        component="div"
+                        disablePadding
+                        subheader={<ListSubheader component="div">รายการแปลง</ListSubheader>}
+                    >
+                        {this.props.isWaitingForPlanMemberQuery ?
+                            'กำลังโหลด'
+                            :
+                            this.props.planMember.map((member) => {
+                                return (
+                                    <ListItem
+                                        key={member.memberId}
+                                    >
+                                        <ListItemText
+                                            primary={member.displayName}
+                                            secondary={member.memberRole}
+                                        />
+                                        <ListItemSecondaryAction>
+                                            <IconButton aria-label="Delete"
+                                                onClick={() => this.handleDeletePlanMemberClick(member)}
+                                            >
+                                                <DeleteIcon />
+                                            </IconButton>
+
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                )
+                            })
+
+                        }
+                    </List>
+                    < DeletePlanMember
+                        onDeletePlanMember={this.props.onDeletePlanMember}
+                        onToggleDeletePlanMemberOpen={this.onToggleDeletePlanMemberOpen}
+                        {...this.state}
+                    />
                     <br />
                     <TextField
                         id="with-placeholder"

@@ -61,7 +61,6 @@ class TaskEdit extends React.PureComponent {
         this.state = {
             taskRepetition: null,
             taskDueDate: null,
-            taskDueTime: null,
         }
         this.taskNameInput = null
         this.setTaskNameInput = element => {
@@ -73,16 +72,12 @@ class TaskEdit extends React.PureComponent {
         };
     }
     componentWillReceiveProps(props) {
-        if (props.task.taskRepetition) {
-            this.setState({
-                taskRepetition: props.task.taskRepetition
-            })
+        const { taskRepetition, taskDueDate } = props.task
+        if (taskRepetition) {
+            this.setState({ taskRepetition })
         } else {
-            if (props.task.taskDueDate) {
-                this.setState({
-                    taskDueDate: props.task.taskDueDate,
-                    taskDueTime: props.task.taskDueDate,
-                })
+            if (taskDueDate) {
+                this.setState({ taskDueDate })
             }
         }
     }
@@ -100,11 +95,6 @@ class TaskEdit extends React.PureComponent {
         var format = moment(date).minute(moment(time).minute())
         format = moment(format).hours(moment(time).hours()).toDate()
         return format
-    }
-    onCompareDateTime = () => {
-        var test = moment(new Date());
-        var test2 = moment(new Date());
-        console.log(test.isBefore(test2))
     }
     handleSaveClick = () => {
         const { task } = this.props
@@ -138,11 +128,7 @@ class TaskEdit extends React.PureComponent {
         this.setState({ taskDueDate: null })
     }
     onResetState = () => {
-        this.setState({
-            taskRepetition: null,
-            taskDueDate: null,
-            taskDueTime: null,
-        })
+        this.setState({ taskRepetition: null, taskDueDate: null, })
     }
     render() {
         const { task, classes, isEditTaskOpen } = this.props;

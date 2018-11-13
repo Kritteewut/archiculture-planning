@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import firebase from '../config/firebase';
 
 // Material-ui Import
@@ -230,7 +230,7 @@ class PermanentDrawer extends React.PureComponent {
                             user={this.props.user}
                             planMember={this.props.planMember}
                             isWaitingForPlanMemberQuery={this.props.isWaitingForPlanMemberQuery}
-
+                            onDeletePlanMember={this.props.onDeletePlanMember}
                         />
                         <DeletePlan
                             isDeletePlanOpen={this.state.isDeletePlanOpen}

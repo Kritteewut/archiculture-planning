@@ -84,7 +84,7 @@ class Login extends React.PureComponent {
             var user = result.user;
             self.props.onSetUser(user)
         }).catch(function (error) {
-            console('เกิดข้อผิดพลาด : ', error)
+            console.log('เกิดข้อผิดพลาด : ', error)
         });
 
     }

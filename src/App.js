@@ -1250,15 +1250,6 @@ class App extends Component {
       })
     })
   }
-  onDeltePlanMember = (data) => {
-    const { memberId, planId } = data
-    planMemberRef.where('planId', '==', planId).where('memberId', '==', memberId)
-      .get().then(function (querySnapshot) {
-        querySnapshot.forEach(doc => {
-          doc.ref.delete()
-        })
-      })
-  }
   onDeleteOverlay = (overlay) => {
     const { overlayObject, distanceDetail } = this.state
     const { overlayId, overlaySource } = overlay
@@ -1614,6 +1605,7 @@ class App extends Component {
                 break;
             }
           }
+          console.log(data, 'q')
           var updateTask
           if (change.type === "added") {
             updateTask = update(self.state.overlayTasks, { $push: [data] })
@@ -1642,16 +1634,18 @@ class App extends Component {
         var queryAmount = snapshot.size
         snapshot.docChanges().forEach(function (change) {
           const { memberId, memberRole } = change.doc.data()
+          const planMemberId = change.doc.id
           const actionIndex = self.state.planMember.findIndex(member => member.memberId === memberId)
           var updatePlanMember
           if (change.type === "added") {
             userRef.doc(memberId).get().then(function (doc) {
+
               queryAmount--
               if (queryAmount === 0) {
                 self.setState({ isWaitingForPlanMemberQuery: false })
               }
               if (doc.exists) {
-                const data2 = { ...doc.data(), ...change.doc.data() }
+                const data2 = { ...doc.data(), ...change.doc.data(), planMemberId }
                 updatePlanMember = update(self.state.planMember, { $push: [data2] })
                 self.setState({ planMember: updatePlanMember })
               }
@@ -1688,6 +1682,10 @@ class App extends Component {
       .onSnapshot(function () { });
     unsubscribe3();
   }
+  onDeletePlanMember = (member) => {
+    const { planMemberId } = member
+    planMemberRef.doc(planMemberId).delete()
+  }
   render() {
     return (
       <div className="AppFrame">
@@ -1718,6 +1716,7 @@ class App extends Component {
           onEditTask={this.onEditTask}
           onDeleteTask={this.onDeleteTask}
           onAddPlanMember={this.onAddPlanMember}
+          onDeletePlanMember={this.onDeletePlanMember}
           {...this.state}
         />
         <input id="pac-input" className="controls" type="text" placeholder="Find place" />
