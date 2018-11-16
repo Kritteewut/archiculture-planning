@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import icon_point from './icons/icon_point.png';
+import React from 'react';
 
 class Marker extends React.PureComponent {
     constructor(props) {

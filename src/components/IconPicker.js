@@ -1,10 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
 // Material-ui Import
-
 import ButtonBase from '@material-ui/core/ButtonBase';
-
 // Icon Group
 import icon_airport from './icons/icon_airplane.png'
 import icon_alert from './icons/icon_alert.png'
@@ -247,10 +243,5 @@ class IconPicker extends React.PureComponent {
         );
     }
 }
-
-
-IconPicker.propTypes = {
-    
-};
 
 export default (IconPicker);

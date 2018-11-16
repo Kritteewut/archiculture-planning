@@ -1,4 +1,3 @@
-
 import firebase from 'firebase'
 require('firebase/firestore')
 const config = {

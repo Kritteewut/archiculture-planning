@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import '../components/SearchBoxStyles.css'
 
 class SearchBox extends React.PureComponent {
@@ -11,7 +11,7 @@ class SearchBox extends React.PureComponent {
   }
   componentWillUnmount() {
     if (this.searchBox !== false) {
-      this.searchBox === false
+      this.searchBox = false
     }
   }
 
@@ -48,14 +48,6 @@ class SearchBox extends React.PureComponent {
             console.log("Returned place contains no geometry");
             return;
           }
-          var icon = {
-            url: place.icon,
-            size: new window.google.maps.Size(71, 71),
-            origin: new window.google.maps.Point(0, 0),
-            anchor: new window.google.maps.Point(17, 34),
-            scaledSize: new window.google.maps.Size(25, 25)
-          };
-
           // Create a marker for each place.
           this.markers.push(new window.google.maps.Marker({
             map: window.map,

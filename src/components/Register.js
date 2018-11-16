@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import firebase, { auth } from '../config/firebase';
+import React from 'react';
+import firebase from '../config/firebase';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import logo from './Picture/Ling logo.png';

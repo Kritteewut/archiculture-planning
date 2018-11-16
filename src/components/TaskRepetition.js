@@ -31,7 +31,8 @@ const days = [
   { label: 'เสาร์', value: 'sat', engLabel: 'Saturday' },
   { label: 'อาทิตย์', value: 'sun', engLabel: 'Sunday' },
 ];
-
+//'diary' to forever วันที่เริ่มงานคือวันที่ต้องทำงานวันแรก
+//ที่เหลือเดี๋ยวมาคิดต่อ อิอิ
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -54,24 +55,25 @@ const styles = theme => ({
     flexBasis: 200,
   },
 })
-
+const initState = {
+  taskRepetitionSwitch: false,
+  isTaskRepetitionOpen: false,
+  repetitionType: 'daily',
+  repetitionDueType: 'forever',
+  taskStartDate: new Date(),
+  taskDueDate: new Date(),
+  repetitionUnit: 1,
+  repetitionTimes: 1,
+  repetitionCountUnit: 'วัน',
+  repetitionDayInWeek: ['mon'],//this.getShowDay(moment().format('dddd')),
+  isTaskStartDateError: false,
+  isTaskDueDateError: false,
+  repetitionFinishTimes: 0
+}
 class TaskRepetition extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      taskRepetitionSwitch: false,
-      isTaskRepetitionOpen: false,
-      repetitionType: 'daily',
-      repetitionDueType: 'forever',
-      taskStartDate: new Date(),
-      taskDueDate: new Date(),
-      repetitionUnit: 1,
-      repetitionTimes: 1,
-      repetitionCountUnit: 'วัน',
-      repetitionDayInWeek: ['mon'],//this.getShowDay(moment().format('dddd')),
-      isTaskStartDateError: false,
-      isTaskDueDateError: false,
-    }
+    this.state = initState
   }
   handleTaskRepetitionClose = () => {
     this.setState({ isTaskRepetitionOpen: false })
@@ -86,27 +88,18 @@ class TaskRepetition extends React.PureComponent {
       })
     } else {
       this.setState({
+        ...initState,
         isTaskRepetitionOpen: true,
-        taskRepetitionSwitch: false,
-        repetitionType: 'daily',
-        repetitionDueType: 'forever',
-        taskStartDate: new Date(),
-        taskDueDate: new Date(),
-        repetitionUnit: 1,
-        repetitionTimes: 1,
-        repetitionCountUnit: 'วัน',
-        repetitionDayInWeek: ['mon'],
-        isTaskStartDateError: false,
-        isTaskDueDateError: false,
       })
     }
   }
   handleSubmitEditTaskRepetition = () => {
     const { taskRepetitionSwitch, repetitionType, repetitionDueType, repetitionUnit, taskStartDate } = this.state
-    var taskRepetition = { repetitionType, repetitionDueType, repetitionUnit, taskStartDate }
+    const doTaskDate = taskStartDate
+    var taskRepetition = { repetitionType, repetitionDueType, repetitionUnit, taskStartDate, doTaskDate }
     if (taskRepetitionSwitch) {
       switch (repetitionType) {
-        //case 'daily': break;
+        case 'daily': break;
         case 'weekly':
           const { repetitionDayInWeek } = this.state
           taskRepetition = { repetitionDayInWeek, ...taskRepetition }
@@ -123,9 +116,8 @@ class TaskRepetition extends React.PureComponent {
           taskRepetition = { taskDueDate, ...taskRepetition }
           break;
         case 'times':
-          const { repetitionTimes } = this.state
-          const repetitionRemainTimes = repetitionTimes
-          taskRepetition = { repetitionRemainTimes, repetitionTimes, ...taskRepetition }
+          const { repetitionTimes, repetitionFinishTimes } = this.state
+          taskRepetition = { repetitionFinishTimes, repetitionTimes, ...taskRepetition }
           break;
         default:
           break;
@@ -230,7 +222,7 @@ class TaskRepetition extends React.PureComponent {
     this.setState({ repetitionDayInWeek })
   }
   getShowDay = (thisDay) => {
-    days.map((day, index) => {
+    days.forEach((day, index) => {
       if (thisDay === day.label || thisDay === day.engLabel) {
         console.log([days[index].value], 'go')
         return [days[index].value]

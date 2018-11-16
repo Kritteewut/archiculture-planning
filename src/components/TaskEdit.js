@@ -97,7 +97,7 @@ class TaskEdit extends React.PureComponent {
         return format
     }
     handleSaveClick = () => {
-        const { task } = this.props
+        const { taskId } = this.props.task
         const { taskDueDate, taskRepetition } = this.state
         var Edittask = {
             name: this.taskNameInput.value,
@@ -105,11 +105,7 @@ class TaskEdit extends React.PureComponent {
             taskRepetition,
             taskDueDate,
         }
-        const data = {
-            ...task,
-            ...Edittask,
-        }
-        this.props.onEditTask(data)
+        this.props.onEditTask(taskId, Edittask)
         this.props.handleToggleEditTask()
         this.onResetState()
     }
@@ -121,7 +117,7 @@ class TaskEdit extends React.PureComponent {
         this.setState({ taskDueDate: new Date() })
     }
     onSetTaskRepetition = (taskRepetition) => {
-        this.setState({ taskRepetition, })
+        this.setState({ taskRepetition, taskDueDate: null })
         console.log(taskRepetition)
     }
     onSetDueDateNull = () => {

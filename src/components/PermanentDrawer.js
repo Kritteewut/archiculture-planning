@@ -55,10 +55,7 @@ class PermanentDrawer extends React.PureComponent {
             this.onToggleMergeOverlayModal()
         }
         else {
-            if (selectedPlan !== planData) {
-                this.props.onSetSelectedPlan(planData)
-                this.props.onClearOverlayFromMap()
-            }
+            this.props.onSetSelectedPlan(planData)
         }
     }
     onToggleMergeOverlayModal = () => {
@@ -70,7 +67,6 @@ class PermanentDrawer extends React.PureComponent {
     }
     handleDiscardToMergeOverlay = () => {
         this.props.onSetSelectedPlan(this.state.planData)
-        this.props.onClearOverlayFromMap()
         this.onToggleMergeOverlayModal()
     }
     handleDeletePlanClick = (planData) => {
@@ -216,7 +212,6 @@ class PermanentDrawer extends React.PureComponent {
                             isMergeOverlayOpen={this.state.isMergeOverlayOpen}
                             onToggleMergeOverlayModal={this.onToggleMergeOverlayModal}
                             planData={this.state.planData}
-                            onClearOverlayFromMap={this.props.onClearOverlayFromMap}
                             onSetSelectedPlan={this.props.onSetSelectedPlan}
                             handleAccecptToMergeOverlay={this.handleAccecptToMergeOverlay}
                             handleDiscardToMergeOverlay={this.handleDiscardToMergeOverlay}

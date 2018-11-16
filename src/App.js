@@ -32,52 +32,46 @@ import './components/SearchBoxStyles.css'
 import icon_point from './components/icons/icon_point.png';
 //Value import 
 import { SORT_BY_NEWEST, SORT_BY_LATEST, SHOW_ALL, SHOW_COMPLETE, SHOW_ACTIVATE, SHOW_OVERVIEW, SHOW_TODAY } from './staticValue/SaticString'
+import moment from 'moment';
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      appUser: null,
+      areaDetail: "",
+      disBtwDetail: "",
+      distanceDetail: [],
+      drawerPage: "homePage",
       drawingBtnType: null,
-      overlayObject: [],
-      overlayTasks: [],
-      overlayTaskShow: [],
-      selectedOverlay: null,
-      isFirstDraw: true,
+      drawingId: null,
       exampleLineCoords: [],
-      userLocationCoords: [],
+      fillColor: "#ffa500",
+      filterTaskType: SHOW_ALL,
+      icon: icon_point,
+      isDistanceMarkerVisible: true,
+      isDrawInDesktopDevice: true,
+      isFirstDraw: true,
+      isFirstOverlayQuery: true,
+      isWaitingForPlanMemberQuery: true,
+      isWaitingForPlanQuery: true,
+      isWaitingForUserResult: true,
+      latLngDetail: "",
+      left: "350px",
+      lengthDetail: "",
+      openSide: true,
+      overlAllFiltertask: SHOW_OVERVIEW,
+      overlayObject: [],
+      overlayOptionsType: "",
+      overlayTaskShow: [],
+      overlayTasks: [],
+      panelName: "จับ",
       planData: [],
       planMember: [],
+      selectedOverlay: null,
       selectedPlan: null,
-      fillColor: '#ffa500',
-      strokeColor: '#ff4500',
+      strokeColor: "#ff4500",
       user: null,
-      openSide: true,
-      openOption: false,
-      left: '350px',
-      overlayOptionsType: '',
-      icon: icon_point,
-      panelName: 'จับ',
-      latLngDetail: '',
-      lengthDetail: '',
-      disBtwDetail: '',
-      areaDetail: '',
-      distanceDetail: [],
-      drawerPage: 'homePage',
-      isDrawInDesktopDevice: true,
-      shouldSave: false,
-      isDistanceMarkerVisible: true,
-      isWaitingForUserResult: true,
-      isWaitingForPlanQuery: true,
-      isWaitingForPlanMemberQuery: true,
-      filterTaskType: SHOW_ALL,
-      overlAllFiltertask: SHOW_OVERVIEW,
-      saveAmount: null,
-      unSaveOverlay: [],
-      isFirstOverlayQuery: true,
-      isFirstTaskQuery: true,
-      drawingId: null,
-      appUser: null,
-      test: null
     }
   }
   componentWillMount() {
@@ -86,7 +80,6 @@ class App extends Component {
       if (user) { self.onSetUser(user) }
       self.setState({ isWaitingForUserResult: false })
     })
-    this.setState({ test: 'hi there' })
   }
   componentDidMount() {
     // this.onAddBeforeUnloadListener()
@@ -785,29 +778,27 @@ class App extends Component {
         }
         if (overlay) {
           if (overlaySource === 'local') {
-            overlayRef
-              .add(overlay)
-              .then(function (doc) {
-                const id = doc.id
-                self.onUpdatePlanLoadingProgress(updatePlanIndex)
-                if (self.state.selectedPlan.planId === planId) {
-                  const updateOverlayIndex = self.state.overlayObject.findIndex(overlay => overlay.overlayId === overlayId)
-                  const editOverlayIndex = update(self.state.overlayObject, {
-                    [updateOverlayIndex]:
-                    {
-                      overlayIndex: { $set: id },
-                      isOverlaySave: { $set: true },
-                      overlaySource: { $set: 'server' }
-                    }
-                  })
-                  if (overlayType === 'polygon' || overlayType === 'polyline') {
-                    const detailIndex = self.state.distanceDetail.findIndex(detail => detail.overlayId === overlayId)
-                    const updateDetailIndex = update(self.state.distanceDetail, { [detailIndex]: { overlayId: { $set: doc.id } } })
-                    self.setState({ distanceDetail: updateDetailIndex })
+            overlayRef.add(overlay).then(function (doc) {
+              const id = doc.id
+              self.onUpdatePlanLoadingProgress(updatePlanIndex)
+              if (self.state.selectedPlan.planId === planId) {
+                const updateOverlayIndex = self.state.overlayObject.findIndex(overlay => overlay.overlayId === overlayId)
+                const editOverlayIndex = update(self.state.overlayObject, {
+                  [updateOverlayIndex]:
+                  {
+                    overlayIndex: { $set: id },
+                    isOverlaySave: { $set: true },
+                    overlaySource: { $set: 'server' }
                   }
-                  self.setState({ overlayObject: editOverlayIndex, });
+                })
+                if (overlayType === 'polygon' || overlayType === 'polyline') {
+                  const detailIndex = self.state.distanceDetail.findIndex(detail => detail.overlayId === overlayId)
+                  const updateDetailIndex = update(self.state.distanceDetail, { [detailIndex]: { overlayId: { $set: doc.id } } })
+                  self.setState({ distanceDetail: updateDetailIndex })
                 }
-              })
+                self.setState({ overlayObject: editOverlayIndex, });
+              }
+            })
               .catch(function (error) {
                 throw ('there is something went wrong', error)
               })
@@ -935,18 +926,22 @@ class App extends Component {
   }
   onSetSelectedPlan = (planData) => {
     this.onResetSelectedPlan()
-    const planId = planData.planId
+    const { planId } = planData
     this.setState((state) => {
-      const actionIndex = this.state.planData.findIndex(plan => plan.planId === planId)
+      const actionIndex = state.planData.findIndex(plan => plan.planId === planId)
       const updatePlanClickable = update(state.planData, { [actionIndex]: { isPlanClickable: { $set: false } } })
       return {
         selectedPlan: planData,
         planData: updatePlanClickable,
       }
-    }, () => { this.onAddRealTimeUpdateListener() })
+    }, () => {
+      this.onAddRealTimeUpdateListener()
+      this.onCheckToggleAllTask(planData)
+    })
   }
   onResetSelectedPlan = () => {
     if (this.state.selectedPlan) {
+      this.onClearOverlayFromMap()
       this.onRemoveRealTimeUpdateListener()
       const planId = this.state.selectedPlan.planId
       const actionIndex = this.state.planData.findIndex(plan => plan.planId === planId)
@@ -956,7 +951,6 @@ class App extends Component {
       })
     }
   }
-
   onAddTask = (task) => {
     const { selectedOverlay, selectedPlan, user } = this.state
     const { overlayId } = selectedOverlay
@@ -966,8 +960,7 @@ class App extends Component {
       throw ('whoops!', erorr)
     })
   }
-  onEditTask = (editTask) => {
-    const { taskId } = editTask
+  onEditTask = (taskId, editTask) => {
     taskRef.doc(taskId).set(editTask
       , { merge: true }).catch(function (erorr) {
         throw ('whoops!', erorr)
@@ -979,6 +972,17 @@ class App extends Component {
       , { merge: true }).catch(function (erorr) {
         throw ('whoops!', erorr)
       })
+  }
+  onCheckToggleAllTask = (plan) => {
+    const { lastModifiedDate } = plan
+    const thisDate = new Date()
+    const format1 = moment(lastModifiedDate).format().split('T')[0]
+    const format2 = moment(thisDate).format().split('T')[0]
+    if (moment(format1).isSame(format2)) {
+      console.log('same')
+    } else {
+      console.log('not same')
+    }
   }
   onSortArrayByCreateDate = (targetState, sortType, dataArray, sortProp) => {
     var sortedByCreateDate = []
@@ -1016,49 +1020,29 @@ class App extends Component {
     //     overAllFilter = overlayTasks
     //   }
     // }
-
+    var filterTask
     switch (filterTaskType) {
       case SHOW_ALL:
-        const showAll = overlayTasks.filter(task => task.overlayId === selectedOverlay.overlayId)
-        return (this.onSortArrayByCreateDate('overlayTaskShow', SORT_BY_LATEST, showAll, 'startAt'));
+        filterTask = overlayTasks.filter(task => task.overlayId === selectedOverlay.overlayId)
+        break;
       case SHOW_ACTIVATE:
-        const showActivate = overlayTasks.filter(task => (task.overlayId === selectedOverlay.overlayId) && task.isDone === false)
-        return (this.onSortArrayByCreateDate('overlayTaskShow', SORT_BY_LATEST, showActivate, 'startAt'));
+        filterTask = overlayTasks.filter(task => (task.overlayId === selectedOverlay.overlayId) && task.isDone === false)
+        break;
       case SHOW_COMPLETE:
-        const showComplete = overlayTasks.filter(task => task.overlayId === selectedOverlay.overlayId && task.isDone === true)
-        return (this.onSortArrayByCreateDate('overlayTaskShow', SORT_BY_LATEST, showComplete, 'startAt'));
-      default: return;
+        filterTask = overlayTasks.filter(task => task.overlayId === selectedOverlay.overlayId && task.isDone === true)
+        break;
+      default: break;
     }
+    this.onSortArrayByCreateDate('overlayTaskShow', SORT_BY_LATEST, filterTask, 'addTaskDate')
   }
   onFitBounds = (overlayObject) => {
-    if (overlayObject.length > 0) {
-      const bounds = new window.google.maps.LatLngBounds();
-      overlayObject.forEach(value => {
-        value.overlayCoords.forEach(value2 => {
-          bounds.extend(new window.google.maps.LatLng(value2))
-        })
-      })
-      window.map.fitBounds(bounds)
-    }
-  }
-  getGeolocation = () => {
-    var LatLngString = ''
-    this.setState({ userLocationCoords: [] })
-    navigator.geolocation.getCurrentPosition(position => {
-      console.log(position.coords)
-      window.map.setCenter({ lat: position.coords.latitude, lng: position.coords.longitude })
-      window.map.setZoom(18)
-      window.map.panTo({ lat: position.coords.latitude, lng: position.coords.longitude })
-      LatLngString = `lattitude : ${position.coords.latitude.toFixed(4)} , longtitude :  ${position.coords.longitude.toFixed(4)}`
-      this.setState({
-        userLocationCoords: [{
-          coords: { lat: position.coords.latitude, lng: position.coords.longitude },
-          id: shortid.generate()
-        }],
-        latLngDetail: LatLngString,
-        panelName: 'Your Location'
+    const bounds = new window.google.maps.LatLngBounds();
+    overlayObject.forEach(overlay => {
+      overlay.overlayCoords.forEach(coords => {
+        bounds.extend(new window.google.maps.LatLng(coords))
       })
     })
+    window.map.fitBounds(bounds)
   }
   onChangePolyStrokeColor = (color) => {
     var { selectedOverlay, overlayObject } = this.state
@@ -1147,7 +1131,6 @@ class App extends Component {
       selectedOverlay: null,
       selectedPlan: null,
       isFirstOverlayQuery: true,
-      isFirstTaskQuery: true,
     })
     this.onClearEverthing()
   }
@@ -1824,12 +1807,7 @@ class App extends Component {
     );
   }
 }
-export default App;
-
-function getInitialState() {
-  var initialState
-  return initialState
-}
+export default App
 
 function new_script(src) {
   return new Promise(function (resolve, reject) {
