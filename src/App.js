@@ -1356,8 +1356,6 @@ class App extends Component {
         this.onPolydistanceBtwCompute(currentObject)
       }
       this.setState({ overlayObject: setIsOverlaySave })
-    } else {
-      return;
     }
   }
   onRedoCoords = (overlay) => {
@@ -1400,8 +1398,6 @@ class App extends Component {
         this.onPolydistanceBtwCompute(currentObject)
       }
       this.setState({ overlayObject: setIsOverlaySave })
-    } else {
-      return;
     }
   }
   onUndoDrawingCoords = () => {
@@ -1444,7 +1440,7 @@ class App extends Component {
       });
     });
     this.setState((state) => {
-      return { distanceDetail: temp2, isDistanceMarkerVisible: !state.isDistanceMarkerVisible };
+      return { distanceDetail: temp1, isDistanceMarkerVisible: !state.isDistanceMarkerVisible };
     });
   }
   onAddPlanMember = (data) => {
