@@ -24,7 +24,6 @@ import TransparentMaker from './components/TransparentMaker';
 import DetailedExpansionPanel from './components/DetailedExpansionPanel';
 import MapCenterFire from './components/MapCenterFire'
 import ToggleDevice from './components/ToggleDevice'
-import MapHeading from './components/MapHeading'
 // CSS Import
 import './App.css'
 import './components/SearchBoxStyles.css'
@@ -56,6 +55,7 @@ class App extends Component {
       isWaitingForPlanMemberQuery: true,
       isWaitingForPlanQuery: true,
       isWaitingForUserResult: true,
+      isWaitingForTaskToggle: false,
       latLngDetail: "",
       left: "350px",
       lengthDetail: "",
@@ -936,7 +936,7 @@ class App extends Component {
       }
     }, () => {
       this.onAddRealTimeUpdateListener()
-      this.onCheckToggleAllTask(planData)
+      this.onCheckToggleAllTaskDone()
     })
   }
   onResetSelectedPlan = () => {
@@ -967,21 +967,90 @@ class App extends Component {
       })
   }
   onToggleIsTaskDone = (task) => {
-    const { isDone, taskId } = task
-    taskRef.doc(taskId).set({ isDone: !isDone }
+    const { isDone, taskId, taskRepetition } = task
+    var data = { isDone: !isDone }
+    if (taskRepetition) {
+      const { repetitionDueType } = taskRepetition
+      if (repetitionDueType === 'times' && !isDone) {
+        const { repetitionFinishTimes } = taskRepetition
+        const increase = parseInt(repetitionFinishTimes, 10)
+
+        const increaseString = increase + 1
+        data = { taskRepetition, ...data }
+        data = update(data, { taskRepetition: { repetitionFinishTimes: { $set: increaseString.toString() } } })
+      }
+    }
+    taskRef.doc(taskId).set(data
       , { merge: true }).catch(function (erorr) {
         throw ('whoops!', erorr)
       })
   }
-  onCheckToggleAllTask = (plan) => {
-    const { lastModifiedDate } = plan
-    const thisDate = new Date()
-    const format1 = moment(lastModifiedDate).format().split('T')[0]
-    const format2 = moment(thisDate).format().split('T')[0]
-    if (moment(format1).isSame(format2)) {
-      console.log('same')
-    } else {
-      console.log('not same')
+  onCheckToggleAllTaskDone = () => {
+    var self = this
+    const { selectedPlan } = this.state
+    const { lastModifiedDate, planId } = selectedPlan
+    const FormatedLastModifiedDate = moment(lastModifiedDate).format().split('T')[0]
+    const thisDate = moment().format().split('T')[0]
+    //if (!moment(FormatedLastModifiedDate).isSame(thisDate)) {
+    taskRef.where('planId', '==', planId).get().then(function (querySnapshot) {
+      if (querySnapshot.size > 0) {
+        self.setState({ isWaitingForTaskToggle: true })
+      }
+      querySnapshot.forEach(doc => {
+        var { taskRepetition } = doc.data()
+        var taskId = doc.id
+        var data = { ...taskRepetition, taskId }
+        if (taskRepetition) {
+          const { repetitionDueType } = taskRepetition
+          switch (repetitionDueType) {
+            case 'forever':
+              self.onChangeTaskDoneAndDoTaskDate(data)
+              break;
+            case 'untiDate':
+              var { taskDueDate } = taskRepetition
+              taskDueDate = taskDueDate.toDate()
+              var formtedTaskDueDate = moment(taskDueDate).format().split('T')[0]
+              if (moment(formtedTaskDueDate).isSameOrBefore(thisDate)) {
+                self.onChangeTaskDoneAndDoTaskDate(data)
+              }
+              break;
+            case 'times':
+              const { repetitionFinishTimes, repetitionTimes } = taskRepetition
+              if (repetitionFinishTimes <= repetitionTimes) {
+                self.onChangeTaskDoneAndDoTaskDate(data)
+              }
+              break;
+            default:
+              break;
+          }
+        }
+      });
+    })
+    //}
+  }
+  onChangeTaskDoneAndDoTaskDate = (taskRepetition) => {
+    var { repetitionType, repetitionUnit, doTaskDate, taskId } = taskRepetition
+    var thisDate = moment().format().split('T')[0]
+    doTaskDate = doTaskDate.toDate()
+    var computeUnit
+    switch (repetitionType) {
+      case 'daily': computeUnit = 'd'
+        break;
+      case 'weekly': computeUnit = 'w'
+        break;
+      case 'monthly': computeUnit = 'M'
+        break;
+      case 'yearly': computeUnit = 'y'
+        break;
+      default:
+        break;
+    }
+    var computeDate = moment(doTaskDate).add(repetitionUnit, computeUnit).format().split('T')[0]
+    if (moment(computeDate).isSame(thisDate)) {
+      var format = moment().minute(moment(doTaskDate).minute())
+      format = moment(format).hours(moment(doTaskDate).hours()).toDate()
+      taskRepetition.doTaskDate = format
+      taskRef.doc(taskId).set({ isDone: false, taskRepetition }, { merge: true })
     }
   }
   onSortArrayByCreateDate = (targetState, sortType, dataArray, sortProp) => {
@@ -1584,16 +1653,13 @@ class App extends Component {
                 break;
             }
           }
-          console.log(data, 'q')
+          //console.log(data, 'q')
           var updateTask
-          if (change.type === "added") {
-            updateTask = update(self.state.overlayTasks, { $push: [data] })
-          }
-          if (change.type === "modified") {
-            updateTask = update(self.state.overlayTasks, { [actionIndex]: { $set: data } })
-          }
-          if (change.type === "removed") {
-            updateTask = update(self.state.overlayTasks, { $splice: [[actionIndex, 1]] })
+          switch (change.type) {
+            case 'added': updateTask = update(self.state.overlayTasks, { $push: [data] }); break;
+            case 'modified': updateTask = update(self.state.overlayTasks, { [actionIndex]: { $set: data } }); break;
+            case 'removed': updateTask = update(self.state.overlayTasks, { $splice: [[actionIndex, 1]] }); break;
+            default: break;
           }
           if (self.state.selectedOverlay) {
             self.onUpdateOverlayTasks(updateTask)
@@ -1664,6 +1730,9 @@ class App extends Component {
   onDeletePlanMember = (member) => {
     const { planMemberId } = member
     planMemberRef.doc(planMemberId).delete()
+  }
+  onSetPlan = (plan) => {
+    console.log(plan)
   }
   render() {
     return (

@@ -22,12 +22,12 @@ export const provider2 = new firebase.auth.GoogleAuthProvider();
 db.settings(settings);
 
 db.enablePersistence().catch(function (err) {
-    if (err.code == 'failed-precondition') {
+    if (err.code === 'failed-precondition') {
         // Multiple tabs open, persistence can only be enabled
         // in one tab at a a time.
         // ...
         alert('Multiple tabs open, persistence can only be enabled in one tab at a a time.')
-    } else if (err.code == 'unimplemented') {
+    } else if (err.code === 'unimplemented') {
         // The current browser does not support all of the
         // features required to enable persistence
         // ...

@@ -89,9 +89,10 @@ class TaskEdit extends React.PureComponent {
     onDueTimeChange = (time) => {
         const { taskDueDate } = this.state
         var format = this.onFormatedDateTime(taskDueDate, time)
-        this.setState({ taskDueDate: format })
+       this.setState({ taskDueDate: format })
     }
-    onFormatedDateTime = (date, time) => {
+    onFormatedDateTime = (unCloneDate, time) => {
+        var date = moment(unCloneDate).clone()
         var format = moment(date).minute(moment(time).minute())
         format = moment(format).hours(moment(time).hours()).toDate()
         return format

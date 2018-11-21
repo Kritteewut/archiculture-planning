@@ -66,7 +66,7 @@ const initState = {
   repetitionDayInWeek: [moment().format('d')],
   isTaskStartDateError: false,
   isTaskDueDateError: false,
-  repetitionFinishTimes: 0
+  repetitionFinishTimes: 0,
 }
 class TaskRepetition extends React.PureComponent {
   constructor(props) {
@@ -93,8 +93,9 @@ class TaskRepetition extends React.PureComponent {
   }
   handleSubmitEditTaskRepetition = () => {
     const { taskRepetitionSwitch, repetitionType, repetitionDueType, repetitionUnit, taskStartDate } = this.state
-    const doTaskDate = taskStartDate
-    var taskRepetition = { repetitionType, repetitionDueType, repetitionUnit, taskStartDate, doTaskDate }
+    var taskRepetition = { repetitionType, repetitionDueType, repetitionUnit, taskStartDate }
+    const doTaskDate = this.onComputeDoTaskDate(taskRepetition)
+    taskRepetition = { doTaskDate, ...taskRepetition }
     if (taskRepetitionSwitch) {
       switch (repetitionType) {
         case 'daily': break;
@@ -125,6 +126,43 @@ class TaskRepetition extends React.PureComponent {
       this.props.onSetTaskRepetition(null)
     }
     this.handleTaskRepetitionClose()
+  }
+  onComputeDoTaskDate = (taskRepetition) => {
+    const { taskStartDate, repetitionType, repetitionUnit } = taskRepetition
+    const thisDate = moment().format().split('T')[0]
+    const startDate = moment(taskStartDate).format().split('T')[0]
+    if (moment(startDate).isSameOrAfter(thisDate)) {
+      return taskStartDate
+    } else {
+      const addDate = repetitionUnit - 1
+      var returnDate
+      switch (repetitionType) {
+        case 'daily': returnDate = moment(thisDate).add(addDate, 'd')
+          break;
+        case 'weekly':
+          var isFoundDay = false
+          for (let i = 0; i <= 6; i++) {
+            var computeDate = moment().add(i, 'd').format('d')
+            for (let j = 0; j <= this.state.repetitionDayInWeek.length; j++) {
+              if (computeDate === this.state.repetitionDayInWeek[j]) {
+                isFoundDay = true
+                break;
+              }
+            }
+            if (isFoundDay) {
+              break;
+            }
+          }
+          returnDate = moment().add(computeDate, 'd')
+          break;
+        case 'monthly': returnDate = moment(thisDate).add(addDate, 'M')
+          break;
+        case 'yearly': returnDate = moment(thisDate).add(addDate, 'y')
+          break;
+        default: break;
+      }
+      return this.onFormatedDateTime(returnDate, taskStartDate)
+    }
   }
   handleTaskRepetitionSwitch = (event) => {
     this.setState({ [event.target.name]: event.target.checked })
@@ -168,6 +206,7 @@ class TaskRepetition extends React.PureComponent {
       isTaskStartDateError: false,
     }, () => {
       if (this.state.repetitionDueType === 'untilDate' || repetitionType === 'weekly') {
+        this.onCheckTaskDueDateError()
         this.onCheckTaskStartDateError()
       }
     })
@@ -181,15 +220,16 @@ class TaskRepetition extends React.PureComponent {
       isTaskStartDateError: false,
     }, () => {
       if (repetitionDueType === 'untilDate' || repetitionType === 'weekly') {
+        this.onCheckTaskStartDateError()
         this.onCheckTaskDueDateError()
       }
     })
   }
   onCheckTaskStartDateError = () => {
-    const { taskDueDate, taskStartDate } = this.state
+    const { taskDueDate, taskStartDate, repetitionDueType } = this.state
     const dueDate = moment(taskDueDate)
     const startDate = moment(taskStartDate)
-    if (this.onCheckDayInWeek() || startDate.isAfter(dueDate)) {
+    if (this.onCheckDayInWeek() || ((repetitionDueType === 'untilDate') ? startDate.isAfter(dueDate) : false)) {
       this.setState({
         isTaskDueDateError: false,
         isTaskStartDateError: true,
@@ -219,11 +259,10 @@ class TaskRepetition extends React.PureComponent {
   }
   onCheckDayInWeek = () => {
     const { repetitionType, repetitionDayInWeek, taskStartDate } = this.state
-    const startDate = moment(taskStartDate).format('d')
     if (repetitionType === 'weekly') {
+      const startDate = moment(taskStartDate).format('d')
       var isError = true
       repetitionDayInWeek.forEach(day => {
-        console.log(day, 'ie', startDate)
         if (startDate === day) {
           isError = false
         }
@@ -237,30 +276,26 @@ class TaskRepetition extends React.PureComponent {
     if (repetitionDayInWeek.length === 0) {
       return;
     }
-
     this.setState({ repetitionDayInWeek }, () => this.onCheckTaskStartDateError())
   }
   onDateChange = name => date => {
     var format = this.onFormatedDateTime(date, this.state[name])
-    this.setState({ [name]: format }, () => {
-      switch (name) {
-        case 'taskDueDate': return this.onCheckTaskDueDateError()
-        case 'taskStartDate': return this.onCheckTaskStartDateError()
-        default:
-          return;
-      }
-    })
+    this.setState({ [name]: format }, () => this.onCheckDateTimeError(name))
   }
   onTimeChange = name => time => {
     var format = this.onFormatedDateTime(this.state[name], time)
-    this.setState({ [name]: format }, () => {
+    this.setState({ [name]: format }, () => this.onCheckDateTimeError(name))
+  }
+  onCheckDateTimeError = (name) => {
+    const { repetitionDueType, repetitionType } = this.state
+    if (repetitionDueType === 'untilDate' || repetitionType === 'weekly') {
       switch (name) {
         case 'taskDueDate': return this.onCheckTaskDueDateError()
         case 'taskStartDate': return this.onCheckTaskStartDateError()
         default:
           return;
       }
-    })
+    }
   }
   onFormatedDateTime = (date, time) => {
     var format = moment(date).minute(moment(time).minute())
