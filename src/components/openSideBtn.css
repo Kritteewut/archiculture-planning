@@ -32,7 +32,7 @@ List of CSS Design Class
 
 .MenuSlide {
     position: absolute;
-    top: -210px;
+    top: -170px;
     left: 15px;
     color: rgba(0, 0, 0, 0.8);
     background: linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%;

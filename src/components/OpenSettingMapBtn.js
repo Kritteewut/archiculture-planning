@@ -101,7 +101,7 @@ class MenuListComposition extends React.Component {
             <div>
                 <Tooltip
                     title="Change Map Style"
-                    placement="left"
+                    placement="right"
                     disableFocusListener
                     disableTouchListener
                 >
