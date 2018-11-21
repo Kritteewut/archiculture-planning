@@ -13,7 +13,7 @@ class Polyline extends React.PureComponent {
         }
     }
     redrawPolyline = () => {
-        const {   overlayCoords, } = this.props
+        const { overlayCoords, } = this.props
         if (this.polyline === false) {
             this.polyline = new window.google.maps.Polyline({
                 path: overlayCoords,

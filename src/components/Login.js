@@ -1,10 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import firebase, { auth, provider, provider2 } from '../config/firebase';
-import PropTypes from 'prop-types';
-
 import Register from './Register';
 import Reset from './Reset';
-
 //material Import
 import Grid from '@material-ui/core/Grid';
 import Lock from '@material-ui/icons/Lock';

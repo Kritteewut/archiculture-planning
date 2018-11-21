@@ -23,15 +23,14 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 
 const CheckboxGroup = Checkbox.Group;
 const days = [
-  { label: 'จันทร์', value: 'mon', engLabel: 'Monday' },
-  { label: 'อังคาร', value: 'tue', engLabel: 'Tuesday' },
-  { label: 'พุธ', value: 'wed', engLabel: 'Wednesday' },
-  { label: 'พฤหัสบดี', value: 'thu', engLabel: 'Thursday' },
-  { label: 'ศุกร์', value: 'fri', engLabel: 'Friday' },
-  { label: 'เสาร์', value: 'sat', engLabel: 'Saturday' },
-  { label: 'อาทิตย์', value: 'sun', engLabel: 'Sunday' },
+  { label: 'อาทิตย์', value: '0', },
+  { label: 'จันทร์', value: '1', },
+  { label: 'อังคาร', value: '2', },
+  { label: 'พุธ', value: '3', },
+  { label: 'พฤหัสบดี', value: '4', },
+  { label: 'ศุกร์', value: '5', },
+  { label: 'เสาร์', value: '6', },
 ];
-
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -54,24 +53,25 @@ const styles = theme => ({
     flexBasis: 200,
   },
 })
-
+const initState = {
+  taskRepetitionSwitch: false,
+  isTaskRepetitionOpen: false,
+  repetitionType: 'daily',
+  repetitionDueType: 'forever',
+  taskStartDate: new Date(),
+  taskDueDate: new Date(),
+  repetitionUnit: 1,
+  repetitionTimes: 1,
+  repetitionCountUnit: 'วัน',
+  repetitionDayInWeek: [moment().format('d')],
+  isTaskStartDateError: false,
+  isTaskDueDateError: false,
+  repetitionFinishTimes: 0,
+}
 class TaskRepetition extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      taskRepetitionSwitch: false,
-      isTaskRepetitionOpen: false,
-      repetitionType: 'daily',
-      repetitionDueType: 'forever',
-      taskStartDate: new Date(),
-      taskDueDate: new Date(),
-      repetitionUnit: 1,
-      repetitionTimes: 1,
-      repetitionCountUnit: 'วัน',
-      repetitionDayInWeek: ['mon'],//this.getShowDay(moment().format('dddd')),
-      isTaskStartDateError: false,
-      isTaskDueDateError: false,
-    }
+    this.state = initState
   }
   handleTaskRepetitionClose = () => {
     this.setState({ isTaskRepetitionOpen: false })
@@ -86,27 +86,19 @@ class TaskRepetition extends React.PureComponent {
       })
     } else {
       this.setState({
+        ...initState,
         isTaskRepetitionOpen: true,
-        taskRepetitionSwitch: false,
-        repetitionType: 'daily',
-        repetitionDueType: 'forever',
-        taskStartDate: new Date(),
-        taskDueDate: new Date(),
-        repetitionUnit: 1,
-        repetitionTimes: 1,
-        repetitionCountUnit: 'วัน',
-        repetitionDayInWeek: ['mon'],
-        isTaskStartDateError: false,
-        isTaskDueDateError: false,
       })
     }
   }
   handleSubmitEditTaskRepetition = () => {
     const { taskRepetitionSwitch, repetitionType, repetitionDueType, repetitionUnit, taskStartDate } = this.state
     var taskRepetition = { repetitionType, repetitionDueType, repetitionUnit, taskStartDate }
+    const doTaskDate = this.onComputeDoTaskDate(taskRepetition)
+    taskRepetition = { doTaskDate, ...taskRepetition }
     if (taskRepetitionSwitch) {
       switch (repetitionType) {
-        //case 'daily': break;
+        case 'daily': break;
         case 'weekly':
           const { repetitionDayInWeek } = this.state
           taskRepetition = { repetitionDayInWeek, ...taskRepetition }
@@ -123,9 +115,8 @@ class TaskRepetition extends React.PureComponent {
           taskRepetition = { taskDueDate, ...taskRepetition }
           break;
         case 'times':
-          const { repetitionTimes } = this.state
-          const repetitionRemainTimes = repetitionTimes
-          taskRepetition = { repetitionRemainTimes, repetitionTimes, ...taskRepetition }
+          const { repetitionTimes, repetitionFinishTimes } = this.state
+          taskRepetition = { repetitionFinishTimes, repetitionTimes, ...taskRepetition }
           break;
         default:
           break;
@@ -135,6 +126,43 @@ class TaskRepetition extends React.PureComponent {
       this.props.onSetTaskRepetition(null)
     }
     this.handleTaskRepetitionClose()
+  }
+  onComputeDoTaskDate = (taskRepetition) => {
+    const { taskStartDate, repetitionType, repetitionUnit } = taskRepetition
+    const thisDate = moment().format().split('T')[0]
+    const startDate = moment(taskStartDate).format().split('T')[0]
+    if (moment(startDate).isSameOrAfter(thisDate)) {
+      return taskStartDate
+    } else {
+      const addDate = repetitionUnit - 1
+      var returnDate
+      switch (repetitionType) {
+        case 'daily': returnDate = moment(thisDate).add(addDate, 'd')
+          break;
+        case 'weekly':
+          var isFoundDay = false
+          for (let i = 0; i <= 6; i++) {
+            var computeDate = moment().add(i, 'd').format('d')
+            for (let j = 0; j <= this.state.repetitionDayInWeek.length; j++) {
+              if (computeDate === this.state.repetitionDayInWeek[j]) {
+                isFoundDay = true
+                break;
+              }
+            }
+            if (isFoundDay) {
+              break;
+            }
+          }
+          returnDate = moment().add(computeDate, 'd')
+          break;
+        case 'monthly': returnDate = moment(thisDate).add(addDate, 'M')
+          break;
+        case 'yearly': returnDate = moment(thisDate).add(addDate, 'y')
+          break;
+        default: break;
+      }
+      return this.onFormatedDateTime(returnDate, taskStartDate)
+    }
   }
   handleTaskRepetitionSwitch = (event) => {
     this.setState({ [event.target.name]: event.target.checked })
@@ -177,27 +205,31 @@ class TaskRepetition extends React.PureComponent {
       isTaskDueDateError: false,
       isTaskStartDateError: false,
     }, () => {
-      if (this.state.repetitionDueType === 'untilDate') {
+      if (this.state.repetitionDueType === 'untilDate' || repetitionType === 'weekly') {
+        this.onCheckTaskDueDateError()
         this.onCheckTaskStartDateError()
       }
     })
-
   }
   onDeuRepetitionTypeChange = (event) => {
+    const { repetitionType } = this.state
     const repetitionDueType = event.target.value
     this.setState({
       repetitionDueType,
       isTaskDueDateError: false,
       isTaskStartDateError: false,
     }, () => {
-      if (repetitionDueType === 'untilDate') {
+      if (repetitionDueType === 'untilDate' || repetitionType === 'weekly') {
+        this.onCheckTaskStartDateError()
         this.onCheckTaskDueDateError()
       }
     })
   }
   onCheckTaskStartDateError = () => {
-    const { taskDueDate, taskStartDate } = this.state
-    if (moment(taskStartDate).isAfter(moment(taskDueDate))) {
+    const { taskDueDate, taskStartDate, repetitionDueType } = this.state
+    const dueDate = moment(taskDueDate)
+    const startDate = moment(taskStartDate)
+    if (this.onCheckDayInWeek() || ((repetitionDueType === 'untilDate') ? startDate.isAfter(dueDate) : false)) {
       this.setState({
         isTaskDueDateError: false,
         isTaskStartDateError: true,
@@ -211,7 +243,9 @@ class TaskRepetition extends React.PureComponent {
   }
   onCheckTaskDueDateError = () => {
     const { taskDueDate, taskStartDate } = this.state
-    if (moment(taskDueDate).isBefore(moment(taskStartDate))) {
+    const dueDate = moment(taskDueDate)
+    const startDate = moment(taskStartDate)
+    if (this.onCheckDayInWeek() || dueDate.isBefore(startDate)) {
       this.setState({
         isTaskDueDateError: true,
         isTaskStartDateError: false,
@@ -223,45 +257,45 @@ class TaskRepetition extends React.PureComponent {
       })
     }
   }
+  onCheckDayInWeek = () => {
+    const { repetitionType, repetitionDayInWeek, taskStartDate } = this.state
+    if (repetitionType === 'weekly') {
+      const startDate = moment(taskStartDate).format('d')
+      var isError = true
+      repetitionDayInWeek.forEach(day => {
+        if (startDate === day) {
+          isError = false
+        }
+      });
+      return isError
+    } else {
+      return false
+    }
+  }
   onDayCheckChange = (repetitionDayInWeek) => {
     if (repetitionDayInWeek.length === 0) {
       return;
     }
-    this.setState({ repetitionDayInWeek })
-  }
-  getShowDay = (thisDay) => {
-    days.map((day, index) => {
-      if (thisDay === day.label || thisDay === day.engLabel) {
-        console.log([days[index].value], 'go')
-        return [days[index].value]
-      }
-    })
+    this.setState({ repetitionDayInWeek }, () => this.onCheckTaskStartDateError())
   }
   onDateChange = name => date => {
     var format = this.onFormatedDateTime(date, this.state[name])
-    this.setState({ [name]: format }, () => {
-      switch (name) {
-        case 'taskDueDate': this.onCheckTaskDueDateError()
-          break;
-        case 'taskStartDate': this.onCheckTaskStartDateError()
-          break;
-        default:
-          break;
-      }
-    })
+    this.setState({ [name]: format }, () => this.onCheckDateTimeError(name))
   }
   onTimeChange = name => time => {
     var format = this.onFormatedDateTime(this.state[name], time)
-    this.setState({ [name]: format }, () => {
+    this.setState({ [name]: format }, () => this.onCheckDateTimeError(name))
+  }
+  onCheckDateTimeError = (name) => {
+    const { repetitionDueType, repetitionType } = this.state
+    if (repetitionDueType === 'untilDate' || repetitionType === 'weekly') {
       switch (name) {
-        case 'taskDueDate': this.onCheckTaskDueDateError()
-          break;
-        case 'taskStartDate': this.onCheckTaskStartDateError()
-          break;
+        case 'taskDueDate': return this.onCheckTaskDueDateError()
+        case 'taskStartDate': return this.onCheckTaskStartDateError()
         default:
-          break;
+          return;
       }
-    })
+    }
   }
   onFormatedDateTime = (date, time) => {
     var format = moment(date).minute(moment(time).minute())
@@ -395,16 +429,20 @@ class TaskRepetition extends React.PureComponent {
               </FormControl>
             </form>
             {this.state.repetitionType === 'weekly' ?
-              <CheckboxGroup
-                options={days}
-                value={this.state.repetitionDayInWeek}
-                onChange={this.onDayCheckChange} />
+              <div>
+                วันที่เริ่มงานต้องเป็นวันใดวันหนึ่งของวันที่เลือก
+                <CheckboxGroup
+                  options={days}
+                  value={this.state.repetitionDayInWeek}
+                  onChange={this.onDayCheckChange} />
+              </div>
               :
               null
             }
             {this.state.taskRepetitionSwitch ?
               <div>
                 <DateFormatInput
+                  label='วันเริ่มงาน'
                   okToConfirm={true}
                   dialog={true}
                   name='date'

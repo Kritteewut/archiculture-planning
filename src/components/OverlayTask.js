@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Input from './AddTask';
-import Navigation from './Navigation'
 import TaskShow from './TaskShow';
 import Navbar from './Navbar';
 import Category from './Category';
 import Calendar from './Calendar';
-import History from './History';
 import ShowButton from './ShowButton';
 import Slide from '@material-ui/core/Slide';
 import Dialog from '@material-ui/core/Dialog';
