@@ -35,13 +35,15 @@ List of CSS Design Class
 }
 
 .paper {
-    margin-right: 'theme.spacing.unit * 2';
+    margin-left: 'theme.spacing.unit * 2';
 }
 
 .MenuSetmap {
     position: fixed;
-    right: 65px;
-    top: 0px;
+
+    top: -250px;
+    left: 15px;
+
     color: rgba(0, 0, 0, 0.8);
     background: linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%;
     box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.60);

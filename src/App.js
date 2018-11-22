@@ -1870,10 +1870,12 @@ class App extends Component {
               onToggleDeviceMode={this.onToggleDeviceMode}
               {...this.state}
             />
-          </div>
-          <div className="FrameRight">
             <OpenSettingMap
             />
+
+          </div>
+          <div className="FrameRight">
+
           </div>
           <SearchBox
           />

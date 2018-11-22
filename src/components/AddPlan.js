@@ -73,7 +73,7 @@ class AddPlan extends React.PureComponent {
             <div>
                 <Tooltip
                     title="Add Plan"
-                    placement="right"
+                    placement="top"
                     disableFocusListener
                     disableTouchListener
                 >

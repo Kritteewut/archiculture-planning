@@ -1,12 +1,16 @@
 import React from 'react';
+
 // Material-ui Import
 import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+
 // Icon group
 import IconComplete from '@material-ui/icons/Check';
 import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak';
 import Timeline from '@material-ui/icons/Timeline';
 import TextureICon from '@material-ui/icons/Texture';
-
+import IconToolArt from '@material-ui/icons/Brush';
 
 // CSS Import
 import './Design.css';
@@ -98,53 +102,94 @@ class IconLabelButtons extends React.PureComponent {
         super(props);
         this.state = {}
     }
+
+    state = {
+        anchorEl: null,
+    };
+
+    handleClick = event => {
+        this.setState({ anchorEl: event.currentTarget });
+    };
+
+    handleClose = () => {
+        this.setState({ anchorEl: null });
+    };
+
     render() {
         const { drawingBtnType } = this.props;
+        const { anchorEl } = this.state;
 
         return (
             <div>
-                <Button
-                    variant="contained"
-                    color="default"
-                    className="buttonComplete"
-                    onClick={() => this.props.onAddListenerGrabBtn()}
-                >
-                    <IconComplete className="leftIcon" />
-                    Complete
 
-                </Button>
                 <Button
-                    variant="contained"
+                    variant="fab"
+                    aria-owns={anchorEl ? 'simple-menu' : null}
+                    aria-haspopup="true"
                     color="default"
-                    className="buttonPoint"
-                    onClick={() => this.props.onAddListenerMarkerBtn()}
-                    disabled={(drawingBtnType === 'marker') ? true : false}
+                    className="MenuToolButton"
+                    onClick={this.handleClick}
                 >
-                    <CenterFocusWeakIcon className="leftIcon" />
-                    Point
+                    <IconToolArt />
+                </Button>
 
-                </Button>
-                <Button
-                    variant="contained"
-                    color="default"
-                    className="buttonLine"
-                    onClick={() => this.props.onAddListenerPolylineBtn()}
-                    disabled={(drawingBtnType === 'polyline') ? true : false}
+                <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={this.handleClose}
                 >
-                    <Timeline className="leftIcon" />
-                    Polyline
 
-                </Button>
-                <Button
-                    variant="contained"
-                    color="default"
-                    className="buttonPolygon"
-                    onClick={() => this.props.onAddListenerPolygonBtn()}
-                    disabled={(drawingBtnType === 'polygon') ? true : false}
-                >
-                    <TextureICon className="leftIcon" />
-                    Polygon
-                </Button>
+                    <MenuItem
+                        variant="contained"
+                        color="default"
+                        //className="buttonComplete"
+                        onClick={() => this.props.onAddListenerGrabBtn()}
+                    >
+                        <IconComplete className="leftIcon" />
+                        Complete
+
+                    </MenuItem>
+
+                    <MenuItem
+                        variant="contained"
+                        color="default"
+                        //className="buttonPoint"
+                        onClick={() => this.props.onAddListenerMarkerBtn()}
+                        disabled={(drawingBtnType === 'marker') ? true : false}
+                    >
+                        <CenterFocusWeakIcon className="leftIcon" />
+                        Point
+
+                </MenuItem>
+
+                    <MenuItem
+                        variant="contained"
+                        color="default"
+                        //className="buttonLine"
+                        onClick={() => this.props.onAddListenerPolylineBtn()}
+                        disabled={(drawingBtnType === 'polyline') ? true : false}
+                    >
+                        <Timeline className="leftIcon" />
+                        Polyline
+
+                </MenuItem>
+
+                    <MenuItem
+                        variant="contained"
+                        color="default"
+                        //className="buttonPolygon"
+                        onClick={() => this.props.onAddListenerPolygonBtn()}
+                        disabled={(drawingBtnType === 'polygon') ? true : false}
+                    >
+                        <TextureICon className="leftIcon" />
+                        Polygon
+                </MenuItem>
+
+
+
+
+                </Menu>
             </div>
         );
     }

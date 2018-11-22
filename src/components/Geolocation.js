@@ -1,6 +1,7 @@
 import React, { } from 'react';
 import PropTypes from 'prop-types';
 import CircularProgress from '@material-ui/core/CircularProgress';
+
 // Material-ui Import
 import MyLocation from '@material-ui/icons/MyLocation';
 import Tooltip from '@material-ui/core/Tooltip';
