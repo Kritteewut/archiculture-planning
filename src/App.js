@@ -936,7 +936,7 @@ class App extends Component {
       }
     }, () => {
       this.onAddRealTimeUpdateListener()
-
+      this.onCheckToggleAllTaskDone()
     })
   }
   onResetSelectedPlan = () => {
@@ -1570,37 +1570,22 @@ class App extends Component {
             taskDueDate = taskDueDate.toDate()
             data = { ...data, taskDueDate }
           }
-          // if (taskRepetition) {
-          //   var { repetitionDueType, taskStartDate } = taskRepetition
-          //   taskStartDate = taskStartDate.toDate()
-          //   data.taskRepetition.taskStartDate = taskStartDate
-          //   var doTaskDate
-          //   switch (repetitionDueType) {
-          //     case 'forever':
-          //       doTaskDate = this.onComputeDoTaskDate(data)
-          //       break;
-          //     case 'untiDate':
-          //       var { taskDueDate } = taskRepetition
-          //       taskDueDate = taskDueDate.toDate()
-          //       data.taskRepetition.taskDueDate = taskDueDate
-          //       var formtedTaskDueDate = moment(taskDueDate).format().split('T')[0]
-          //       if (moment(formtedTaskDueDate).isSameOrBefore(thisDate)) {
-          //         doTaskDate = this.onComputeDoTaskDate(data)
-          //       }
-          //       break;
-          //     case 'times':
-          //       const { repetitionFinishTimes, repetitionTimes } = taskRepetition
-          //       if (repetitionFinishTimes <= repetitionTimes) {
-          //         doTaskDate = this.onComputeDoTaskDate(data)
-          //       }
-          //       break;
-          //     default:
-          //       break;
-          //   }
-          //   if (doTaskDate) {
-          //     data.taskRepetition.doTaskDate = doTaskDate
-          //   }
-          // }
+
+          if (taskRepetition) {
+
+            var { taskStartDate, repetitionDueType, taskDueDate } = taskRepetition
+            if (repetitionDueType === 'untilDate') {
+              taskDueDate = taskDueDate.toDate()
+              data.taskRepetition.taskDueDate = taskDueDate
+            }
+            taskStartDate = taskStartDate.toDate()
+            data.taskRepetition.taskStartDate = taskStartDate
+            var doTaskDate = self.onCheckDoTaskDate(taskRepetition)
+            if (doTaskDate) {
+              data.taskRepetition.doTaskDate = doTaskDate
+            }
+          }
+          console.log(data)
           var updateTask
           switch (change.type) {
             case 'added': updateTask = update(self.state.overlayTasks, { $push: [data] }); break;
@@ -1663,45 +1648,59 @@ class App extends Component {
     const FormatedLastModifiedDate = moment(lastModifiedDate).format().split('T')[0]
     const thisDate = moment().format().split('T')[0]
     //if (!moment(FormatedLastModifiedDate).isSame(thisDate)) {
-    //}
+    taskRef.where('planId', '==', planId).get().then(function (querySnapshot) {
+      querySnapshot.forEach(task => {
+        const { taskRepetition } = task.data()
+        const taskId = task.id
+        if (taskRepetition) {
+          const doTaskDate = self.onCheckDoTaskDate(taskRepetition)
+          console.log(doTaskDate)
+          const doDate = moment(doTaskDate).format().split('T')[0]
+          if (moment(doDate).isSame(thisDate)) {
+            taskRef.doc(taskId).set({ isDone: false }, { merge: true })
+          }
+        }
+      })
+    })
+    // }
   }
-  onChangeTaskDoneAndDoTaskDate = (taskRepetition) => {
-    var { repetitionType, repetitionUnit, doTaskDate, taskId } = taskRepetition
-    var thisDate = moment().format().split('T')[0]
-    doTaskDate = doTaskDate.toDate()
-    var computeUnit
-    switch (repetitionType) {
-      case 'daily': computeUnit = 'd'
+  onCheckDoTaskDate = (taskRepetition) => {
+    const { repetitionDueType } = taskRepetition
+    var result = null
+    switch (repetitionDueType) {
+      case 'forever':
+        result = this.onComputeDoTaskDate(taskRepetition)
         break;
-      case 'weekly': computeUnit = 'w'
+      case 'untilDate':
+        const { taskDueDate } = taskRepetition
+        const thisDate = moment().format().split('T')[0]
+        const formatedTaskDueDate = moment(taskDueDate.toDate()).format().split('T')[0]
+        if (moment(thisDate).isSameOrBefore(formatedTaskDueDate)) {
+          result = this.onComputeDoTaskDate(taskRepetition)
+        }
         break;
-      case 'monthly': computeUnit = 'M'
-        break;
-      case 'yearly': computeUnit = 'y'
+      case 'times':
+        const { repetitionFinishTimes, repetitionTimes } = taskRepetition
+        if (repetitionFinishTimes <= repetitionTimes) {
+          result = this.onComputeDoTaskDate(taskRepetition)
+        }
         break;
       default:
         break;
     }
-    var computeDate = moment(doTaskDate).add(repetitionUnit, computeUnit).format().split('T')[0]
-    if (moment(computeDate).isSame(thisDate)) {
-      var format = moment().minute(moment(doTaskDate).minute())
-      format = moment(format).hours(moment(doTaskDate).hours()).toDate()
-      taskRepetition.doTaskDate = format
-      taskRef.doc(taskId).set({ isDone: false, taskRepetition }, { merge: true })
-    }
+    return result
   }
-  onComputeDoTaskDate = (task) => {
-    const { taskId, taskRepetition } = task
+  onComputeDoTaskDate = (taskRepetition) => {
     const { taskStartDate, repetitionType, repetitionUnit, repetitionDayInWeek } = taskRepetition
     const thisDate = moment().format().split('T')[0]
-    const startDate = moment(taskStartDate).format().split('T')[0]
+    const startDate = moment(taskStartDate.toDate()).format().split('T')[0]
     if (moment(startDate).isSameOrAfter(thisDate)) {
-      return taskStartDate
+      return taskStartDate.toDate()
     } else {
-      const addDate = repetitionUnit - 1
+      const addUnit = repetitionUnit - 1
       var returnDate
       switch (repetitionType) {
-        case 'daily': returnDate = moment(thisDate).add(addDate, 'd')
+        case 'daily': returnDate = moment().add(addUnit, 'd')
           break;
         case 'weekly':
           const dayLength = repetitionDayInWeek.length
@@ -1714,20 +1713,21 @@ class App extends Component {
             }
           }
           if (shouldChangeWeek) {
-
+            returnDate = moment().add((dayNum + repetitionDayInWeek[dayIndex]), 'd')
           } else {
-
+            returnDate = moment().add((repetitionDayInWeek[dayIndex] - dayNum), 'd')
           }
+          returnDate = moment(returnDate).add(addUnit, 'w')
           break;
-        case 'monthly': returnDate = moment(thisDate).add(addDate, 'M')
+        case 'monthly': returnDate = moment().add(addUnit, 'M')
           break;
-        case 'yearly': returnDate = moment(thisDate).add(addDate, 'y')
+        case 'yearly': returnDate = moment().add(addUnit, 'y')
           break;
         default: break;
       }
-      // var format = moment().minute(moment(doTaskDate).minute())
-      // format = moment(format).hours(moment(doTaskDate).hours()).toDate()
-      return this.onFormatedDateTime(returnDate, taskStartDate)
+      var format = moment(returnDate).minute(moment(taskStartDate.toDate()).minute())
+      format = moment(format).hours(moment(taskStartDate.toDate()).hours()).toDate()
+      return format
     }
   }
   onRemoveRealTimeUpdateListener = () => {

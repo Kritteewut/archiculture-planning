@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import purple from '@material-ui/core/colors/purple';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+import TextField from '@material-ui/core/TextField';
 
 const styles = theme => ({
     container: {
@@ -39,7 +38,7 @@ class InputItem extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: '',
+            taskName: '',
         }
     }
 
@@ -49,12 +48,12 @@ class InputItem extends Component {
         })
     }
     handleSubmit = () => {
-        if (!this.state.name.trim()) {
+        if (!this.state.taskName.trim()) {
             alert('กรุณากรอกชื่องาน')
             this.setState({ name: '', })
         } else {
             var task = {
-                name: this.state.name,
+                name: this.state.taskName,
                 content: '',
                 isDone: false,
                 addTaskDate: new Date(),
@@ -71,7 +70,15 @@ class InputItem extends Component {
         return (
             <div className={classes.container}>
                 <FormControl className={classes.margin}>
-                    <InputLabel
+                    <TextField
+                        className="DataTextPlan"
+                        name='taskName'
+                        value={this.state.taskName}
+                        onChange={this.handleOnchange}
+                        margin="normal"
+                        label="ชื่องาน"
+                    />
+                    {/* <InputLabel
                         FormLabelClasses={{
                             root: classes.cssLabel,
                             focused: classes.cssFocused,
@@ -88,7 +95,7 @@ class InputItem extends Component {
                         name="name"
                         onChange={this.handleOnchange}
                         value={this.state.name}
-                    />
+                    /> */}
                 </FormControl>
                 <Button onClick={this.handleSubmit} variant="fab" className={classes.button}>
                     <AddIcon />
