@@ -74,7 +74,7 @@ class TaskShow extends React.PureComponent {
                                 <ListItem
                                     key={task.taskId}
                                     button
-                                    onClick={() => this.props.onToggleIsTaskDone(task)}
+                                    //onClick={() => this.props.onToggleIsTaskDone(task)}
                                 >
                                     <ListItemText
                                         primary={task.name}
