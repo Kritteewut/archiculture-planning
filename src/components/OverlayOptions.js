@@ -127,6 +127,7 @@ class OverlayOptions extends React.PureComponent {
                     filterTaskType={this.props.filterTaskType}
                     onEditTask={this.props.onEditTask}
                     onDeleteTask={this.props.onDeleteTask}
+                    isWaitingForTaskToggle={this.props.isWaitingForTaskToggle}
                 />
             </div>
         )

@@ -60,62 +60,76 @@ class TaskShow extends React.PureComponent {
     handleToggleDeleteTask = () => {
         this.setState({ isDeleteTaskOpen: !this.state.isDeleteTaskOpen })
     }
+    getShowTaskDate = (task) => {
+        const { taskRepetition } = task
+        if (taskRepetition) {
+            return task.taskRepetition.doTaskDate ? 'วันที่ทำงาน : ' + moment(task.taskRepetition.doTaskDate).format('ll') : 'งานเสร็จสิ้นหรือเลยกำหนดการแล้ว'
+        } else {
+            return 'ทำครั้งเดียว ' + ' เพิ่มเมื่อ' + moment(task.addTaskDate).format('ll')
+        }
+    }
 
     render() {
-        const { overlayTaskShow, classes, } = this.props;
+        const { overlayTaskShow, classes, isWaitingForTaskToggle } = this.props;
         return (
             <div className={classes.root}>
+                {isWaitingForTaskToggle ?
+                    "กำลังโหลด"
+                    :
+                    <div>
 
-                <main className={classes.layout}>
-
-                    <List component="nav">
-                        {overlayTaskShow.map((task) => {
-                            return (
-                                <ListItem
-                                    key={task.taskId}
-                                    button
-                                    //onClick={() => this.props.onToggleIsTaskDone(task)}
-                                >
-                                    <ListItemText
-                                        primary={task.name}
-                                        secondary={'วันที่เพิ่มงาน : ' + moment(task.addTaskDate).format('ll')}
-                                    />
-                                    <ListItemSecondaryAction>
-
-                                        <IconButton aria-label="Edit"
+                        <main className={classes.layout}>
+                            <List component="nav">
+                                {overlayTaskShow.map((task) => {
+                                    return (
+                                        <ListItem
+                                            key={task.taskId}
+                                            button
+                                            //onClick={() => this.props.onToggleIsTaskDone(task)}
                                             onClick={() => this.handleEditOpen(task)}
                                         >
-                                            <EditIcon />
-                                        </IconButton>
+                                            <ListItemText
+                                                primary={task.name}
+                                                secondary={this.getShowTaskDate(task)}
+                                            />
+                                            <ListItemSecondaryAction>
 
-                                        <IconButton aria-label="Delete" onClick={() => this.handleDeleteTaskClick(task)}>
-                                            <DeleteIcon />
-                                        </IconButton>
+                                                <IconButton aria-label="Edit"
+                                                    onClick={() => this.handleEditOpen(task)}
+                                                >
+                                                    <EditIcon />
+                                                </IconButton>
 
-                                        <Checkbox
-                                            onChange={() => this.props.onToggleIsTaskDone(task)}
-                                            checked={task.isDone}
-                                        />
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                            )
-                        })
-                        }
-                    </List>
+                                                <IconButton aria-label="Delete" onClick={() => this.handleDeleteTaskClick(task)}>
+                                                    <DeleteIcon />
+                                                </IconButton>
 
+                                                <Checkbox
+                                                    onChange={() => this.props.onToggleIsTaskDone(task)}
+                                                    checked={task.isDone}
+                                                />
+                                            </ListItemSecondaryAction>
+                                        </ListItem>
+                                    )
+                                })
+                                }
+                            </List>
+                        </main>
+                        <TaskEdit
+                            handleToggleEditTask={this.handleToggleEditTask}
+                            onEditTask={this.props.onEditTask}
+                            {...this.state}
+                        />
 
-                </main>
-                <TaskEdit
-                    handleToggleEditTask={this.handleToggleEditTask}
-                    onEditTask={this.props.onEditTask}
-                    {...this.state}
-                />
+                        <TaskDelete
+                            handleToggleDeleteTask={this.handleToggleDeleteTask}
+                            onDeleteTask={this.props.onDeleteTask}
+                            {...this.state}
+                        />
 
-                <TaskDelete
-                    handleToggleDeleteTask={this.handleToggleDeleteTask}
-                    onDeleteTask={this.props.onDeleteTask}
-                    {...this.state}
-                />
+                    </div>
+                }
+
             </div>
         );
     }

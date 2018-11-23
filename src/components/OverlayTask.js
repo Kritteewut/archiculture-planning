@@ -88,6 +88,7 @@ class OverlayTask extends React.PureComponent {
               onToggleIsTaskDone={this.props.onToggleIsTaskDone}
               onEditTask={this.props.onEditTask}
               onDeleteTask={this.props.onDeleteTask}
+              isWaitingForTaskToggle={this.props.isWaitingForTaskToggle}
             />
 
           </div>

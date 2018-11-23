@@ -20,6 +20,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Checkbox } from 'antd';
 import moment from 'moment';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import TextField from '@material-ui/core/TextField'
 
 const CheckboxGroup = Checkbox.Group;
 const days = [
@@ -59,7 +60,7 @@ const initState = {
   repetitionType: 'daily',
   repetitionDueType: 'forever',
   taskStartDate: new Date(),
-  taskDueDate: new Date(),
+  repetitionDueDate: new Date(),
   repetitionUnit: 1,
   repetitionTimes: 1,
   repetitionCountUnit: 'วัน',
@@ -109,8 +110,8 @@ class TaskRepetition extends React.PureComponent {
       switch (repetitionDueType) {
         // case 'forever': break;
         case 'untilDate':
-          const { taskDueDate } = this.state
-          taskRepetition = { taskDueDate, ...taskRepetition }
+          const { repetitionDueDate } = this.state
+          taskRepetition = { repetitionDueDate, ...taskRepetition }
           break;
         case 'times':
           const { repetitionTimes, repetitionFinishTimes } = this.state
@@ -133,15 +134,19 @@ class TaskRepetition extends React.PureComponent {
   };
   onRepetitionUnitChange = (event) => {
     var RawRePetitionUnit = event.target.value
+    var int = parseInt(RawRePetitionUnit, 10)
+    if (!int) {
+      return;
+    }
     var props = event.target.name
     var repetitionUnit
-    if (RawRePetitionUnit > 99) {
+    if (int > 99) {
       repetitionUnit = 99
     } else {
-      if (RawRePetitionUnit < 1) {
+      if (int < 1) {
         repetitionUnit = 1
       } else {
-        repetitionUnit = RawRePetitionUnit
+        repetitionUnit = int
       }
     }
     this.setState({ [props]: repetitionUnit })
@@ -187,8 +192,8 @@ class TaskRepetition extends React.PureComponent {
     })
   }
   onCheckTaskStartDateError = () => {
-    const { taskDueDate, taskStartDate, repetitionDueType } = this.state
-    const dueDate = moment(taskDueDate)
+    const { repetitionDueDate, taskStartDate, repetitionDueType } = this.state
+    const dueDate = moment(repetitionDueDate)
     const startDate = moment(taskStartDate)
     if (this.onCheckDayInWeek() || ((repetitionDueType === 'untilDate') ? startDate.isAfter(dueDate) : false)) {
       this.setState({
@@ -203,8 +208,8 @@ class TaskRepetition extends React.PureComponent {
     }
   }
   onCheckTaskDueDateError = () => {
-    const { taskDueDate, taskStartDate } = this.state
-    const dueDate = moment(taskDueDate)
+    const { repetitionDueDate, taskStartDate } = this.state
+    const dueDate = moment(repetitionDueDate)
     const startDate = moment(taskStartDate)
     if (this.onCheckDayInWeek() || dueDate.isBefore(startDate)) {
       this.setState({
@@ -254,7 +259,7 @@ class TaskRepetition extends React.PureComponent {
     const { repetitionDueType, repetitionType } = this.state
     if (repetitionDueType === 'untilDate' || repetitionType === 'weekly') {
       switch (name) {
-        case 'taskDueDate': return this.onCheckTaskDueDateError()
+        case 'repetitionDueDate': return this.onCheckTaskDueDateError()
         case 'taskStartDate': return this.onCheckTaskStartDateError()
         default:
           return;
@@ -276,8 +281,16 @@ class TaskRepetition extends React.PureComponent {
       default: return;
     }
   }
+  onShowSummaryCountUnit = () => {
+    const { repetitionUnit } = this.state
+    switch (repetitionUnit) {
+      case 1: return `ทุก${this.onShowCountUnit()}`;
+      case 2: return `${this.onShowCountUnit()}เว้น${this.onShowCountUnit()}`;
+      default: return `${this.onShowCountUnit()}เว้น${repetitionUnit}${this.onShowCountUnit()}`;
+    }
+  }
   renderRepetitionDueType = () => {
-    const { repetitionDueType, taskDueDate } = this.state
+    const { repetitionDueType, repetitionDueDate } = this.state
     const { classes } = this.props
     switch (repetitionDueType) {
       case 'forever': return
@@ -287,15 +300,15 @@ class TaskRepetition extends React.PureComponent {
             okToConfirm={true}
             dialog={true}
             name='date'
-            value={taskDueDate}
-            onChange={this.onDateChange('taskDueDate')}
+            value={repetitionDueDate}
+            onChange={this.onDateChange('repetitionDueDate')}
           />
           <br />
           <FormControl className={classes.formControl} error aria-describedby="component-error-text">
             <TimeInput
               mode='24h'
-              value={taskDueDate}
-              onChange={this.onTimeChange('taskDueDate')}
+              value={repetitionDueDate}
+              onChange={this.onTimeChange('repetitionDueDate')}
               cancelLabel='ยกเลิก'
               okLabel='ตกลง'
               label="ชื่องาน"
@@ -429,24 +442,17 @@ class TaskRepetition extends React.PureComponent {
                     <FormHelperText id="component-error-text">วันที่หรือเวลาที่กำหนดผิด</FormHelperText> : null
                   }
                 </FormControl>
-
-                <FormControl
-                  className={classNames(classes.margin, classes.withoutLabel, classes.textField)}
-                  aria-describedby="weight-helper-text"
-                >
-                  <InputLabel htmlFor="component-simple">ทุก ๆ </InputLabel>
-                  <Input
-                    id="adornment-weight"
-                    value={this.state.repetitionUnit}
-                    type="number"
-                    name="repetitionUnit"
-                    onChange={this.onRepetitionUnitChange}
-                    endAdornment={<InputAdornment position="end">{this.onShowCountUnit()}</InputAdornment>}
-                    inputProps={{
-                      'aria-label': 'Weight',
-                    }}
-                  />
-                </FormControl>
+                <TextField
+                  id="standard-helperText"
+                  label={`หน่วย${this.onShowCountUnit()}`}
+                  type="number"
+                  name="repetitionUnit"
+                  onChange={this.onRepetitionUnitChange}
+                  value={this.state.repetitionUnit}
+                  className={classes.textField}
+                  helperText={`ทำ${this.onShowSummaryCountUnit()}`}
+                  margin="normal"
+                />
               </div>
               :
               null

@@ -972,11 +972,18 @@ class App extends Component {
     if (taskRepetition) {
       const { repetitionDueType } = taskRepetition
       if (repetitionDueType === 'times' && !isDone) {
-        const { repetitionFinishTimes } = taskRepetition
-        const increase = parseInt(repetitionFinishTimes, 10)
-        const increaseString = increase + 1
-        data = { taskRepetition, ...data }
-        data = update(data, { taskRepetition: { repetitionFinishTimes: { $set: increaseString.toString() } } })
+        const { repetitionFinishTimes, repetitionTimes, repetitionType, repetitionUnit, taskStartDate } = taskRepetition
+        data = update(data, {
+          taskRepetition: {
+            $set: {
+              repetitionFinishTimes: repetitionFinishTimes + 1,
+              repetitionTimes,
+              repetitionType,
+              repetitionUnit,
+              taskStartDate,
+            }
+          }
+        })
       }
     }
     taskRef.doc(taskId).set(data
@@ -1558,28 +1565,23 @@ class App extends Component {
     taskRef.where("planId", "==", this.state.selectedPlan.planId)
       .onSnapshot(function (snapshot) {
         snapshot.docChanges().forEach(function (change) {
-          var { taskDueDate, taskRepetition } = change.doc.data()
-          var addTaskDate = change.doc.data().addTaskDate.toDate();
-          var taskId = change.doc.id
+          const { taskDueDate, taskRepetition } = change.doc.data()
+          const addTaskDate = change.doc.data().addTaskDate.toDate();
+          const taskId = change.doc.id
           const actionIndex = self.state.overlayTasks.findIndex(task => task.taskId === taskId)
           var data = {
             ...change.doc.data(),
-            taskId, addTaskDate
+            taskId, addTaskDate,
           }
           if (taskDueDate) {
-            taskDueDate = taskDueDate.toDate()
-            data = { ...data, taskDueDate }
+            data = { ...data, taskDueDate: taskDueDate.toDate(), }
           }
-
           if (taskRepetition) {
-
-            var { taskStartDate, repetitionDueType, taskDueDate } = taskRepetition
+            const { taskStartDate, repetitionDueType, repetitionDueDate } = taskRepetition
             if (repetitionDueType === 'untilDate') {
-              taskDueDate = taskDueDate.toDate()
-              data.taskRepetition.taskDueDate = taskDueDate
+              data.taskRepetition.repetitionDueDate = repetitionDueDate.toDate()
             }
-            taskStartDate = taskStartDate.toDate()
-            data.taskRepetition.taskStartDate = taskStartDate
+            data.taskRepetition.taskStartDate = taskStartDate.toDate()
             var doTaskDate = self.onCheckDoTaskDate(taskRepetition)
             if (doTaskDate) {
               data.taskRepetition.doTaskDate = doTaskDate
@@ -1643,26 +1645,41 @@ class App extends Component {
   }
   onCheckToggleAllTaskDone = () => {
     var self = this
-    const { selectedPlan } = this.state
+    const { selectedPlan, planData } = this.state
     const { lastModifiedDate, planId } = selectedPlan
     const FormatedLastModifiedDate = moment(lastModifiedDate).format().split('T')[0]
     const thisDate = moment().format().split('T')[0]
-    //if (!moment(FormatedLastModifiedDate).isSame(thisDate)) {
-    taskRef.where('planId', '==', planId).get().then(function (querySnapshot) {
-      querySnapshot.forEach(task => {
-        const { taskRepetition } = task.data()
-        const taskId = task.id
-        if (taskRepetition) {
-          const doTaskDate = self.onCheckDoTaskDate(taskRepetition)
-          console.log(doTaskDate)
-          const doDate = moment(doTaskDate).format().split('T')[0]
-          if (moment(doDate).isSame(thisDate)) {
-            taskRef.doc(taskId).set({ isDone: false }, { merge: true })
-          }
+    if (!moment(FormatedLastModifiedDate).isSame(thisDate)) {
+      planRef.doc(planId).set({ lastModifiedDate: new Date() }, { merge: true })
+      const actionIndex = planData.findIndex(plan => plan.planId === planId)
+      const updatePlan = update(planData, { [actionIndex]: { lastModifiedDate: new Date() } })
+      this.setState({ planData: updatePlan })
+      taskRef.where('planId', '==', planId).get().then(function (querySnapshot) {
+        var taskAmount = querySnapshot.size
+        if (taskAmount === 0) {
+          //self.setState({ isWaitingForTaskToggle: false })
         }
+        querySnapshot.forEach(doc => {
+          const { taskRepetition } = doc.data()
+          const taskId = doc.id
+          if (taskRepetition) {
+            const doTaskDate = self.onCheckDoTaskDate(taskRepetition)
+            if (doTaskDate) {
+              const doDate = moment(doTaskDate).format().split('T')[0]
+              if (moment(doDate).isSame(thisDate)) {
+                taskRef.doc(taskId).set({ isDone: false }, { merge: true }).then(function () {
+                  taskAmount--
+                  if (taskAmount === 0) {
+                    planRef.doc(planId).set({ lastModifiedDate: new Date() }, { merge: true })
+                    self.setState({ isWaitingForTaskToggle: false })
+                  }
+                })
+              }
+            }
+          }
+        })
       })
-    })
-    // }
+    }
   }
   onCheckDoTaskDate = (taskRepetition) => {
     const { repetitionDueType } = taskRepetition
@@ -1672,16 +1689,16 @@ class App extends Component {
         result = this.onComputeDoTaskDate(taskRepetition)
         break;
       case 'untilDate':
-        const { taskDueDate } = taskRepetition
+        const { repetitionDueDate } = taskRepetition
         const thisDate = moment().format().split('T')[0]
-        const formatedTaskDueDate = moment(taskDueDate.toDate()).format().split('T')[0]
+        const formatedTaskDueDate = moment(repetitionDueDate.toDate()).format().split('T')[0]
         if (moment(thisDate).isSameOrBefore(formatedTaskDueDate)) {
           result = this.onComputeDoTaskDate(taskRepetition)
         }
         break;
       case 'times':
         const { repetitionFinishTimes, repetitionTimes } = taskRepetition
-        if (repetitionFinishTimes <= repetitionTimes) {
+        if (repetitionFinishTimes < repetitionTimes) {
           result = this.onComputeDoTaskDate(taskRepetition)
         }
         break;

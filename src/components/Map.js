@@ -38,6 +38,7 @@ class Map extends React.PureComponent {
             isLoad: true
         })
     }
+
     render() {
         var childrenOutput = null;
         if (this.state.isLoad === true) {

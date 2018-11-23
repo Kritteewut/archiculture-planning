@@ -59,7 +59,7 @@ class InputItem extends Component {
                 addTaskDate: new Date(),
             }
             this.props.onAddTask(task)
-            this.setState({ name: '' })
+            this.setState({ taskName: '' })
         }
     }
 
