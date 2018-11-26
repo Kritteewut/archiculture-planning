@@ -1896,7 +1896,7 @@ class App extends Component {
               onAddListenerPolygonBtn={this.onAddListenerPolygonBtn}
               onAddListenerPolylineBtn={this.onAddListenerPolylineBtn}
             />
-
+            
             <SearchBox
             />
 

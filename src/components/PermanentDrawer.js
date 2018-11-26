@@ -25,7 +25,7 @@ import Login from './Login';
 import EditPlan from './EditPlan';
 import DeletePlan from './DeletePlan';
 import MergeOverlay from './MergeOverlay';
-import AddPlanBtn from './AddPlan';
+import AddPlan from './AddPlan';
 
 // Icon Group
 import Pic from './Picture/Ling logo.png';
@@ -136,7 +136,12 @@ class PermanentDrawer extends React.PureComponent {
                         <Divider />
 
                         <Button>
-                            <AddPlanBtn />
+                            <AddPlan
+                                onAddPlan={this.props.onAddPlan}
+                                onChangeDrawPage={this.props.onChangeDrawPage}
+                                handleDrawerOpen={this.props.handleDrawerOpen}
+                                {...this.props}
+                            />
                         </Button>
 
                         <Button variant="contained" className="buttonshow" onClick={onToggleDistanceMarker}>

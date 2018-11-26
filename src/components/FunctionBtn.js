@@ -69,7 +69,7 @@ class IconLabelButtons extends React.PureComponent {
                         color="default"
                     >
 
-                        <Mapsetting />
+                            <Mapsetting />
 
                     </MenuItem>
 
@@ -77,8 +77,9 @@ class IconLabelButtons extends React.PureComponent {
                         variant="contained"
                         color="default"
                     >
-
-                        <GPS />
+                            <GPS
+                                onSetPanelName={this.props.onSetPanelName}
+                            />
 
                     </MenuItem>
 
@@ -86,12 +87,12 @@ class IconLabelButtons extends React.PureComponent {
                         variant="contained"
                         color="default"
                     >
-
-                        <Device />
+                            <Device
+                                onToggleDeviceMode={this.props.onToggleDeviceMode}
+                                {...this.state}
+                            />
 
                     </MenuItem>
-
-
 
                 </Menu>
             </div>
