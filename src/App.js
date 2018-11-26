@@ -1714,31 +1714,44 @@ class App extends Component {
     if (moment(startDate).isSameOrAfter(thisDate)) {
       return taskStartDate.toDate()
     } else {
-      const addUnit = repetitionUnit - 1
       var returnDate
       switch (repetitionType) {
-        case 'daily': returnDate = moment().add(addUnit, 'd')
+        case 'daily':
+          var addDay
+          const diffDate = moment().diff(startDate, 'd')
+          if (diffDate < repetitionUnit) {
+            addDay = repetitionUnit - diffDate
+          } else {
+            addDay = diffDate % repetitionUnit
+          }
+          returnDate = moment().add(addDay, 'd')
           break;
         case 'weekly':
-          const dayLength = repetitionDayInWeek.length
-          const dayNum = moment().format('d')
+          const dayLength = repetitionDayInWeek.length - 1
+          const dayNum = parseInt(moment().format('d'), 10)
           var shouldChangeWeek = true
-          for (var dayIndex = 0; dayIndex <= dayLength; dayIndex++) {
-            if (dayNum < repetitionDayInWeek[dayIndex]) {
+          var dayIndex
+          var addDayInweek
+          repetitionDayInWeek.forEach((day, key) => {
+            if (shouldChangeWeek && (dayNum < day)) {
+              dayIndex = key
               shouldChangeWeek = false
-              break;
             }
-          }
+          });
           if (shouldChangeWeek) {
-            returnDate = moment().add((dayNum + repetitionDayInWeek[dayIndex]), 'd')
+            addDayInweek = repetitionDayInWeek[dayLength] - dayNum
+            console.log('chang', addDayInweek)
           } else {
-            returnDate = moment().add((repetitionDayInWeek[dayIndex] - dayNum), 'd')
+            addDayInweek = repetitionDayInWeek[dayIndex] - dayNum
+            console.log('not chang', addDayInweek)
           }
-          returnDate = moment(returnDate).add(addUnit, 'w')
+          // console.log(addDayInweek)
+          returnDate = moment().add(addDayInweek, 'd')
+          returnDate = moment(returnDate).add(repetitionUnit, 'w')
           break;
-        case 'monthly': returnDate = moment().add(addUnit, 'M')
+        case 'monthly': //returnDate = moment().add(addUnit, 'M')
           break;
-        case 'yearly': returnDate = moment().add(addUnit, 'y')
+        case 'yearly': //returnDate = moment().add(addUnit, 'y')
           break;
         default: break;
       }
