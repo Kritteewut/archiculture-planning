@@ -134,16 +134,12 @@ class PermanentDrawer extends React.PureComponent {
                             </ListItem>
                         </List>
                         <Divider />
-
-                        <Button>
                             <AddPlan
                                 onAddPlan={this.props.onAddPlan}
                                 onChangeDrawPage={this.props.onChangeDrawPage}
                                 handleDrawerOpen={this.props.handleDrawerOpen}
                                 {...this.props}
                             />
-                        </Button>
-
                         <Button variant="contained" className="buttonshow" onClick={onToggleDistanceMarker}>
                             {isDistanceMarkerVisible ? 'ปิดระยะ' : 'แสดงระยะ'}
                         </Button>

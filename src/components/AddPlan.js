@@ -77,16 +77,14 @@ class AddPlan extends React.PureComponent {
                     disableFocusListener
                     disableTouchListener
                 >
-                    <div >
-                        <Button
-                            variant="contained"
-                            className="AddButton"
-                            onClick={this.onToggleAddPlanOpen}
-                            disabled={isWaitingForUserResult ? true : false}
-                        >
-                            <AddIcon />
-                        </Button>
-                    </div>
+                    <Button
+                        variant="contained"
+                        className="AddButton"
+                        onClick={this.onToggleAddPlanOpen}
+                        disabled={isWaitingForUserResult ? true : false}
+                    >
+                        <AddIcon />
+                    </Button>
                 </Tooltip>
                 <Modal
                     aria-labelledby="simple-modal-title"
