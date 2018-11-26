@@ -27,8 +27,8 @@ List of CSS Design Class
 .MenuToolButton {
     position: absolute;
 
-    top: 180px;
-    left: 15px;
+    top: 30px;
+    left: 10px;
     
     color: rgba(0, 0, 0, 0.8);
     background: linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%;
@@ -44,8 +44,8 @@ List of CSS Design Class
 
 .buttonComplete {
     position: absolute;
-    top: 170px;
-    left: 15px;
+    top: 40px;
+    left: 10px;
     width: 125px;
     color: rgba(0, 0, 0, 0.8);
     background: linear-gradient(20deg, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1)) 30%;

@@ -53,7 +53,7 @@ List of CSS Design Class
 .FrameLeft {
     width: 0px;     /* เมื่อต้องปรับต้องตั้งค่าให้เห็น Frame เป็นปกติก่อน */
     height: 0px;
-    top: 10%;
+    top: 0px;
     left: 0px;
     right: 0px;
     bottom: 0px;
@@ -68,13 +68,13 @@ List of CSS Design Class
 .FrameRight {
     width: 0px;
     height: 0px;
-    top: 10%;
+    top: 0px;
     right: 0px;
     bottom: 0px;
     /* Layer Group*/
     position: absolute;
     cursor: pointer;
-    background-color: rgba(151, 255, 66, 0.548);
+    background-color: rgba(151, 255, 66, 0);
 }
 
 .FrameCenter {

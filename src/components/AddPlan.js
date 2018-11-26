@@ -79,7 +79,7 @@ class AddPlan extends React.PureComponent {
                 >
                     <div >
                         <Button
-                            variant="fab"
+                            variant="contained"
                             className="AddButton"
                             onClick={this.onToggleAddPlanOpen}
                             disabled={isWaitingForUserResult ? true : false}

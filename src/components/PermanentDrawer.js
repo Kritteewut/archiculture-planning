@@ -25,6 +25,7 @@ import Login from './Login';
 import EditPlan from './EditPlan';
 import DeletePlan from './DeletePlan';
 import MergeOverlay from './MergeOverlay';
+import AddPlanBtn from './AddPlan';
 
 // Icon Group
 import Pic from './Picture/Ling logo.png';
@@ -133,6 +134,10 @@ class PermanentDrawer extends React.PureComponent {
                             </ListItem>
                         </List>
                         <Divider />
+
+                        <Button>
+                            <AddPlanBtn />
+                        </Button>
 
                         <Button variant="contained" className="buttonshow" onClick={onToggleDistanceMarker}>
                             {isDistanceMarkerVisible ? 'ปิดระยะ' : 'แสดงระยะ'}

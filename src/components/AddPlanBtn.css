@@ -101,8 +101,8 @@ List of CSS Design Class
 .AddButton {
     position: absolute;
 
-    top: 160px;
-    left: 15px;
+    top: 0px;
+    left: 0px;
     
     color: rgba(0, 0, 0, 0.8);
     background: linear-gradient(20deg, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1)) 30%;
