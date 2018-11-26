@@ -1886,7 +1886,7 @@ class App extends Component {
               onToggleDeviceMode={this.onToggleDeviceMode}
               {...this.state}
 
-            //OpensettingMao
+              //OpensettingMap
             />
 
             <IconLabelButtons
@@ -1896,7 +1896,7 @@ class App extends Component {
               onAddListenerPolygonBtn={this.onAddListenerPolygonBtn}
               onAddListenerPolylineBtn={this.onAddListenerPolylineBtn}
             />
-            
+
             <SearchBox
             />
 
