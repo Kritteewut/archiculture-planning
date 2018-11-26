@@ -7,6 +7,7 @@ import {
   planRef, taskRef,
   planMemberRef,
 } from './config/firebase'
+
 // Import location
 import Map from './components/Map'
 import Marker from './components/Marker';
@@ -16,19 +17,23 @@ import SearchBox from './components/searchBox';
 import OpenSide from './components/openSideBtn';
 import ExampleLine from './components/ExampleLine';
 import AddPlan from './components/AddPlan';
-import GeolocatedMe from './components/Geolocation';
+import FunctionBtn from './components/FunctionBtn'
+//import GeolocatedMe from './components/Geolocation';
 import IconLabelButtons from './components/DrawingBtn';
 import PermanentDrawer from './components/PermanentDrawer';
-import OpenSettingMap from './components/OpenSettingMapBtn';
+//import OpenSettingMap from './components/OpenSettingMapBtn';
 import TransparentMaker from './components/TransparentMaker';
 import DetailedExpansionPanel from './components/DetailedExpansionPanel';
 import MapCenterFire from './components/MapCenterFire'
-import ToggleDevice from './components/ToggleDevice'
+//import ToggleDevice from './components/ToggleDevice'
+
 // CSS Import
 import './App.css'
 import './components/SearchBoxStyles.css'
+
 // Logo Import
 import icon_point from './components/icons/icon_point.png';
+
 //Value import 
 import { SORT_BY_NEWEST, SORT_BY_LATEST, SHOW_ALL, SHOW_COMPLETE, SHOW_ACTIVATE, SHOW_OVERVIEW, SHOW_TODAY } from './staticValue/SaticString'
 import moment from 'moment';
@@ -1815,6 +1820,9 @@ class App extends Component {
           onDeleteTask={this.onDeleteTask}
           onAddPlanMember={this.onAddPlanMember}
           onDeletePlanMember={this.onDeletePlanMember}
+          onAddPlan={this.onAddPlan}
+          onChangeDrawPage={this.onChangeDrawPage}
+          handleDrawerOpen={this.handleDrawerOpen}
           {...this.state}
         />
         <input id="pac-input" className="controls" type="text" placeholder="Find place" />
@@ -1857,13 +1865,9 @@ class App extends Component {
             exampleLineCoords={this.state.exampleLineCoords}
             strokeColor={this.state.strokeColor}
           />
+
           <div className="FrameLeft">
-            <AddPlan
-              onAddPlan={this.onAddPlan}
-              onChangeDrawPage={this.onChangeDrawPage}
-              handleDrawerOpen={this.handleDrawerOpen}
-              {...this.state}
-            />
+
             {
               this.state.distanceDetail.map(value => {
                 return (
@@ -1880,27 +1884,33 @@ class App extends Component {
                 )
               })
             }
-            <IconLabelButtons
-              onAddListenerMarkerBtn={this.onAddListenerMarkerBtn}
-              onAddListenerPolygonBtn={this.onAddListenerPolygonBtn}
-              onAddListenerPolylineBtn={this.onAddListenerPolylineBtn}
-              onAddListenerGrabBtn={this.onAddListenerGrabBtn}
-            />
+
             <OpenSide
               handleDrawerOpen={this.handleDrawerOpen}
               handleDrawerClose={this.handleDrawerClose}
               openSide={this.state.openSide}
             />
-            <SearchBox
-            />
-            <GeolocatedMe
+
+            <FunctionBtn
+              //Geolocation
               onSetPanelName={this.onSetPanelName}
-            />
-            <ToggleDevice
+
+              //ToggleDevice
               onToggleDeviceMode={this.onToggleDeviceMode}
               {...this.state}
+
+              //OpensettingMap
             />
-            <OpenSettingMap
+
+            <IconLabelButtons
+              onAddListenerGrabBtn={this.onAddListenerGrabBtn}
+
+              onAddListenerMarkerBtn={this.onAddListenerMarkerBtn}
+              onAddListenerPolygonBtn={this.onAddListenerPolygonBtn}
+              onAddListenerPolylineBtn={this.onAddListenerPolylineBtn}
+            />
+
+            <SearchBox
             />
 
           </div>

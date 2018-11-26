@@ -7,6 +7,7 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
+import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import { withStyles } from '@material-ui/core/styles';
@@ -99,12 +100,14 @@ class MenuListComposition extends React.Component {
 
         return (
             <div>
+
                 <Tooltip
                     title="Change Map Style"
                     placement="right"
                     disableFocusListener
                     disableTouchListener
                 >
+
                     <Button
                         buttonRef={node => {
                             this.anchorEl = node;
@@ -114,9 +117,13 @@ class MenuListComposition extends React.Component {
                         onClick={this.handleToggle}
                         variant="fab" className="MenuSetmap"
                     >
+
                         <MapIcon />
                     </Button>
+
                 </Tooltip>
+
+
                 <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
                     {({ TransitionProps, placement }) => (
                         <Grow
@@ -124,24 +131,37 @@ class MenuListComposition extends React.Component {
                             id="menu-list-grow"
                             style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
                         >
+
                             <Paper>
                                 <ClickAwayListener onClickAway={this.handleClose}>
-                                    <MenuList>
 
-                                        <MenuItem onClick={this.onSetMapTypeToRoadmap}>
+                                    <MenuList>
+                                        <MenuItem
+                                            variant="contained"
+                                            color="default"
+                                            onClick={this.onSetMapTypeToRoadmap}>
+
                                             <button className="ButtonMaplayer">
                                                 <img src={Roadmap} className="Maplayer" alt='Roadmap' />
                                             </button>
+
                                         </MenuItem>
 
-                                        <MenuItem onClick={this.onSetMapTypeToSatellite} >
+                                        <MenuItem
+                                            variant="contained"
+                                            color="default"
+                                            onClick={this.onSetMapTypeToSatellite} >
+
                                             <button className="ButtonMaplayer">
                                                 <img src={Satellite} className="Maplayer" alt='Satellite' />
                                             </button>
+
                                         </MenuItem>
                                     </MenuList>
+
                                 </ClickAwayListener>
                             </Paper>
+
                         </Grow>
                     )}
                 </Popper>
@@ -151,7 +171,7 @@ class MenuListComposition extends React.Component {
 }
 
 MenuListComposition.propTypes = {
-    
+
 };
 
 export default (MenuListComposition);

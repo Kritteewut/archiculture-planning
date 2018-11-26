@@ -76,29 +76,22 @@ class GeolocatedMe extends React.PureComponent {
     render() {
         return (
             <div>
-                <Tooltip
-                    title="Your Location"
-                    placement="right"
-                    disableFocusListener
-                    disableTouchListener
+
+                <Button
+                    variant="contained"
+                    className="LOL"
+                    onClick={this.onGetGeolocation}
+                    disabled={this.state.isWaitingForGeo}
                 >
+                    {this.state.isWaitingForGeo
+                        ?
+                        <CircularProgress
+                        />
+                        :
+                        <MyLocation />
+                    }
+                </Button>
 
-                    <Button
-                        variant="fab"
-                        className="LOL"
-                        onClick={this.onGetGeolocation}
-                        disabled={this.state.isWaitingForGeo}
-                    >
-                        {this.state.isWaitingForGeo
-                            ?
-                            <CircularProgress
-                            />
-                            :
-                            <MyLocation />
-                        }
-                    </Button>
-
-                </Tooltip>
             </div>
         )
     }

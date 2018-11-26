@@ -143,17 +143,6 @@ class IconLabelButtons extends React.PureComponent {
                     <MenuItem
                         variant="contained"
                         color="default"
-                        //className="buttonComplete"
-                        onClick={() => this.props.onAddListenerGrabBtn()}
-                    >
-                        <IconComplete className="leftIcon" />
-                        Complete
-
-                    </MenuItem>
-
-                    <MenuItem
-                        variant="contained"
-                        color="default"
                         //className="buttonPoint"
                         onClick={() => this.props.onAddListenerMarkerBtn()}
                         disabled={(drawingBtnType === 'marker') ? true : false}
@@ -186,10 +175,18 @@ class IconLabelButtons extends React.PureComponent {
                         Polygon
                 </MenuItem>
 
-
-
-
                 </Menu>
+
+                <Button
+                    variant="fab"
+                    color="default"
+                    className="buttonComplete"
+                    onClick={() => this.props.onAddListenerGrabBtn()}
+                >
+                    <IconComplete />
+
+                </Button>
+
             </div>
         );
     }
