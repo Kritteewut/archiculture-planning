@@ -6,6 +6,9 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Divider from '@material-ui/core/Divider';
+import Snackbar from '@material-ui/core/Snackbar';
+import Slide from '@material-ui/core/Slide';
+
 // CSS Import
 import './DetailedExpansionPanel.css';
 
@@ -13,28 +16,42 @@ class DetailedExpansionPanel extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+
+
     }
   }
+
+
   render() {
     const { panelName, latLngDetail, lengthDetail, disBtwDetail, areaDetail } = this.props
 
     return (
+
       <div className="Detailroot">
+
         <ExpansionPanel className="theme">
+
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon className="details" />}>
+
             <div style={{ alignItems: 'center' }} >
               <Typography className="heading">{panelName}</Typography>
             </div>
+
           </ExpansionPanelSummary>
+
           {(latLngDetail !== '') ?
+
             <ExpansionPanelDetails className="details">
+
               <Typography className="details"> {latLngDetail} </Typography>
+
             </ExpansionPanelDetails>
             :
             null
           }
           {(disBtwDetail !== '') ?
             <ExpansionPanelDetails className="details">
+
               <Typography className="details" >
                 ระยะห่างระหว่างจุด : {disBtwDetail} เมตร</Typography>
             </ExpansionPanelDetails>
@@ -44,6 +61,7 @@ class DetailedExpansionPanel extends React.PureComponent {
           }
           {(lengthDetail !== '') ?
             <ExpansionPanelDetails className="details">
+
               <Typography className="details">
                 ความยาวรวม : {lengthDetail} เมตร
               </Typography>
@@ -60,7 +78,9 @@ class DetailedExpansionPanel extends React.PureComponent {
             null
           }
           <Divider />
+
         </ExpansionPanel>
+
       </div>
     );
   }

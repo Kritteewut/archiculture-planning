@@ -101,6 +101,9 @@ List of CSS Design Class
 .AddButton {
     position: absolute;
 
+    width: 70px;
+    height: 20px;
+
     top: 0px;
     left: 0px;
     

@@ -31,9 +31,12 @@ List of CSS Design Class
 /* ------------------- Button Group ------------------ */
 
 .buttonsave {
-    width: 100px;
+
+    width: 80px;
+    height: 20px;
+
     top: 0px;
-    left: 3px;
+    left: 15px;
     
     color: rgba(0, 0, 0, 0.8);
     background: linear-gradient(20deg, rgb(255, 255, 255) 40%, rgba(255, 255, 255, 1)) 30%;
@@ -66,6 +69,7 @@ List of CSS Design Class
 
 .buttonshow {
     width: 100px;
+    height: 20px;
     top: 0px;
     left: 0px;
     
@@ -89,7 +93,8 @@ List of CSS Design Class
 
 .drawerPaper {
     position: relative;
-    width: drawerWidth;
+    width: 350px;           /* ปรับขนาด ข้างใน PermanenDrawer ข้างใน  */
+    background-color: rgba(151, 255, 66, 0);
 }
 
 .paper {

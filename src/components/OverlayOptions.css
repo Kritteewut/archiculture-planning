@@ -156,13 +156,13 @@ List of CSS Design Class
 
 .drawerPaper {
     position: relative;
-    width: 350px;
+    width: 320px;      /* แก้ไขขนาดของ Permance Drawer*/
     height: 100%;
 }
 
 
 .card {
-    max-width: 350px;
+    max-width: 320px;
 }
 
 .media {
@@ -172,7 +172,7 @@ List of CSS Design Class
 .paper {
     position: absolute;
     width: 500px;
-    background-color: rgb(255, 247, 247);
+    background-color: rgba(255, 247, 247, 0);
     box-shadow: rgb(255, 247, 247);
     padding: 0%;
     top: 50%;
@@ -190,7 +190,7 @@ List of CSS Design Class
     position: absolute;
     z-index: 0;
     cursor: pointer;
-    background-color: rgb(55, 0, 255, 0)
+    background-color: rgb(255, 82, 82,0)
 }
 
 /* ------------------- Gridview Group ------------------ */

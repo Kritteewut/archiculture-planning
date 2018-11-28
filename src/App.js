@@ -1812,10 +1812,11 @@ class App extends Component {
           handleDrawerOpen={this.handleDrawerOpen}
           {...this.state}
         />
-        <input id="pac-input" className="controls" type="text" placeholder="Find place" />
+
         <Map
           left={this.state.left}
         >
+
           {this.state.overlayObject.map((value) => {
             const overlayType = value.overlayType
             const overlayId = value.overlayId
@@ -1872,6 +1873,8 @@ class App extends Component {
               })
             }
 
+            {/*<input id="pac-input" className="searchboxSeries" type="text" placeholder="Find place" />*/}
+
             <OpenSide
               handleDrawerOpen={this.handleDrawerOpen}
               handleDrawerClose={this.handleDrawerClose}
@@ -1886,7 +1889,7 @@ class App extends Component {
               onToggleDeviceMode={this.onToggleDeviceMode}
               {...this.state}
 
-              //OpensettingMap
+            //OpensettingMap
             />
 
             <IconLabelButtons
