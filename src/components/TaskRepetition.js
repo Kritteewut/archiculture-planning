@@ -248,7 +248,6 @@ class TaskRepetition extends React.PureComponent {
     repetitionDayInWeek.forEach((day, key) => {
       repetitionDayInWeek[key] = parseInt(day, 10)
     })
-    console.log(repetitionDayInWeek)
     this.setState({ repetitionDayInWeek }, () => this.onCheckTaskStartDateError())
   }
   onDateChange = name => date => {

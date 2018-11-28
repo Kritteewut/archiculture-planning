@@ -91,7 +91,7 @@ class PermanentDrawer extends React.PureComponent {
     }
     renderDrawer = () => {
         const { user, onSetUser, selectedPlan, onCallFitBounds,
-            onToggleDistanceMarker, isDistanceMarkerVisible
+            onToggleDistanceMarker, isDistanceMarkerVisible, overlayObject
         } = this.props;
         return (
             user ?
@@ -124,7 +124,7 @@ class PermanentDrawer extends React.PureComponent {
                                 แปลงที่เลือก : {selectedPlan ? selectedPlan.planName : 'ยังไม่มีแปลงที่เลือก'}
                                 <ListItemSecondaryAction>
                                     <IconButton aria-label="Delete"
-                                        disabled={selectedPlan ? false : true}
+                                        disabled={overlayObject.length > 0 ? false : true}
                                         onClick={onCallFitBounds}
                                     >
                                         <OpenWith />
@@ -134,12 +134,12 @@ class PermanentDrawer extends React.PureComponent {
                             </ListItem>
                         </List>
                         <Divider />
-                            <AddPlan
-                                onAddPlan={this.props.onAddPlan}
-                                onChangeDrawPage={this.props.onChangeDrawPage}
-                                handleDrawerOpen={this.props.handleDrawerOpen}
-                                {...this.props}
-                            />
+                        <AddPlan
+                            onAddPlan={this.props.onAddPlan}
+                            onChangeDrawPage={this.props.onChangeDrawPage}
+                            handleDrawerOpen={this.props.handleDrawerOpen}
+                            {...this.props}
+                        />
                         <Button variant="contained" className="buttonshow" onClick={onToggleDistanceMarker}>
                             {isDistanceMarkerVisible ? 'ปิดระยะ' : 'แสดงระยะ'}
                         </Button>
@@ -281,6 +281,7 @@ class PermanentDrawer extends React.PureComponent {
                         onEditTask={this.props.onEditTask}
                         onDeleteTask={this.props.onDeleteTask}
                         isWaitingForTaskToggle={this.props.isWaitingForTaskToggle}
+                        overlAllFiltertask={this.props.overlAllFiltertask}
                     />
                 )
             default: return;
@@ -294,10 +295,8 @@ class PermanentDrawer extends React.PureComponent {
                 variant="persistent"
                 anchor='left'
                 open={this.props.openSide}
-                classes={{
-                    paper: "drawerPaper",
-                }}
-            // className={classes.drawerPaper}
+                classes={{ paper: "drawerPaper", }}
+            //className={classes.drawerPaper}
             >
                 {isWaitingForUserResult ?
                     'กำลังโหลด....'

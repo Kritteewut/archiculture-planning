@@ -44,14 +44,6 @@ class OverlayTask extends React.PureComponent {
     })
     console.log('Page', page)
   };
-
-  changeMenu = (menu) => {
-    this.setState({
-      menu: menu
-    })
-    console.log('menu', menu)
-  };
-
   renderpage = () => {
 
     switch (this.state.page) {
@@ -68,6 +60,7 @@ class OverlayTask extends React.PureComponent {
               {...this.state}
               onFilterTask={this.props.onFilterTask}
               filterTaskType={this.props.filterTaskType}
+              overlAllFiltertask={this.props.overlAllFiltertask}
 
             />
 

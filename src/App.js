@@ -1012,39 +1012,36 @@ class App extends Component {
       [targetState]: sortedByCreateDate
     })
   }
-  onFilterTask = (filterTaskType = this.state.filterTaskType) => {
+  onFilterTask = (filterTaskType = this.state.filterTaskType, overlAllFiltertask = this.state.overlAllFiltertask) => {
     const { overlayTasks, selectedOverlay } = this.state
-    //const overlAllFiltertask = this.state.overlAllFiltertask
-    if (!selectedOverlay) {
-      return;
-    }
-    if (filterTaskType !== this.state.filterTaskType) {
-      this.setState({ filterTaskType })
-    }
-    // if (overlAllFiltertask !== this.state.overlAllFiltertask) {
-    //   this.setState({ overlAllFiltertask })
-    // }
-    // var overAllFilter
-    // if (overlAllFiltertask === SHOW_OVERVIEW) {
-    //   overAllFilter = overlayTasks
-    // } else {
-    //   if (overlAllFiltertask === SHOW_TODAY) {
-    //     overAllFilter = overlayTasks
-    //   }
-    // }
-    var filterTask
-    switch (filterTaskType) {
-      case SHOW_ALL:
-        filterTask = overlayTasks.filter(task => task.overlayId === selectedOverlay.overlayId)
+    var overAllFilter
+    switch (overlAllFiltertask) {
+      case SHOW_OVERVIEW:
+        overAllFilter = overlayTasks
         break;
-      case SHOW_ACTIVATE:
-        filterTask = overlayTasks.filter(task => (task.overlayId === selectedOverlay.overlayId) && task.isDone === false)
-        break;
-      case SHOW_COMPLETE:
-        filterTask = overlayTasks.filter(task => task.overlayId === selectedOverlay.overlayId && task.isDone === true)
+      case SHOW_TODAY:
+        overAllFilter = overlayTasks.filter(task => {
+          const thisDate = moment().format().split('T')[0]
+          const doTaskDate = moment(task.taskRepetition.doTaskDate).format().split('T')[0]
+          return doTaskDate === thisDate
+        })
         break;
       default: break;
     }
+    var filterTask
+    switch (filterTaskType) {
+      case SHOW_ALL:
+        filterTask = overAllFilter.filter(task => task.overlayId === selectedOverlay.overlayId)
+        break;
+      case SHOW_ACTIVATE:
+        filterTask = overAllFilter.filter(task => (task.overlayId === selectedOverlay.overlayId) && task.isDone === false)
+        break;
+      case SHOW_COMPLETE:
+        filterTask = overAllFilter.filter(task => task.overlayId === selectedOverlay.overlayId && task.isDone === true)
+        break;
+      default: break;
+    }
+    this.setState({ overlAllFiltertask, filterTaskType })
     this.onSortArrayByCreateDate('overlayTaskShow', SORT_BY_LATEST, filterTask, 'addTaskDate')
   }
   onFitBounds = (overlayObject) => {
@@ -1732,31 +1729,35 @@ class App extends Component {
           returnDate = moment().add(addDay, 'd')
           break;
         case 'weekly':
-          const dayLength = repetitionDayInWeek.length - 1
           const dayNum = parseInt(moment().format('d'), 10)
           var shouldChangeWeek = true
           var dayIndex
           var addDayInweek
           repetitionDayInWeek.forEach((day, key) => {
-            if (shouldChangeWeek && (dayNum < day)) {
+            if (shouldChangeWeek && (dayNum <= day)) {
               dayIndex = key
               shouldChangeWeek = false
             }
           });
           if (shouldChangeWeek) {
-            addDayInweek = repetitionDayInWeek[dayLength] - dayNum
-            console.log('chang', addDayInweek)
+            addDayInweek = (repetitionDayInWeek[0] - dayNum) + 7
           } else {
             addDayInweek = repetitionDayInWeek[dayIndex] - dayNum
-            console.log('not chang', addDayInweek)
           }
-          // console.log(addDayInweek)
           returnDate = moment().add(addDayInweek, 'd')
-          returnDate = moment(returnDate).add(repetitionUnit, 'w')
+          returnDate = moment(returnDate).add(repetitionUnit - 1, 'w')
           break;
-        case 'monthly': //returnDate = moment().add(addUnit, 'M')
+        case 'monthly':
+          returnDate = moment(startDate)
+          while (returnDate.isSameOrBefore(thisDate)) {
+            returnDate = returnDate.add(repetitionUnit, 'M')
+          }
           break;
-        case 'yearly': //returnDate = moment().add(addUnit, 'y')
+        case 'yearly':
+          returnDate = moment(startDate)
+          while (returnDate.isSameOrBefore(thisDate)) {
+            returnDate = returnDate.add(repetitionUnit, 'y')
+          }
           break;
         default: break;
       }
@@ -1825,7 +1826,6 @@ class App extends Component {
           handleDrawerOpen={this.handleDrawerOpen}
           {...this.state}
         />
-        <input id="pac-input" className="controls" type="text" placeholder="Find place" />
         <Map
           left={this.state.left}
         >
@@ -1899,7 +1899,7 @@ class App extends Component {
               onToggleDeviceMode={this.onToggleDeviceMode}
               {...this.state}
 
-              //OpensettingMap
+            //OpensettingMap
             />
 
             <IconLabelButtons
@@ -1910,15 +1910,13 @@ class App extends Component {
               onAddListenerPolylineBtn={this.onAddListenerPolylineBtn}
             />
 
-            <SearchBox
-            />
+
 
           </div>
+          <SearchBox />
           <div className="FrameRight">
 
           </div>
-          <SearchBox
-          />
           <DetailedExpansionPanel
             {...this.state}
           />
