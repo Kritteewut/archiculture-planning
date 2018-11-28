@@ -1012,39 +1012,36 @@ class App extends Component {
       [targetState]: sortedByCreateDate
     })
   }
-  onFilterTask = (filterTaskType = this.state.filterTaskType) => {
+  onFilterTask = (filterTaskType = this.state.filterTaskType, overlAllFiltertask = this.state.overlAllFiltertask) => {
     const { overlayTasks, selectedOverlay } = this.state
-    //const overlAllFiltertask = this.state.overlAllFiltertask
-    if (!selectedOverlay) {
-      return;
-    }
-    if (filterTaskType !== this.state.filterTaskType) {
-      this.setState({ filterTaskType })
-    }
-    // if (overlAllFiltertask !== this.state.overlAllFiltertask) {
-    //   this.setState({ overlAllFiltertask })
-    // }
-    // var overAllFilter
-    // if (overlAllFiltertask === SHOW_OVERVIEW) {
-    //   overAllFilter = overlayTasks
-    // } else {
-    //   if (overlAllFiltertask === SHOW_TODAY) {
-    //     overAllFilter = overlayTasks
-    //   }
-    // }
-    var filterTask
-    switch (filterTaskType) {
-      case SHOW_ALL:
-        filterTask = overlayTasks.filter(task => task.overlayId === selectedOverlay.overlayId)
+    var overAllFilter
+    switch (overlAllFiltertask) {
+      case SHOW_OVERVIEW:
+        overAllFilter = overlayTasks
         break;
-      case SHOW_ACTIVATE:
-        filterTask = overlayTasks.filter(task => (task.overlayId === selectedOverlay.overlayId) && task.isDone === false)
-        break;
-      case SHOW_COMPLETE:
-        filterTask = overlayTasks.filter(task => task.overlayId === selectedOverlay.overlayId && task.isDone === true)
+      case SHOW_TODAY:
+        overAllFilter = overlayTasks.filter(task => {
+          const thisDate = moment().format().split('T')[0]
+          const doTaskDate = moment(task.taskRepetition.doTaskDate).format().split('T')[0]
+          return doTaskDate === thisDate
+        })
         break;
       default: break;
     }
+    var filterTask
+    switch (filterTaskType) {
+      case SHOW_ALL:
+        filterTask = overAllFilter.filter(task => task.overlayId === selectedOverlay.overlayId)
+        break;
+      case SHOW_ACTIVATE:
+        filterTask = overAllFilter.filter(task => (task.overlayId === selectedOverlay.overlayId) && task.isDone === false)
+        break;
+      case SHOW_COMPLETE:
+        filterTask = overAllFilter.filter(task => task.overlayId === selectedOverlay.overlayId && task.isDone === true)
+        break;
+      default: break;
+    }
+    this.setState({ overlAllFiltertask, filterTaskType })
     this.onSortArrayByCreateDate('overlayTaskShow', SORT_BY_LATEST, filterTask, 'addTaskDate')
   }
   onFitBounds = (overlayObject) => {
@@ -1719,31 +1716,48 @@ class App extends Component {
     if (moment(startDate).isSameOrAfter(thisDate)) {
       return taskStartDate.toDate()
     } else {
-      const addUnit = repetitionUnit - 1
       var returnDate
       switch (repetitionType) {
-        case 'daily': returnDate = moment().add(addUnit, 'd')
+        case 'daily':
+          var addDay
+          const diffDate = moment().diff(startDate, 'd')
+          if (diffDate < repetitionUnit) {
+            addDay = repetitionUnit - diffDate
+          } else {
+            addDay = diffDate % repetitionUnit
+          }
+          returnDate = moment().add(addDay, 'd')
           break;
         case 'weekly':
-          const dayLength = repetitionDayInWeek.length
-          const dayNum = moment().format('d')
+          const dayNum = parseInt(moment().format('d'), 10)
           var shouldChangeWeek = true
-          for (var dayIndex = 0; dayIndex <= dayLength; dayIndex++) {
-            if (dayNum < repetitionDayInWeek[dayIndex]) {
+          var dayIndex
+          var addDayInweek
+          repetitionDayInWeek.forEach((day, key) => {
+            if (shouldChangeWeek && (dayNum <= day)) {
+              dayIndex = key
               shouldChangeWeek = false
-              break;
             }
-          }
+          });
           if (shouldChangeWeek) {
-            returnDate = moment().add((dayNum + repetitionDayInWeek[dayIndex]), 'd')
+            addDayInweek = (repetitionDayInWeek[0] - dayNum) + 7
           } else {
-            returnDate = moment().add((repetitionDayInWeek[dayIndex] - dayNum), 'd')
+            addDayInweek = repetitionDayInWeek[dayIndex] - dayNum
           }
-          returnDate = moment(returnDate).add(addUnit, 'w')
+          returnDate = moment().add(addDayInweek, 'd')
+          returnDate = moment(returnDate).add(repetitionUnit - 1, 'w')
           break;
-        case 'monthly': returnDate = moment().add(addUnit, 'M')
+        case 'monthly':
+          returnDate = moment(startDate)
+          while (returnDate.isSameOrBefore(thisDate)) {
+            returnDate = returnDate.add(repetitionUnit, 'M')
+          }
           break;
-        case 'yearly': returnDate = moment().add(addUnit, 'y')
+        case 'yearly':
+          returnDate = moment(startDate)
+          while (returnDate.isSameOrBefore(thisDate)) {
+            returnDate = returnDate.add(repetitionUnit, 'y')
+          }
           break;
         default: break;
       }
@@ -1812,11 +1826,9 @@ class App extends Component {
           handleDrawerOpen={this.handleDrawerOpen}
           {...this.state}
         />
-
         <Map
           left={this.state.left}
         >
-
           {this.state.overlayObject.map((value) => {
             const overlayType = value.overlayType
             const overlayId = value.overlayId
@@ -1873,8 +1885,6 @@ class App extends Component {
               })
             }
 
-            {/*<input id="pac-input" className="searchboxSeries" type="text" placeholder="Find place" />*/}
-
             <OpenSide
               handleDrawerOpen={this.handleDrawerOpen}
               handleDrawerClose={this.handleDrawerClose}
@@ -1900,15 +1910,13 @@ class App extends Component {
               onAddListenerPolylineBtn={this.onAddListenerPolylineBtn}
             />
 
-            <SearchBox
-            />
+
 
           </div>
+          <SearchBox />
           <div className="FrameRight">
 
           </div>
-          <SearchBox
-          />
           <DetailedExpansionPanel
             {...this.state}
           />

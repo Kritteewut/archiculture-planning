@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-
-import TaskEdit from './TaskEdit';
-
 import 'antd/dist/antd.css';
 import './Calendar.css';
 import { Calendar, Badge } from 'antd';
 import moment from 'moment';
-
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -15,11 +11,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import shortid from 'shortid'
-
 
 const styles = theme => ({
     root: {
@@ -44,10 +36,9 @@ class CalendarTask extends Component {
     getListData = (day) => {
         let listData = []
         this.props.overlayTaskShow.map((task) => {
-            const startAt = moment(new Date(task.startAt)).format('MMMM Do YYYY')
-            const endAt = moment(new Date(task.endAt)).format('MMMM Do YYYY')
-            const dayInCalendar = moment(new Date(day)).format('MMMM Do YYYY')
-            if (startAt === dayInCalendar) {
+            const doTaskDate = moment(task.taskRepetition.doTaskDate).format().split('T')[0]
+            const dayInCalendar = day.format().split('T')[0]
+            if (doTaskDate === dayInCalendar) {
                 const taskId = shortid.generate()
                 if (task.isDone) {
                     listData.push(
@@ -59,20 +50,20 @@ class CalendarTask extends Component {
                     )
                 }
             }
-            if (endAt === dayInCalendar) {
-                const taskId = shortid.generate()
-                if (task.isDone) {
-                    listData.push(
-                        { type: 'success', content: task.name + '(สิ้นสุด)', taskId },
-                    )
-                } else {
-                    listData.push(
-                        { type: 'warning', content: task.name + '(สิ้นสุด)', taskId },
-                    )
-                }
-            }
+            // if (endAt === dayInCalendar) {
+            //     const taskId = shortid.generate()
+            //     if (task.isDone) {
+            //         listData.push(
+            //             { type: 'success', content: task.name + '(สิ้นสุด)', taskId },
+            //         )
+            //     } else {
+            //         listData.push(
+            //             { type: 'warning', content: task.name + '(สิ้นสุด)', taskId },
+            //         )
+            //     }
+            // }
         })
-        return listData || [];
+        return listData;
     }
 
     dateCellRender = (value) => {
@@ -106,10 +97,10 @@ class CalendarTask extends Component {
         // ) : null;
     }
 
-    onSelect = (value) => {
+    onSelect = (selectedDate) => {
         this.setState({
             open: !this.state.open,
-            selectedDate: value
+            selectedDate
         });
     }
 
@@ -123,7 +114,6 @@ class CalendarTask extends Component {
     };
 
     render() {
-        console.log(moment().format('MMMM Do YYYY'))
         const { overlayTaskShow } = this.props
         const { selectedDate } = this.state;
         return (

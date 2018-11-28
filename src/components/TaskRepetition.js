@@ -24,13 +24,13 @@ import TextField from '@material-ui/core/TextField'
 
 const CheckboxGroup = Checkbox.Group;
 const days = [
-  { label: 'อาทิตย์', value: '0', },
-  { label: 'จันทร์', value: '1', },
-  { label: 'อังคาร', value: '2', },
-  { label: 'พุธ', value: '3', },
-  { label: 'พฤหัสบดี', value: '4', },
-  { label: 'ศุกร์', value: '5', },
-  { label: 'เสาร์', value: '6', },
+  { label: 'อาทิตย์', value: 0, },
+  { label: 'จันทร์', value: 1, },
+  { label: 'อังคาร', value: 2, },
+  { label: 'พุธ', value: 3, },
+  { label: 'พฤหัสบดี', value: 4, },
+  { label: 'ศุกร์', value: 5, },
+  { label: 'เสาร์', value: 6, },
 ];
 const styles = theme => ({
   root: {
@@ -64,7 +64,7 @@ const initState = {
   repetitionUnit: 1,
   repetitionTimes: 1,
   repetitionCountUnit: 'วัน',
-  repetitionDayInWeek: [moment().format('d')],
+  repetitionDayInWeek: [parseInt(moment().format('d'), 10)],
   isTaskStartDateError: false,
   isTaskDueDateError: false,
   repetitionFinishTimes: 0,
@@ -226,7 +226,7 @@ class TaskRepetition extends React.PureComponent {
   onCheckDayInWeek = () => {
     const { repetitionType, repetitionDayInWeek, taskStartDate } = this.state
     if (repetitionType === 'weekly') {
-      const startDate = moment(taskStartDate).format('d')
+      const startDate = parseInt(moment(taskStartDate).format('d'), 10)
       var isError = true
       repetitionDayInWeek.forEach(day => {
         if (startDate === day) {
@@ -244,6 +244,9 @@ class TaskRepetition extends React.PureComponent {
     }
     repetitionDayInWeek = repetitionDayInWeek.sort((a, b) => {
       return a - b
+    })
+    repetitionDayInWeek.forEach((day, key) => {
+      repetitionDayInWeek[key] = parseInt(day, 10)
     })
     this.setState({ repetitionDayInWeek }, () => this.onCheckTaskStartDateError())
   }

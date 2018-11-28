@@ -1,47 +1,77 @@
 import React from 'react';
-import '../components/SearchBoxStyles.css'
+//import '../components/SearchBoxStyles.css'
+import TextField from '@material-ui/core/TextField'
+import { withStyles } from '@material-ui/core/styles';
+import classNames from 'classnames';
+import IconButton from '@material-ui/core/IconButton';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormControl from '@material-ui/core/FormControl';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+
+
+const styles = theme => ({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  margin: {
+    margin: theme.spacing.unit,
+  },
+  withoutLabel: {
+    marginTop: theme.spacing.unit * 3,
+  },
+  textField: {
+    flexBasis: 200,
+  },
+
+});
 
 class SearchBox extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      searchText: ''
+    }
     this.searchBox = false
     this.markers = []
     this.bounds = false
+    this.inputBox = null
   }
-  componentWillUnmount() {
-    if (this.searchBox !== false) {
-      this.searchBox = false
-    }
+  componentDidMount() {
+    this.renderSearchBox()
   }
-
   renderSearchBox = () => {
-    if (this.searchBox === false) {
-      var input = document.getElementById('pac-input');
-      this.searchBox = new window.google.maps.places.SearchBox(input);
+    var self = this
+    this.inputBox = document.getElementById('pac-input');
+    if (!this.searchBox) {
+      this.searchBox = new window.google.maps.places.SearchBox(this.inputBox);
       // Bias the SearchBox results towards current map's viewport.
-      window.map.addListener('bounds_changed', () => {
-        this.searchBox.setBounds(window.map.getBounds());
-      });
-
+      console.log(this.searchBox)
+      window.google.maps.event.addListener(window.map, 'bounds_changed', function () {
+        self.searchBox.setBounds(window.map.getBounds());
+      })
       this.markers = [];
       // Listen for the event fired when the user selects a prediction and retrieve
       // more details for that place.
-      this.searchBox.addListener('places_changed', () => {
-        var places = this.searchBox.getPlaces();
+      window.google.maps.event.addListener(this.searchBox, 'places_changed', function () {
+        var places = self.searchBox.getPlaces();
 
         if (places.length === 0) {
           return;
         }
 
         // Clear out the old markers.
-        this.markers.forEach((marker) => {
+        self.markers.forEach((marker) => {
           marker.setMap(null);
         });
-        this.markers = [];
+        self.markers = [];
 
         // For each place, get the icon, name and location.
-        this.bounds = new window.google.maps.LatLngBounds();
+        self.bounds = new window.google.maps.LatLngBounds();
         console.log("place", places);
         places.forEach((place) => {
           if (!place.geometry) {
@@ -49,29 +79,62 @@ class SearchBox extends React.PureComponent {
             return;
           }
           // Create a marker for each place.
-          this.markers.push(new window.google.maps.Marker({
+          self.markers.push(new window.google.maps.Marker({
             map: window.map,
             // icon: icon,
-            title: place.name,
+            title: place.name + ' ' + place.formatted_address,
             position: place.geometry.location
           }));
 
           if (place.geometry.viewport) {
             // Only geocodes have viewport.
-            this.bounds.union(place.geometry.viewport);
+            self.bounds.union(place.geometry.viewport);
           } else {
-            this.bounds.extend(place.geometry.location);
+            self.bounds.extend(place.geometry.location);
           }
         });
-        window.map.fitBounds(this.bounds);
-      });
+        window.map.fitBounds(self.bounds);
+      })
     }
+  }
+  onClearPlaceMarker = () => {
+    this.markers.forEach(marker => {
+      marker.setMap(null)
+    })
+    this.setState({ searchText: '' })
+  }
+  onChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value })
   }
 
   render() {
-    this.renderSearchBox()
-    return (null)
+    const { classes } = this.props
+    return (
+      <TextField
+        id="pac-input"
+        className={classNames(classes.margin, classes.textField)}
+        //className={classes.margin}
+        type="text"
+        variant="outlined"
+        placeholder="ค้นหาสถานที่"
+        value={this.state.searchText}
+        onChange={this.onChange}
+        name='searchText'
+        margin="normal"
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="Toggle password visibility"
+                onClick={this.onClearPlaceMarker}
+              >
+                <AccountCircle />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
+    )
   }
 }
-
-export default SearchBox
+export default withStyles(styles)(SearchBox)

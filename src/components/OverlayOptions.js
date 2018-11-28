@@ -128,50 +128,45 @@ class OverlayOptions extends React.PureComponent {
                     onEditTask={this.props.onEditTask}
                     onDeleteTask={this.props.onDeleteTask}
                     isWaitingForTaskToggle={this.props.isWaitingForTaskToggle}
+                    overlAllFiltertask={this.props.overlAllFiltertask}
                 />
             </div>
         )
     }
     render() {
-        const {
-            onChangePolyStrokeColor,
-            onChangePolyFillColor,
-            overlayOptionsType,
-            onSetSelectedIcon,
-            selectedOverlay,
-            isFirstDraw,
-            onUndoDrawingCoords,
-            onRedoDrawingCoords,
-            fillColor,
-            strokeColor,
-        } = this.props
         return (
             <div>
                 {
-                    overlayOptionsType === 'marker' ?
+                    this.props.selectedOverlay ?
+                        this.drawOverlayDetail()
+                        :
+                        null
+                }
+                {
+                    this.props.overlayOptionsType === 'marker' ?
                         <div>
                             <IconPicker
-                                onSetSelectedIcon={onSetSelectedIcon}
+                                onSetSelectedIcon={this.props.onSetSelectedIcon}
                             />
                         </div>
                         :
                         <div>
 
                             <ColorPicker
-                                onChangePolyStrokeColor={onChangePolyStrokeColor}
-                                onChangePolyFillColor={onChangePolyFillColor}
-                                selectedOverlay={selectedOverlay}
-                                fillColor={fillColor}
-                                strokeColor={strokeColor}
+                                onChangePolyStrokeColor={this.props.onChangePolyStrokeColor}
+                                onChangePolyFillColor={this.props.onChangePolyFillColor}
+                                selectedOverlay={this.props.selectedOverlay}
+                                fillColor={this.props.fillColor}
+                                strokeColor={this.props.strokeColor}
                             />
                             {
-                                (!isFirstDraw) ?
+                                (!this.props.isFirstDraw) ?
                                     <div className="FrameTaskData">
                                         <Button
                                             variant="contained"
                                             className="buttonundoonwork"
                                             disabled={false}
-                                            onClick={onUndoDrawingCoords}
+                                            onClick={this.props.onUndoDrawingCoords}
                                         >
                                             Undo
                                         </Button>
@@ -179,7 +174,7 @@ class OverlayOptions extends React.PureComponent {
                                             variant="contained"
                                             className="buttonredoonwork"
                                             disabled={false}
-                                            onClick={onRedoDrawingCoords}
+                                            onClick={this.props.onRedoDrawingCoords}
                                         >
                                             Redo
                                         </Button>
@@ -188,14 +183,7 @@ class OverlayOptions extends React.PureComponent {
                                     :
                                     null
                             }
-
                         </div>
-                }
-                {
-                    selectedOverlay ?
-                        this.drawOverlayDetail()
-                        :
-                        null
                 }
             </div>
         )

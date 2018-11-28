@@ -6,6 +6,7 @@ import { db, planMemberRef, planRef } from '../config/firebase'
 import update from 'immutability-helper'
 //if sort by alfhabet 0-9 => a-z => ก - ฮ
 //if sort by date the lastest day will be at the end of array
+//['S', 'M', 'T', 'W', 'T', 'F', 'S']
 
 class Map extends React.PureComponent {
     constructor(props) {
@@ -29,6 +30,7 @@ class Map extends React.PureComponent {
             streetViewControl: false,
             fullscreenControl: false,
             mapTypeId: 'satellite',
+            tilt: 0,
             //hybrid sat with detail
             //roadmap raod
             //satellite sat
