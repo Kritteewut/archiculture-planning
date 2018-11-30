@@ -151,8 +151,5 @@ class IconLabelButtons extends React.PureComponent {
         );
     }
 }
-IconLabelButtons.propTypes = {
-
-};
 
 export default (IconLabelButtons);

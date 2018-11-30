@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import transparent_icon from './icons/transparent_icon.png';
 
 

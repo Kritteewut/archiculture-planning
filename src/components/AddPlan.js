@@ -1,6 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
 // Material-ui Import
 import Modal from '@material-ui/core/Modal';
 import AddIcon from '@material-ui/icons/Add';
@@ -72,7 +70,7 @@ class AddPlan extends React.PureComponent {
         return (
             <div>
                 <Tooltip
-                    title="Add Plan"
+                    title="เพิ่มแปลง"
                     placement="top"
                     disableFocusListener
                     disableTouchListener
@@ -93,7 +91,7 @@ class AddPlan extends React.PureComponent {
                     onClose={this.onToggleAddPlanOpen}
                 >
                     <div className="paperadd">
-                        <p className="textcolor"> สร้างแปลนของคุณ </p>
+                        <p className="textcolor"> สร้างแปลงของคุณ </p>
 
                         <TextField className="TextAddPlan"
                             inputRef={this.setAddPlanInput}
@@ -150,9 +148,5 @@ class AddPlan extends React.PureComponent {
         );
     }
 }
-
-AddPlan.propTypes = {
-
-};
 
 export default (AddPlan);;

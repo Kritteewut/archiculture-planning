@@ -35,7 +35,7 @@ class CalendarTask extends Component {
 
     getListData = (day) => {
         let listData = []
-        this.props.overlayTaskShow.map((task) => {
+        this.props.overlayTaskShow.forEach((task) => {
             const doTaskDate = moment(task.taskRepetition.doTaskDate).format().split('T')[0]
             const dayInCalendar = day.format().split('T')[0]
             if (doTaskDate === dayInCalendar) {

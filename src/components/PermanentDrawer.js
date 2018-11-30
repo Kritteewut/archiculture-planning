@@ -114,7 +114,7 @@ class PermanentDrawer extends React.PureComponent {
                         </CopyToClipboard>
                     </List>
                     <Button variant="contained" className="buttonmargin buttonlogout" onClick={this.logout}>
-                        logout
+                        ออกจากระบบ
                     </Button>
 
                     <div>

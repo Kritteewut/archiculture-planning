@@ -4,13 +4,8 @@ import TextField from '@material-ui/core/TextField'
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import IconButton from '@material-ui/core/IconButton';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import FormControl from '@material-ui/core/FormControl';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import Cancel from '@material-ui/icons/Cancel';
 
 
 const styles = theme => ({
@@ -36,7 +31,7 @@ class SearchBox extends React.PureComponent {
     this.state = {
       searchText: ''
     }
-    this.searchBox = false
+    this.searchBox = null
     this.markers = []
     this.bounds = false
     this.inputBox = null
@@ -47,10 +42,10 @@ class SearchBox extends React.PureComponent {
   renderSearchBox = () => {
     var self = this
     this.inputBox = document.getElementById('pac-input');
+    console.log(this.inputBox)
     if (!this.searchBox) {
       this.searchBox = new window.google.maps.places.SearchBox(this.inputBox);
       // Bias the SearchBox results towards current map's viewport.
-      console.log(this.searchBox)
       window.google.maps.event.addListener(window.map, 'bounds_changed', function () {
         self.searchBox.setBounds(window.map.getBounds());
       })
@@ -59,11 +54,9 @@ class SearchBox extends React.PureComponent {
       // more details for that place.
       window.google.maps.event.addListener(this.searchBox, 'places_changed', function () {
         var places = self.searchBox.getPlaces();
-
         if (places.length === 0) {
           return;
         }
-
         // Clear out the old markers.
         self.markers.forEach((marker) => {
           marker.setMap(null);
@@ -72,7 +65,6 @@ class SearchBox extends React.PureComponent {
 
         // For each place, get the icon, name and location.
         self.bounds = new window.google.maps.LatLngBounds();
-        console.log("place", places);
         places.forEach((place) => {
           if (!place.geometry) {
             console.log("Returned place contains no geometry");
@@ -128,7 +120,7 @@ class SearchBox extends React.PureComponent {
                 aria-label="Toggle password visibility"
                 onClick={this.onClearPlaceMarker}
               >
-                <AccountCircle />
+                <Cancel />
               </IconButton>
             </InputAdornment>
           ),

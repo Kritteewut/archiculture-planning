@@ -345,6 +345,39 @@ class TaskRepetition extends React.PureComponent {
       default: return;
     }
   }
+  onShowTaskRepetitionDetail = (taskRepetition) => {
+    const { repetitionType, repetitionDueType, repetitionTimes, repetitionFinishTimes, repetitionDueDate } = taskRepetition
+    var repType = ''
+    var repDueType = ''
+    switch (repetitionType) {
+      case 'daily':
+        repType = 'รายวัน'
+        break;
+      case 'weekly':
+        repType = 'รายอาทิตย์'
+        break;
+      case 'monthly':
+        repType = 'รายเดือน'
+        break;
+      case 'yearly':
+        repType = 'รายปี'
+        break;
+      default: break;
+    }
+    switch (repetitionDueType) {
+      case 'forever':
+        repDueType = 'ตลอดไป'
+        break;
+      case 'untilDate':
+        repDueType = 'จนถึงวันที่' + moment(repetitionDueDate).format('ll')
+        break;
+      case 'times':
+        repDueType = 'เป็นจำนวนครั้ง ' + repetitionTimes + ' เสร็จแล้ว ' + repetitionFinishTimes + ' ครั้ง '
+        break;
+      default: break;
+    }
+    return repType + ' ' + repDueType
+  }
   render() {
     const { classes, taskRepetition } = this.props
     const { taskStartDate, taskRepetitionSwitch } = this.state
@@ -357,8 +390,7 @@ class TaskRepetition extends React.PureComponent {
           {
             taskRepetition ?
               <div>
-                {taskRepetition.repetitionType},
-              {taskRepetition.repetitionDueType}
+                {this.onShowTaskRepetitionDetail(taskRepetition)}
               </div>
               : 'ไม่มีการเกิดซ้ำ'
           }
@@ -401,10 +433,10 @@ class TaskRepetition extends React.PureComponent {
                   name="repetitionType"
                   className={classes.selectEmpty}
                 >
-                  <MenuItem value={'daily'}>ซ้ำทุกวัน</MenuItem>
-                  <MenuItem value={'weekly'}>ซ้ำทุกอาทิตย์</MenuItem>
-                  <MenuItem value={'monthly'}>ซ้ำทุกเดือน</MenuItem>
-                  <MenuItem value={'yearly'}>ซ้ำทุกปี</MenuItem>
+                  <MenuItem value={'daily'}>รายวัน</MenuItem>
+                  <MenuItem value={'weekly'}>รายอาทิตย์</MenuItem>
+                  <MenuItem value={'monthly'}>รายเดือน</MenuItem>
+                  <MenuItem value={'yearly'}>รายปี</MenuItem>
                 </Select>
               </FormControl>
             </form>

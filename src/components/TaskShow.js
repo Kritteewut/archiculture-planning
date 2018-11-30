@@ -51,7 +51,7 @@ class TaskShow extends React.PureComponent {
     }
 
     handleToggleEditTask = () => {
-        this.setState({ isEditTaskOpen: !this.state.isEditTaskOpen })
+        this.setState({ isEditTaskOpen: !this.state.isEditTaskOpen, })
     }
 
     handleDeleteTaskClick = (task) => {
@@ -63,9 +63,21 @@ class TaskShow extends React.PureComponent {
     getShowTaskDate = (task) => {
         const { taskRepetition } = task
         if (taskRepetition) {
-            return task.taskRepetition.doTaskDate ? 'วันที่ทำงาน : ' + moment(task.taskRepetition.doTaskDate).format('ll') : 'งานเสร็จสิ้นหรือเลยกำหนดการแล้ว'
+            const { repetitionDueType, doTaskDate } = taskRepetition
+            if (doTaskDate) {
+                return `วันที่ทำงาน : ${moment(doTaskDate).format('ll')}`
+            } else {
+                switch (repetitionDueType) {
+                    case 'untilDate':
+                        return 'งานเลยวันที่กำหนดมาแล้ว';
+                    case 'times':
+                        return 'งานเสร็จตามจำนวนครั้งที่กำหนดแล้ว';
+                    default: return;
+                }
+            }
+
         } else {
-            return 'ทำครั้งเดียว ' + ' เพิ่มเมื่อ' + moment(task.addTaskDate).format('ll')
+            return `ทำครั้งเดียว เพิ่มเมื่อ ${moment(task.addTaskDate).format('ll')}`
         }
     }
 

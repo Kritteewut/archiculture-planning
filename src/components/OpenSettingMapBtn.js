@@ -1,21 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
 // Material-ui Import
 import Button from '@material-ui/core/Button';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
-import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
-import { withStyles } from '@material-ui/core/styles';
 import MapIcon from '@material-ui/icons/FilterHdr';
 import { Tooltip } from '@material-ui/core';
-
 // Icon Group
-import target_icon from './icons/target_icon.png'
 import Roadmap from './Picture/Roadmap.jpg'
 import Satellite from './Picture/Satellite.jpg'
 
@@ -39,25 +33,6 @@ import './Design.css';
         boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
     },
 });*/
-
-const mapimages = [
-    {
-        //src: Roadmap,
-        key: ''
-    },
-    {
-        // src: Roadmap,
-        key: ''
-    },
-    {
-        // src: Roadmap,
-        key: ''
-    },
-    {
-        //  src: Roadmap,
-        key: ''
-    },
-]
 
 class MenuListComposition extends React.Component {
     constructor(props) {
@@ -95,7 +70,6 @@ class MenuListComposition extends React.Component {
 
     }
     render() {
-        const { classes } = this.props;
         const { open } = this.state;
 
         return (
@@ -169,9 +143,5 @@ class MenuListComposition extends React.Component {
         );
     }
 }
-
-MenuListComposition.propTypes = {
-
-};
 
 export default (MenuListComposition);

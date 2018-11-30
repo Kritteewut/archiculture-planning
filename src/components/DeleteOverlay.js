@@ -2,7 +2,6 @@ import React from 'react'
 
 // Material-ui Import
 import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 
 // CSS Import
@@ -43,7 +42,7 @@ class DeleteOverlay extends React.PureComponent {
         this.props.onToggleDeleteOverlayOpen()
     }
     render() {
-        const { classes, onToggleDeleteOverlayOpen, isDeleteOverlayOpen, selectedOverlay } = this.props
+        const { onToggleDeleteOverlayOpen, isDeleteOverlayOpen, selectedOverlay } = this.props
         return (
             <Modal
                 aria-labelledby="simple-modal-title"
