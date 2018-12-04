@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import PhoneIcon from '@material-ui/icons/PhoneAndroid';
 import DestopIcon from '@material-ui/icons/PersonalVideo';
 import './DrawingBtn.css';
+import MenuItem from '@material-ui/core/MenuItem';
 
 class ToggleDevice extends React.PureComponent {
     constructor(props) {
@@ -12,27 +13,33 @@ class ToggleDevice extends React.PureComponent {
     render() {
         const { isDrawInDesktopDevice, isFirstDraw, drawingBtnType } = this.props
         return (
-            <Button
-                variant="contained"
-                color="default"
-                className="buttonToggleDeviceMode"
-                onClick={() => this.props.onToggleDeviceMode()}
-                disabled={drawingBtnType || !isFirstDraw ? true : false}
-            >
-                {
-                    isDrawInDesktopDevice ?
-                        <DestopIcon className="leftIcon" />
-                        :
-                        <PhoneIcon className="leftIcon" />
-                }
+            <div>
+                <MenuItem
+                    variant="contained"
+                    color="default"
+                    className="buttonToggleDeviceMode"
+                    onClick={() => this.props.onToggleDeviceMode()}
+                    disabled={drawingBtnType || !isFirstDraw ? true : false}
+                >
+                    {
+                        isDrawInDesktopDevice ?
+                            <div className="ButtonIconColor">
+                                <DestopIcon className="leftIcon" />
+                            </div>
+                            :
+                            <div className="ButtonIconColor">
+                            <PhoneIcon className="leftIcon" />
+                            </div>
+            }
 
-                {
-                    isDrawInDesktopDevice ?
-                        'DESKTOP'
-                        :
-                        'TOUCH'
-                }
-            </Button>
+                    {
+                        isDrawInDesktopDevice ?
+                            'DESKTOP'
+                            :
+                            'TOUCH'
+                    }
+                </MenuItem>
+            </div>
         )
     }
 }

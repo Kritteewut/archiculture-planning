@@ -24,7 +24,60 @@ List of CSS Design Class
 
 /* ------------------- Text Group ------------------ */
 
+.TextThemewhiteColor{
+    color: rgb(133, 148, 1)
+  }
+
+.TextThemewhiteColor:hover{
+    color: rgb(70, 78, 0)
+  }
+  
+.TextThemedarkColor{
+    color: rgb(70, 78, 0)
+  }
+
+.TextThemedarkColor:hover{
+    color: rgb(133, 148, 1)
+  }
+
+.TextThemeButton{
+    color: rgb(70, 78, 0)
+  }
+
+.TextSmallSize{
+    font-size: 12px;
+}
+
+.TextLargeSize{
+    font-size: 20px;
+}
+
 /* ------------------- Button Group ------------------ */
+
+.ButtonIconColor {
+    color: rgb(129, 165, 0);
+}
+
+.ButtonIconColor:hover {
+    color: rgb(94, 121, 0);
+}
+
+.ButtonLogoutIconColor {
+    color: rgb(255, 0, 0);
+}
+
+.ButtonLogoutIconColor:hover {
+    color: rgb(255, 255, 255);
+}
+
+.ButtonHowtoIconColor {
+    color: rgb(7, 7, 7);
+}
+
+.ButtonHowtoIconColor:hover {
+    color: rgb(29, 29, 29);
+}
+
 
 /* Group Login */
 
@@ -227,7 +280,7 @@ List of CSS Design Class
     background: rgba(255, 0, 0, 0);
 }
 
-.FrameColor {
+.FrameColorsetup {
     width: 300px;     /* เมื่อต้องปรับต้องตั้งค่าให้เห็น Frame เป็นปกติก่อน */
     height: 650px;
     top: 10px;
@@ -240,6 +293,66 @@ List of CSS Design Class
     cursor: pointer;
     background-color: rgba(55, 0, 255, 0)
 }
+
+.Framecolor {
+    width: 600px;  
+    height: 40vh;
+    left: -100px;
+    bottom: 500px;
+    /* Layer Group*/
+    position: absolute;
+    z-index: -2;
+    cursor: pointer;
+    background: linear-gradient(15deg, rgb(147, 184, 15) 0.5%, rgb(255, 210, 143)) 100%;
+  }
+
+.Framelinearcolor1 {
+    width: 300px;  
+    height: 136px;
+    left: 0px;
+    top: 0px;
+    /* Layer Group*/
+    position: absolute;
+    z-index: -2;
+    cursor: pointer;
+    background: linear-gradient(45deg, rgb(208, 255, 146) 40%, rgb(255, 235, 146)) 30%;
+  }
+
+.Framelinearcolor2 {
+    width: 349px;  
+    height: 38px;
+    left: 0px;
+    top: 251px;
+    /* Layer Group*/
+    position: absolute;
+    z-index: -2;
+    cursor: pointer;
+    background: linear-gradient(45deg, rgb(208, 255, 146) 40%, rgb(255, 235, 146)) 30%;
+  }
+
+  .FramecolorTools {
+    width: 349px;  
+    height: 136px;
+    left: 0px;
+    top: 0px;
+    /* Layer Group*/
+    position: absolute;
+    z-index: -2;
+    cursor: pointer;
+    background: linear-gradient(45deg, rgb(208, 255, 146) 40%, rgb(255, 235, 146)) 30%;
+  }
+
+.FrameButtoncolor {
+    width: 71px;  
+    height: 136px;
+    right: 0px;
+    top: 0px;
+    /* Layer Group*/
+    position: absolute;
+    z-index: -1;
+    cursor: pointer;
+    background: rgba(58, 58, 58, 0.979);
+  }
 
 /* ------------------- Gridview Group ------------------ */
 

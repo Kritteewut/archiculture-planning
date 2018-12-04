@@ -14,11 +14,10 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Button from '@material-ui/core/Button';
-import OpenWith from '@material-ui/icons/OpenWith';
 import ListSubheader from '@material-ui/core/ListSubheader'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import CircularProgress from '@material-ui/core/CircularProgress'
-import ViewOnly from '@material-ui/icons/Visibility'
+import Grid from '@material-ui/core/Grid';
 
 // Import Group
 import Login from './Login';
@@ -28,11 +27,20 @@ import MergeOverlay from './MergeOverlay';
 import AddPlan from './AddPlan';
 
 // Icon Group
-import Pic from './Picture/Ling logo.png';
+import Pic from './Picture/User.png';
+import IconBook from '@material-ui/icons/Book';
+import IconLogout from '@material-ui/icons/PhonelinkErase';
+import IconForward from '@material-ui/icons/ArrowForward';
+import ViewOnly from '@material-ui/icons/Visibility'
+import OpenWith from '@material-ui/icons/LocationOn';
+
+//Picture Group
+import Picbackground from './Picture/Profile Background.jpg';
 
 // CSS Import
 import '../App.css';
 import './Design.css';
+import './AddPlanBtn';
 import './PermanentDrawer.css';
 
 class PermanentDrawer extends React.PureComponent {
@@ -45,10 +53,12 @@ class PermanentDrawer extends React.PureComponent {
             isEditPlanOpen: false,
         }
     }
+
     logout = () => {
         firebase.auth().signOut();
         this.props.onSetUserNull()
     }
+
     handlePlanClick = (planData) => {
         const { selectedPlan, overlayObject } = this.props
         if ((!selectedPlan) && overlayObject.length > 0) {
@@ -59,36 +69,45 @@ class PermanentDrawer extends React.PureComponent {
             this.props.onSetSelectedPlan(planData)
         }
     }
+
     onToggleMergeOverlayModal = () => {
         this.setState({ isMergeOverlayOpen: !this.state.isMergeOverlayOpen })
     }
+
     handleAccecptToMergeOverlay = () => {
         this.props.onSetSelectedPlan(this.state.planData)
         this.onToggleMergeOverlayModal()
     }
+
     handleDiscardToMergeOverlay = () => {
         this.props.onSetSelectedPlan(this.state.planData)
         this.onToggleMergeOverlayModal()
     }
+
     handleDeletePlanClick = (planData) => {
         this.setState({ planData: planData })
         this.onToggleDeletePlanModal()
     }
+
     handleEditPlanClick = (planData) => {
         this.props.onAddRealTimePlanMemberUpdateListener(planData)
         this.setState({ planData: planData })
         this.onToggleEditPlanOpen()
     }
+
     onToggleDeletePlanModal = () => {
         this.setState({ isDeletePlanOpen: !this.state.isDeletePlanOpen })
     }
+
     onToggleEditPlanOpen = () => {
         this.setState({ isEditPlanOpen: !this.state.isEditPlanOpen })
     }
+
     handleAcceptToDeletePlan = (planId) => {
         this.props.onDeletePlan(planId)
         this.onToggleDeletePlanModal()
     }
+
     renderDrawer = () => {
         const { user, onSetUser, selectedPlan, onCallFitBounds,
             onToggleDistanceMarker, isDistanceMarkerVisible, overlayObject
@@ -96,50 +115,101 @@ class PermanentDrawer extends React.PureComponent {
         return (
             user ?
                 <div>
-                    <List>
-                        <ListItem>
-                            <Avatar
-                                alt={user.email}
-                                src={user.photoURL || Pic}
-                                className="bigAvatar"
-                            />
-                            <ListItemText
-                                primary={user.displayName}
-                            >
-                            </ListItemText>
-                        </ListItem>
-                        <CopyToClipboard text={user.uid}
-                            onCopy={() => alert('coppied to clip baord')}>
-                            <span>ID ผู้ใช้ {user.uid}</span>
-                        </CopyToClipboard>
-                    </List>
-                    <Button variant="contained" className="buttonmargin buttonlogout" onClick={this.logout}>
-                        logout
-                    </Button>
 
                     <div>
-                        <Divider />
                         <List>
                             <ListItem>
+
+                                <Avatar
+                                    alt={user.email}
+                                    src={user.photoURL || Pic}
+                                    className="bigAvatar"
+                                />
+
+                                <ListItemText
+                                    primary={user.displayName}
+                                >
+                                </ListItemText>
+
+                            </ListItem>
+
+
+                            <CopyToClipboard text={user.uid}
+                                className="FrameTextID"
+                                onCopy={() => alert('coppied to clip baord')}>
+
+                                <span className="TextSmallSize "> ID ผู้ใช้งาน : {user.uid}</span>
+
+                            </CopyToClipboard>
+
+                        </List>
+
+                        <Button variant="fab" className="buttonlogout" onClick={this.logout}>
+                            <div className="ButtonLogoutIconColor">
+                                <IconLogout />
+                            </div>
+                        </Button>
+
+                        <Button variant="fab" className="buttonturnoff">
+                            <div className="ButtonIconColor">
+                                <IconForward />
+                            </div>
+                        </Button>
+
+                        <div className="Framelinearcolor1">
+                        </div>
+
+                        <div className="Framelinearcolor2">
+                        </div>
+
+                        <div className="FrameButtoncolor">
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <Divider />
+
+                        <Button
+                            variant="contained"
+                            color="default"
+                            className="buttonHowtoUse"
+                        >
+
+                            <div className="leftIcon ButtonHowtoIconColor">
+                                <IconBook />
+                            </div>
+
+                            <div className="TextLargeSize">
+                                คู่มือการใช้งาน
+                            </div>
+
+                        </Button>
+
+                        <List>
+                            <ListItem>
+
                                 แปลงที่เลือก : {selectedPlan ? selectedPlan.planName : 'ยังไม่มีแปลงที่เลือก'}
+
                                 <ListItemSecondaryAction>
-                                    <IconButton aria-label="Delete"
+                                    <IconButton
+                                        aria-label="Delete"
                                         disabled={overlayObject.length > 0 ? false : true}
                                         onClick={onCallFitBounds}
                                     >
-                                        <OpenWith />
+                                        <div className="ButtonIconColor">
+                                            <OpenWith />
+                                        </div>
                                     </IconButton>
                                 </ListItemSecondaryAction>
 
                             </ListItem>
                         </List>
+
                         <Divider />
-                        <AddPlan
-                            onAddPlan={this.props.onAddPlan}
-                            onChangeDrawPage={this.props.onChangeDrawPage}
-                            handleDrawerOpen={this.props.handleDrawerOpen}
-                            {...this.props}
-                        />
+
                         <Button variant="contained" className="buttonshow" onClick={onToggleDistanceMarker}>
                             {isDistanceMarkerVisible ? 'ปิดระยะ' : 'แสดงระยะ'}
                         </Button>
@@ -151,6 +221,18 @@ class PermanentDrawer extends React.PureComponent {
                             onClick={() => this.props.onSaveToFirestore(selectedPlan)}
                         >
                             บันทึก
+                        </Button>
+
+                        <Button
+                            variant="contained"
+                            className="AddButton"
+                        >
+                            <AddPlan
+                                onAddPlan={this.props.onAddPlan}
+                                onChangeDrawPage={this.props.onChangeDrawPage}
+                                handleDrawerOpen={this.props.handleDrawerOpen}
+                                {...this.props}
+                            />
                         </Button>
 
                         <Divider />
@@ -178,17 +260,29 @@ class PermanentDrawer extends React.PureComponent {
                                                     plan.memberRole === 'editor' ?
                                                         <ListItemSecondaryAction>
                                                             {plan.loadingProgress ? <CircularProgress variant="static" value={(plan.loadingProgress / plan.loadingAmount) * 100} /> : null}
-                                                            < IconButton aria-label="Edit"
+                                                            < IconButton
+                                                                variant="fab"
+                                                                aria-label="Edit"
                                                                 onClick={() => this.handleEditPlanClick(plan)}
                                                                 disabled={!plan.isPlanOptionsClickable}
                                                             >
-                                                                <EditIcon />
+                                                                <div
+                                                                    className="ButtonIconColor"
+                                                                    variant="fab">
+                                                                    <EditIcon />
+                                                                </div>
                                                             </IconButton>
-                                                            <IconButton aria-label="Delete"
+                                                            <IconButton
+                                                                variant="fab"
+                                                                aria-label="Delete"
                                                                 onClick={() => this.handleDeletePlanClick(plan)}
                                                                 disabled={!plan.isPlanOptionsClickable}
                                                             >
-                                                                <DeleteIcon />
+                                                                <div className="ButtonIconColor"
+                                                                    variant="fab">
+                                                                    <DeleteIcon />
+                                                                </div>
+
                                                             </IconButton>
 
                                                         </ListItemSecondaryAction>
@@ -222,6 +316,7 @@ class PermanentDrawer extends React.PureComponent {
                             handleAccecptToMergeOverlay={this.handleAccecptToMergeOverlay}
                             handleDiscardToMergeOverlay={this.handleDiscardToMergeOverlay}
                         />
+
                         <EditPlan
                             onToggleEditPlanOpen={this.onToggleEditPlanOpen}
                             isEditPlanOpen={this.state.isEditPlanOpen}
@@ -233,6 +328,7 @@ class PermanentDrawer extends React.PureComponent {
                             isWaitingForPlanMemberQuery={this.props.isWaitingForPlanMemberQuery}
                             onDeletePlanMember={this.props.onDeletePlanMember}
                         />
+
                         <DeletePlan
                             isDeletePlanOpen={this.state.isDeletePlanOpen}
                             onToggleDeletePlanModal={this.onToggleDeletePlanModal}
@@ -240,8 +336,11 @@ class PermanentDrawer extends React.PureComponent {
                             handleAcceptToDeletePlan={this.handleAcceptToDeletePlan}
                         />
                     </div>
+
                 </div>
+
                 :
+
                 <Login
                     onSetUser={onSetUser}
                     onQueryPlanFromFirestore={this.props.onQueryPlanFromFirestore}
@@ -291,6 +390,7 @@ class PermanentDrawer extends React.PureComponent {
     render() {
         const { isWaitingForUserResult } = this.props;
         return (
+
             <Drawer
                 variant="persistent"
                 anchor='left'
@@ -305,6 +405,7 @@ class PermanentDrawer extends React.PureComponent {
                 }
 
             </Drawer>
+
         );
     }
 }

@@ -8,8 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
-// Icon Group
-import logo from './Picture/Ling logo.png';
+//Icon import
+import logo from './Picture/Logo App.png'
 
 // CSS Import
 import './Login.css'
@@ -48,7 +48,7 @@ class Reset extends React.PureComponent {
 
             <div className="loading container wrapper LoginFont">
 
-                <p className="logo"><img src={logo} className="App-logo" alt="logo" />
+                <p className="logo TextThemedarkColor"><img src={logo} className="App-logo" alt="logo" />
 
                     <br /> กรอก Email ที่สมัคร
 
@@ -61,7 +61,7 @@ class Reset extends React.PureComponent {
 
                             <Grid container spacing={8} alignItems="flex-end">
 
-                                <Grid item>
+                                <Grid className="TextThemedarkColor" item>
                                     <AccountCircle />
                                 </Grid>
 
@@ -85,6 +85,10 @@ class Reset extends React.PureComponent {
                     <Button onClick={() => this.props.changePage('login')}>ย้อนกลับ</Button>
 
                 </div>
+
+                <div className="Framecolor">
+                </div>
+
             </div >
         )
     }

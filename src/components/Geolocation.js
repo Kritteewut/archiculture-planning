@@ -8,7 +8,9 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
 
 // CSS Import
+import './Design.css';
 import './Geolocation.css';
+import { MenuItem } from '@material-ui/core';
 
 class GeolocatedMe extends React.PureComponent {
     constructor(props) {
@@ -56,12 +58,11 @@ class GeolocatedMe extends React.PureComponent {
                 })
             })
         } else {
-            if (self.userLocationMarker) {
-                self.userLocationMarker.setMap(null)
-            }
             self.onTogleGeoClick()
             self.props.onSetPanelName('')
-
+        }
+        if (self.userLocationMarker) {
+            self.userLocationMarker.setMap(null)
         }
     }
     addUserMarkerListener = (marker) => {
@@ -76,22 +77,24 @@ class GeolocatedMe extends React.PureComponent {
     render() {
         return (
             <div>
-
-                <Button
+                <MenuItem
                     variant="contained"
-                    className="LOL"
+                    className="GeolocationBtn"
                     onClick={this.onGetGeolocation}
                     disabled={this.state.isWaitingForGeo}
                 >
                     {this.state.isWaitingForGeo
                         ?
-                        <CircularProgress
-                        />
+                        <CircularProgress />
                         :
-                        <MyLocation />
+                        <div className="leftIcon ButtonIconColor">
+                            <MyLocation />
+                        </div>
                     }
-                </Button>
+                    
+                    ตำแหน่งคุณ
 
+                </MenuItem>
             </div>
         )
     }

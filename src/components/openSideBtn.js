@@ -5,6 +5,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 // CSS Import
 import './openSideBtn.css';
+import './Design.css';
 
 /*const styles = theme => ({
     Menu: {
@@ -36,7 +37,9 @@ class openSideBtn extends React.PureComponent {
         return (
             <div >
                 <Button variant="fab" className="MenuSlide" onClick={this.onToggleDrawer} >
-                    <MenuIcon />
+                    <div className="ButtonIconColor">
+                        <MenuIcon />
+                    </div>
                 </Button>
             </div>
         )

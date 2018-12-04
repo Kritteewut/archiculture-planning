@@ -14,10 +14,11 @@ import Button from '@material-ui/core/Button';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
 //Icon import
-import logo from './Picture/Ling logo.png'
+import logo from './Picture/Logo App.png'
 
 // CSS import
 import './Login.css';
+import './Design.css';
 
 
 const styles = theme => ({
@@ -76,6 +77,7 @@ class Login extends React.PureComponent {
             console.log(errorMessage)
         });
     }
+
     loginGoogle = () => {
         var self = this;
         auth.signInWithPopup(provider2).then(function (result) {
@@ -86,9 +88,11 @@ class Login extends React.PureComponent {
         });
 
     }
+
     changePage = (page) => {
         this.setState({ page: page })
     }
+
     render() {
         const { classes } = this.props;
         switch (this.state.page) {
@@ -96,17 +100,19 @@ class Login extends React.PureComponent {
                 return (
 
                     //loading container wrapper LoginFont
-                    <div className="container wrapper LoginFont">
 
-                        <p className="logo TextWhite">
+                    <div className="container wrapper LoginFont ">
+
+                        <p className="logo TextThemedarkColor">
 
                             <img src={logo} className="logo App-logo" alt="logo" />
 
                             <br />
 
-                            Ling Map
+                            Farm Plan
 
                         </p>
+
 
                         <div className="inputLogin">
 
@@ -116,7 +122,7 @@ class Login extends React.PureComponent {
 
                                     <Grid container spacing={8} alignItems="flex-end">
 
-                                        <Grid className={classes.Theme} item>
+                                        <Grid className="TextThemedarkColor" item>
                                             <AccountCircle />
                                         </Grid>
 
@@ -132,7 +138,7 @@ class Login extends React.PureComponent {
 
                                     <Grid container spacing={8} alignItems="flex-end">
 
-                                        <Grid className={classes.Theme} item>
+                                        <Grid className="TextThemedarkColor" item>
                                             <Lock />
                                         </Grid>
 
@@ -150,11 +156,15 @@ class Login extends React.PureComponent {
                         <br /><br />
 
                         <div className="LoginButton">
-                            <button type="submit" onClick={this.loginEmail} className="loginBtnforEmail loginBtn--L">&nbsp;Log In with email</button>
+                            <button type="submit" onClick={this.loginEmail} className="loginBtnforEmail loginBtn--L TextThemedarkColor">
+                            
+                            <div className="TextThemeButton">Log In with email</div>
+
+                            </button>
 
                             <br /><br />
 
-                            <p className='Or TextWhite'> or </p>
+                            <p className='TextThemedarkColor'> or </p>
 
                             <button className="loginBtn loginBtn--facebook" onClick={this.loginFacebook}>Log In with Facebook</button>
                             <button className="loginBtn loginBtn--google" onClick={this.loginGoogle}>Log In with Google</button><br />
@@ -168,7 +178,11 @@ class Login extends React.PureComponent {
                             <Button onClick={() => this.changePage('reset')} className={classes.button}>ลืมรหัสผ่าน</Button>
                         </div>
 
+                        <div className="Framecolor">
+                        </div>
+
                     </div>
+
                 )
             case 'register':
                 return (
@@ -185,6 +199,7 @@ class Login extends React.PureComponent {
             default: return null
         }
     }
+
 }
 
 Login.propTypes = {

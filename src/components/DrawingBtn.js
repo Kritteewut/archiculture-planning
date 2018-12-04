@@ -130,7 +130,9 @@ class IconLabelButtons extends React.PureComponent {
                     className="MenuToolButton"
                     onClick={this.handleClick}
                 >
-                    <IconToolArt />
+                    <div className="ButtonIconColor">
+                        <IconToolArt />
+                    </div>
                 </Button>
 
                 <Menu
@@ -147,7 +149,7 @@ class IconLabelButtons extends React.PureComponent {
                         onClick={() => this.props.onAddListenerMarkerBtn()}
                         disabled={(drawingBtnType === 'marker') ? true : false}
                     >
-                        <CenterFocusWeakIcon className="leftIcon" />
+                        <CenterFocusWeakIcon className="leftIcon ButtonIconColor" />
                         Point
 
                 </MenuItem>
@@ -159,7 +161,7 @@ class IconLabelButtons extends React.PureComponent {
                         onClick={() => this.props.onAddListenerPolylineBtn()}
                         disabled={(drawingBtnType === 'polyline') ? true : false}
                     >
-                        <Timeline className="leftIcon" />
+                        <Timeline className="leftIcon ButtonIconColor" />
                         Polyline
 
                 </MenuItem>
@@ -171,7 +173,7 @@ class IconLabelButtons extends React.PureComponent {
                         onClick={() => this.props.onAddListenerPolygonBtn()}
                         disabled={(drawingBtnType === 'polygon') ? true : false}
                     >
-                        <TextureICon className="leftIcon" />
+                        <TextureICon className="leftIcon ButtonIconColor" />
                         Polygon
                 </MenuItem>
 
@@ -183,8 +185,9 @@ class IconLabelButtons extends React.PureComponent {
                     className="buttonComplete"
                     onClick={() => this.props.onAddListenerGrabBtn()}
                 >
-                    <IconComplete />
-
+                    <div className="ButtonIconColor">
+                        <IconComplete />
+                    </div>
                 </Button>
 
             </div>

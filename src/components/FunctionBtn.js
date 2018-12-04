@@ -7,6 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import MyLocation from '@material-ui/icons/MyLocation';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Divider from '@material-ui/core/Divider';
 
 // Icon group
 import IconComplete from '@material-ui/icons/Check';
@@ -23,8 +24,8 @@ import './FunctionBtn.css';
 
 // JS Import
 import Mapsetting from './OpenSettingMapBtn';
-import GPS from './Geolocation';
-import Device from './ToggleDevice';
+import GeolocatedMe from './Geolocation';
+import ToggleDevice from './ToggleDevice';
 
 //Pic Icon
 import Roadmap from './Picture/Roadmap.jpg'
@@ -76,7 +77,9 @@ class IconLabelButtons extends React.PureComponent {
                     className="FunctionButton"
                     onClick={this.handleClick}
                 >
-                    <FunctionIcon />
+                    <div className="ButtonIconColor">
+                        <FunctionIcon />
+                    </div>
                 </Button>
 
                 <Menu
@@ -108,43 +111,19 @@ class IconLabelButtons extends React.PureComponent {
 
                     </MenuItem>
 
-                    <MenuItem
-                        variant="contained"
-                        color="default"
-                    >
+                    <div>
+                        <ToggleDevice
+                            onToggleDeviceMode={this.props.onToggleDeviceMode}
+                            {...this.props} />
+                    </div>
 
-                        <GPS />
 
-                    </MenuItem>
-
-                    <MenuItem
-                        variant="contained"
-                        color="default"
-                    >
-
-                        <Button
-                            variant="contained"
-                            color="default"
-                            className="buttonToggleDeviceMode"
-                            onClick={() => this.props.onToggleDeviceMode()}
-                            disabled={drawingBtnType || !isFirstDraw ? true : false}
-                        >
-                            {
-                                isDrawInDesktopDevice ?
-                                    <DestopIcon className="leftIcon" />
-                                    :
-                                    <PhoneIcon className="leftIcon" />
-                            }
-
-                            {
-                                isDrawInDesktopDevice ?
-                                    'DESKTOP'
-                                    :
-                                    'TOUCH'
-                            }
-                        </Button>
-
-                    </MenuItem>
+                    <div>
+                        <GeolocatedMe
+                            onSetPanelName={this.props.onSetPanelName}
+                            {...this.props}
+                        />
+                    </div>
 
                 </Menu>
             </div>

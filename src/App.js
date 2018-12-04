@@ -13,10 +13,10 @@ import Map from './components/Map'
 import Marker from './components/Marker';
 import Polygon from './components/Polygon';
 import Polyline from './components/Polyline';
+import AddPlan from './components/AddPlan';
 import SearchBox from './components/searchBox';
 import OpenSide from './components/openSideBtn';
 import ExampleLine from './components/ExampleLine';
-import AddPlan from './components/AddPlan';
 import FunctionBtn from './components/FunctionBtn'
 //import GeolocatedMe from './components/Geolocation';
 import IconLabelButtons from './components/DrawingBtn';
@@ -37,6 +37,7 @@ import icon_point from './components/icons/icon_point.png';
 //Value import 
 import { SORT_BY_NEWEST, SORT_BY_LATEST, SHOW_ALL, SHOW_COMPLETE, SHOW_ACTIVATE, SHOW_OVERVIEW, SHOW_TODAY } from './staticValue/SaticString'
 import moment from 'moment';
+import GeolocatedMe from './components/Geolocation';
 
 class App extends Component {
   constructor(props) {
@@ -79,6 +80,7 @@ class App extends Component {
       user: null,
     }
   }
+
   componentWillMount() {
     var self = this
     auth.onAuthStateChanged((user) => {
@@ -86,11 +88,14 @@ class App extends Component {
       self.setState({ isWaitingForUserResult: false })
     })
   }
+
   componentDidMount() {
     // this.onAddBeforeUnloadListener()
   }
+
   componentWillUnmount() {
   }
+
   onAddBeforeUnloadListener() {
     var self = this
     window.addEventListener("beforeunload", function (event) {
@@ -100,22 +105,27 @@ class App extends Component {
       //event.returnValue = 'เซฟก่อนไหมพ่อหนุ่ม'
     });
   }
+
   onDrawingBtnTypeChange = (type) => {
     this.setState({ drawingBtnType: type, panelName: type })
   }
+
   onToggleDeviceMode = () => {
     const { isDrawInDesktopDevice } = this.state
     this.setState({ isDrawInDesktopDevice: !isDrawInDesktopDevice })
     this.onClearSomeMapEventListener()
   }
+
   onClearExampleLine = () => {
     this.setState({ exampleLineCoords: [] })
   }
+
   onClearSomeMapEventListener = () => {
     window.google.maps.event.clearListeners(window.map, 'click')
     window.google.maps.event.clearListeners(window.map, 'mousemove')
     window.google.maps.event.clearListeners(window.map, 'center_changed')
   }
+
   addMouseMoveOnMap = () => {
     var self = this
     window.google.maps.event.addListener(window.map, 'mousemove', function (event) {
@@ -123,6 +133,7 @@ class App extends Component {
       self.setState({ latLngDetail: LatLngString })
     })
   }
+
   onFinishDrawing = () => {
     const { isFirstDraw, overlayObject, distanceDetail, selectedPlan, drawingId } = this.state
     if (isFirstDraw === false) {
@@ -204,6 +215,7 @@ class App extends Component {
       }
     })
   }
+
   onSetPlanToLoading = (planId, loadingAmount) => {
     const updatePlanIndex = this.state.planData.findIndex(plan => plan.planId === planId)
     const updateIsSaving = update(this.state.selectedPlan, { isLoading: { $set: true } })
@@ -217,6 +229,7 @@ class App extends Component {
     })
     this.setState({ planData: upDateSaveProgressPlan, selectedPlan: updateIsSaving })
   }
+
   onResetDetail = () => {
     this.setState({
       latLngDetail: '',
@@ -225,9 +238,11 @@ class App extends Component {
       areaDetail: '',
     })
   }
+
   onSetPanelName = (panelName) => {
     this.setState({ panelName })
   }
+
   onAddListenerMarkerBtn = () => {
     this.onFinishDrawing()
     this.onClearSomeMapEventListener()
@@ -242,6 +257,7 @@ class App extends Component {
       this.addMapCenterOnMap()
     }
   }
+
   onAddListenerPolygonBtn = () => {
     this.onFinishDrawing()
     this.onClearSomeMapEventListener()
@@ -256,6 +272,7 @@ class App extends Component {
       this.addMapCenterOnMap()
     }
   }
+
   onAddListenerPolylineBtn = () => {
     this.onFinishDrawing()
     this.onClearSomeMapEventListener()
@@ -270,6 +287,7 @@ class App extends Component {
       this.addMapCenterOnMap()
     }
   }
+
   onAddListenerGrabBtn = () => {
     this.onFinishDrawing()
     this.onClearSomeMapEventListener()
@@ -280,6 +298,7 @@ class App extends Component {
       drawerPage: 'homePage',
     })
   }
+
   drawMarker = () => {
     var self = this
     window.google.maps.event.addListener(window.map, 'click', function (event) {
@@ -288,6 +307,7 @@ class App extends Component {
       }
     })
   }
+
   drawPolyline = () => {
     var self = this
     window.google.maps.event.addListener(window.map, 'click', function (event) {
@@ -299,6 +319,7 @@ class App extends Component {
       }
     })
   }
+
   drawPolygon = () => {
     var self = this
     window.google.maps.event.addListener(window.map, 'click', function (event) {
@@ -311,6 +332,7 @@ class App extends Component {
       }
     })
   }
+
   onPushNewPolygon = (latLng) => {
     const lat = latLng.lat()
     const lng = latLng.lng()
@@ -341,6 +363,7 @@ class App extends Component {
     })
     this.onDrawExampleLine(latLng)
   }
+
   onPushDrawingPolygonCoords = (latLng) => {
     const { overlayObject, drawingId } = this.state
     const lat = latLng.lat()
@@ -362,6 +385,7 @@ class App extends Component {
     this.setState({ overlayObject: setRedoCoords })
     this.onDrawExampleLine(latLng)
   }
+
   onPushNewPolyline = (latLng) => {
     const lat = latLng.lat()
     const lng = latLng.lng()
@@ -391,8 +415,8 @@ class App extends Component {
       drawingId: id,
     })
     this.onDrawExampleLine(latLng)
-
   }
+
   onPushDrawingPolylineCoords = (latLng) => {
     const { overlayObject, drawingId } = this.state
     const lat = latLng.lat()
@@ -413,6 +437,7 @@ class App extends Component {
     this.setState({ overlayObject: setRedoCoords })
     this.onDrawExampleLine(latLng)
   }
+
   onPushNewMarker = (latLng) => {
     const { overlayObject, icon } = this.state
     const lat = latLng.lat()
@@ -442,6 +467,7 @@ class App extends Component {
       this.onFinishDrawing()
     })
   }
+
   drawOverlayUsingTouchScreen = () => {
     const { isFirstDraw, drawingBtnType, overlayObject } = this.state
     const clickLatLng = window.map.getCenter()
@@ -465,6 +491,7 @@ class App extends Component {
       }
     }
   }
+
   onSetSelectedOverlay = (overlay) => {
     this.onResetSelectedOverlay()
     if (overlay.overlayType === 'polygon' || overlay.overlayType === 'polyline') {
@@ -480,6 +507,7 @@ class App extends Component {
       this.onFilterTask()
     })
   }
+
   onResetSelectedOverlay = () => {
     this.onResetDetail()
     const { selectedOverlay } = this.state
@@ -494,6 +522,7 @@ class App extends Component {
       this.setState({ selectedOverlay: null })
     }
   }
+
   addMarkerListener = (marker) => {
     var self = this
     window.google.maps.event.addListener(marker, 'mousedown', function () {
@@ -517,6 +546,7 @@ class App extends Component {
       self.setState({ overlayObject: updateOverlay })
     })
   }
+
   addPolygonListener = (polygon) => {
     var self = this
     window.google.maps.event.addListener(polygon, 'click', function () {
@@ -534,6 +564,7 @@ class App extends Component {
       }
     })
   }
+
   addPolylineListener = (polyline) => {
     var self = this
     window.google.maps.event.addListener(polyline, 'click', function () {
@@ -550,6 +581,7 @@ class App extends Component {
       }
     })
   }
+
   onDrawExampleLine = (clickEvent) => {
     const { isDrawInDesktopDevice } = this.state
     var self = this
@@ -578,6 +610,7 @@ class App extends Component {
       })
     }
   }
+
   addMapCenterOnMap = () => {
     var self = this
     window.google.maps.event.addListener(window.map, 'center_changed', function () {
@@ -587,6 +620,7 @@ class App extends Component {
     var LatLngString = `lattitude :  ${window.map.getCenter().lat().toFixed(4)}   ,   longtitude : ${window.map.getCenter().lng().toFixed(4)}`
     self.setState({ latLngDetail: LatLngString })
   }
+
   onPolyCoordsEdit = (polygon) => {
     const { overlayObject } = this.state
     let overlayId = polygon.overlayId
@@ -608,12 +642,15 @@ class App extends Component {
     this.onPolydistanceBtwCompute(updateOverlay[actionIndex])
     this.setState({ overlayObject: updateOverlay, })
   }
+
   onSetDrawingCursor = () => {
     window.map.setOptions({ draggableCursor: 'crosshair' })
   }
+
   onSetDragMapCursor = () => {
     window.map.setOptions({ draggableCursor: null, draggingCursor: null })
   }
+
   onPolydistanceBtwCompute = (overlayObject) => {
     const { distanceDetail, isDistanceMarkerVisible } = this.state
     const overlayType = overlayObject.overlayType
@@ -653,6 +690,7 @@ class App extends Component {
     }
     this.setState({ distanceDetail: editedDetail })
   }
+
   onEditPolyVertex = () => {
     var { overlayObject } = this.state
     var currentObject = overlayObject[overlayObject.length - 1]
@@ -672,6 +710,7 @@ class App extends Component {
     }
     this.setState({ lengthDetail: sumLength.toFixed(3) })
   }
+
   onPolydistanceBtwComputeForCoords = () => {
     var { distanceDetail, overlayObject, isFirstDraw, } = this.state
     var currentCoords = overlayObject[overlayObject.length - 1].overlayCoords
@@ -728,6 +767,7 @@ class App extends Component {
     }
     this.setState({ lengthDetail: sumLength.toFixed(3) })
   }
+
   onSquereMetersTrans = (polygon) => {
 
     var area = window.google.maps.geometry.spherical.computeArea(polygon.getPath())
@@ -747,6 +787,7 @@ class App extends Component {
     else { rnwString = '0 ตารางวา' }
     this.setState({ areaDetail: rnwString })
   }
+
   onSaveToFirestore = (plan) => {
     var self = this
     var planId = plan.planId
@@ -826,6 +867,7 @@ class App extends Component {
       });
     };
   }
+
   onUpdatePlanLoadingProgress = (updatePlanIndex) => {
     var self = this
     self.setState((state) => {
@@ -855,6 +897,7 @@ class App extends Component {
       }
     })
   }
+
   onClearOverlayFromMap = () => {
     this.setState({
       overlayObject: [],
@@ -862,6 +905,7 @@ class App extends Component {
       overlayTasks: [],
     })
   }
+
   onQueryPlanFromFirestore = () => {
     // get all plan list from frirestore filter by user ID
     if (!this.state.isWaitingForPlanQuery) {
@@ -904,6 +948,7 @@ class App extends Component {
       throw ('There is something went wrong', error)
     })
   }
+
   onAddPlan = (plan) => {
     const { planData, user } = this.state
     const self = this
@@ -929,6 +974,7 @@ class App extends Component {
         self.onSortArrayByCreateDate('planData', SORT_BY_NEWEST, pushPlan, 'createPlanDate')
       })
   }
+
   onSetSelectedPlan = (planData) => {
     this.onResetSelectedPlan()
     const { planId } = planData
@@ -944,6 +990,7 @@ class App extends Component {
       this.onCheckToggleAllTaskDone()
     })
   }
+
   onResetSelectedPlan = () => {
     if (this.state.selectedPlan) {
       this.onClearOverlayFromMap()
@@ -956,6 +1003,7 @@ class App extends Component {
       })
     }
   }
+
   onAddTask = (task) => {
     const { selectedOverlay, selectedPlan, user } = this.state
     const { overlayId } = selectedOverlay
@@ -965,12 +1013,14 @@ class App extends Component {
       throw ('whoops!', erorr)
     })
   }
+
   onEditTask = (taskId, editTask) => {
     taskRef.doc(taskId).set(editTask
       , { merge: true }).catch(function (erorr) {
         throw ('whoops!', erorr)
       })
   }
+
   onToggleIsTaskDone = (task) => {
     const { isDone, taskId, taskRepetition } = task
     var data = { isDone: !isDone }
@@ -996,6 +1046,7 @@ class App extends Component {
         throw ('whoops!', erorr)
       })
   }
+
   onSortArrayByCreateDate = (targetState, sortType, dataArray, sortProp) => {
     var sortedByCreateDate = []
     if (sortType === SORT_BY_NEWEST) {
@@ -1012,6 +1063,7 @@ class App extends Component {
       [targetState]: sortedByCreateDate
     })
   }
+
   onFilterTask = (filterTaskType = this.state.filterTaskType, overlAllFiltertask = this.state.overlAllFiltertask) => {
     const { overlayTasks, selectedOverlay } = this.state
     var overAllFilter
@@ -1053,6 +1105,7 @@ class App extends Component {
     })
     window.map.fitBounds(bounds)
   }
+
   onChangePolyStrokeColor = (color) => {
     var { selectedOverlay, overlayObject } = this.state
     if (selectedOverlay) {
@@ -1068,6 +1121,7 @@ class App extends Component {
     }
     this.setState({ strokeColor: color })
   }
+
   onChangePolyFillColor = (color) => {
     var { selectedOverlay, overlayObject } = this.state
     if (selectedOverlay) {
@@ -1083,6 +1137,7 @@ class App extends Component {
     }
     this.setState({ fillColor: color })
   }
+
   onSetUser = (user) => {
     this.setState({ user }, () => {
       this.onQueryPlanFromFirestore()
@@ -1119,6 +1174,7 @@ class App extends Component {
         console.log("Error getting document:", error);
       });
   }
+
   onSetUerInfo = (info) => {
     this.state.user.updateProfile({
       displayName: info,
@@ -1143,18 +1199,21 @@ class App extends Component {
     })
     this.onClearEverthing()
   }
+
   onSetMarkerOptions = () => {
     this.setState({
       drawerPage: 'option',
       overlayOptionsType: 'marker'
     })
   }
+
   onSetPolyOptions = () => {
     this.setState({
       overlayOptionsType: 'poly',
       drawerPage: 'option',
     })
   }
+
   onSetSelectedIcon = (icon) => {
     const { selectedOverlay, overlayObject } = this.state
     if (selectedOverlay) {
@@ -1184,6 +1243,7 @@ class App extends Component {
       left: '0vw',
     });
   };
+
   onEditOverlayDetail = (editData) => {
     var self = this
     const { selectedOverlay, overlayObject } = this.state
@@ -1203,9 +1263,11 @@ class App extends Component {
     })
     self.setState({ overlayObject: updateOverlay, selectedOverlay: updateSelectedOverlay })
   }
+
   onChangeDrawPage = (page) => {
     this.setState({ drawerPage: page })
   }
+
   onDeletePlan = (planId) => {
     var self = this
     const { planData, selectedPlan } = this.state
@@ -1235,6 +1297,7 @@ class App extends Component {
       return { planData: setOptionsClickable }
     })
   }
+
   onDeleteAllPlanMember = (planId) => {
     planMemberRef.where('planId', '==', planId).get().then(function (querySnapshot) {
       querySnapshot.forEach(doc => {
@@ -1242,6 +1305,7 @@ class App extends Component {
       })
     })
   }
+
   onDeleteOverlay = (overlay) => {
     const { overlayObject, distanceDetail } = this.state
     const { overlayId, overlaySource } = overlay
@@ -1262,6 +1326,7 @@ class App extends Component {
       }
     }
   }
+
   onDeleteAllOverlay = (planId) => {
     overlayRef.where('planId', '==', planId).get().then(function (querySnapshot) {
       var deleteAmount = querySnapshot.docs.length
@@ -1278,6 +1343,7 @@ class App extends Component {
 
     })
   }
+
   onDeleleteAllTask = (fieldProp, id) => {
     taskRef.where(fieldProp, '==', id).get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
@@ -1287,20 +1353,24 @@ class App extends Component {
       })
     })
   }
+
   onDeleteTask = (task) => {
     const taskId = task.taskId
     taskRef.doc(taskId).delete().catch(function (error) {
       throw ('erorr', error)
     });
   }
+
   onUpdateOverlayTasks = (updateTasks) => {
     this.setState({ overlayTasks: updateTasks }, () => {
       this.onFilterTask()
     })
   }
+
   onCallFitBounds = () => {
     this.onFitBounds(this.state.overlayObject)
   }
+
   onEditPlanName = (plan) => {
     var self = this
     const { planData } = this.state
@@ -1323,6 +1393,7 @@ class App extends Component {
       console.error("Error updating document: ", error);
     });
   }
+
   onUndoCoords = (overlay) => {
     if (overlay.undoCoords.length > 1) {
       const { overlayObject, isFirstDraw, exampleLineCoords } = this.state
@@ -1367,6 +1438,7 @@ class App extends Component {
       this.setState({ overlayObject: setIsOverlaySave })
     }
   }
+
   onRedoCoords = (overlay) => {
     if (overlay.redoCoords.length > 0) {
       const { overlayObject, exampleLineCoords, isFirstDraw } = this.state
@@ -1409,18 +1481,21 @@ class App extends Component {
       this.setState({ overlayObject: setIsOverlaySave })
     }
   }
+
   onUndoDrawingCoords = () => {
     const { overlayObject } = this.state
     const currentObjectLength = overlayObject.length - 1
     const currentObject = overlayObject[currentObjectLength]
     this.onUndoCoords(currentObject)
   }
+
   onRedoDrawingCoords = () => {
     const { overlayObject } = this.state
     const currentObjectLength = overlayObject.length - 1
     const currentObject = overlayObject[currentObjectLength]
     this.onRedoCoords(currentObject)
   }
+
   onClearEverthing = () => {
     this.onResetDetail()
     this.onClearOverlayFromMap()
@@ -1452,6 +1527,7 @@ class App extends Component {
       return { distanceDetail: temp1, isDistanceMarkerVisible: !state.isDistanceMarkerVisible };
     });
   }
+
   onAddPlanMember = (data) => {
     const { planId, memberId } = data
     planMemberRef
@@ -1475,10 +1551,12 @@ class App extends Component {
         console.log("Error getting document:", error);
       });
   }
+
   onAddRealTimeUpdateListener = () => {
     this.onAddRealTimeOverlayUpdateListener()
     this.onAddRealTimeTaskUpdateListener()
   }
+
   onAddRealTimeOverlayUpdateListener = () => {
     var self = this
     overlayRef.where("planId", "==", this.state.selectedPlan.planId)
@@ -1562,6 +1640,7 @@ class App extends Component {
         throw ('whoops!', error)
       });
   }
+
   onAddRealTimeTaskUpdateListener = () => {
     var self = this
     taskRef.where("planId", "==", this.state.selectedPlan.planId)
@@ -1607,6 +1686,7 @@ class App extends Component {
         throw ('whoops!', error)
       });
   }
+
   onAddRealTimePlanMemberUpdateListener = (selectedPlan) => {
     this.onRemoveRealTimePlanMember()
     var self = this
@@ -1645,6 +1725,7 @@ class App extends Component {
         throw ('whoops!', error)
       });
   }
+
   onCheckToggleAllTaskDone = () => {
     var self = this
     const { selectedPlan, planData } = this.state
@@ -1683,6 +1764,7 @@ class App extends Component {
       })
     }
   }
+
   onCheckDoTaskDate = (taskRepetition) => {
     const { repetitionDueType } = taskRepetition
     var result = null
@@ -1709,6 +1791,7 @@ class App extends Component {
     }
     return result
   }
+
   onComputeDoTaskDate = (taskRepetition) => {
     const { taskStartDate, repetitionType, repetitionUnit, repetitionDayInWeek } = taskRepetition
     const thisDate = moment().format().split('T')[0]
@@ -1766,6 +1849,7 @@ class App extends Component {
       return format
     }
   }
+
   onRemoveRealTimeUpdateListener = () => {
     this.setState({ isFirstOverlayQuery: true })
     var unsubscribe = overlayRef
@@ -1777,19 +1861,23 @@ class App extends Component {
     // ...
     // Stop listening to changes
   }
+
   onRemoveRealTimePlanMember = () => {
     this.setState({ planMember: [], isWaitingForPlanMemberQuery: true })
     var unsubscribe3 = planMemberRef
       .onSnapshot(function () { });
     unsubscribe3();
   }
+
   onDeletePlanMember = (member) => {
     const { planMemberId } = member
     planMemberRef.doc(planMemberId).delete()
   }
+
   onSetPlan = (plan) => {
     console.log(plan)
   }
+
   render() {
     return (
       <div className="AppFrame">
@@ -1826,9 +1914,11 @@ class App extends Component {
           handleDrawerOpen={this.handleDrawerOpen}
           {...this.state}
         />
+
         <Map
           left={this.state.left}
         >
+
           {this.state.overlayObject.map((value) => {
             const overlayType = value.overlayType
             const overlayId = value.overlayId
@@ -1861,6 +1951,7 @@ class App extends Component {
             }
           })
           }
+
           <ExampleLine
             exampleLineCoords={this.state.exampleLineCoords}
             strokeColor={this.state.strokeColor}
@@ -1885,6 +1976,8 @@ class App extends Component {
               })
             }
 
+            <SearchBox />
+            
             <OpenSide
               handleDrawerOpen={this.handleDrawerOpen}
               handleDrawerClose={this.handleDrawerClose}
@@ -1910,13 +2003,12 @@ class App extends Component {
               onAddListenerPolylineBtn={this.onAddListenerPolylineBtn}
             />
 
-
-
           </div>
-          <SearchBox />
+
           <div className="FrameRight">
 
           </div>
+
           <DetailedExpansionPanel
             {...this.state}
           />

@@ -73,21 +73,15 @@ class AddPlan extends React.PureComponent {
         const { isWaitingForUserResult } = this.props;
         return (
             <div>
-                <Tooltip
-                    title="Add Plan"
-                    placement="top"
-                    disableFocusListener
-                    disableTouchListener
-                >
-                    <Button
-                        variant="contained"
-                        className="AddButton"
+
+                    <div
                         onClick={this.onToggleAddPlanOpen}
                         disabled={isWaitingForUserResult ? true : false}
                     >
                         <AddIcon />
-                    </Button>
-                </Tooltip>
+                    </div>
+
+                
                 <Modal
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
