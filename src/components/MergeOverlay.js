@@ -2,7 +2,6 @@ import React from 'react'
 
 // Material-ui Import
 import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 
 // CSS Import

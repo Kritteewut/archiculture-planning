@@ -1,8 +1,6 @@
 // ระบบเพิ่มงาน AddPlan
 
 import React from 'react';
-import PropTypes from 'prop-types';
-
 // Material-ui Import
 import Modal from '@material-ui/core/Modal';
 import AddIcon from '@material-ui/icons/Add';
@@ -73,82 +71,86 @@ class AddPlan extends React.PureComponent {
         const { isWaitingForUserResult } = this.props;
         return (
             <div>
-
-                    <div
+                <Tooltip
+                    title="เพิ่มแปลง"
+                    placement="top"
+                    disableFocusListener
+                    disableTouchListener
+                >
+                    <Button
+                        variant="contained"
+                        className="AddButton"
                         onClick={this.onToggleAddPlanOpen}
                         disabled={isWaitingForUserResult ? true : false}
                     >
                         <AddIcon />
-                    </div>
+                    </Button>
 
-                
-                <Modal
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                    open={this.state.isAddPlanOpen}
-                    onClose={this.onToggleAddPlanOpen}
-                >
-                    <div className="paperadd">
-                        <p className="textcolor"> สร้างแปลนของคุณ </p>
 
-                        <TextField className="TextAddPlan"
-                            inputRef={this.setAddPlanInput}
-                            autoFocus={true}
-                            error={this.state.isPlanNameInputError}
-                            helperText={this.state.isPlanNameInputError ? 'ชื่อแปลงต้องมีอย่างน้อย 1 ตัวอักษรแต่ไม่เกิน 30 ตัวอักษร' : ''}
-                            onChange={this.handlePlanNameInputChange}
-                        />
 
-                        <TextField className="DataTextPlan"
-                            inputRef={this.setPlanDescriptionInput}
-                            defaultValue=''
-                            multiline
-                            rowsMax="4"
-                        />
+                    <Modal
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description"
+                        open={this.state.isAddPlanOpen}
+                        onClose={this.onToggleAddPlanOpen}
+                    >
+                        <div className="paperadd">
+                            <p className="textcolor"> สร้างแปลงของคุณ </p>
 
-                        <Tooltip
-                            title="Close Window"
-                            placement="bottom"
-                            disableFocusListener
-                            disableTouchListener
-                        >
+                            <TextField className="TextAddPlan"
+                                inputRef={this.setAddPlanInput}
+                                autoFocus={true}
+                                error={this.state.isPlanNameInputError}
+                                helperText={this.state.isPlanNameInputError ? 'ชื่อแปลงต้องมีอย่างน้อย 1 ตัวอักษรแต่ไม่เกิน 30 ตัวอักษร' : ''}
+                                onChange={this.handlePlanNameInputChange}
+                            />
 
-                            <Button className="CancelButton" onClick={this.onToggleAddPlanOpen}>
-                                ยกเลิก
+                            <TextField className="DataTextPlan"
+                                inputRef={this.setPlanDescriptionInput}
+                                defaultValue=''
+                                multiline
+                                rowsMax="4"
+                            />
+
+                            <Tooltip
+                                title="Close Window"
+                                placement="bottom"
+                                disableFocusListener
+                                disableTouchListener
+                            >
+
+                                <Button className="CancelButton" onClick={this.onToggleAddPlanOpen}>
+                                    ยกเลิก
                             </Button>
 
-                        </Tooltip>
+                            </Tooltip>
 
 
-                        <Tooltip
-                            title="Add Plan"
-                            placement="bottom"
-                            disableFocusListener
-                            disableTouchListener
-                        >
-                            <div>
-                                <Button
-                                    className="ContinueButton"
-                                    onClick={this.handleAdd}
-                                    disabled={this.state.isPlanNameInputError}
-                                >
-                                    เพิ่ม
+                            <Tooltip
+                                title="Add Plan"
+                                placement="bottom"
+                                disableFocusListener
+                                disableTouchListener
+                            >
+                                <div>
+                                    <Button
+                                        className="ContinueButton"
+                                        onClick={this.handleAdd}
+                                        disabled={this.state.isPlanNameInputError}
+                                    >
+                                        เพิ่ม
                             </Button>
-                            </div>
-                        </Tooltip>
+                                </div>
+                            </Tooltip>
 
-                    </div>
+                        </div>
 
-                </Modal>
+                    </Modal>
 
             </div>
 
-        );
-    }
-}
-
-AddPlan.propTypes = {
-
-};
-
+                );
+            }
+        }
+        
 export default (AddPlan);;

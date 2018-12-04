@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
-import classNames from 'classnames';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -23,7 +22,9 @@ const styles = theme => ({
     avatar: {
         margin: 10,
     },
-
+    bar: {
+        margin: theme
+    }
 });
 
 class Category extends Component {
@@ -39,7 +40,7 @@ class Category extends Component {
     };
 
     render() {
-        const { classes, theme } = this.props;
+        const { classes } = this.props;
         return (
             <Drawer
                 variant="temporary"
@@ -80,7 +81,6 @@ class Category extends Component {
 
 Category.propTypes = {
     classes: PropTypes.object.isRequired,
-    theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(Category);
+export default withStyles(styles)(Category);

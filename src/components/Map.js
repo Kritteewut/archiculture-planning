@@ -1,9 +1,9 @@
 import React from 'react';
 import './Design.css';
-import moment from 'moment';
-import firebase from 'firebase'
-import { db, planMemberRef, planRef } from '../config/firebase'
-import update from 'immutability-helper'
+// import moment from 'moment';
+// import firebase from 'firebase'
+import { db, planMemberRef, planRef, overlayRef } from '../config/firebase'
+// import update from 'immutability-helper'
 //if sort by alfhabet 0-9 => a-z => ก - ฮ
 //if sort by date the lastest day will be at the end of array
 //['S', 'M', 'T', 'W', 'T', 'F', 'S']
@@ -21,7 +21,6 @@ class Map extends React.PureComponent {
         window.initMap = this.initMap
     }
     initMap = () => {
-        var self = this
         window.map = new window.google.maps.Map(document.getElementById("map"), {
             center: this.state.center,
             zoom: this.state.zoom,
@@ -29,12 +28,14 @@ class Map extends React.PureComponent {
             mapTypeControl: false,
             streetViewControl: false,
             fullscreenControl: false,
+            zoomControl: false,
             mapTypeId: 'satellite',
             tilt: 0,
             //hybrid sat with detail
             //roadmap raod
             //satellite sat
             //terrain raod wtih terrain
+
         })
         this.setState({
             isLoad: true

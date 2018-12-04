@@ -117,7 +117,6 @@ class IconLabelButtons extends React.PureComponent {
                             {...this.props} />
                     </div>
 
-
                     <div>
                         <GeolocatedMe
                             onSetPanelName={this.props.onSetPanelName}

@@ -212,8 +212,6 @@ class IconPicker extends React.PureComponent {
         //this.onIconSelect = this.onIconSelect.bind(this)
     }
     render() {
-        const {  } = this.props;
-
         return (
             <div>
                 {images.map(image => (

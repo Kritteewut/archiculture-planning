@@ -3,7 +3,7 @@ import update from 'immutability-helper';
 import shortid from 'shortid'
 import { auth, userRef } from './config/firebase'
 import {
-  overlayRef, user,
+  overlayRef,
   planRef, taskRef,
   planMemberRef,
 } from './config/firebase'
@@ -26,6 +26,7 @@ import TransparentMaker from './components/TransparentMaker';
 import DetailedExpansionPanel from './components/DetailedExpansionPanel';
 import MapCenterFire from './components/MapCenterFire'
 //import ToggleDevice from './components/ToggleDevice'
+//import OverlayDetail from './components/OverlayDetail'
 
 // CSS Import
 import './App.css'
@@ -49,7 +50,7 @@ class App extends Component {
       distanceDetail: [],
       drawerPage: "homePage",
       drawingBtnType: null,
-      drawingId: null,
+      drawingOverlayId: null,
       exampleLineCoords: [],
       fillColor: "#ffa500",
       filterTaskType: SHOW_ALL,
@@ -97,7 +98,6 @@ class App extends Component {
   }
 
   onAddBeforeUnloadListener() {
-    var self = this
     window.addEventListener("beforeunload", function (event) {
       // Cancel the event as stated by the standard.
       event.preventDefault();
@@ -135,15 +135,16 @@ class App extends Component {
   }
 
   onFinishDrawing = () => {
-    const { isFirstDraw, overlayObject, distanceDetail, selectedPlan, drawingId } = this.state
+    const { isFirstDraw, overlayObject, distanceDetail, selectedPlan, drawingOverlayId } = this.state
     if (isFirstDraw === false) {
-      const drawingIndex = overlayObject.findIndex(overlay => overlay.overlayId === drawingId)
+      const drawingIndex = overlayObject.findIndex(overlay => overlay.overlayId === drawingOverlayId)
+      const detailIndex = distanceDetail.findIndex(detail => detail.overlayId === drawingOverlayId)
       const currentOverlay = overlayObject[drawingIndex]
       const coordsLength = currentOverlay.overlayCoords.length
       const overlayType = currentOverlay.overlayType
       if ((overlayType === 'polygon' && coordsLength < 3) || (overlayType === 'polyline' && coordsLength < 2)) {
-        let spliceCoords = update(overlayObject, { $splice: [[overlayObject.length - 1, 1]] })
-        let spliceDetail = update(distanceDetail, { $splice: [[distanceDetail.length - 1, 1]] })
+        let spliceOverlay = update(overlayObject, { $splice: [[drawingIndex, 1]] })
+        let spliceDetail = update(distanceDetail, { $splice: [[detailIndex, 1]] })
         if (overlayType === 'polygon') {
           alert('รูปหลายเหลี่ยมที่มีจำนวนจุดมากกว่าสองจุดเท่านั้นจึงจะถูกบันทึกได้')
         }
@@ -151,10 +152,10 @@ class App extends Component {
           alert('เส้นเชื่อมที่มีจำนวนจุดมากกว่าหนึ่งจุดเท่านั้นจึงจะถูกบันทึกได้')
         }
         this.setState({
-          overlayObject: spliceCoords,
+          overlayObject: spliceOverlay,
           distanceDetail: spliceDetail,
           isFirstDraw: true,
-          drawingId: null,
+          drawingOverlayId: null,
         })
       } else {
         if (selectedPlan) {
@@ -163,7 +164,7 @@ class App extends Component {
           const updateOverlay = update(overlayObject, { [drawingIndex]: { clickable: { $set: true } } })
           this.setState({ overlayObject: updateOverlay })
         }
-        this.setState({ isFirstDraw: true, drawingId: null, }, () => console.log(this.state.overlayObject, 'overlayOb'))
+        this.setState({ isFirstDraw: true, drawingOverlayId: null, }, () => console.log(this.state.overlayObject, 'overlayOb'))
       }
     }
     this.onClearExampleLine()
@@ -359,19 +360,19 @@ class App extends Component {
       drawingBtnType: null,
       overlayObject: pushObject,
       isFirstDraw: false,
-      drawingId: id,
+      drawingOverlayId: id,
     })
     this.onDrawExampleLine(latLng)
   }
 
   onPushDrawingPolygonCoords = (latLng) => {
-    const { overlayObject, drawingId } = this.state
+    const { overlayObject, drawingOverlayId } = this.state
     const lat = latLng.lat()
     const lng = latLng.lng()
     const clickLatLng = { lat, lng }
-    const actionIndex = overlayObject.findIndex(overlay => overlay.overlayId === drawingId)
+    const actionIndex = overlayObject.findIndex(overlay => overlay.overlayId === drawingOverlayId)
     const pushCoords = update(overlayObject, { [actionIndex]: { overlayCoords: { $push: [clickLatLng] } } })
-    const currentOverlay = pushCoords[pushCoords.length - 1]
+    const currentOverlay = pushCoords[actionIndex]
     const currentCoords = currentOverlay.overlayCoords
     const pushUndoCoords = update(pushCoords, { [actionIndex]: { undoCoords: { $push: [currentCoords] } } })
     const setRedoCoords = update(pushUndoCoords, { [actionIndex]: { redoCoords: { $set: [] } } })
@@ -412,19 +413,19 @@ class App extends Component {
       drawingBtnType: null,
       overlayObject: pushObject,
       isFirstDraw: false,
-      drawingId: id,
+      drawingOverlayId: id,
     })
     this.onDrawExampleLine(latLng)
   }
 
   onPushDrawingPolylineCoords = (latLng) => {
-    const { overlayObject, drawingId } = this.state
+    const { overlayObject, drawingOverlayId } = this.state
     const lat = latLng.lat()
     const lng = latLng.lng()
     const clickLatLng = { lat, lng }
-    let actionIndex = overlayObject.findIndex(overlay => overlay.overlayId === drawingId)
+    let actionIndex = overlayObject.findIndex(overlay => overlay.overlayId === drawingOverlayId)
     let pushCoords = update(overlayObject, { [actionIndex]: { overlayCoords: { $push: [clickLatLng] } } })
-    const currentOverlay = pushCoords[pushCoords.length - 1]
+    const currentOverlay = pushCoords[actionIndex]
     const currentCoords = currentOverlay.overlayCoords
     const pushUndoCoords = update(pushCoords, { [actionIndex]: { undoCoords: { $push: [currentCoords] } } })
     const setRedoCoords = update(pushUndoCoords, { [actionIndex]: { redoCoords: { $set: [] } } })
@@ -462,7 +463,7 @@ class App extends Component {
       overlayObject: coordsPush,
       drawingBtnType: 'marker',
       isFirstDraw: false,
-      drawingId: id,
+      drawingOverlayId: id,
     }, () => {
       this.onFinishDrawing()
     })
@@ -590,7 +591,7 @@ class App extends Component {
       window.google.maps.event.clearListeners(window.map, 'mousemove')
       window.google.maps.event.addListener(window.map, 'mousemove', function (event) {
         let mousemoveLatLng = event.latLng
-        var LatLngString = `lattitude :  ${event.latLng.lat().toFixed(4)}   ,   longtitude : ${event.latLng.lng().toFixed(4)}`
+        var LatLngString = `lattitude :  ${event.latLng.lat().toFixed(4)} , longtitude : ${event.latLng.lng().toFixed(4)}`
         self.setState({
           exampleLineCoords: [clickEvent, mousemoveLatLng],
           disBtwDetail: window.google.maps.geometry.spherical.computeDistanceBetween(clickEvent, mousemoveLatLng).toFixed(3),
@@ -601,7 +602,7 @@ class App extends Component {
       window.google.maps.event.clearListeners(window.map, 'center_changed')
       window.google.maps.event.addListener(window.map, 'center_changed', function () {
         let mousemoveLatLng = window.map.getCenter()
-        var LatLngString = `lattitude :  ${window.map.getCenter().lat().toFixed(4)}   ,   longtitude : ${window.map.getCenter().lng().toFixed(4)}`
+        var LatLngString = `lattitude :  ${window.map.getCenter().lat().toFixed(4)} , longtitude : ${window.map.getCenter().lng().toFixed(4)}`
         self.setState({
           exampleLineCoords: [clickEvent, mousemoveLatLng],
           latLngDetail: LatLngString,
@@ -614,10 +615,10 @@ class App extends Component {
   addMapCenterOnMap = () => {
     var self = this
     window.google.maps.event.addListener(window.map, 'center_changed', function () {
-      var LatLngString = `lattitude :  ${window.map.getCenter().lat().toFixed(4)}   ,   longtitude : ${window.map.getCenter().lng().toFixed(4)}`
+      var LatLngString = `lattitude :  ${window.map.getCenter().lat().toFixed(4)} , longtitude : ${window.map.getCenter().lng().toFixed(4)}`
       self.setState({ latLngDetail: LatLngString })
     })
-    var LatLngString = `lattitude :  ${window.map.getCenter().lat().toFixed(4)}   ,   longtitude : ${window.map.getCenter().lng().toFixed(4)}`
+    var LatLngString = `lattitude :  ${window.map.getCenter().lat().toFixed(4)} , longtitude : ${window.map.getCenter().lng().toFixed(4)}`
     self.setState({ latLngDetail: LatLngString })
   }
 
@@ -802,29 +803,29 @@ class App extends Component {
         const { overlayCoords, overlayType, overlayName, overlayDetail,
           fillColor, strokeColor, icon, overlaySource, overlayId } = overlay
         const data = { editorId, overlayCoords, overlayType, overlayName, overlayDetail, planId }
-        var overlay
+        var saveData
         if ((overlayType === 'polygon') && (overlayCoords.length > 2)) {
-          overlay = {
+          saveData = {
             fillColor,
             strokeColor,
             ...data
           }
         }
         if ((overlayType === 'polyline') && (overlayCoords.length > 1)) {
-          overlay = {
+          saveData = {
             strokeColor,
             ...data
           }
         }
         if (overlayType === 'marker') {
-          overlay = {
+          saveData = {
             icon,
             ...data
           }
         }
-        if (overlay) {
+        if (saveData) {
           if (overlaySource === 'local') {
-            overlayRef.add(overlay).then(function (doc) {
+            overlayRef.add(saveData).then(function (doc) {
               const id = doc.id
               self.onUpdatePlanLoadingProgress(updatePlanIndex)
               if (self.state.selectedPlan.planId === planId) {
@@ -849,7 +850,7 @@ class App extends Component {
                 throw ('there is something went wrong', error)
               })
           } else {
-            overlayRef.doc(overlayId).set(overlay
+            overlayRef.doc(overlayId).set(saveData
               , { merge: true }).then(function () {
                 self.onUpdatePlanLoadingProgress(updatePlanIndex)
                 if (self.state.selectedPlan.planId === planId) {
@@ -892,7 +893,7 @@ class App extends Component {
         self.setState({ planData: upDateSaveProgressPlan })
         if (this.state.selectedPlan.planId === planId) {
           const selectedPlan = update(this.state.selectedPlan, { isLoading: { $set: false } })
-          self.setState({ selectedPlan })
+          self.setState({ selectedPlan }) 
         }
       }
     })
@@ -918,32 +919,32 @@ class App extends Component {
       var queryAmount = querySnapshot.size
       if (queryAmount === 0) {
         self.setState({ isWaitingForPlanQuery: false, })
-      } else {
-        querySnapshot.forEach(function (doc) {
-          const { planId } = doc.data()
-          planRef.doc(planId).get().then(function (doc2) {
-            const createPlanDate = doc2.data().createPlanDate.toDate()
-            const lastModifiedDate = doc2.data().lastModifiedDate.toDate()
-            unSortplanData.push({
-              isPlanClickable: true,
-              isPlanOptionsClickable: true,
-              isLoading: false,
-              isSave: true,
-              loadingAmount: 0,
-              loadingProgress: null,
-              ...doc.data(),
-              ...doc2.data(),
-              createPlanDate,
-              lastModifiedDate,
-            })
-            queryAmount--
-            if (queryAmount === 0) {
-              self.setState({ isWaitingForPlanQuery: false, })
-              self.onSortArrayByCreateDate('planData', SORT_BY_NEWEST, unSortplanData, 'createPlanDate')
-            }
-          })
-        })
       }
+      querySnapshot.forEach(function (doc) {
+        const { planId } = doc.data()
+        planRef.doc(planId).get().then(function (doc2) {
+          const createPlanDate = doc2.data().createPlanDate.toDate()
+          const lastModifiedDate = doc2.data().lastModifiedDate.toDate()
+          unSortplanData.push({
+            isPlanClickable: true,
+            isPlanOptionsClickable: true,
+            isLoading: false,
+            isSave: true,
+            loadingAmount: 0,
+            loadingProgress: null,
+            ...doc.data(),
+            ...doc2.data(),
+            createPlanDate,
+            lastModifiedDate,
+          })
+          queryAmount--
+          if (queryAmount === 0) {
+            self.setState({ isWaitingForPlanQuery: false, })
+            self.onSortArrayByCreateDate('planData', SORT_BY_NEWEST, unSortplanData, 'lastModifiedDate')
+          }
+        })
+      })
+
     }).catch(function (error) {
       throw ('There is something went wrong', error)
     })
@@ -971,7 +972,7 @@ class App extends Component {
             ...data,
           }]
         })
-        self.onSortArrayByCreateDate('planData', SORT_BY_NEWEST, pushPlan, 'createPlanDate')
+        self.onSortArrayByCreateDate('planData', SORT_BY_NEWEST, pushPlan, 'lastModifiedDate')
       })
   }
 
@@ -1005,7 +1006,7 @@ class App extends Component {
   }
 
   onAddTask = (task) => {
-    const { selectedOverlay, selectedPlan, user } = this.state
+    const { selectedOverlay, selectedPlan } = this.state
     const { overlayId } = selectedOverlay
     const { planId } = selectedPlan
     const data = { overlayId, planId, ...task }
@@ -1072,10 +1073,16 @@ class App extends Component {
         overAllFilter = overlayTasks
         break;
       case SHOW_TODAY:
+        const thisDate = moment().format().split('T')[0]
         overAllFilter = overlayTasks.filter(task => {
-          const thisDate = moment().format().split('T')[0]
-          const doTaskDate = moment(task.taskRepetition.doTaskDate).format().split('T')[0]
-          return doTaskDate === thisDate
+          const { taskRepetition } = task
+          if (taskRepetition && taskRepetition.doTaskDate) {
+            const doTaskDate = moment(task.taskRepetition.doTaskDate).format().split('T')[0]
+            return moment(doTaskDate).isSame(thisDate)
+          } else {
+            return;
+          }
+
         })
         break;
       default: break;
@@ -1161,16 +1168,13 @@ class App extends Component {
             self.onSetUerInfo(email)
           }
           const data = { displayName, email }
-          userRef.doc(uid).set(data, { merge: true })
-            .then(function () {
-              //console.log('เพิ่มผู้ใช้งานเป็นสมาชิกเรียบร้อย')
-            }).
-            catch(function (error) {
-              throw ('whoops!', error)
-            })
+          userRef.doc(uid).set(data, { merge: true }).then(function () {
+            //console.log('เพิ่มผู้ใช้งานเป็นสมาชิกเรียบร้อย')
+          }).catch(function (error) {
+            throw ('whoops!', error)
+          })
         }
-      })
-      .catch(function (error) {
+      }).catch(function (error) {
         console.log("Error getting document:", error);
       });
   }
@@ -1324,6 +1328,7 @@ class App extends Component {
         const deleteDetail = update(distanceDetail, { $splice: [[detailIndex, 1]] })
         this.setState({ distanceDetail: deleteDetail, })
       }
+
     }
   }
 
@@ -1483,16 +1488,16 @@ class App extends Component {
   }
 
   onUndoDrawingCoords = () => {
-    const { overlayObject } = this.state
-    const currentObjectLength = overlayObject.length - 1
-    const currentObject = overlayObject[currentObjectLength]
+    const { overlayObject, drawingOverlayId } = this.state
+    const actionIndex = overlayObject.findIndex(overlay => overlay.overlayId === drawingOverlayId)
+    const currentObject = overlayObject[actionIndex]
     this.onUndoCoords(currentObject)
   }
 
   onRedoDrawingCoords = () => {
-    const { overlayObject } = this.state
-    const currentObjectLength = overlayObject.length - 1
-    const currentObject = overlayObject[currentObjectLength]
+    const { overlayObject, drawingOverlayId } = this.state
+    const actionIndex = overlayObject.findIndex(overlay => overlay.overlayId === drawingOverlayId)
+    const currentObject = overlayObject[actionIndex]
     this.onRedoCoords(currentObject)
   }
 
@@ -1530,26 +1535,19 @@ class App extends Component {
 
   onAddPlanMember = (data) => {
     const { planId, memberId } = data
-    planMemberRef
-      .where('planId', '==', planId)
-      .where('memberId', '==', memberId)
-      .get()
-      .then(function (querySnapshot) {
-        if (querySnapshot.empty) {
-          planMemberRef.add(data)
-            .then(function () {
-              console.log('เพิ่มผู้ใช้งานเป็นสมาชิกเรียบร้อย')
-            }).
-            catch(function (error) {
-              throw ('whoops!', error)
-            })
-        } else {
-          console.log('ผู้ใช้งานนี้เป็นสมาชิกของแปลงนี้อยู่แล้ว')
-        }
-      })
-      .catch(function (error) {
-        console.log("Error getting document:", error);
-      });
+    planMemberRef.where('planId', '==', planId).where('memberId', '==', memberId).get().then(function (querySnapshot) {
+      if (querySnapshot.empty) {
+        planMemberRef.add(data).then(function () {
+          console.log('เพิ่มผู้ใช้งานเป็นสมาชิกเรียบร้อย')
+        }).catch(function (error) {
+          throw ('whoops!', error)
+        })
+      } else {
+        console.log('ผู้ใช้งานนี้เป็นสมาชิกของแปลงนี้อยู่แล้ว')
+      }
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
   }
 
   onAddRealTimeUpdateListener = () => {
@@ -1622,7 +1620,7 @@ class App extends Component {
           if (change.type === "removed") {
             if (self.state.selectedOverlay) {
               if (self.state.selectedOverlay.overlayId === overlayId) {
-                self.setState({ selectedOverlay: null, drawerPage: 'homePage' })
+                self.setState({ drawerPage: 'homePage' })
                 self.onResetSelectedOverlay()
               }
             }
@@ -1668,7 +1666,7 @@ class App extends Component {
               data.taskRepetition.doTaskDate = doTaskDate
             }
           }
-          console.log(data)
+          //console.log(data)
           var updateTask
           switch (change.type) {
             case 'added': updateTask = update(self.state.overlayTasks, { $push: [data] }); break;
@@ -1728,43 +1726,50 @@ class App extends Component {
 
   onCheckToggleAllTaskDone = () => {
     var self = this
-    const { selectedPlan, planData } = this.state
+    const { selectedPlan } = this.state
     const { lastModifiedDate, planId } = selectedPlan
     const FormatedLastModifiedDate = moment(lastModifiedDate).format().split('T')[0]
     const thisDate = moment().format().split('T')[0]
     if (!moment(FormatedLastModifiedDate).isSame(thisDate)) {
-      planRef.doc(planId).set({ lastModifiedDate: new Date() }, { merge: true })
-      const actionIndex = planData.findIndex(plan => plan.planId === planId)
-      const updatePlan = update(planData, { [actionIndex]: { lastModifiedDate: new Date() } })
-      this.setState({ planData: updatePlan })
       taskRef.where('planId', '==', planId).get().then(function (querySnapshot) {
         var taskAmount = querySnapshot.size
         if (taskAmount === 0) {
-          //self.setState({ isWaitingForTaskToggle: false })
+          self.onUpdatePlanLastModifiedDate(taskAmount, planId)
+        } else {
+          self.setState({ isWaitingForTaskToggle: true })
         }
         querySnapshot.forEach(doc => {
           const { taskRepetition } = doc.data()
           const taskId = doc.id
-          if (taskRepetition) {
-            const doTaskDate = self.onCheckDoTaskDate(taskRepetition)
-            if (doTaskDate) {
-              const doDate = moment(doTaskDate).format().split('T')[0]
-              if (moment(doDate).isSame(thisDate)) {
-                taskRef.doc(taskId).set({ isDone: false }, { merge: true }).then(function () {
-                  taskAmount--
-                  if (taskAmount === 0) {
-                    planRef.doc(planId).set({ lastModifiedDate: new Date() }, { merge: true })
-                    self.setState({ isWaitingForTaskToggle: false })
-                  }
-                })
-              }
+          const doTaskDate = self.onCheckDoTaskDate(taskRepetition)
+          if (doTaskDate) {
+            const doDate = moment(doTaskDate).format().split('T')[0]
+            if (moment(doDate).isSame(thisDate)) {
+              taskRef.doc(taskId).set({ isDone: false }, { merge: true }).then(function () {
+                taskAmount--
+                self.onUpdatePlanLastModifiedDate(taskAmount, planId)
+              })
+            } else {
+              taskAmount--
+              self.onUpdatePlanLastModifiedDate(taskAmount, planId)
             }
+          } else {
+            taskAmount--
+            self.onUpdatePlanLastModifiedDate(taskAmount, planId)
           }
         })
       })
     }
   }
-
+  onUpdatePlanLastModifiedDate = (taskAmount, planId) => {
+    const { planData } = this.state
+    if (taskAmount === 0) {
+      const actionIndex = planData.findIndex(plan => plan.planId === planId)
+      const updatePlan = update(planData, { [actionIndex]: { lastModifiedDate: new Date() } })
+      planRef.doc(planId).set({ lastModifiedDate: new Date() }, { merge: true })
+      this.setState({ isWaitingForTaskToggle: false, planData: updatePlan })
+    }
+  }
   onCheckDoTaskDate = (taskRepetition) => {
     const { repetitionDueType } = taskRepetition
     var result = null
@@ -1863,7 +1868,7 @@ class App extends Component {
   }
 
   onRemoveRealTimePlanMember = () => {
-    this.setState({ planMember: [], isWaitingForPlanMemberQuery: true })
+    this.setState({ planMember: [], isWaitingForPlanMemberQuery: true, isWaitingForTaskToggle: false })
     var unsubscribe3 = planMemberRef
       .onSnapshot(function () { });
     unsubscribe3();
@@ -2004,21 +2009,24 @@ class App extends Component {
             />
 
           </div>
-
           <div className="FrameRight">
 
           </div>
 
           <DetailedExpansionPanel
             {...this.state}
+
           />
+
           {/* <MapHeading /> */}
           <div className="FrameCenter">
+            {/* <OverlayDetail /> */}
             <MapCenterFire
               drawOverlayUsingTouchScreen={this.drawOverlayUsingTouchScreen}
               {...this.state}
             />
           </div>
+
         </Map>
       </div>
     );

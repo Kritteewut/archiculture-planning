@@ -33,7 +33,6 @@ class openSideBtn extends React.PureComponent {
             this.props.handleDrawerOpen()
     }
     render() {
-        const { classes, } = this.props;
         return (
             <div >
                 <Button variant="fab" className="MenuSlide" onClick={this.onToggleDrawer} >

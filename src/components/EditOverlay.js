@@ -3,7 +3,6 @@ import React from 'react'
 // Material-ui Import
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
-import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import farm2 from './Picture/Picfarm2.jpg';
 import CardMedia from '@material-ui/core/CardMedia';
