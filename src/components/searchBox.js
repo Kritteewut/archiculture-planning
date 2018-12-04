@@ -42,7 +42,6 @@ class SearchBox extends React.PureComponent {
   renderSearchBox = () => {
     var self = this
     this.inputBox = document.getElementById('pac-input');
-    console.log(this.inputBox)
     if (!this.searchBox) {
       this.searchBox = new window.google.maps.places.SearchBox(this.inputBox);
       // Bias the SearchBox results towards current map's viewport.

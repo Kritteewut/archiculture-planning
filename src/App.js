@@ -25,7 +25,7 @@ import TransparentMaker from './components/TransparentMaker';
 import DetailedExpansionPanel from './components/DetailedExpansionPanel';
 import MapCenterFire from './components/MapCenterFire'
 //import ToggleDevice from './components/ToggleDevice'
-import OverlayDetail from './components/OverlayDetail'
+//import OverlayDetail from './components/OverlayDetail'
 
 // CSS Import
 import './App.css'
@@ -849,7 +849,7 @@ class App extends Component {
         self.setState({ planData: upDateSaveProgressPlan })
         if (this.state.selectedPlan.planId === planId) {
           const selectedPlan = update(this.state.selectedPlan, { isLoading: { $set: false } })
-          self.setState({ selectedPlan })
+          self.setState({ selectedPlan }) 
         }
       }
     })
@@ -873,32 +873,32 @@ class App extends Component {
       var queryAmount = querySnapshot.size
       if (queryAmount === 0) {
         self.setState({ isWaitingForPlanQuery: false, })
-      } else {
-        querySnapshot.forEach(function (doc) {
-          const { planId } = doc.data()
-          planRef.doc(planId).get().then(function (doc2) {
-            const createPlanDate = doc2.data().createPlanDate.toDate()
-            const lastModifiedDate = doc2.data().lastModifiedDate.toDate()
-            unSortplanData.push({
-              isPlanClickable: true,
-              isPlanOptionsClickable: true,
-              isLoading: false,
-              isSave: true,
-              loadingAmount: 0,
-              loadingProgress: null,
-              ...doc.data(),
-              ...doc2.data(),
-              createPlanDate,
-              lastModifiedDate,
-            })
-            queryAmount--
-            if (queryAmount === 0) {
-              self.setState({ isWaitingForPlanQuery: false, })
-              self.onSortArrayByCreateDate('planData', SORT_BY_NEWEST, unSortplanData, 'createPlanDate')
-            }
-          })
-        })
       }
+      querySnapshot.forEach(function (doc) {
+        const { planId } = doc.data()
+        planRef.doc(planId).get().then(function (doc2) {
+          const createPlanDate = doc2.data().createPlanDate.toDate()
+          const lastModifiedDate = doc2.data().lastModifiedDate.toDate()
+          unSortplanData.push({
+            isPlanClickable: true,
+            isPlanOptionsClickable: true,
+            isLoading: false,
+            isSave: true,
+            loadingAmount: 0,
+            loadingProgress: null,
+            ...doc.data(),
+            ...doc2.data(),
+            createPlanDate,
+            lastModifiedDate,
+          })
+          queryAmount--
+          if (queryAmount === 0) {
+            self.setState({ isWaitingForPlanQuery: false, })
+            self.onSortArrayByCreateDate('planData', SORT_BY_NEWEST, unSortplanData, 'lastModifiedDate')
+          }
+        })
+      })
+
     }).catch(function (error) {
       throw ('There is something went wrong', error)
     })
@@ -925,7 +925,7 @@ class App extends Component {
             ...data,
           }]
         })
-        self.onSortArrayByCreateDate('planData', SORT_BY_NEWEST, pushPlan, 'createPlanDate')
+        self.onSortArrayByCreateDate('planData', SORT_BY_NEWEST, pushPlan, 'lastModifiedDate')
       })
   }
   onSetSelectedPlan = (planData) => {
@@ -1019,15 +1019,16 @@ class App extends Component {
         overAllFilter = overlayTasks
         break;
       case SHOW_TODAY:
+        const thisDate = moment().format().split('T')[0]
         overAllFilter = overlayTasks.filter(task => {
           const { taskRepetition } = task
-          const thisDate = moment().format().split('T')[0]
           if (taskRepetition && taskRepetition.doTaskDate) {
             const doTaskDate = moment(task.taskRepetition.doTaskDate).format().split('T')[0]
             return moment(doTaskDate).isSame(thisDate)
           } else {
             return;
           }
+
         })
         break;
       default: break;
@@ -1261,6 +1262,7 @@ class App extends Component {
         const deleteDetail = update(distanceDetail, { $splice: [[detailIndex, 1]] })
         this.setState({ distanceDetail: deleteDetail, })
       }
+
     }
   }
   onDeleteAllOverlay = (planId) => {
@@ -1538,7 +1540,7 @@ class App extends Component {
           if (change.type === "removed") {
             if (self.state.selectedOverlay) {
               if (self.state.selectedOverlay.overlayId === overlayId) {
-                self.setState({ selectedOverlay: null, drawerPage: 'homePage' })
+                self.setState({ drawerPage: 'homePage' })
                 self.onResetSelectedOverlay()
               }
             }
@@ -1641,40 +1643,48 @@ class App extends Component {
   }
   onCheckToggleAllTaskDone = () => {
     var self = this
-    const { selectedPlan, planData } = this.state
+    const { selectedPlan } = this.state
     const { lastModifiedDate, planId } = selectedPlan
     const FormatedLastModifiedDate = moment(lastModifiedDate).format().split('T')[0]
     const thisDate = moment().format().split('T')[0]
     if (!moment(FormatedLastModifiedDate).isSame(thisDate)) {
-      planRef.doc(planId).set({ lastModifiedDate: new Date() }, { merge: true })
-      const actionIndex = planData.findIndex(plan => plan.planId === planId)
-      const updatePlan = update(planData, { [actionIndex]: { lastModifiedDate: new Date() } })
-      this.setState({ planData: updatePlan })
       taskRef.where('planId', '==', planId).get().then(function (querySnapshot) {
         var taskAmount = querySnapshot.size
         if (taskAmount === 0) {
-          //self.setState({ isWaitingForTaskToggle: false })
+          self.onUpdatePlanLastModifiedDate(taskAmount, planId)
+        } else {
+          self.setState({ isWaitingForTaskToggle: true })
         }
         querySnapshot.forEach(doc => {
           const { taskRepetition } = doc.data()
           const taskId = doc.id
-          if (taskRepetition) {
-            const doTaskDate = self.onCheckDoTaskDate(taskRepetition)
-            if (doTaskDate) {
-              const doDate = moment(doTaskDate).format().split('T')[0]
-              if (moment(doDate).isSame(thisDate)) {
-                taskRef.doc(taskId).set({ isDone: false }, { merge: true }).then(function () {
-                  taskAmount--
-                  if (taskAmount === 0) {
-                    planRef.doc(planId).set({ lastModifiedDate: new Date() }, { merge: true })
-                    self.setState({ isWaitingForTaskToggle: false })
-                  }
-                })
-              }
+          const doTaskDate = self.onCheckDoTaskDate(taskRepetition)
+          if (doTaskDate) {
+            const doDate = moment(doTaskDate).format().split('T')[0]
+            if (moment(doDate).isSame(thisDate)) {
+              taskRef.doc(taskId).set({ isDone: false }, { merge: true }).then(function () {
+                taskAmount--
+                self.onUpdatePlanLastModifiedDate(taskAmount, planId)
+              })
+            } else {
+              taskAmount--
+              self.onUpdatePlanLastModifiedDate(taskAmount, planId)
             }
+          } else {
+            taskAmount--
+            self.onUpdatePlanLastModifiedDate(taskAmount, planId)
           }
         })
       })
+    }
+  }
+  onUpdatePlanLastModifiedDate = (taskAmount, planId) => {
+    const { planData } = this.state
+    if (taskAmount === 0) {
+      const actionIndex = planData.findIndex(plan => plan.planId === planId)
+      const updatePlan = update(planData, { [actionIndex]: { lastModifiedDate: new Date() } })
+      planRef.doc(planId).set({ lastModifiedDate: new Date() }, { merge: true })
+      this.setState({ isWaitingForTaskToggle: false, planData: updatePlan })
     }
   }
   onCheckDoTaskDate = (taskRepetition) => {
@@ -1772,7 +1782,7 @@ class App extends Component {
     // Stop listening to changes
   }
   onRemoveRealTimePlanMember = () => {
-    this.setState({ planMember: [], isWaitingForPlanMemberQuery: true })
+    this.setState({ planMember: [], isWaitingForPlanMemberQuery: true, isWaitingForTaskToggle: false })
     var unsubscribe3 = planMemberRef
       .onSnapshot(function () { });
     unsubscribe3();

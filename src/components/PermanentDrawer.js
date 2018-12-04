@@ -67,6 +67,7 @@ class PermanentDrawer extends React.PureComponent {
         this.onToggleMergeOverlayModal()
     }
     handleDiscardToMergeOverlay = () => {
+        this.props.onClearOverlayFromMap()
         this.props.onSetSelectedPlan(this.state.planData)
         this.onToggleMergeOverlayModal()
     }
