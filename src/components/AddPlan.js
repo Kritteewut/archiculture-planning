@@ -85,72 +85,72 @@ class AddPlan extends React.PureComponent {
                     >
                         <AddIcon />
                     </Button>
+                </Tooltip>
 
 
+                <Modal
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                    open={this.state.isAddPlanOpen}
+                    onClose={this.onToggleAddPlanOpen}
+                >
+                    <div className="paperadd">
+                        <p className="textcolor"> สร้างแปลงของคุณ </p>
 
-                    <Modal
-                        aria-labelledby="simple-modal-title"
-                        aria-describedby="simple-modal-description"
-                        open={this.state.isAddPlanOpen}
-                        onClose={this.onToggleAddPlanOpen}
-                    >
-                        <div className="paperadd">
-                            <p className="textcolor"> สร้างแปลงของคุณ </p>
+                        <TextField className="TextAddPlan"
+                            inputRef={this.setAddPlanInput}
+                            autoFocus={true}
+                            error={this.state.isPlanNameInputError}
+                            helperText={this.state.isPlanNameInputError ? 'ชื่อแปลงต้องมีอย่างน้อย 1 ตัวอักษรแต่ไม่เกิน 30 ตัวอักษร' : ''}
+                            onChange={this.handlePlanNameInputChange}
+                        />
 
-                            <TextField className="TextAddPlan"
-                                inputRef={this.setAddPlanInput}
-                                autoFocus={true}
-                                error={this.state.isPlanNameInputError}
-                                helperText={this.state.isPlanNameInputError ? 'ชื่อแปลงต้องมีอย่างน้อย 1 ตัวอักษรแต่ไม่เกิน 30 ตัวอักษร' : ''}
-                                onChange={this.handlePlanNameInputChange}
-                            />
+                        <TextField className="DataTextPlan"
+                            inputRef={this.setPlanDescriptionInput}
+                            defaultValue=''
+                            multiline
+                            rowsMax="4"
+                        />
 
-                            <TextField className="DataTextPlan"
-                                inputRef={this.setPlanDescriptionInput}
-                                defaultValue=''
-                                multiline
-                                rowsMax="4"
-                            />
+                        <Tooltip
+                            title="Close Window"
+                            placement="bottom"
+                            disableFocusListener
+                            disableTouchListener
+                        >
 
-                            <Tooltip
-                                title="Close Window"
-                                placement="bottom"
-                                disableFocusListener
-                                disableTouchListener
-                            >
-
-                                <Button className="CancelButton" onClick={this.onToggleAddPlanOpen}>
-                                    ยกเลิก
+                            <Button className="CancelButton" onClick={this.onToggleAddPlanOpen}>
+                                ยกเลิก
                             </Button>
 
-                            </Tooltip>
+                        </Tooltip>
 
 
-                            <Tooltip
-                                title="Add Plan"
-                                placement="bottom"
-                                disableFocusListener
-                                disableTouchListener
-                            >
-                                <div>
-                                    <Button
-                                        className="ContinueButton"
-                                        onClick={this.handleAdd}
-                                        disabled={this.state.isPlanNameInputError}
-                                    >
-                                        เพิ่ม
+                        <Tooltip
+                            title="Add Plan"
+                            placement="bottom"
+                            disableFocusListener
+                            disableTouchListener
+                        >
+                            <div>
+                                <Button
+                                    className="ContinueButton"
+                                    onClick={this.handleAdd}
+                                    disabled={this.state.isPlanNameInputError}
+                                >
+                                    เพิ่ม
                             </Button>
-                                </div>
-                            </Tooltip>
+                            </div>
+                        </Tooltip>
 
-                        </div>
+                    </div>
 
-                    </Modal>
+                </Modal>
 
             </div>
 
-                );
-            }
-        }
-        
+        );
+    }
+}
+
 export default (AddPlan);;

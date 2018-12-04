@@ -224,17 +224,13 @@ class PermanentDrawer extends React.PureComponent {
                             บันทึก
                         </Button>
 
-                        <Button
-                            variant="contained"
-                            className="AddButton"
-                        >
-                            <AddPlan
-                                onAddPlan={this.props.onAddPlan}
-                                onChangeDrawPage={this.props.onChangeDrawPage}
-                                handleDrawerOpen={this.props.handleDrawerOpen}
-                                {...this.props}
-                            />
-                        </Button>
+                        <AddPlan
+                            onAddPlan={this.props.onAddPlan}
+                            onChangeDrawPage={this.props.onChangeDrawPage}
+                            handleDrawerOpen={this.props.handleDrawerOpen}
+                            {...this.props}
+                        />
+
 
                         <Divider />
                         <List
