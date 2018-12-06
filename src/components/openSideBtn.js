@@ -21,21 +21,13 @@ import './Design.css';
 class openSideBtn extends React.PureComponent {
     constructor(props) {
         super(props);
-        this.state = {
-        }
-
+        this.state = {}
         //this.deleteme = this.deleteme.bind(this)
-    }
-    onToggleDrawer = () => {
-        this.props.openSide ?
-            this.props.handleDrawerClose()
-            :
-            this.props.handleDrawerOpen()
     }
     render() {
         return (
             <div >
-                <Button variant="fab" className="MenuSlide" onClick={this.onToggleDrawer} >
+                <Button variant="fab" className="MenuSlide" onClick={this.props.handleDrawerToggle} >
                     <div className="ButtonIconColor">
                         <MenuIcon />
                     </div>

@@ -108,11 +108,9 @@ List of CSS Design Class
 }
 
 .buttonHowtoUse {
-    width: 320px;
+    width: 100%;
     height: 50px;
     top: 7px;
-    left: 13px;
-    
     background: linear-gradient(40deg, rgb(171, 255, 74) 20%, rgb(255, 192, 76)) 20%;
     box-shadow: 0px 0px 0px 3px rgba(183, 255, 89, 0.6);
     opacity: 0.7; 
@@ -158,7 +156,10 @@ List of CSS Design Class
     cursor: pointer;
     background-color: rgba(151, 255, 66, 0);
 }
-
+.container {
+    display: flex;
+    flex-wrap: wrap;
+  }
 /* ------------------- Gridview Group ------------------ */
 
 /* ------------------- Dropdown Group ------------------ */

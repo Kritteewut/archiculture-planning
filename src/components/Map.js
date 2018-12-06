@@ -49,8 +49,8 @@ class Map extends React.PureComponent {
         }
         return (
             <div style={{
-                left: this.props.left,
-
+                // width: '100%',
+                // height: '100vh',
             }}
                 className="Map"
                 id="map" >

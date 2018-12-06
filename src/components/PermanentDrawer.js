@@ -38,9 +38,7 @@ import OpenWith from '@material-ui/icons/LocationOn';
 import Picbackground from './Picture/Profile Background.jpg';
 
 // CSS Import
-import '../App.css';
 import './Design.css';
-import './AddPlanBtn';
 import './PermanentDrawer.css';
 
 class PermanentDrawer extends React.PureComponent {
@@ -210,31 +208,35 @@ class PermanentDrawer extends React.PureComponent {
                         </List>
 
                         <Divider />
-
-                        <Button variant="contained" className="buttonshow" onClick={onToggleDistanceMarker}>
-                            {isDistanceMarkerVisible ? 'ปิดระยะ' : 'แสดงระยะ'}
-                        </Button>
-
-                        <Button
-                            variant="contained"
-                            className="buttonsave"
-                            disabled={(selectedPlan) ? selectedPlan.isLoading : true}
-                            onClick={() => this.props.onSaveToFirestore(selectedPlan)}
+                        <div
+                        //className="container"
                         >
-                            บันทึก
+                            <Button variant="contained" className="buttonshow" onClick={onToggleDistanceMarker}>
+                                {isDistanceMarkerVisible ? 'ปิดระยะ' : 'แสดงระยะ'}
+                            </Button>
+
+                            <Button
+                                variant="contained"
+                                className="buttonsave"
+                                disabled={(selectedPlan) ? selectedPlan.isLoading : true}
+                                onClick={() => this.props.onSaveToFirestore(selectedPlan)}
+                            >
+                                บันทึก
                         </Button>
 
-                        <Button
+                            {/* <Button
                             variant="contained"
                             className="AddButton"
-                        >
+                        > */}
                             <AddPlan
                                 onAddPlan={this.props.onAddPlan}
                                 onChangeDrawPage={this.props.onChangeDrawPage}
+                                user={this.props.user}
                                 handleDrawerOpen={this.props.handleDrawerOpen}
-                                {...this.props}
                             />
-                        </Button>
+                            {/* </Button> */}
+
+                        </div>
 
                         <Divider />
                         <List
@@ -391,28 +393,29 @@ class PermanentDrawer extends React.PureComponent {
     render() {
         const { isWaitingForUserResult } = this.props;
         return (
-
-            <Drawer
-                variant="persistent"
-                anchor='left'
-                open={this.props.openSide}
-                classes={{ paper: "drawerPaper", }}
-            //className={classes.drawerPaper}
+            // <Drawer
+            //     variant="persistent"
+            //     anchor='left'
+            //     open={this.props.openSide}
+            //     classes={{ paper: "drawerPaper", }}
+            // //className={classes.drawerPaper}
+            // >
+            <div
+            style={{
+                width: '100%'
+            }}
             >
-                {isWaitingForUserResult ?
-                    'กำลังโหลด....'
-                    :
-                    this.drawerPageRender()
+                {
+                    isWaitingForUserResult ?
+                        'กำลังโหลด....'
+                        :
+                        this.drawerPageRender()
                 }
-
-            </Drawer>
+            </div>
+            // </Drawer>
 
         );
     }
 }
-
-PermanentDrawer.propTypes = {
-
-};
 
 export default (PermanentDrawer);

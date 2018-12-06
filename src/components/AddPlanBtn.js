@@ -146,7 +146,7 @@ class AddPlanBtn extends React.PureComponent {
     }
 
     render() {
-        const { classes, isWaitingForUserResult } = this.props;
+        const {  isWaitingForUserResult } = this.props;
         return (
             <div>
 
