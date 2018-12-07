@@ -84,13 +84,17 @@ class TaskShow extends React.PureComponent {
     render() {
         const { overlayTaskShow, classes, isWaitingForTaskToggle } = this.props;
         return (
-            <div className={classes.root}>
+            <div 
+            className={classes.root}
+            >
                 {isWaitingForTaskToggle ?
                     "กำลังโหลด"
                     :
                     <div>
 
-                        <main className={classes.layout}>
+                        <main 
+                        className={classes.layout}
+                        >
                             <List component="nav">
                                 {overlayTaskShow.map((task) => {
                                     return (

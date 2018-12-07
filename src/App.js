@@ -499,6 +499,7 @@ class ResponsiveDrawer extends React.Component {
         }
     }
     onSetSelectedOverlay = (overlay) => {
+        console.log(overlay)
         this.onResetSelectedOverlay()
         if (overlay.overlayType === 'polygon' || overlay.overlayType === 'polyline') {
             overlay.setOptions({ editable: true, })
@@ -1125,8 +1126,35 @@ class ResponsiveDrawer extends React.Component {
     onSetUser = (user) => {
         this.setState({ user }, () => {
             this.onQueryPlanFromFirestore()
+            this.onCheckUser(user)
         })
 
+    }
+    onCheckUser = (user) => {
+        var self = this
+        const { uid, email } = user
+        userRef
+            .doc(uid)
+            .get()
+            .then(function (querySnapshot) {
+                if (!querySnapshot.exists) {
+                    var displayName
+                    if (user.displayName) {
+                        displayName = user.displayName
+                    } else {
+                        displayName = email
+                        self.onSetUerInfo(email)
+                    }
+                    const data = { displayName, email }
+                    userRef.doc(uid).set(data, { merge: true }).then(function () {
+                        //console.log('เพิ่มผู้ใช้งานเป็นสมาชิกเรียบร้อย')
+                    }).catch(function (error) {
+                        throw ('whoops!', error)
+                    })
+                }
+            }).catch(function (error) {
+                console.log("Error getting document:", error);
+            });
     }
     onSetUerInfo = (info) => {
         this.state.user.updateProfile({
@@ -1253,7 +1281,7 @@ class ResponsiveDrawer extends React.Component {
     }
     onDeleteOverlay = (overlay) => {
         const { overlayObject, distanceDetail } = this.state
-        const { overlayId, overlaySource } = overlay
+        const { overlayId, overlaySource, overlayType } = overlay
         const deleteIndex = overlayObject.findIndex(overlay => overlay.overlayId === overlayId)
         if (overlaySource === 'server') {
             //delete selected overlay from firestore
@@ -1261,15 +1289,14 @@ class ResponsiveDrawer extends React.Component {
                 console.error("Error removing document: ", error);
             });
         } else {
-            this.onResetSelectedOverlay()
             const deleteObject = update(overlayObject, { $splice: [[deleteIndex, 1]] })
             this.setState({ overlayObject: deleteObject, drawerPage: 'homePage' })
-            if (overlay.overlayType !== 'marker') {
+            this.onResetDetail()
+            if (overlayType === 'polyline' || overlayType === 'polygon') {
                 const detailIndex = distanceDetail.findIndex(detail => detail.overlayId === overlayId)
                 const deleteDetail = update(distanceDetail, { $splice: [[detailIndex, 1]] })
                 this.setState({ distanceDetail: deleteDetail, })
             }
-
         }
     }
     onDeleteAllOverlay = (planId) => {
@@ -1548,7 +1575,7 @@ class ResponsiveDrawer extends React.Component {
                         if (self.state.selectedOverlay) {
                             if (self.state.selectedOverlay.overlayId === overlayId) {
                                 self.setState({ drawerPage: 'homePage' })
-                                self.onResetSelectedOverlay()
+                                self.onResetDetail()
                             }
                         }
                         if (overlayType !== 'marker') {

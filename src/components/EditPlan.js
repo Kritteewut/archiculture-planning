@@ -94,7 +94,7 @@ class EditPlan extends React.PureComponent {
                     <List
                         component="div"
                         disablePadding
-                        subheader={<ListSubheader component="div">รายการแปลง</ListSubheader>}
+                        subheader={<ListSubheader component="div">รายชื่อสมาชิก</ListSubheader>}
                     >
                         {this.props.isWaitingForPlanMemberQuery ?
                             'กำลังโหลด'

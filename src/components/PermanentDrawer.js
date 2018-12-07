@@ -144,7 +144,7 @@ class PermanentDrawer extends React.PureComponent {
                                 onCopy={() => alert('coppied to clip baord')}
                                 text={user.uid}
                             >
-                                <IconButton aria-label="Delete" >
+                                <IconButton aria-label="Coppied" >
                                     <CoppiedIcon />
                                 </IconButton>
                             </CopyToClipboard>
