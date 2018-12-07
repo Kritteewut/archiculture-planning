@@ -40,6 +40,13 @@ class Map extends React.PureComponent {
         this.setState({
             isLoad: true
         })
+        // var mapLabel = new window.MapLabel({
+        //     text: 'Test',
+        //     position: new window.google.maps.LatLng(34.03, -118.235),
+        //     map: window.map,
+        //     fontSize: 35,
+        //     align: 'right'
+        //   });
     }
 
     render() {
