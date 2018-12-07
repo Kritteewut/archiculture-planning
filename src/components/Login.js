@@ -103,7 +103,7 @@ class Login extends React.PureComponent {
 
                     <div className="container wrapper LoginFont ">
 
-                        <p className="logo TextThemedarkColor">
+                        <p className="logoFrame logo TextThemedarkColor">
 
                             <img src={logo} className="logo App-logo" alt="logo" />
 

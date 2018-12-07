@@ -39,7 +39,7 @@ List of CSS Design Class
   line-height: 34px;
 
   white-space: nowrap;
-    
+
   border-radius: 0.2em;
 
   font-size: 16px;
@@ -260,6 +260,7 @@ List of CSS Design Class
 
  .LoginButton{
   text-align: center;
+  
 }
 .regisBtn{
   font-family: 'Prompt', sans-serif;
@@ -274,12 +275,39 @@ List of CSS Design Class
 .App-logo {
   height: 110px;
   width: 110px;
+
+  left: 100px;
 }
 
 p.logo{
   text-align: center;
   font-size: 23px;
-  font-weight:bold
+  font-weight:bold;
+
+}
+
+.logoFrame {
+
+  width: 200px;  
+  height: 150px;
+  left: 27px;
+  top: -5px;
+  /* Layer Group*/
+  position: relative;
+  cursor: pointer;
+  background: linear-gradient(15deg, rgba(255, 255, 255, 0) 0.rgb(255, 255, 255, 0)) 100%;
+}
+
+.buttoncenterFrameregister {
+
+  width: 200px;  
+  height: 150px;
+  left: 27px;
+  top: 0px;
+  /* Layer Group*/
+  position: relative;
+  cursor: pointer;
+  background: linear-gradient(15deg, rgba(255, 255, 255, 0) 0.rgb(255, 255, 255, 0)) 100%;
 }
 
 /* ------------------- Forms Group ------------------ */

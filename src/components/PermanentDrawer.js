@@ -137,7 +137,7 @@ class PermanentDrawer extends React.PureComponent {
                                 className="FrameTextID"
                                 onCopy={() => alert('coppied to clip baord')}>
 
-                                <span className="TextSmallSize "> ID ผู้ใช้งาน : {user.uid}</span>
+                                <span className="TextSmallSizeset"> ID ผู้ใช้งาน : {user.uid}</span>
 
                             </CopyToClipboard>
 
@@ -156,9 +156,6 @@ class PermanentDrawer extends React.PureComponent {
                         </Button>
 
                         <div className="Framelinearcolor1">
-                        </div>
-
-                        <div className="Framelinearcolor2">
                         </div>
 
                         <div className="FrameButtoncolor">
@@ -187,27 +184,6 @@ class PermanentDrawer extends React.PureComponent {
 
                         </Button>
 
-                        <List>
-                            <ListItem>
-
-                                แปลงที่เลือก : {selectedPlan ? selectedPlan.planName : 'ยังไม่มีแปลงที่เลือก'}
-
-                                <ListItemSecondaryAction>
-                                    <IconButton
-                                        aria-label="Delete"
-                                        disabled={overlayObject.length > 0 ? false : true}
-                                        onClick={onCallFitBounds}
-                                    >
-                                        <div className="ButtonIconColor">
-                                            <OpenWith />
-                                        </div>
-                                    </IconButton>
-                                </ListItemSecondaryAction>
-
-                            </ListItem>
-                        </List>
-
-                        <Divider />
                         <div
                         //className="container"
                         >
@@ -228,6 +204,7 @@ class PermanentDrawer extends React.PureComponent {
                             variant="contained"
                             className="AddButton"
                         > */}
+
                             <AddPlan
                                 onAddPlan={this.props.onAddPlan}
                                 onChangeDrawPage={this.props.onChangeDrawPage}
@@ -236,7 +213,30 @@ class PermanentDrawer extends React.PureComponent {
                             />
                             {/* </Button> */}
 
+
                         </div>
+
+                        <Divider />
+
+                        <List>
+                            <ListItem>
+
+                                แปลงที่เลือก : {selectedPlan ? selectedPlan.planName : 'ยังไม่มีแปลงที่เลือก'}
+
+                                <ListItemSecondaryAction>
+                                    <IconButton
+                                        aria-label="Delete"
+                                        disabled={overlayObject.length > 0 ? false : true}
+                                        onClick={onCallFitBounds}
+                                    >
+                                        <div className="ButtonIconColor">
+                                            <OpenWith />
+                                        </div>
+                                    </IconButton>
+                                </ListItemSecondaryAction>
+
+                            </ListItem>
+                        </List>
 
                         <Divider />
                         <List
@@ -401,9 +401,9 @@ class PermanentDrawer extends React.PureComponent {
             // //className={classes.drawerPaper}
             // >
             <div
-            style={{
-                width: '100%'
-            }}
+                style={{
+                    width: '100%'
+                }}
             >
                 {
                     isWaitingForUserResult ?
