@@ -33,7 +33,7 @@ import IconLogout from '@material-ui/icons/PhonelinkErase';
 import IconForward from '@material-ui/icons/ArrowForward';
 import ViewOnly from '@material-ui/icons/Visibility'
 import OpenWith from '@material-ui/icons/LocationOn';
-
+import CoppiedIcon from '@material-ui/icons/LibraryBooks'
 //Picture Group
 import Picbackground from './Picture/Profile Background.jpg';
 
@@ -126,19 +126,27 @@ class PermanentDrawer extends React.PureComponent {
                                 />
 
                                 <ListItemText
-                                    primary={user.displayName}
+                                    primary={user.displayName ? user.displayName : user.email}
                                 >
                                 </ListItemText>
 
                             </ListItem>
 
 
-                            <CopyToClipboard text={user.uid}
+                            <CopyToClipboard
+                                text={user.uid}
                                 className="FrameTextID"
                                 onCopy={() => alert('coppied to clip baord')}>
-
                                 <span className="TextSmallSize "> ID ผู้ใช้งาน : {user.uid}</span>
 
+                            </CopyToClipboard>
+                            <CopyToClipboard
+                                onCopy={() => alert('coppied to clip baord')}
+                                text={user.uid}
+                            >
+                                <IconButton aria-label="Delete" >
+                                    <CoppiedIcon />
+                                </IconButton>
                             </CopyToClipboard>
 
                         </List>
@@ -149,7 +157,7 @@ class PermanentDrawer extends React.PureComponent {
                             </div>
                         </Button>
 
-                        <Button variant="fab" className="buttonturnoff">
+                        <Button variant="fab" className="buttonturnoff" onClick={this.props.handleDrawerToggle}>
                             <div className="ButtonIconColor">
                                 <IconForward />
                             </div>
@@ -401,13 +409,17 @@ class PermanentDrawer extends React.PureComponent {
             // //className={classes.drawerPaper}
             // >
             <div
-            style={{
-                width: '100%'
-            }}
+                style={{
+                    width: '100%'
+                }}
             >
                 {
                     isWaitingForUserResult ?
-                        'กำลังโหลด....'
+                        <div
+                            style={{ alignContent: 'center' }}
+                        >
+                            กำลังโหลด....
+                        </div>
                         :
                         this.drawerPageRender()
                 }

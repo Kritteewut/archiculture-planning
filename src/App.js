@@ -73,7 +73,6 @@ class ResponsiveDrawer extends React.Component {
         super(props);
         this.state = {
             mobileOpen: false,
-            appUser: null,
             areaDetail: "",
             disBtwDetail: "",
             distanceDetail: [],
@@ -1126,35 +1125,8 @@ class ResponsiveDrawer extends React.Component {
     onSetUser = (user) => {
         this.setState({ user }, () => {
             this.onQueryPlanFromFirestore()
-            this.onCheckUser(user)
         })
 
-    }
-    onCheckUser = (user) => {
-        var self = this
-        const { uid, email } = user
-        userRef
-            .doc(uid)
-            .get()
-            .then(function (querySnapshot) {
-                if (!querySnapshot.exists) {
-                    var displayName
-                    if (user.displayName) {
-                        displayName = user.displayName
-                    } else {
-                        displayName = email
-                        self.onSetUerInfo(email)
-                    }
-                    const data = { displayName, email }
-                    userRef.doc(uid).set(data, { merge: true }).then(function () {
-                        //console.log('เพิ่มผู้ใช้งานเป็นสมาชิกเรียบร้อย')
-                    }).catch(function (error) {
-                        throw ('whoops!', error)
-                    })
-                }
-            }).catch(function (error) {
-                console.log("Error getting document:", error);
-            });
     }
     onSetUerInfo = (info) => {
         this.state.user.updateProfile({
@@ -1865,6 +1837,7 @@ class ResponsiveDrawer extends React.Component {
                     onAddPlan={this.onAddPlan}
                     onChangeDrawPage={this.onChangeDrawPage}
                     handleDrawerOpen={this.handleDrawerOpen}
+                    handleDrawerToggle={this.handleDrawerToggle}
                     {...this.state}
                 />
             </div>
@@ -2055,4 +2028,5 @@ function new_script(src) {
     })
 };
 // Promise Interface can ensure load the script only once
-var my_script = new_script('https://maps.googleapis.com/maps/api/js?&libraries=geometry,drawing,places,visualization&key=&callback=initMap');
+new_script('https://maps.googleapis.com/maps/api/js?&libraries=geometry,drawing,places,visualization&key=&callback=initMap');
+new_script('https://google-analytics.com/ga.js')
