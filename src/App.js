@@ -35,7 +35,7 @@ import './App.css'
 import './components/SearchBoxStyles.css'
 import './components/PermanentDrawer.css';
 
-const drawerWidth = 300;
+const drawerWidth = 320;
 const styles = theme => ({
     root: {
         display: 'flex',

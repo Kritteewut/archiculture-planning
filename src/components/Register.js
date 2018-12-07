@@ -61,7 +61,7 @@ class Register extends React.PureComponent {
         return (
             <div className="loading container wrapper LoginFont">
 
-                <p className="logo TextThemedarkColor"><img src={logo} className="App-logo " alt="logo" />
+                <p className=" logoFrame logo TextThemedarkColor"><img src={logo} className="App-logo " alt="logo" />
 
                     <br /> สมัครสมาชิก </p>
 
@@ -101,7 +101,7 @@ class Register extends React.PureComponent {
 
                 <br />
 
-                <div className="LoginButton">
+                <div className="LoginButton buttoncenterFrameregister">
 
                     <button type="submit" onClick={this.registerU} className="loginBtnforEmail loginBtn--L">ยืนยัน</button>
 

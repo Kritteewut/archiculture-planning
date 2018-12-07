@@ -24,31 +24,31 @@ List of CSS Design Class
 
 /* ------------------- Text Group ------------------ */
 
-.TextThemewhiteColor{
+.TextThemewhiteColor {
     color: rgb(133, 148, 1)
-  }
-
-.TextThemewhiteColor:hover{
-    color: rgb(70, 78, 0)
-  }
-  
-.TextThemedarkColor{
-    color: rgb(70, 78, 0)
-  }
-
-.TextThemedarkColor:hover{
-    color: rgb(133, 148, 1)
-  }
-
-.TextThemeButton{
-    color: rgb(70, 78, 0)
-  }
-
-.TextSmallSize{
-    font-size: 12px;
 }
 
-.TextLargeSize{
+.TextThemewhiteColor:hover {
+    color: rgb(70, 78, 0)
+}
+
+.TextThemedarkColor {
+    color: rgb(70, 78, 0)
+}
+
+.TextThemedarkColor:hover {
+    color: rgb(133, 148, 1)
+}
+
+.TextThemeButton {
+    color: rgb(70, 78, 0)
+}
+
+.TextSmallSizeset {
+    font-size: 10px;
+}
+
+.TextLargeSize {
     font-size: 20px;
 }
 
@@ -77,7 +77,6 @@ List of CSS Design Class
 .ButtonHowtoIconColor:hover {
     color: rgb(29, 29, 29);
 }
-
 
 /* Group Login */
 
@@ -234,17 +233,12 @@ List of CSS Design Class
     width: 100%;
     height: 100vw;
     color: white;
-
     padding: 1px;
-    
     text-align: center;
     text-decoration: none;
     display: inline-block;
-
     font-size: 16px;
-
     background-color: rgb(255, 255, 255, 0);
-
     border: none;
     opacity: 1;
 }
@@ -271,9 +265,12 @@ List of CSS Design Class
 /* ------------------- Forms Group ------------------ */
 
 .SetFrame {
+    position: relative;
     width: 100%;
-    left: auto;
-    right: auto;
+
+    left: 0px;
+    top: -10px;
+
     padding-right: 15%;
     padding-left: 15%;
     box-shadow: 0 0 15px 0 rgba(51, 51, 51, 0);
@@ -281,7 +278,8 @@ List of CSS Design Class
 }
 
 .FrameColorsetup {
-    width: 300px;     /* เมื่อต้องปรับต้องตั้งค่าให้เห็น Frame เป็นปกติก่อน */
+    width: 300px;
+    /* เมื่อต้องปรับต้องตั้งค่าให้เห็น Frame เป็นปกติก่อน */
     height: 650px;
     top: 10px;
     left: 10px;
@@ -295,19 +293,19 @@ List of CSS Design Class
 }
 
 .Framecolor {
-    width: 600px;  
+    width: 333px;
     height: 40vh;
-    left: -100px;
+    left: -25px;
     bottom: 500px;
     /* Layer Group*/
     position: absolute;
     z-index: -2;
     cursor: pointer;
     background: linear-gradient(15deg, rgb(147, 184, 15) 0.5%, rgb(255, 210, 143)) 100%;
-  }
+}
 
 .Framelinearcolor1 {
-    width: 300px;  
+    width: 300px;
     height: 136px;
     left: 0px;
     top: 0px;
@@ -316,10 +314,10 @@ List of CSS Design Class
     z-index: -2;
     cursor: pointer;
     background: linear-gradient(45deg, rgb(208, 255, 146) 40%, rgb(255, 235, 146)) 30%;
-  }
+}
 
 .Framelinearcolor2 {
-    width: 349px;  
+    width: 349px;
     height: 38px;
     left: 0px;
     top: 251px;
@@ -328,10 +326,10 @@ List of CSS Design Class
     z-index: -2;
     cursor: pointer;
     background: linear-gradient(45deg, rgb(208, 255, 146) 40%, rgb(255, 235, 146)) 30%;
-  }
+}
 
-  .FramecolorTools {
-    width: 349px;  
+.FramecolorTools {
+    width: 349px;
     height: 136px;
     left: 0px;
     top: 0px;
@@ -340,10 +338,10 @@ List of CSS Design Class
     z-index: -2;
     cursor: pointer;
     background: linear-gradient(45deg, rgb(208, 255, 146) 40%, rgb(255, 235, 146)) 30%;
-  }
+}
 
 .FrameButtoncolor {
-    width: 71px;  
+    width: 70px;
     height: 136px;
     right: 0px;
     top: 0px;
@@ -352,14 +350,15 @@ List of CSS Design Class
     z-index: -1;
     cursor: pointer;
     background: rgba(58, 58, 58, 0.979);
-  }
+}
 
 /* ------------------- Gridview Group ------------------ */
 
 /* ------------------- Dropdown Group ------------------ */
 
 /* ------------------- Containner Group Group ------------------ */
-.Map{
+
+.Map {
     /*position: absolute;*/
     width: 100%;
     height: 100vh;
