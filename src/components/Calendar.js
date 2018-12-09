@@ -17,11 +17,27 @@ const styles = theme => ({
     root: {
         width: '100%',
         backgroundColor: theme.palette.background.paper,
+        margin: 'auto',
     },
     text: {
         textDecoration: 'line-through',
     },
-
+    layout: {
+        width: 'auto',
+        heigth: 'auto',
+        marginLeft: theme.spacing.unit * 2,
+        marginRight: theme.spacing.unit * 2,
+        [theme.breakpoints.up(1000 + theme.spacing.unit * 2 * 2)]: {
+            width: 1000,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+    },
+    toolbar: theme.mixins.toolbar,
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing.unit * 3
+    }
 });
 
 class CalendarTask extends Component {
@@ -36,18 +52,13 @@ class CalendarTask extends Component {
     getListData = (day) => {
         let listData = []
         this.props.overlayTaskShow.forEach((task) => {
-            const doTaskDate = moment(task.taskRepetition.doTaskDate).format().split('T')[0]
-            const dayInCalendar = day.format().split('T')[0]
-            if (doTaskDate === dayInCalendar) {
-                const taskId = shortid.generate()
-                if (task.isDone) {
-                    listData.push(
-                        { type: 'success', content: task.name + '(เริ่ม)', taskId, },
-                    )
-                } else {
-                    listData.push(
-                        { type: 'warning', content: task.name + '(เริ่ม)', taskId },
-                    )
+            if (task.taskRepetition.doTaskDate) {
+                const doTaskDate = moment(task.taskRepetition.doTaskDate).format().split('T')[0]
+                const dayInCalendar = day.format().split('T')[0]
+                if (doTaskDate === dayInCalendar) {
+                    const taskId = shortid.generate()
+                    listData.push({ type: task.isDone ? 'success' : 'warning', content: task.name, taskId, })
+
                 }
             }
             // if (endAt === dayInCalendar) {
@@ -114,11 +125,12 @@ class CalendarTask extends Component {
     };
 
     render() {
-        const { overlayTaskShow } = this.props
+        const { overlayTaskShow, classes } = this.props
         const { selectedDate } = this.state;
         return (
-            <div>
+            <div className={classes.root}>
                 <Calendar
+                    //className={classes.layout}
                     dateCellRender={this.dateCellRender}
                     monthCellRender={this.monthCellRender}
                     value={selectedDate}
@@ -155,12 +167,8 @@ class CalendarTask extends Component {
                         <Button onClick={this.handleClose} color="primary">
                             Close
                         </Button>
-
                     </DialogActions>
                 </Dialog>
-
-
-
             </div>
         )
     }

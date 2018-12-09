@@ -2,7 +2,6 @@ import React from 'react';
 import Input from './AddTask';
 import TaskShow from './TaskShow';
 import Navbar from './Navbar';
-import Category from './Category';
 import Calendar from './Calendar';
 import ShowButton from './ShowButton';
 import Slide from '@material-ui/core/Slide';
@@ -31,31 +30,15 @@ class OverlayTask extends React.PureComponent {
       show: 'กำลังทำ',
     }
   }
-  handleDrawerOpen = (open) => {
-    this.setState({
-      open: open
-    });
-    console.log(open, 'Drawer')
-  };
-
   changePage = (page) => {
-    this.setState({
-      page: page
-    })
-    console.log('Page', page)
+    this.setState({ page })
   };
   renderpage = () => {
 
     switch (this.state.page) {
       case 'งาน':
         return (
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-            }}
-          >
-
+          <div>
             <ShowButton
               {...this.state}
               onFilterTask={this.props.onFilterTask}
@@ -63,13 +46,11 @@ class OverlayTask extends React.PureComponent {
               overlAllFiltertask={this.props.overlAllFiltertask}
 
             />
-
             <Input
               selectedPlan={this.props.selectedPlan}
               selectedOverlay={this.props.selectedOverlay}
               onAddTask={this.props.onAddTask}
             />
-
             <TaskShow
               {...this.state}
               overlayTaskShow={this.props.overlayTaskShow}
@@ -89,7 +70,6 @@ class OverlayTask extends React.PureComponent {
       case 'ปฏิทิน':
         return (
           <div>
-
             <Calendar
               overlayTaskShow={this.props.overlayTaskShow}
               {...this.state}
@@ -117,13 +97,10 @@ class OverlayTask extends React.PureComponent {
             changePage={this.changePage}
             {...this.state}
           />
-          <Category
-            handleDrawerOpen={this.handleDrawerOpen}
-            open={this.state.open}
-          />
           <br /><br /><br />
-          {this.renderpage()}
-          <br /><br /><br />
+          <div>
+            {this.renderpage()}
+          </div>
         </div>
       </Dialog>
     )
