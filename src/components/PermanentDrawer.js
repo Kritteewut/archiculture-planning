@@ -30,7 +30,7 @@ import AddPlan from './AddPlan';
 import Pic from './Picture/User.png';
 import IconBook from '@material-ui/icons/Book';
 import IconLogout from '@material-ui/icons/PhonelinkErase';
-import IconForward from '@material-ui/icons/ArrowForward';
+import IconForward from '@material-ui/icons/ArrowBack';
 import ViewOnly from '@material-ui/icons/Visibility'
 import OpenWith from '@material-ui/icons/LocationOn';
 import CoppiedIcon from '@material-ui/icons/LibraryBooks'
@@ -145,9 +145,22 @@ class PermanentDrawer extends React.PureComponent {
                                 onCopy={() => alert('coppied to clip baord')}
                                 text={user.uid}
                             >
-                                <IconButton aria-label="Delete" >
-                                    <CoppiedIcon />
-                                </IconButton>
+
+                                <Button
+                                    variant="contained"
+                                    aria-label="Delete"
+                                    className="buttonCopy">
+    
+                                    <div className="leftIcon ButtonIconColor">
+                                        <CoppiedIcon />
+                                    </div>
+
+                                    <div>
+                                        Copy ID ผู้ใช้งาน
+                            </div>
+
+                                </Button>
+
                             </CopyToClipboard>
 
                         </List>

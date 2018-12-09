@@ -210,8 +210,10 @@ List of CSS Design Class
 .DesignButtonColor {
     /*animation: App-logo-spin infinite 20s linear;*/
     border-radius: 10px;
+
     width: 100px;
     height: 40px;
+
     color: white;
     margin: 10px;
     padding: 0px;
@@ -219,12 +221,13 @@ List of CSS Design Class
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+    
     background-color: rgb(151, 151, 151);
     border: none;
 }
 
 .DesignButtonColor:hover {
-    background-color: rgb(255, 95, 95);
+    background-color: rgb(148, 201, 25);
 }
 
 .ButtonMaplayer {
@@ -277,12 +280,31 @@ List of CSS Design Class
     background: rgba(255, 0, 0, 0);
 }
 
-.FrameColorsetup {
-    width: 300px;
+.FrameColorsetupButton {
+    width: 250px;
     /* เมื่อต้องปรับต้องตั้งค่าให้เห็น Frame เป็นปกติก่อน */
-    height: 650px;
-    top: 10px;
+    height: 60px;
+
+    top: 380px;
     left: 10px;
+    
+    right: 0px;
+    bottom: 0px;
+    /* Layer Group*/
+    position: absolute;
+    z-index: 0;
+    cursor: pointer;
+    background-color: rgba(255, 230, 0, 0)
+}
+
+.FrameColorsetup {
+    width: 290px;
+    /* เมื่อต้องปรับต้องตั้งค่าให้เห็น Frame เป็นปกติก่อน */
+    height: 350px;
+
+    top: 40px;
+    left: 10px;
+
     right: 0px;
     bottom: 0px;
     /* Layer Group*/
@@ -306,7 +328,7 @@ List of CSS Design Class
 
 .Framelinearcolor1 {
     width: 300px;
-    height: 136px;
+    height: 176px;
     left: 0px;
     top: 0px;
     /* Layer Group*/
@@ -342,7 +364,7 @@ List of CSS Design Class
 
 .FrameButtoncolor {
     width: 70px;
-    height: 136px;
+    height: 176px;
     right: 0px;
     top: 0px;
     /* Layer Group*/

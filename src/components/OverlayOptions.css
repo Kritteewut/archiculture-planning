@@ -183,7 +183,7 @@ List of CSS Design Class
 .FrameTaskData {
     width: 300px;     /* เมื่อต้องปรับต้องตั้งค่าให้เห็น Frame เป็นปกติก่อน */
     height: 200px;
-    top: 650px;
+    top: 490px;
     left: 10px;
     right: 0px;
     /* Layer Group*/
