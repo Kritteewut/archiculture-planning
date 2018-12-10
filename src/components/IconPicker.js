@@ -102,105 +102,93 @@ import './IconPicker.css';
 const images = [
     {
         src: icon_point,
-        title: 'จุด',
-        width: '5%',
-        height: '5%',
+        title: 'รดน้ำต้นไม้',
+        width: '1%',
+        height: '1%',
+    },
+    {
+        src: icon_sakura1,
+        title: 'ปลูกพืช',
+        width: '1%',
+        height: '1%',
+    },
+    {
+        src: icon_sakura2,
+        title: 'ต้นไม้',
+        width: '1%',
+        height: '1%',
     },
     {
         src: light_bulb_icon,
-        title: 'หลอดไฟ',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_airport,
-        title: 'สนามบิน',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_alert,
-        title: 'เตือนภัย',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_bamboo,
-        title: 'เขตป่าไม้',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_bonsai,
-        title: 'เขตสวน',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_clock,
-        title: 'เตือนเวลา',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_home,
-        title: 'บ้าน',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_location,
-        title: 'จุดตำแหน่ง',
-        width: '5%',
-        height: '5%',
+        title: 'แสงอาทิตย์',
+        width: '1%',
+        height: '1%',
     },
     {
         src: icon_rain,
         title: 'สภาพอากาศฝนตก',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_sakura1,
-        title: 'ดอกไม้1',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_sakura2,
-        title: 'ดอกไม้2',
-        width: '5%',
-        height: '5%',
-    },
-    {
-        src: icon_sale,
-        title: 'ขาย',
-        width: '5%',
-        height: '5%',
+        width: '1%',
+        height: '1%',
     },
     {
         src: icon_snow,
         title: 'สภาพอากาศหนาว',
-        width: '5%',
-        height: '5%',
+        width: '1%',
+        height: '1%',
+    },
+    {
+        src: icon_bonsai,
+        title: 'เขตสวน',
+        width: '1%',
+        height: '1%',
+    },
+    {
+        src: icon_bamboo,
+        title: 'เขตไผ่',
+        width: '1%',
+        height: '1%',
+    },
+    {
+        src: icon_home,
+        title: 'บ้าน',
+        width: '1%',
+        height: '1%',
+    },
+    {
+        src: icon_sale,
+        title: 'ขาย',
+        width: '1%',
+        height: '1%',
     },
     {
         src: icon_star,
-        title: 'จุดสำคัญ',
-        width: '5%',
-        height: '5%',
+        title: 'ปฏิทิน',
+        width: '1%',
+        height: '1%',
+    },
+    {
+        src: icon_clock,
+        title: 'เตือนเวลา',
+        width: '1%',
+        height: '1%',
+    },
+    {
+        src: icon_alert,
+        title: 'เตือนภัย',
+        width: '1%',
+        height: '1%',
     },
     {
         src: icon_tool1,
-        title: 'จุดแก้ไข1',
-        width: '5%',
-        height: '5%',
+        title: 'จัดการแปลงสวน',
+        width: '1%',
+        height: '1%',
     },
     {
         src: icon_tool2,
-        title: 'จุดแก้ไข2',
-        width: '5%',
-        height: '5%',
+        title: 'จัดการปรับปรุง',
+        width: '1%',
+        height: '1%',
     },
 ];
 
@@ -221,8 +209,8 @@ class IconPicker extends React.PureComponent {
                         className="image"
                         focusVisibleClassName="focusVisible"
                         style={{
-                            width: '100px',
-                            height: '100px',
+                            width: '95px',
+                            height: '95px',
                         }}
                         onClick={() => this.props.onSetSelectedIcon(image.src)}
                     >

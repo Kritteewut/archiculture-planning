@@ -1,5 +1,13 @@
 import React from 'react';
 import { CirclePicker } from 'react-color';
+
+//Material Import
+import Button from '@material-ui/core/Button'
+
+//Icon Import
+import IconForward from '@material-ui/icons/ArrowBack';
+import IconComplete from '@material-ui/icons/Check';
+
 // CSS Import
 import './Design.css';
 
@@ -108,6 +116,25 @@ class ColorPicker extends React.PureComponent {
                     colors={colorArray}
                     onChangeComplete={this.handleChangeComplete}
                 />*/}
+
+                <div className="FrameButtoncolor2">
+                    <Button variant="fab" className="buttonturnoff2" onClick={this.props.handleDrawerToggle}>
+                        <div className="ButtonIconColor">
+                            <IconForward />
+                        </div>
+                    </Button>
+
+                    <Button
+                        variant="fab"
+                        color="default"
+                        className="buttonCompleteInSlide"
+                        onClick={() => this.props.onAddListenerGrabBtn()}
+                    >
+                        <div className="ButtonIconColor">
+                            <IconComplete />
+                        </div>
+                    </Button>
+                </div>
 
                 <CirclePicker
                     className="FrameColorsetup"
