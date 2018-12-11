@@ -46,12 +46,28 @@ List of CSS Design Class
 
 /* ------------------- Forms Group ------------------ */
 
+.DetailFrame{
+  width: 200px;
+  height: 20px;
+
+  left: 0px;
+  top: 0px;
+
+  /* Layer Group*/
+  position: absolute;
+  cursor: pointer;
+
+}
+
 .Detailroot {
     position: relative;
+
+    width: 500px;
+
     top: 0px;
-    width: 40%;
     left: 30%;
-    right: 30%;
+
+
     justify-content: flex-end;
     align-items: center;
   }

@@ -6,16 +6,21 @@ import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
 import moment from 'moment';
 import List from '@material-ui/core/List';
+
 // CSS Import
 import './EditPlan.css';
+
+//Import
 import PlanMember from './PlanMember';
+import DeletePlanMember from './DeletePlanMember';
+
+//Material Import
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import IconButton from '@material-ui/core/IconButton';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ListSubheader from '@material-ui/core/ListSubheader'
-import DeletePlanMember from './DeletePlanMember';
 
 class EditPlan extends React.PureComponent {
     constructor(props) {
@@ -87,14 +92,16 @@ class EditPlan extends React.PureComponent {
             >
                 <div className="papereditplan">
                     แก้ไขแปลง
+
                      <PlanMember
                         onAddPlanMember={this.props.onAddPlanMember}
                         planData={planData}
                     />
+
                     <List
                         component="div"
                         disablePadding
-                        subheader={<ListSubheader component="div">รายชื่อสมาชิก</ListSubheader>}
+                        subheader={<ListSubheader component="div"> รายชื่อสมาชิก </ListSubheader>}
                     >
                         {this.props.isWaitingForPlanMemberQuery ?
                             'กำลังโหลด'
@@ -121,61 +128,66 @@ class EditPlan extends React.PureComponent {
                             })
 
                         }
+
                     </List>
+
                     < DeletePlanMember
                         onDeletePlanMember={this.props.onDeletePlanMember}
                         onToggleDeletePlanMemberOpen={this.onToggleDeletePlanMemberOpen}
                         {...this.state}
                     />
-                    <br />
-                    <TextField
-                        id="with-placeholder"
-                        label="ชื่อแปลง"
-                        className="textField"
-                        margin="normal"
-                        name="planName"
-                        defaultValue={planData ? planData.planName : ''}
-                        inputRef={this.setPlanNameInput}
-                        onChange={this.handlePlanNameInputChange}
-                        autoFocus={true}
-                        error={this.state.isPlanNameInputError}
-                        helperText={this.state.isPlanNameInputError ? 'ชื่อแปลงต้องมีอย่างน้อย 1 ตัวอักษรแต่ไม่เกิน 30 ตัวอักษร' : ''}
-                    />
-                    <br />                    <br />
-                    <TextField className="textField"
-                        label="รายละเอียดแปลง"
-                        inputRef={this.setPlanDescriptionInput}
-                        defaultValue={planData ? planData.planDescription : ''}
-                        multiline
-                        rowsMax="4"
-                    />
-                    <br />                    <br />
-                    <TextField className="textField"
-                        label="วันที่สร้างแปลง"
-                        inputRef={this.setCreatePlanDateInput}
-                        defaultValue={planData ? moment(planData.createPlanDate).format('ll') : ''}
-                        multiline
-                        rowsMax="4"
-                        disabled
-                    />
-                    <br />                    <br />
-                    <Button
-                        className="buttoncontinueedit"
-                        onClick={this.onSubmitEditPlan}
-                        disabled={this.state.isPlanNameInputError}
-                    >
-                        ตกลง
+
+                    <div className="FramePlanUser">
+
+                        <TextField
+                            id="with-placeholder"
+                            label="ชื่อแปลง"
+                            className="textField"
+                            margin="normal"
+                            name="planName"
+                            defaultValue={planData ? planData.planName : ''}
+                            inputRef={this.setPlanNameInput}
+                            onChange={this.handlePlanNameInputChange}
+                            autoFocus={true}
+                            error={this.state.isPlanNameInputError}
+                            helperText={this.state.isPlanNameInputError ? 'ชื่อแปลงต้องมีอย่างน้อย 1 ตัวอักษรแต่ไม่เกิน 30 ตัวอักษร' : ''}
+                        />
+                        <br />                  
+                        <TextField className="textField"
+                            label="รายละเอียดแปลง"
+                            inputRef={this.setPlanDescriptionInput}
+                            defaultValue={planData ? planData.planDescription : ''}
+                            multiline
+                            rowsMax="4"
+                        />
+                        <br />                    <br />
+                        <TextField className="textField"
+                            label="วันที่สร้างแปลง"
+                            inputRef={this.setCreatePlanDateInput}
+                            defaultValue={planData ? moment(planData.createPlanDate).format('ll') : ''}
+                            multiline
+                            rowsMax="4"
+                            disabled
+                        />
+                        <br />                    <br />
+                        <Button
+                            className="buttoncontinueedit"
+                            onClick={this.onSubmitEditPlan}
+                            disabled={this.state.isPlanNameInputError}
+                        >
+                            ตกลง
                     </Button>
-                    <Button
-                        className="buttoncanceledit"
-                        onClick={this.handleToggleEditPlan}>
-                        ยกเลิก
+                        <Button
+                            className="buttoncanceledit"
+                            onClick={this.handleToggleEditPlan}>
+                            ยกเลิก
                     </Button>
-                    <List
-                        component="div"
-                        disablePadding
-                    >
-                    </List>
+                        <List
+                            component="div"
+                            disablePadding
+                        >
+                        </List>
+                    </div>
                 </div>
             </Modal>
         )

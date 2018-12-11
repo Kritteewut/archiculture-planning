@@ -27,9 +27,9 @@ class DetailedExpansionPanel extends React.PureComponent {
 
     return (
 
-      <div className="Detailroot">
+      <div className="DetailFrame">
 
-        <ExpansionPanel className="theme">
+        <ExpansionPanel className="theme DetailFrame ">
 
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon className="details" />}>
 

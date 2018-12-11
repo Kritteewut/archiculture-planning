@@ -1,5 +1,10 @@
 import React from 'react'
+
+//Material Import
 import SnackbarContent from '@material-ui/core/SnackbarContent';
+
+//CSS Import
+import './DetailedExpansionPanel.css';
 
 
 class OverlayDetail extends React.PureComponent {
@@ -12,7 +17,7 @@ class OverlayDetail extends React.PureComponent {
     render() {
         const { panelName, latLngDetail, lengthDetail, disBtwDetail, areaDetail } = this.props
         return (
-            <div>
+            <div className="DetailFrame">
                 <SnackbarContent
                     message={panelName}
                 />
