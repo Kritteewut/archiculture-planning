@@ -86,7 +86,4 @@ class DetailedExpansionPanel extends React.PureComponent {
   }
 }
 
-DetailedExpansionPanel.propTypes = {
-
-};
-export default (DetailedExpansionPanel);
+export default DetailedExpansionPanel;

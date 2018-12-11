@@ -1,13 +1,6 @@
 import React from 'react'
 import SnackbarContent from '@material-ui/core/SnackbarContent';
-import { withStyles } from '@material-ui/core/styles';
 
-const styles = theme => ({
-    snackbar: {
-        margin: theme.spacing.unit,
-        widith: '300px',
-    },
-});
 
 class OverlayDetail extends React.PureComponent {
     constructor(props) {
@@ -17,16 +10,60 @@ class OverlayDetail extends React.PureComponent {
         }
     }
     render() {
-        const { classes } = this.props
+        const { panelName, latLngDetail, lengthDetail, disBtwDetail, areaDetail } = this.props
         return (
             <div>
                 <SnackbarContent
-                    className={classes.snackbar}
-                    message={'I love candy. I love cookies. I love cupcakes. I love cheesecake. I love chocolate.'}
+                    message={panelName}
                 />
+
+                {(latLngDetail !== '') ?
+
+                    <SnackbarContent
+
+                        message={latLngDetail}
+
+                    />
+                    :
+                    null
+                }
+
+                {(lengthDetail !== '') ?
+
+                    <SnackbarContent
+
+                        message={'ความยาวรวม : ' + lengthDetail + ' เมตร'}
+
+                    />
+                    :
+                    null
+                }
+
+                {(areaDetail !== '') ?
+
+                    <SnackbarContent
+
+                        message={'พื้นที่คือ : ' + areaDetail}
+
+                    />
+                    :
+                    null
+                }
+
+                {(disBtwDetail !== '') ?
+
+                    <SnackbarContent
+
+                        message={'ระยะห่างระหว่างจุด : ' + disBtwDetail + ' เมตร'}
+
+                    />
+                    :
+                    null
+                }
+
             </div>
         );
     }
 }
 
-export default withStyles(styles)(OverlayDetail);
+export default OverlayDetail;
