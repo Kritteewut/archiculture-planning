@@ -36,6 +36,7 @@ import IconForward from '@material-ui/icons/ArrowBack';
 import ViewOnly from '@material-ui/icons/Visibility'
 import OpenWith from '@material-ui/icons/LocationOn';
 import CoppiedIcon from '@material-ui/icons/LibraryBooks'
+
 //Picture Group
 import Picbackground from './Picture/Profile Background.jpg';
 
@@ -160,7 +161,7 @@ class PermanentDrawer extends React.PureComponent {
                                     </div>
 
                                     <div>
-                                        Copy ID ผู้ใช้งาน
+                                        คัดลอก ID ผู้ใช้งาน
                             </div>
 
                                 </Button>
