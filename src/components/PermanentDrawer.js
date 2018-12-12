@@ -25,6 +25,7 @@ import EditPlan from './EditPlan';
 import DeletePlan from './DeletePlan';
 import MergeOverlay from './MergeOverlay';
 import AddPlan from './AddPlan';
+import OpenSide from '../components/openSideBtn'
 
 // Icon Group
 import Pic from './Picture/User.png';
@@ -150,7 +151,7 @@ class PermanentDrawer extends React.PureComponent {
                                     variant="contained"
                                     aria-label="Delete"
                                     className="buttonCopy">
-    
+
                                     <div className="leftIcon ButtonIconColor">
                                         <CoppiedIcon />
                                     </div>
@@ -171,11 +172,14 @@ class PermanentDrawer extends React.PureComponent {
                             </div>
                         </Button>
 
-                        <Button variant="fab" className="buttonturnoff" onClick={this.props.handleDrawerToggle}>
+                        {/* <Button variant="fab" className="buttonturnoff" onClick={this.props.handleDrawerToggle}>
                             <div className="ButtonIconColor">
                                 <IconForward />
                             </div>
-                        </Button>
+                        </Button> */}
+                        <OpenSide
+                            handleDrawerToggle={this.props.handleDrawerToggle}
+                        />
 
                         <div className="Framelinearcolor1">
                         </div>
