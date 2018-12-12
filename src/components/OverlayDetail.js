@@ -2,6 +2,8 @@ import React from 'react'
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 //CSS Import
+
+import './Design.css';
 import './OverlayDetail.css';
 
 
@@ -15,6 +17,8 @@ class OverlayDetail extends React.PureComponent {
     render() {
         const { panelName, latLngDetail, lengthDetail, disBtwDetail, areaDetail } = this.props
         return (
+
+            <div className="FrameCenterformap">
             <SnackbarContent
                 // ContentProps={{
                 //     'aria-describedby': 'snackbar-fab-message-id',
@@ -29,8 +33,10 @@ class OverlayDetail extends React.PureComponent {
                         <div>{(lengthDetail !== '') ? 'ความยาวรวม : ' + lengthDetail + ' เมตร' : ''}</div>
                         <div>{(areaDetail !== '') ? 'พื้นที่คือ : ' + areaDetail : ''}</div>
                     </div>
+
                 }
             />
+            </div>
         );
     }
 }

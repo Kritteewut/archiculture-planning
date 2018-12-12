@@ -2022,23 +2022,20 @@ class ResponsiveDrawer extends React.Component {
 
                         /> */}
 
-                        <div className="FrameSnackbar">
-                            <OverlayDetail
-                                {...this.state}
-                            />
-                        </div>
-
-
-
                         {/* <MapHeading /> */}
                         <div className="FrameCenter">
                             <MapCenterFire
                                 drawOverlayUsingTouchScreen={this.drawOverlayUsingTouchScreen}
                                 {...this.state}
                             />
+
                         </div>
 
-
+                        <div className="FrameSnackbar">
+                            <OverlayDetail
+                                {...this.state}
+                            />
+                        </div>
 
                     </Map>
                 </main>
