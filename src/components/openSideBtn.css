@@ -29,11 +29,6 @@ List of CSS Design Class
 /* ------------------- Image Group ------------------ */
 
 /* ------------------- Forms Group ------------------ */
-@media only screen and (max-width: 600px) {
-    .MenuSlide {
-        display: none
-    }
-}
 .MenuSlide {
     position: absolute;
     top: 10px;

@@ -31,14 +31,7 @@ class AddPlan extends React.PureComponent {
     }
 
     onToggleAddPlanOpen = () => {
-        if (this.props.user) {
-            this.setState({ isAddPlanOpen: !this.state.isAddPlanOpen, isPlanNameInputError: false });
-        } else {
-            this.props.handleDrawerOpen()
-            this.props.onChangeDrawPage('homePage')
-            alert(' กรุณา Login ')
-        }
-
+        this.setState({ isAddPlanOpen: !this.state.isAddPlanOpen, isPlanNameInputError: false });
     }
     handleAdd = () => {
         const addPlanInput = this.addPlanInput.value
@@ -54,9 +47,7 @@ class AddPlan extends React.PureComponent {
             }
             this.props.onAddPlan(planData)
             this.onToggleAddPlanOpen()
-            this.props.handleDrawerOpen()
         }
-
     }
     handlePlanNameInputChange = (event) => {
         const addPlanInput = this.addPlanInput.value
@@ -101,13 +92,15 @@ class AddPlan extends React.PureComponent {
                             error={this.state.isPlanNameInputError}
                             helperText={this.state.isPlanNameInputError ? 'ชื่อแปลงต้องมีอย่างน้อย 1 ตัวอักษรแต่ไม่เกิน 30 ตัวอักษร' : ''}
                             onChange={this.handlePlanNameInputChange}
+                            placeholder="ชื่อแปลง"
                         />
 
                         <TextField className="DataTextPlan"
                             inputRef={this.setPlanDescriptionInput}
                             defaultValue=''
                             multiline
-                            rowsMax="4"
+                            rowsMax="3"
+                            placeholder="รายละเอียดแปลง"
                         />
 
                         <Button
