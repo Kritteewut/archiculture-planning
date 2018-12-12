@@ -477,7 +477,7 @@ class ResponsiveDrawer extends React.Component {
         })
     }
     drawOverlayUsingTouchScreen = () => {
-        const { isFirstDraw, drawingBtnType, overlayObject } = this.state
+        const { isFirstDraw, drawingBtnType, overlayObject, drawingOverlayId } = this.state
         const clickLatLng = window.map.getCenter()
         if (isFirstDraw) {
             if (drawingBtnType === 'polygon') {
@@ -490,7 +490,8 @@ class ResponsiveDrawer extends React.Component {
                 this.onPushNewMarker(clickLatLng)
             }
         } else {
-            const overlayType = overlayObject[overlayObject.length - 1].overlayType
+            const actionIndex = overlayObject.findIndex(overlay => overlay.overlayId === drawingOverlayId)
+            const overlayType = overlayObject[actionIndex].overlayType
             if (overlayType === 'polygon') {
                 this.onPushDrawingPolygonCoords(clickLatLng)
             }
@@ -500,7 +501,6 @@ class ResponsiveDrawer extends React.Component {
         }
     }
     onSetSelectedOverlay = (overlay) => {
-        console.log(overlay)
         this.onResetSelectedOverlay()
         if (overlay.overlayType === 'polygon' || overlay.overlayType === 'polyline') {
             overlay.setOptions({ editable: true, })
@@ -535,6 +535,8 @@ class ResponsiveDrawer extends React.Component {
             self.handleDrawerOpen()
             self.onSetMarkerOptions()
             self.onSetSelectedOverlay(marker)
+            var latLngDetail = `lattitude :  ${marker.getPosition().lat().toFixed(4)} , longtitude : ${marker.getPosition().lng().toFixed(4)}`
+            self.setState({ latLngDetail })
         })
         window.google.maps.event.addListener(marker, 'dragend', function () {
             const { overlayObject } = self.state
@@ -550,6 +552,10 @@ class ResponsiveDrawer extends React.Component {
                 }
             })
             self.setState({ overlayObject: updateOverlay })
+        })
+        window.google.maps.event.addListener(marker, 'drag', function () {
+            var latLngDetail = `lattitude :  ${marker.getPosition().lat().toFixed(4)} , longtitude : ${marker.getPosition().lng().toFixed(4)}`
+            self.setState({ latLngDetail })
         })
     }
     addPolygonListener = (polygon) => {
@@ -1375,7 +1381,8 @@ class ResponsiveDrawer extends React.Component {
             const pushRedoCoods = update(setUndoCoords, { [actionIndex]: { redoCoords: { $push: [lastUndoCoords] } } })
             const popUndoCoords = update(pushRedoCoods, { [actionIndex]: { undoCoords: { $splice: [[undoCoordsLength, 1]] } } })
             const setIsOverlaySave = update(popUndoCoords, { [actionIndex]: { isOverlaySave: { $set: false } } })
-
+            const currentObject = setUndoCoords[actionIndex]
+            const currentCoords = currentObject.overlayCoords
             if (overlayType !== 'marker') {
                 if (isFirstDraw === false) {
                     const lastCoords = beforeLastUndoCoords[beforeLastUndoCoords.length - 1]
@@ -1384,8 +1391,6 @@ class ResponsiveDrawer extends React.Component {
                     this.onDrawExampleLine(lastCoordsLatLng)
                     this.setState({ exampleLineCoords: setExampleline })
                 }
-                const currentObject = setUndoCoords[actionIndex]
-                const currentCoords = currentObject.overlayCoords
                 var poly
                 if (overlayType === 'polygon') {
                     poly = new window.google.maps.Polygon({
@@ -1401,6 +1406,9 @@ class ResponsiveDrawer extends React.Component {
                 }
                 this.onPolyLengthCompute(poly)
                 this.onPolydistanceBtwCompute(currentObject)
+            } else {
+                var latLngDetail = `lattitude :  ${currentCoords[0].lat.toFixed(4)} , longtitude : ${currentCoords[0].lng.toFixed(4)}`
+                this.setState({ latLngDetail })
             }
             this.setState({ overlayObject: setIsOverlaySave })
         }
@@ -1418,6 +1426,8 @@ class ResponsiveDrawer extends React.Component {
             const pushUndoCoords = update(setRedoCoords, { [actionIndex]: { undoCoords: { $push: [lastRedoCoords] } } })
             const popRedoCoords = update(pushUndoCoords, { [actionIndex]: { redoCoords: { $splice: [[redoCoordsLength, 1]] } } })
             const setIsOverlaySave = update(popRedoCoords, { [actionIndex]: { isOverlaySave: { $set: false } } })
+            const currentObject = setRedoCoords[actionIndex]
+            const currentCoords = currentObject.overlayCoords
             if (overlayType !== 'marker') {
                 if (isFirstDraw === false) {
                     const lastCoords = lastRedoCoords[lastRedoCoords.length - 1]
@@ -1426,8 +1436,6 @@ class ResponsiveDrawer extends React.Component {
                     this.onDrawExampleLine(lastCoordsLatLng)
                     this.setState({ exampleLineCoords: setExampleline })
                 }
-                const currentObject = setRedoCoords[actionIndex]
-                const currentCoords = currentObject.overlayCoords
                 var poly
                 if (overlayType === 'polygon') {
                     poly = new window.google.maps.Polygon({
@@ -1443,6 +1451,9 @@ class ResponsiveDrawer extends React.Component {
                 }
                 this.onPolyLengthCompute(poly)
                 this.onPolydistanceBtwCompute(currentObject)
+            } else {
+                var latLngDetail = `lattitude :  ${currentCoords[0].lat.toFixed(4)} , longtitude : ${currentCoords[0].lng.toFixed(4)}`
+                this.setState({ latLngDetail })
             }
             this.setState({ overlayObject: setIsOverlaySave })
         }
@@ -1486,9 +1497,7 @@ class ResponsiveDrawer extends React.Component {
                 }
             });
         });
-        this.setState((state) => {
-            return { distanceDetail: temp1, isDistanceMarkerVisible: !state.isDistanceMarkerVisible };
-        });
+        this.setState((state) => { return { distanceDetail: temp1, isDistanceMarkerVisible: !state.isDistanceMarkerVisible }; });
     }
     onAddPlanMember = (data) => {
         const { planId, memberId } = data
@@ -2019,7 +2028,7 @@ class ResponsiveDrawer extends React.Component {
                             />
                         </div>
 
-                        
+
 
                         {/* <MapHeading /> */}
                         <div className="FrameCenter">
@@ -2029,7 +2038,7 @@ class ResponsiveDrawer extends React.Component {
                             />
                         </div>
 
-                        
+
 
                     </Map>
                 </main>

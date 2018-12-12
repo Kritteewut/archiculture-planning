@@ -75,19 +75,6 @@ class OverlayOptions extends React.PureComponent {
                     รายละเอียด : {selectedOverlay.overlayDetail}
                     <br />
                 </div>
-                {
-                    selectedOverlay.overlayType === 'marker' ?
-                        <div>
-                            ตำแหน่ง :
-                            <br />
-                            - lat : {selectedOverlay.getPosition().lat()}
-                            <br />
-                            - lng : {selectedOverlay.getPosition().lng()}
-                            <br />
-                        </div>
-                        :
-                        null
-                }
                 <Button variant="contained" className="buttonaddwork" onClick={this.onToggleOverlayTaskOpen} disabled={selectedOverlay.overlaySource === 'server' ? false : true}>
                     จัดการงาน
                 </Button>

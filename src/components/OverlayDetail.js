@@ -1,10 +1,8 @@
 import React from 'react'
-
-//Material Import
+import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
-
 //CSS Import
-import './DetailedExpansionPanel.css';
+import './OverlayDetail.css';
 
 
 class OverlayDetail extends React.PureComponent {
@@ -17,56 +15,22 @@ class OverlayDetail extends React.PureComponent {
     render() {
         const { panelName, latLngDetail, lengthDetail, disBtwDetail, areaDetail } = this.props
         return (
-            <div className="DetailFrame">
-                <SnackbarContent
-                    message={panelName}
-                />
-
-                {(latLngDetail !== '') ?
-
-                    <SnackbarContent
-
-                        message={latLngDetail}
-
-                    />
-                    :
-                    null
+            <SnackbarContent
+                // ContentProps={{
+                //     'aria-describedby': 'snackbar-fab-message-id',
+                //     className: "SnackbarContent",
+                // }}
+                className="Snackbar"
+                message={
+                    <div>
+                        <div>{panelName}</div>
+                        <div>{(latLngDetail !== '') ? latLngDetail : ''}</div>
+                        <div>{(disBtwDetail !== '') ? 'ระยะห่างระหว่างจุด : ' + disBtwDetail + ' เมตร' : ''}</div>
+                        <div>{(lengthDetail !== '') ? 'ความยาวรวม : ' + lengthDetail + ' เมตร' : ''}</div>
+                        <div>{(areaDetail !== '') ? 'พื้นที่คือ : ' + areaDetail : ''}</div>
+                    </div>
                 }
-
-                {(lengthDetail !== '') ?
-
-                    <SnackbarContent
-
-                        message={'ความยาวรวม : ' + lengthDetail + ' เมตร'}
-
-                    />
-                    :
-                    null
-                }
-
-                {(areaDetail !== '') ?
-
-                    <SnackbarContent
-
-                        message={'พื้นที่คือ : ' + areaDetail}
-
-                    />
-                    :
-                    null
-                }
-
-                {(disBtwDetail !== '') ?
-
-                    <SnackbarContent
-
-                        message={'ระยะห่างระหว่างจุด : ' + disBtwDetail + ' เมตร'}
-
-                    />
-                    :
-                    null
-                }
-
-            </div>
+            />
         );
     }
 }
