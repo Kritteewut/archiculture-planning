@@ -14,7 +14,9 @@ import AddMember from '@material-ui/icons/GroupAdd';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
+//CSS import
 import './EditPlan.css';
+import './Design.css';
 
 class PlanMember extends React.PureComponent {
     constructor(props) {
@@ -60,12 +62,17 @@ class PlanMember extends React.PureComponent {
                     disableTouchListener
                 >
                     <Button
+                        className="buttonAddUser"
                         variant="fab"
                         onClick={this.handleToggleAddPlanMember}
                     >
-                        <AddMember />
+                        <div className="ButtonIconColor">
+                            <AddMember />
+                        </div>
                     </Button>
+
                 </Tooltip>
+
                 <Dialog
                     open={this.state.isAddPlanmemberOpen}
                     TransitionComponent={Transition}
@@ -77,6 +84,7 @@ class PlanMember extends React.PureComponent {
                     <DialogTitle id="alert-dialog-slide-title">
                         {"เพิ่มสมาชิกแปลง"}
                     </DialogTitle>
+
                     <DialogContent>
                         <DialogContentText id="alert-dialog-slide-description">
                             กรอก ID ผู้ใช้งานที่ต้องการเพิ่ม
@@ -90,6 +98,7 @@ class PlanMember extends React.PureComponent {
                             name="memberId"
                             inputRef={this.setMemberIdInput}
                         />
+
                         <form className="root" autoComplete="off">
                             <FormControl className={"formControl"}>
                                 <InputLabel
@@ -110,15 +119,20 @@ class PlanMember extends React.PureComponent {
                                     <MenuItem value={'viewer'}>ผู้เข้าชม</MenuItem>
                                 </Select>
                             </FormControl>
+
                         </form>
+
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.handleToggleAddPlanMember} color="primary">
-                            ยกเลิก
-                            </Button>
-                        <Button onClick={this.handleSubmitAddPlanMember} color="primary">
+
+                        <Button onClick={this.handleSubmitAddPlanMember} color="primary" className="buttoncontinueedit">
                             ตกลง
                              </Button>
+
+                        <Button onClick={this.handleToggleAddPlanMember} color="primary" className="buttoncanceledit">
+                            ยกเลิก
+                            </Button>
+
                     </DialogActions>
                 </Dialog>
             </div>
