@@ -109,15 +109,17 @@ class AddPlan extends React.PureComponent {
                             multiline
                             rowsMax="4"
                         />
-                        <Button className="CancelButton" onClick={this.onToggleAddPlanOpen}>
-                            ยกเลิก
-                        </Button>
+
                         <Button
                             className="ContinueButton"
                             onClick={this.handleAdd}
                             disabled={this.state.isPlanNameInputError}
                         >
                             เพิ่ม
+                        </Button>
+
+                        <Button className="CancelButton" onClick={this.onToggleAddPlanOpen}>
+                            ยกเลิก
                         </Button>
                     </div>
 
