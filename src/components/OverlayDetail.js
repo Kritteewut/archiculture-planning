@@ -1,7 +1,6 @@
 import React from 'react'
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 
-
 class OverlayDetail extends React.PureComponent {
     constructor(props) {
         super(props);

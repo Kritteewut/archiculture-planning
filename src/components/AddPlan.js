@@ -109,38 +109,16 @@ class AddPlan extends React.PureComponent {
                             multiline
                             rowsMax="4"
                         />
-
-                        <Tooltip
-                            title="Close Window"
-                            placement="bottom"
-                            disableFocusListener
-                            disableTouchListener
+                        <Button className="CancelButton" onClick={this.onToggleAddPlanOpen}>
+                            ยกเลิก
+                        </Button>
+                        <Button
+                            className="ContinueButton"
+                            onClick={this.handleAdd}
+                            disabled={this.state.isPlanNameInputError}
                         >
-
-                            <Button className="CancelButton" onClick={this.onToggleAddPlanOpen}>
-                                ยกเลิก
-                            </Button>
-
-                        </Tooltip>
-
-
-                        <Tooltip
-                            title="Add Plan"
-                            placement="bottom"
-                            disableFocusListener
-                            disableTouchListener
-                        >
-                            <div>
-                                <Button
-                                    className="ContinueButton"
-                                    onClick={this.handleAdd}
-                                    disabled={this.state.isPlanNameInputError}
-                                >
-                                    เพิ่ม
-                            </Button>
-                            </div>
-                        </Tooltip>
-
+                            เพิ่ม
+                        </Button>
                     </div>
 
                 </Modal>

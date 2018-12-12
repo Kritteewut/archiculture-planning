@@ -89,7 +89,7 @@ class TaskEdit extends React.PureComponent {
     onDueTimeChange = (time) => {
         const { taskDueDate } = this.state
         var format = this.onFormatedDateTime(taskDueDate, time)
-       this.setState({ taskDueDate: format })
+        this.setState({ taskDueDate: format })
     }
     onFormatedDateTime = (unCloneDate, time) => {
         var date = moment(unCloneDate).clone()
@@ -139,7 +139,7 @@ class TaskEdit extends React.PureComponent {
                 >
                     <AppBar className={classes.appBar}>
                         <Toolbar>
-                            <IconButton color="inherit" onClick={() => this.handleCancleClick()} aria-label="Close">
+                            <IconButton color="inherit" onClick={this.handleCancleClick} aria-label="Close">
                                 <CloseIcon />
                             </IconButton>
                             <Typography variant="title" color="inherit" className={classes.flex}>
@@ -147,7 +147,7 @@ class TaskEdit extends React.PureComponent {
                             </Typography>
                             <Button
                                 color="inherit"
-                                onClick={() => this.handleSaveClick()}
+                                onClick={this.handleSaveClick}
                             >
                                 save
                             </Button>

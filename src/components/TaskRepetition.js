@@ -97,7 +97,7 @@ class TaskRepetition extends React.PureComponent {
     var taskRepetition = { repetitionType, repetitionDueType, repetitionUnit, taskStartDate }
     if (taskRepetitionSwitch) {
       switch (repetitionType) {
-        case 'daily': break;
+        //case 'daily': break;
         case 'weekly':
           const { repetitionDayInWeek } = this.state
           taskRepetition = { repetitionDayInWeek, ...taskRepetition }
