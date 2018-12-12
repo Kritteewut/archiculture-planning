@@ -133,6 +133,7 @@ class OverlayOptions extends React.PureComponent {
                     this.props.overlayOptionsType === 'marker' ?
                         <div>
                             <IconPicker
+                                onAddListenerGrabBtn={this.props.onAddListenerGrabBtn}
                                 onSetSelectedIcon={this.props.onSetSelectedIcon}
                             />
                         </div>
@@ -140,6 +141,7 @@ class OverlayOptions extends React.PureComponent {
                         <div>
 
                             <ColorPicker
+                                onAddListenerGrabBtn={this.props.onAddListenerGrabBtn}
                                 onChangePolyStrokeColor={this.props.onChangePolyStrokeColor}
                                 onChangePolyFillColor={this.props.onChangePolyFillColor}
                                 selectedOverlay={this.props.selectedOverlay}

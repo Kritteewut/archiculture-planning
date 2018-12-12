@@ -1875,6 +1875,7 @@ class ResponsiveDrawer extends React.Component {
                     onChangeDrawPage={this.onChangeDrawPage}
                     handleDrawerOpen={this.handleDrawerOpen}
                     handleDrawerToggle={this.handleDrawerToggle}
+                    onAddListenerGrabBtn={this.onAddListenerGrabBtn}
                     {...this.state}
                 />
             </div>

@@ -128,7 +128,7 @@ class ColorPicker extends React.PureComponent {
                         variant="fab"
                         color="default"
                         className="buttonCompleteInSlide"
-                        onClick={() => this.props.onAddListenerGrabBtn()}
+                        onClick={this.props.onAddListenerGrabBtn}
                     >
                         <div className="ButtonIconColor">
                             <IconComplete />
