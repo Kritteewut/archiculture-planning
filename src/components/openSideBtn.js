@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 // CSS Import
 import './openSideBtn.css';
 import './Design.css';
+import classNames from 'classnames';
 
 const styles = theme => ({
     Menu: {
@@ -34,7 +35,7 @@ class openSideBtn extends React.PureComponent {
         const { classes } = this.props
         return (
             <div >
-                <Button variant="fab" className="MenuSlide" onClick={this.props.handleDrawerToggle} >
+                <Button variant="fab" className={classNames("MenuSlide", classes.menuButton)} onClick={this.props.handleDrawerToggle} >
                     <div className="ButtonIconColor">
                         <MenuIcon />
                     </div>
