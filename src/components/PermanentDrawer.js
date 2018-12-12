@@ -26,6 +26,7 @@ import DeletePlan from './DeletePlan';
 import MergeOverlay from './MergeOverlay';
 import AddPlan from './AddPlan';
 import OpenSide from '../components/openSideBtn'
+import HowTo from './HowTo'
 
 // Icon Group
 import Pic from './Picture/User.png';
@@ -102,6 +103,8 @@ class PermanentDrawer extends React.PureComponent {
     onToggleEditPlanOpen = () => {
         this.setState({ isEditPlanOpen: !this.state.isEditPlanOpen })
     }
+
+    
 
     handleAcceptToDeletePlan = (planId) => {
         this.props.onDeletePlan(planId)
@@ -194,7 +197,8 @@ class PermanentDrawer extends React.PureComponent {
 
                         <Divider />
 
-                        <Button
+                       <div>
+                        {/* <Button
                             variant="contained"
                             color="default"
                             className="buttonHowtoUse"
@@ -209,7 +213,9 @@ class PermanentDrawer extends React.PureComponent {
                             </div>
 
                         </Button>
-
+                         */}
+                        <HowTo/>
+                        </div>
                         <div
                         //className="container"
                         >

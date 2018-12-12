@@ -28,7 +28,7 @@ import ExampleLine from './components/ExampleLine';
 import FunctionBtn from './components/FunctionBtn'
 import IconLabelButtons from './components/DrawingBtn';
 import TransparentMaker from './components/TransparentMaker';
-import DetailedExpansionPanel from './components/DetailedExpansionPanel';
+// import DetailedExpansionPanel from './components/DetailedExpansionPanel';
 import OverlayDetail from './components/OverlayDetail'
 import MapCenterFire from './components/MapCenterFire'
 import { isMobile } from 'react-device-detect';
