@@ -34,7 +34,7 @@ class openSideBtn extends React.PureComponent {
         const { classes } = this.props
         return (
             <div >
-                <Button variant="fab" className={classes.menuButton} onClick={this.props.handleDrawerToggle} >
+                <Button variant="fab" className="MenuSlide" onClick={this.props.handleDrawerToggle} >
                     <div className="ButtonIconColor">
                         <MenuIcon />
                     </div>

@@ -104,7 +104,7 @@ class PermanentDrawer extends React.PureComponent {
         this.setState({ isEditPlanOpen: !this.state.isEditPlanOpen })
     }
 
-    
+
 
     handleAcceptToDeletePlan = (planId) => {
         this.props.onDeletePlan(planId)
@@ -175,14 +175,13 @@ class PermanentDrawer extends React.PureComponent {
                             </div>
                         </Button>
 
-                        {/* <Button variant="fab" className="buttonturnoff" onClick={this.props.handleDrawerToggle}>
-                            <div className="ButtonIconColor">
-                                <IconForward />
-                            </div>
-                        </Button> */}
-                        <OpenSide
-                            handleDrawerToggle={this.props.handleDrawerToggle}
-                        />
+                        <div className="buttonturnoff" >
+                            <OpenSide
+                                className="buttonturnoff"
+                                handleDrawerToggle={this.props.handleDrawerToggle}
+                            />
+                        </div>
+
 
                         <div className="Framelinearcolor1">
                         </div>
@@ -197,8 +196,8 @@ class PermanentDrawer extends React.PureComponent {
 
                         <Divider />
 
-                       <div>
-                        {/* <Button
+                        <div>
+                            {/* <Button
                             variant="contained"
                             color="default"
                             className="buttonHowtoUse"
@@ -214,7 +213,7 @@ class PermanentDrawer extends React.PureComponent {
 
                         </Button>
                          */}
-                        <HowTo/>
+                            <HowTo />
                         </div>
                         <div
                         //className="container"
