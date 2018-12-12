@@ -1,5 +1,5 @@
 import React from 'react';
-
+import OpenSide from '../components/openSideBtn'
 // Material-ui Import
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Button from '@material-ui/core/Button';
@@ -210,11 +210,12 @@ class IconPicker extends React.PureComponent {
             <div>
 
                 <div className="FrameButtoncolor3">
-                    <Button variant="fab" className="buttonturnoff2" onClick={this.props.handleDrawerToggle}>
-                        <div className="ButtonIconColor">
-                            <IconForward />
-                        </div>
-                    </Button>
+                <div className="buttonturnoff2">
+                    <OpenSide 
+                    className="buttonturnoff2"  
+                    handleDrawerToggle={this.props.handleDrawerToggle} 
+                    />
+                    </div>
 
                     <Button
                         variant="fab"

@@ -135,6 +135,7 @@ class OverlayOptions extends React.PureComponent {
                             <IconPicker
                                 onAddListenerGrabBtn={this.props.onAddListenerGrabBtn}
                                 onSetSelectedIcon={this.props.onSetSelectedIcon}
+                                handleDrawerToggle={this.props.handleDrawerToggle} 
                             />
                         </div>
                         :
@@ -147,6 +148,7 @@ class OverlayOptions extends React.PureComponent {
                                 selectedOverlay={this.props.selectedOverlay}
                                 fillColor={this.props.fillColor}
                                 strokeColor={this.props.strokeColor}
+                                handleDrawerToggle={this.props.handleDrawerToggle} 
                             />
                             {
                                 (!this.props.isFirstDraw) ?

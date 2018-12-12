@@ -417,6 +417,7 @@ class PermanentDrawer extends React.PureComponent {
                         isWaitingForTaskToggle={this.props.isWaitingForTaskToggle}
                         overlAllFiltertask={this.props.overlAllFiltertask}
                         onAddListenerGrabBtn={this.props.onAddListenerGrabBtn}
+                        handleDrawerToggle={this.props.handleDrawerToggle}
                     />
                 )
             default: return;

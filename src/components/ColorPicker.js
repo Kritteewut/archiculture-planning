@@ -1,5 +1,6 @@
 import React from 'react';
 import { CirclePicker } from 'react-color';
+import OpenSide from '../components/openSideBtn';
 
 //Material Import
 import Button from '@material-ui/core/Button'
@@ -118,11 +119,12 @@ class ColorPicker extends React.PureComponent {
                 />*/}
 
                 <div className="FrameButtoncolor2">
-                    <Button variant="fab" className="buttonturnoff2" onClick={this.props.handleDrawerToggle}>
-                        <div className="ButtonIconColor">
-                            <IconForward />
-                        </div>
-                    </Button>
+                    <div className="buttonturnoff2">
+                    <OpenSide 
+                    className="buttonturnoff2"  
+                    handleDrawerToggle={this.props.handleDrawerToggle} 
+                    />
+                    </div>
 
                     <Button
                         variant="fab"

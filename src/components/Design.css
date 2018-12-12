@@ -82,13 +82,9 @@ List of CSS Design Class
     position: absolute;
     cursor: pointer;
 
-    top: 7px;
+    top: 0px;
     left: 250px;
-    
-    color: rgba(0, 0, 0, 0.8);
-    background: linear-gradient(20deg, rgb(255, 255, 255) 40%, rgb(255, 255, 255)) 30%;
-    box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.60);
-    opacity: 0.9; 
+
 }
 
 .buttonturnoff2:hover {
@@ -101,8 +97,8 @@ List of CSS Design Class
     position: absolute;
     cursor: pointer;
 
-    top: 7px;
-    left: 120px;
+    top: 10px;
+    left: 195px;
     
     color: rgba(0, 0, 0, 0.8);
     background: linear-gradient(20deg, rgb(255, 255, 255) 40%, rgb(255, 255, 255)) 30%;
