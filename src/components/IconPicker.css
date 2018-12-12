@@ -24,16 +24,35 @@ List of CSS Design Class
 
 /* ------------------- Button Group ------------------ */
 
+.buttonIconPoint {
+    width: 82px;
+    height: 82px;
+    top: 80px;
+    left: 35px;
+
+    background: linear-gradient(40deg, rgb(255, 255, 255) 20%, rgb(255, 255, 255)) 20%;
+    box-shadow: 0px 0px 0px 3px rgba(183, 255, 89, 0.6);
+    opacity: 0.9; 
+}
+
+.buttonIconPoint:hover {
+    background: linear-gradient(40deg, rgb(215, 255, 170) 20%, rgb(255, 231, 187)) 20%;
+    box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.6);
+    opacity: 1; 
+}
+
 /* ------------------- Background Group ------------------ */
 
 /* ------------------- Image Group ------------------ */
 
 .image {
     position: absolute;
-    margin: 80px;
 
-    width: 90px;
-    height:90px;
+    left: 0px;
+    top: 0px;
+
+    width: 50px;
+    height:50px;
 
 }
 
@@ -55,16 +74,14 @@ List of CSS Design Class
 
 .imageSrc {
     position: absolute;
-    left: 15px;
-    right: auto;
-    top: 15px;
-    bottom: auto;
 
-    width: 90px;
-    height: 90px;
+    left: 10px;
+    top: 10px;
 
-    background-size: 90px;
-    background-position: center 40%;
+    width: 60px;
+    height: 60px;
+
+    background-size: 60px;
 }
 
 .imageBackdrop {
@@ -101,6 +118,18 @@ List of CSS Design Class
     min-width: 300px;
     width: 50%;
     min-height: 200px;
+}
+
+.Framelinearcolor2 {
+    width: 349px;
+    height: 38px;
+    left: 0px;
+    top: 251px;
+    /* Layer Group*/
+    position: absolute;
+    z-index: -2;
+    cursor: pointer;
+    background: linear-gradient(45deg, rgb(208, 255, 146) 40%, rgb(255, 235, 146)) 30%;
 }
 
 /* ------------------- Gridview Group ------------------ */

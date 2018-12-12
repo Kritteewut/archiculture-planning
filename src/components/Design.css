@@ -388,6 +388,7 @@ List of CSS Design Class
     background: linear-gradient(45deg, rgb(208, 255, 146) 40%, rgb(255, 235, 146)) 30%;
 }
 
+
 .FramecolorTools {
     width: 349px;
     height: 136px;
@@ -417,6 +418,18 @@ List of CSS Design Class
     height: 70px;
     left: -10px;
     top: -47px;
+    /* Layer Group*/
+    position: absolute;
+    z-index: -1;
+    cursor: pointer;
+    background: rgb(58, 58, 58);
+}
+
+.FrameButtoncolor3 {
+    width: 319px;
+    height: 70px;
+    left: 0px;
+    top: 0px;
     /* Layer Group*/
     position: absolute;
     z-index: -1;

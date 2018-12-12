@@ -1,14 +1,15 @@
 import React from 'react';
+
 // Material-ui Import
 import ButtonBase from '@material-ui/core/ButtonBase';
+import Button from '@material-ui/core/Button';
+
 // Icon Group
-import icon_airport from './icons/icon_airplane.png'
 import icon_alert from './icons/icon_alert.png'
 import icon_bamboo from './icons/icon_bamboo.png'
 import icon_bonsai from './icons/icon_bonsai.png'
 import icon_clock from './icons/icon_clock.png'
 import icon_home from './icons/icon_home.png'
-import icon_location from './icons/icon_location.png'
 import icon_point from './icons/icon_point.png'
 import icon_rain from './icons/icon_rain.png'
 import icon_sakura1 from './icons/icon_sakura1.png'
@@ -20,7 +21,11 @@ import icon_tool1 from './icons/icon_tool1.png'
 import icon_tool2 from './icons/icon_tool2.png'
 import light_bulb_icon from './icons/light_bulb_icon.png'
 
+import IconForward from '@material-ui/icons/ArrowBack';
+import IconComplete from '@material-ui/icons/Check';
+
 // CSS Import
+import './Design.css';
 import './IconPicker.css';
 
 /*const styles = theme => ({
@@ -192,6 +197,7 @@ const images = [
     },
 ];
 
+
 class IconPicker extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -202,29 +208,50 @@ class IconPicker extends React.PureComponent {
     render() {
         return (
             <div>
-                {images.map(image => (
-                    <ButtonBase
-                        focusRipple
-                        key={image.title}
-                        className="image"
-                        focusVisibleClassName="focusVisible"
-                        style={{
-                            width: '95px',
-                            height: '95px',
-                        }}
-                        onClick={() => this.props.onSetSelectedIcon(image.src)}
-                    >
 
-                        <span
-                            className="imageSrc"
-                            style={{
-                                backgroundImage: `url(${image.src})`,
-                            }}
-                        />
-                        <span className="imageButton">
-                        </span>
-                    </ButtonBase>
-                ))}
+                <div className="FrameButtoncolor3">
+                    <Button variant="fab" className="buttonturnoff2" onClick={this.props.handleDrawerToggle}>
+                        <div className="ButtonIconColor">
+                            <IconForward />
+                        </div>
+                    </Button>
+
+                    <Button
+                        variant="fab"
+                        color="default"
+                        className="buttonCompleteInSlide"
+                        onClick={() => this.props.onAddListenerGrabBtn()}
+                    >
+                        <div className="ButtonIconColor">
+                            <IconComplete />
+                        </div>
+                    </Button>
+                </div>
+
+                <div>
+                    {images.map(image => (
+
+                        <Button
+                            variant="contained"
+                            color="default"
+                            className="buttonIconPoint"
+                            focusRipple
+                            key={image.title}
+                            focusVisibleClassName="focusVisible"
+                            onClick={() => this.props.onSetSelectedIcon(image.src)}
+                        >
+
+
+                            <span
+                                className="imageSrc"
+                                style={{
+                                    backgroundImage: `url(${image.src})`,
+                                }}
+                            />
+
+                        </Button>
+                    ))}
+                </div>
             </div>
         );
     }
