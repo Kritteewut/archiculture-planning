@@ -33,8 +33,8 @@ const colorArray = [
 
     /* Circle Color Mini set*/
 
-    '#610B0B', '#B40404', '#FF0000', '#F78181', '#F6CECE', '#FBEFEF', //Red
-    '#61380B', '#B45F04', '#FF8000', '#FAAC58', '#F5D0A9', '#F8ECE0', //Orange
+    '#610B0B', '#B40404', '#ff4500', '#F78181', '#F6CECE', '#FBEFEF', //Red
+    '#61380B', '#B45F04', '#ffa500', '#FAAC58', '#F5D0A9', '#F8ECE0', //Orange
 
     '#5E610B', '#AEB404', '#FFFF00', '#F4FA58', '#F2F5A9', '#F7F8E0', //Yellow
     '#0B610B', '#04B404', '#00FF00', '#58FA58', '#A9F5A9', '#E0F8E0', //Green2
@@ -95,17 +95,12 @@ class ColorPicker extends React.PureComponent {
     }
     handleShowSelectedColor = () => {
         const { btnType } = this.state
-        const { fillColor, strokeColor, selectedOverlay, } = this.porps
+        const { fillColor, strokeColor, selectedOverlay, } = this.props
         switch (btnType) {
             case ('strokeColor'): return selectedOverlay ? selectedOverlay.strokeColor : strokeColor
             case ('fillColor'): return selectedOverlay ? selectedOverlay.fillColor : fillColor
             default: return;
         }
-        // if (btnType === 'strokeColor') {
-
-        // } else {
-        //     selectedOverlay ? selectedOverlay.fillColor : fillColor
-        // }
     }
     render() {
         return (
@@ -120,10 +115,10 @@ class ColorPicker extends React.PureComponent {
 
                 <div className="FrameButtoncolor2">
                     <div className="buttonturnoff2">
-                    <OpenSide 
-                    className="buttonturnoff2"  
-                    handleDrawerToggle={this.props.handleDrawerToggle} 
-                    />
+                        <OpenSide
+                            className="buttonturnoff2"
+                            handleDrawerToggle={this.props.handleDrawerToggle}
+                        />
                     </div>
 
                     <Button
@@ -141,7 +136,7 @@ class ColorPicker extends React.PureComponent {
                 <CirclePicker
                     className="FrameColorsetup"
                     triangle={'hide'}
-                    //color={this.handleShowSelectedColor}
+                    color={this.handleShowSelectedColor()}
                     colors={colorArray}
                     onChangeComplete={this.handleChangeComplete}
                 />

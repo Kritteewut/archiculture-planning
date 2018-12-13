@@ -1,5 +1,5 @@
 import React from 'react';
-//import '../components/SearchBoxStyles.css'
+import '../components/SearchBoxStyles.css'
 import TextField from '@material-ui/core/TextField'
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';

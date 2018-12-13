@@ -23,7 +23,7 @@ class PlanMember extends React.PureComponent {
         super(props)
         this.state = {
             isAddPlanmemberOpen: false,
-            memberRole: '',
+            memberRole: 'editor',
         }
         this.memberIdInput = null;
         this.setMemberIdInput = element => {
@@ -31,7 +31,7 @@ class PlanMember extends React.PureComponent {
         };
     }
     handleToggleAddPlanMember = () => {
-        this.setState({ isAddPlanmemberOpen: !this.state.isAddPlanmemberOpen, memberRole: ' ' })
+        this.setState({ isAddPlanmemberOpen: !this.state.isAddPlanmemberOpen, memberRole: 'editor' })
         this.memberIdInput.value = ''
     }
     handleSubmitAddPlanMember = () => {

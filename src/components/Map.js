@@ -37,9 +37,7 @@ class Map extends React.PureComponent {
             //terrain raod wtih terrain
 
         })
-        this.setState({
-            isLoad: true
-        })
+        this.setState({ isLoad: true })
     }
 
     render() {

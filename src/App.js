@@ -1987,8 +1987,8 @@ class ResponsiveDrawer extends React.Component {
                                 })
                             }
 
-                            <SearchBox />
 
+                            <SearchBox />
                             <OpenSide
                                 handleDrawerToggle={this.handleDrawerToggle}
                             />
@@ -2052,11 +2052,6 @@ ResponsiveDrawer.propTypes = {
 };
 
 export default withStyles(styles, { withTheme: true })(ResponsiveDrawer);
-
-function getInitialState() {
-    console.log(isMobile)
-    return isMobile
-}
 function new_script(src) {
     return new Promise(function (resolve, reject) {
         var script = document.createElement('script');
@@ -2072,4 +2067,3 @@ function new_script(src) {
 };
 // Promise Interface can ensure load the script only once
 new_script('https://maps.googleapis.com/maps/api/js?&libraries=geometry,drawing,places,visualization&key=&callback=initMap');
-new_script('https://google-analytics.com/ga.js')
