@@ -108,7 +108,11 @@ class ResponsiveDrawer extends React.Component {
             selectedPlan: null,
             strokeColor: "#ff4500",
             user: null,
+
         };
+        this.overlayRealTimeUpdateRef = null
+        this.overlayTaskRealTimeUpdateRef = null
+        this.planMemberRealtimeUpdateRef = null
     }
 
     handleDrawerToggle = () => {
@@ -1521,7 +1525,7 @@ class ResponsiveDrawer extends React.Component {
     }
     onAddRealTimeOverlayUpdateListener = () => {
         var self = this
-        overlayRef.where("planId", "==", this.state.selectedPlan.planId)
+        this.overlayRealTimeUpdateRef = overlayRef.where("planId", "==", this.state.selectedPlan.planId)
             .onSnapshot(function (snapshot) {
                 var queryAmount = snapshot.size
                 if (queryAmount === 0) {
@@ -1604,7 +1608,7 @@ class ResponsiveDrawer extends React.Component {
     }
     onAddRealTimeTaskUpdateListener = () => {
         var self = this
-        taskRef.where("planId", "==", this.state.selectedPlan.planId)
+        this.overlayTaskRealTimeUpdateRef = taskRef.where("planId", "==", this.state.selectedPlan.planId)
             .onSnapshot(function (snapshot) {
                 snapshot.docChanges().forEach(function (change) {
                     const { taskDueDate, taskRepetition } = change.doc.data()
@@ -1650,7 +1654,7 @@ class ResponsiveDrawer extends React.Component {
     onAddRealTimePlanMemberUpdateListener = (selectedPlan) => {
         this.onRemoveRealTimePlanMember()
         var self = this
-        planMemberRef.where("planId", "==", selectedPlan.planId)
+        this.planMemberRealtimeUpdateRef = planMemberRef.where("planId", "==", selectedPlan.planId)
             .onSnapshot(function (snapshot) {
                 var queryAmount = snapshot.size
                 snapshot.docChanges().forEach(function (change) {
@@ -1816,20 +1820,17 @@ class ResponsiveDrawer extends React.Component {
     }
     onRemoveRealTimeUpdateListener = () => {
         this.setState({ isFirstOverlayQuery: true })
-        var unsubscribe = overlayRef
-            .onSnapshot(function () { });
-        var unsubscribe2 = taskRef
-            .onSnapshot(function () { });
-        unsubscribe();
-        unsubscribe2();
+        this.overlayRealTimeUpdateRef()
+        this.overlayTaskRealTimeUpdateRef()
         // ...
         // Stop listening to changes
     }
     onRemoveRealTimePlanMember = () => {
         this.setState({ planMember: [], isWaitingForPlanMemberQuery: true, isWaitingForTaskToggle: false })
-        var unsubscribe3 = planMemberRef
-            .onSnapshot(function () { });
-        unsubscribe3();
+        if (this.planMemberRealtimeUpdateRef) {
+            this.planMemberRealtimeUpdateRef()
+            // Stop listening to changes
+        }
     }
     onDeletePlanMember = (member) => {
         const { planMemberId } = member
