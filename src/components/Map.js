@@ -46,12 +46,10 @@ class Map extends React.PureComponent {
             childrenOutput = this.props.children;
         }
         return (
-            <div style={{
-                // width: '100%',
-                // height: '100vh',
-            }}
+            <div
                 className="Map"
-                id="map" >
+                id="map"
+            >
                 {childrenOutput}
             </div>
         );

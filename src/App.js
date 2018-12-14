@@ -1923,15 +1923,6 @@ class ResponsiveDrawer extends React.Component {
                     //className={classes.toolbar} 
                     />
                     <Map>
-                        <IconButton
-                            color="primary"
-                            aria-label="Open drawer"
-                            onClick={this.handleDrawerToggle}
-                            className={classes.menuButton}
-
-                        >
-                            <MenuIcon />
-                        </IconButton>
                         {this.state.overlayObject.map((value) => {
                             const overlayType = value.overlayType
                             const overlayId = value.overlayId
@@ -2067,4 +2058,4 @@ function new_script(src) {
     })
 };
 // Promise Interface can ensure load the script only once
-new_script('https://maps.googleapis.com/maps/api/js?&libraries=geometry,drawing,places,visualization&key=&callback=initMap');
+new_script('https://maps.googleapis.com/maps/api/js?&libraries=geometry,drawing,places,visualization&key=AIzaSyDsVFar03bgXY8xkPmzQ-NxqcEzzscdLnc&callback=initMap');

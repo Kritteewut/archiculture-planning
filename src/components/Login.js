@@ -199,11 +199,6 @@ class Login extends React.PureComponent {
             default: return null
         }
     }
-
 }
-
-Login.propTypes = {
-
-};
 
 export default withStyles(styles)(Login);

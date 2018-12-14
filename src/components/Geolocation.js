@@ -46,7 +46,7 @@ class GeolocatedMe extends React.PureComponent {
                                     title: addDress,
                                 })
                                 self.addUserMarkerListener(self.userLocationMarker)
-                                var panelName = `ตำแหน่งของท่านคือ : ${addDress}, ความคลาดเคลื่อน : ${accuracy} เมตร`
+                                var panelName = `ตำแหน่งของคุณคือ : ${addDress}, ความคลาดเคลื่อน : ${accuracy} เมตร`
                                 self.props.onSetPanelName(panelName)
                                 self.setState({ isWaitingForGeo: false, })
                             } else {
