@@ -40,7 +40,7 @@ const drawerWidth = 320;
 const styles = theme => ({
     root: {
         display: 'flex',
-        width:'100%',
+        width: '100%',
         height: '100%',
         margin: 0,
         padding: 0,
@@ -69,7 +69,7 @@ const styles = theme => ({
     },
     content: {
         flexGrow: 1,
-        width:'100%',
+        width: '100%',
         height: '100%',
         //padding: theme.spacing.unit * 3,
     },
@@ -1712,7 +1712,10 @@ class ResponsiveDrawer extends React.Component {
                 querySnapshot.forEach(doc => {
                     const { taskRepetition } = doc.data()
                     const taskId = doc.id
-                    const doTaskDate = self.onCheckDoTaskDate(taskRepetition)
+                    var doTaskDate = null
+                    if (taskRepetition) {
+                        doTaskDate = self.onCheckDoTaskDate(taskRepetition)
+                    }
                     if (doTaskDate) {
                         const doDate = moment(doTaskDate).format().split('T')[0]
                         if (moment(doDate).isSame(thisDate)) {
