@@ -40,6 +40,10 @@ const drawerWidth = 320;
 const styles = theme => ({
     root: {
         display: 'flex',
+        width:'100%',
+        height: '100%',
+        margin: 0,
+        padding: 0,
     },
     drawer: {
         [theme.breakpoints.up('sm')]: {
@@ -65,6 +69,8 @@ const styles = theme => ({
     },
     content: {
         flexGrow: 1,
+        width:'100%',
+        height: '100%',
         //padding: theme.spacing.unit * 3,
     },
 });
@@ -1919,9 +1925,6 @@ class ResponsiveDrawer extends React.Component {
                     </Hidden>
                 </nav>
                 <main className={classes.content}>
-                    <div
-                    //className={classes.toolbar} 
-                    />
                     <Map>
                         {this.state.overlayObject.map((value) => {
                             const overlayType = value.overlayType

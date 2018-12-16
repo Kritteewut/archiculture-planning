@@ -127,7 +127,7 @@ List of CSS Design Class
     top: 251px;
     /* Layer Group*/
     position: absolute;
-    z-index: -2;
+    z-index: -1;
     cursor: pointer;
     background: linear-gradient(45deg, rgb(208, 255, 146) 40%, rgb(255, 235, 146)) 30%;
 }
