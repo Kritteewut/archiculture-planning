@@ -208,14 +208,13 @@ class IconPicker extends React.PureComponent {
     render() {
         return (
             <div>
-
                 <div className="FrameButtoncolor3">
-                <div className="buttonturnoff2">
-                    <OpenSide 
-                    className="buttonturnoff2"  
-                    handleDrawerToggle={this.props.handleDrawerToggle} 
-                    />
+                    <div className="buttonturnoff2">
+                        <OpenSide
+                            handleDrawerToggle={this.props.handleDrawerToggle}
+                        />
                     </div>
+
 
                     <Button
                         variant="fab"
@@ -223,6 +222,7 @@ class IconPicker extends React.PureComponent {
                         className="buttonCompleteInSlide"
                         onClick={this.props.onAddListenerGrabBtn}
                     >
+
                         <div className="ButtonIconColor">
                             <IconComplete />
                         </div>

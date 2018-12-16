@@ -116,7 +116,6 @@ class ColorPicker extends React.PureComponent {
                 <div className="FrameButtoncolor2">
                     <div className="buttonturnoff2">
                         <OpenSide
-                            className="buttonturnoff2"
                             handleDrawerToggle={this.props.handleDrawerToggle}
                         />
                     </div>

@@ -18,7 +18,6 @@ const styles = theme => ({
         boxShadow: '0px 0px 0px 3px rgba(255, 255, 255, 0.60)',
     },
     menuButton: {
-        marginRight: 20,
         [theme.breakpoints.up('sm')]: {
             display: 'none',
         },
