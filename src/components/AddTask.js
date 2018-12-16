@@ -57,6 +57,8 @@ class InputItem extends Component {
                 content: '',
                 isDone: false,
                 addTaskDate: new Date(),
+                taskRepetition:null,
+                taskDueDate: null,
             }
             this.props.onAddTask(task)
             this.setState({ taskName: '' })
