@@ -1,12 +1,12 @@
 import firebase from 'firebase'
 require('firebase/firestore')
 const config = {
-    apiKey: "AIzaSyDUF-rTKSwQiz_scL-JPNLRZbcQQXFfPZ0",
-    authDomain: "archiculture-planning.firebaseapp.com",
-    databaseURL: "https://archiculture-planning.firebaseio.com",
-    projectId: "archiculture-planning",
-    storageBucket: "archiculture-planning.appspot.com",
-    messagingSenderId: "626415423664"
+    apiKey: "AIzaSyDGRHQBn0XP7hpqHX_lNDi01yJFQxBFJhg",
+    authDomain: "agriculture-planning-672f0.firebaseapp.com",
+    databaseURL: "https://agriculture-planning-672f0.firebaseio.com",
+    projectId: "agriculture-planning-672f0",
+    storageBucket: "agriculture-planning-672f0.appspot.com",
+    messagingSenderId: "846740808328"
 };
 firebase.initializeApp(config);
 
