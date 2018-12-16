@@ -4,6 +4,10 @@ import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import IconBook from '@material-ui/icons/Book';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
 
 //CSS Import
 import './Design.css';
@@ -28,6 +32,25 @@ import pic15 from './Picture/15.JPG'
 import pic16 from './Picture/16.JPG'
 import pic17 from './Picture/17.JPG'
 
+const howToPic = [
+    pic1,
+    pic2,
+    pic3,
+    pic4,
+    pic5,
+    pic6,
+    pic7,
+    pic8,
+    pic9,
+    pic10,
+    pic11,
+    pic12,
+    pic13,
+    pic14,
+    pic15,
+    pic16,
+    pic17,
+]
 
 class HowTo extends React.PureComponent {
     constructor(props) {
@@ -68,10 +91,17 @@ class HowTo extends React.PureComponent {
                     onClose={this.onToggleHowToOpen}
                 >
                     <div className="paperHowto">
-
-                            <img src={pic1} className="picHowto"/>
-
-
+                        {
+                            howToPic.map((pic, key) => {
+                                return (
+                                    <ListItem
+                                        key={key}
+                                    >
+                                        <img src={pic} className="picHowto"/>
+                                    </ListItem>
+                                )
+                            })
+                        }
                     </div>
                 </Modal>
             </div>

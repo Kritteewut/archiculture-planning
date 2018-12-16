@@ -5,7 +5,6 @@ import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
 import moment from 'moment';
-import List from '@material-ui/core/List';
 
 // CSS Import
 import './EditPlan.css';
@@ -15,12 +14,13 @@ import PlanMember from './PlanMember';
 import DeletePlanMember from './DeletePlanMember';
 
 //Material Import
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import IconButton from '@material-ui/core/IconButton';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import DeleteIcon from '@material-ui/icons/Delete';
-import ListSubheader from '@material-ui/core/ListSubheader'
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
 
 class EditPlan extends React.PureComponent {
     constructor(props) {
@@ -98,46 +98,51 @@ class EditPlan extends React.PureComponent {
                         planData={planData}
                     />
 
-                    <List
-                        component="div"
-                        disablePadding
-                        subheader={<ListSubheader component="div"> รายชื่อสมาชิก </ListSubheader>}
-                    >
-                        {this.props.isWaitingForPlanMemberQuery ?
-                            'กำลังโหลด'
-                            :
-                            this.props.planMember.map((member) => {
-                                return (
-                                    <ListItem
-                                        key={member.memberId}
-                                    >
-                                        <ListItemText
-                                            primary={member.displayName}
-                                            secondary={member.memberRole}
-                                        />
-                                        <ListItemSecondaryAction>
-                                            <IconButton aria-label="Delete"
-                                                onClick={() => this.handleDeletePlanMemberClick(member)}
-                                            >
-                                                <DeleteIcon />
-                                            </IconButton>
-
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                )
-                            })
-
-                        }
-
-                    </List>
-
-                    < DeletePlanMember
-                        onDeletePlanMember={this.props.onDeletePlanMember}
-                        onToggleDeletePlanMemberOpen={this.onToggleDeletePlanMemberOpen}
-                        {...this.state}
-                    />
-
                     <div className="FramePlanUser">
+                        รายชื่อสมาชิก
+
+                    <List
+                            subheader={<li />}
+                            component="div"
+                            disablePadding
+                        // subheader={<ListSubheader component="div"> รายชื่อสมาชิก </ListSubheader>}
+                        >
+                            {this.props.isWaitingForPlanMemberQuery ?
+                                'กำลังโหลด'
+                                :
+                                this.props.planMember.map((member) => {
+                                    return (
+                                        <ListItem
+                                            key={member.memberId}
+                                        >
+                                            <ListItemText
+                                                primary={member.displayName}
+                                                secondary={member.memberRole}
+                                            />
+                                            <ListItemSecondaryAction>
+                                                <IconButton aria-label="Delete"
+                                                    onClick={() => this.handleDeletePlanMemberClick(member)}
+                                                >
+                                                    <DeleteIcon />
+                                                </IconButton>
+
+                                            </ListItemSecondaryAction>
+                                        </ListItem>
+                                    )
+                                })
+
+                            }
+                        </List>
+
+                        < DeletePlanMember
+                            onDeletePlanMember={this.props.onDeletePlanMember}
+                            onToggleDeletePlanMemberOpen={this.onToggleDeletePlanMemberOpen}
+                            {...this.state}
+                        />
+
+                    </div>
+
+                    <div className="FramePlanData">
 
                         <TextField
                             id="with-placeholder"
@@ -152,7 +157,7 @@ class EditPlan extends React.PureComponent {
                             error={this.state.isPlanNameInputError}
                             helperText={this.state.isPlanNameInputError ? 'ชื่อแปลงต้องมีอย่างน้อย 1 ตัวอักษรแต่ไม่เกิน 30 ตัวอักษร' : ''}
                         />
-                        <br />                  
+                        <br />
                         <TextField className="textField"
                             label="รายละเอียดแปลง"
                             inputRef={this.setPlanDescriptionInput}

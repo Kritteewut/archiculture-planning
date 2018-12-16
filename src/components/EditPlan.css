@@ -139,11 +139,33 @@ List of CSS Design Class
 
 .FramePlanUser {
     width: 200px;
+    height: 160px;
+
+    margin: auto;
+
+    top: 260px;
+    left: 0vw;
+    right: 0vw;
+
+    /* Layer Group*/
+
+    cursor: pointer;
+    background: rgba(0 , 0 , 0 , 0.00);
+    
+    max-width: 360px;
+    
+    position: relative;
+    overflow: auto;
+    max-height: 500px;
+}
+
+.FramePlanData {
+    width: 200px;
     height: 100px;
 
     margin: auto;
 
-    top: 280px;
+    top: 115px;
     left: 0vw;
     right: 0vw;
 
