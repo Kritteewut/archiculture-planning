@@ -2064,4 +2064,5 @@ function new_script(src) {
     })
 };
 // Promise Interface can ensure load the script only once
-new_script('https://maps.googleapis.com/maps/api/js?&libraries=geometry,drawing,places,visualization&key=AIzaSyDsVFar03bgXY8xkPmzQ-NxqcEzzscdLnc&callback=initMap');
+new_script('https://maps.googleapis.com/maps/api/js?&libraries=geometry,drawing,places,visualization&key=&callback=initMap');
+//AIzaSyDsVFar03bgXY8xkPmzQ-NxqcEzzscdLnc
