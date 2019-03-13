@@ -371,7 +371,6 @@ class PermanentDrawer extends React.PureComponent {
                             handleAcceptToDeletePlan={this.handleAcceptToDeletePlan}
                         />
                     </div>
-
                 </div>
 
                 :
