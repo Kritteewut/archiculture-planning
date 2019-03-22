@@ -43,7 +43,8 @@ import Picbackground from './Picture/Profile Background.jpg';
 // CSS Import
 import './Design.css';
 import './PermanentDrawer.css';
-import WeatherForecast from './WeatherForecast';
+import WeatherForecast from './WeatherForecastPlace';
+import WeatherForecastDisplay from './WeatherForecastDisplay';
 
 class PermanentDrawer extends React.PureComponent {
     constructor(props) {
@@ -372,7 +373,7 @@ class PermanentDrawer extends React.PureComponent {
                             handleAcceptToDeletePlan={this.handleAcceptToDeletePlan}
                         />
                     </div>
-                    <WeatherForecast />
+                    <WeatherForecastDisplay />
                 </div>
 
                 :

@@ -13,52 +13,111 @@ import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
+import { TMDAPIKey } from '../config/TMD'
 
-const suggestions = [
-    { label: 'Afghanistan' },
-    { label: 'Aland Islands' },
-    { label: 'Albania' },
-    { label: 'Algeria' },
-    { label: 'American Samoa' },
-    { label: 'Andorra' },
-    { label: 'Angola' },
-    { label: 'Anguilla' },
-    { label: 'Antarctica' },
-    { label: 'Antigua and Barbuda' },
-    { label: 'Argentina' },
-    { label: 'Armenia' },
-    { label: 'Aruba' },
-    { label: 'Australia' },
-    { label: 'Austria' },
-    { label: 'Azerbaijan' },
-    { label: 'Bahamas' },
-    { label: 'Bahrain' },
-    { label: 'Bangladesh' },
-    { label: 'Barbados' },
-    { label: 'Belarus' },
-    { label: 'Belgium' },
-    { label: 'Belize' },
-    { label: 'Benin' },
-    { label: 'Bermuda' },
-    { label: 'Bhutan' },
-    { label: 'Bolivia, Plurinational State of' },
-    { label: 'Bonaire, Sint Eustatius and Saba' },
-    { label: 'Bosnia and Herzegovina' },
-    { label: 'Botswana' },
-    { label: 'Bouvet Island' },
-    { label: 'Brazil' },
-    { label: 'British Indian Ocean Territory' },
-    { label: 'Brunei Darussalam' },
+function arrayConvert(value) {
+    return {
+        value: value.label,
+        label: value.label,
+    }
+}
+const provinces = [
+    { label: 'กรุงเทพมหานคร' },
+    { label: 'สมุทรปราการ' },
+    { label: 'นนทบุรี' },
+    { label: 'ปทุมธานี' },
+    { label: 'พระนครศรีอยุธยา' },
+    { label: 'อ่างทอง' },
+    { label: 'ลพบุรี' },
+    { label: 'สิงห์บุรี' },
+    { label: 'ชัยนาท' },
+    { label: 'สระบุรี' },
+    { label: 'ชลบุรี' },
+    { label: 'ระยอง' },
+    { label: 'จันทบุรี' },
+    { label: 'ตราด' },
+    { label: 'ฉะเชิงเทรา' },
+    { label: 'ปราจีนบุรี' },
+    { label: 'นครนายก' },
+    { label: 'สระแก้ว' },
+    { label: 'นครราชสีมา' },
+    { label: 'บุรีรัมย์' },
+    { label: 'สุรินทร์' },
+    { label: 'ศรีสะเกษ' },
+    { label: 'อุบลราชธานี' },
+    { label: 'ยโสธร' },
+    { label: 'ชัยภูมิ' },
+    { label: 'อำนาจเจริญ' },
+    { label: 'บึงกาฬ' },
+    { label: 'หนองบัวลำภู' },
+    { label: 'ขอนแก่น' },
+    { label: 'อุดรธานี' },
+    { label: 'เลย' },
+    { label: 'หนองคาย' },
+    { label: 'มหาสารคาม' },
+    { label: 'ร้อยเอ็ด' },
+    { label: 'กาฬสินธุ์' },
+    { label: 'สกลนคร' },
+    { label: 'นครพนม' },
+    { label: 'มุกดาหาร' },
+    { label: 'เชียงใหม่' },
+    { label: 'ลำพูน' },
+    { label: 'ลำปาง' },
+    { label: 'อุตรดิตถ์' },
+    { label: 'แพร่' },
+    { label: 'น่าน' },
+    { label: 'พะเยา' },
+    { label: 'เชียงราย' },
+    { label: 'แม่ฮ่องสอน' },
+    { label: 'นครสวรรค์' },
+    { label: 'อุทัยธานี' },
+    { label: 'กำแพงเพชร' },
+    { label: 'ตาก' },
+    { label: 'สุโขทัย' },
+    { label: 'พิษณุโลก' },
+    { label: 'พิจิตร' },
+    { label: 'เพชรบูรณ์' },
+    { label: 'ราชบุรี' },
+    { label: 'กาญจนบุรี' },
+    { label: 'สุพรรณบุรี' },
+    { label: 'นครปฐม' },
+    { label: 'สมุทรสาคร' },
+    { label: 'สมุทรสงคราม' },
+    { label: 'เพชรบุรี' },
+    { label: 'ประจวบคีรีขันธ์' },
+    { label: 'นครศรีธรรมราช' },
+    { label: 'กระบี่' },
+    { label: 'พังงา' },
+    { label: 'ภูเก็ต' },
+    { label: 'สุราษฎร์ธานี' },
+    { label: 'ระนอง' },
+    { label: 'ชุมพร' },
+    { label: 'สงขลา' },
+    { label: 'สตูล' },
+    { label: 'ตรัง' },
+    { label: 'พัทลุง' },
+    { label: 'ปัตตานี' },
+    { label: 'ยะลา' },
+    { label: 'นราธิวาส' },
 ]
-.map(suggestion => ({
-    value: suggestion.label,
-    label: suggestion.label,
-}));
+    .map(province => arrayConvert(province))
+const amphoes = {
+    กรุงเทพมหานคร: [
+        { label: 'พระนคร' },
+        { label: 'ดุสิต' },
+        { label: 'หนองจอก' },
+        { label: 'บางรัก' },
+        { label: 'บางเขน' },
+        { label: 'บางกะปิ' },
+        { label: 'ปทุมวัน' },
+        { label: 'ป้อมปราบศัตรูพ่าย' },
+        { label: 'พระโขนง' },
+        { label: 'มีนบุรี' },
+        { label: 'ลาดกระบัง' },
+        { label: 'ยานนาวา' },
+    ].map(amphoe => arrayConvert(amphoe)),
 
-// const provinces = [
-
-// ]
-
+}
 const styles = theme => ({
     root: {
         flexGrow: 1,
@@ -215,21 +274,40 @@ const components = {
 };
 
 
-class WeatherForecast extends React.Component {
-    state = {
-        single: null,
-        multi: null,
-    };
+class WeatherForecast extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            province: null,
+            amphoe: null,
+            tambon: null,
+        }
+    }
+    componentWillMount() {
+        // var url = "https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly/place?province=ร้อยเอ็ด&amphoe=ธวัชบุรี&tambon=นิเวศน์"
+        let url = 'https://data.tmd.go.th/nwpapi/v1/forecast/location/daily/at?lat=13.6506712&lon=100.4902561&fields=tc_min,tc_max,rh,cond,rain,rh&duration=7'
 
+        fetch(url, {
+            method: "get",
+            headers: {
+                authorization: TMDAPIKey,
+                accept: "application/json",
+            },
+        })
+            .then(res => res.json())
+            .then((result) => {
+                console.log(result.WeatherForecasts)
+            }, (error) => {
+                console.log(error)
+            })
+    }
     handleChange = name => value => {
-        this.setState({
-            [name]: value,
-        });
+        this.setState({ [name]: value, });
     };
 
     render() {
         const { classes, theme } = this.props;
-
+        const { province, amphoe, tambon } = this.state;
         const selectStyles = {
             input: base => ({
                 ...base,
@@ -245,10 +323,10 @@ class WeatherForecast extends React.Component {
                     <Select
                         classes={classes}
                         styles={selectStyles}
-                        options={suggestions}
+                        options={provinces}
                         components={components}
-                        value={this.state.single}
-                        onChange={this.handleChange('single')}
+                        value={province}
+                        onChange={this.handleChange('province')}
                         placeholder="ค้นหาจังหวัด"
                         isClearable
                         textFieldProps={{
@@ -260,12 +338,13 @@ class WeatherForecast extends React.Component {
                     />
                     <div className={classes.divider} />
                     <Select
+                        isDisabled={province ? false : true}
                         classes={classes}
                         styles={selectStyles}
-                        options={suggestions}
+                        options={amphoes[province] ? amphoes[province] : []}
                         components={components}
-                        value={this.state.single}
-                        onChange={this.handleChange('single')}
+                        value={amphoe}
+                        onChange={this.handleChange('amphoe')}
                         placeholder="ค้นหาอำเภอหรือเขต"
                         isClearable
                         textFieldProps={{
@@ -277,12 +356,13 @@ class WeatherForecast extends React.Component {
                     />
                     <div className={classes.divider} />
                     <Select
+                        isDisabled={amphoe ? false : true}
                         classes={classes}
                         styles={selectStyles}
-                        options={suggestions}
+                        options={provinces}
                         components={components}
-                        value={this.state.single}
-                        onChange={this.handleChange('single')}
+                        value={tambon}
+                        onChange={this.handleChange('tambon')}
                         placeholder="ค้นหาตำบลหรือเขต"
                         isClearable
                         textFieldProps={{
