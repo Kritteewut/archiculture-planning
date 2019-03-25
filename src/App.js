@@ -6,7 +6,7 @@ import Hidden from '@material-ui/core/Hidden';
 import { withStyles } from '@material-ui/core/styles';
 import Map from './components/Map'
 import PermanentDrawer from './components/PermanentDrawer'
-import { SORT_BY_NEWEST, SORT_BY_LATEST, SHOW_ALL, SHOW_COMPLETE, SHOW_ACTIVATE, SHOW_OVERVIEW, SHOW_TODAY } from './staticValue/SaticString'
+import { SORT_BY_NEWEST, SORT_BY_LATEST, SHOW_ALL, SHOW_COMPLETE, SHOW_ACTIVATE, SHOW_OVERVIEW, SHOW_TODAY } from './StaticValue/StaticString'
 import moment from 'moment';
 import {
     overlayRef,
@@ -134,7 +134,6 @@ class ResponsiveDrawer extends React.Component {
     }
     componentDidMount() {
         // this.onAddBeforeUnloadListener()
-
     }
     componentWillUnmount() {
     }
