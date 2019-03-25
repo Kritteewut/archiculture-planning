@@ -103,6 +103,17 @@ export const amphoes = {
 }
 export const tambons = {
     พระนคร: [
-
-    ].map(amphoe => arrayConvert(amphoe)),
+        { label: 'พระบรมมหาราชวัง' },
+        { label: 'วังบูรพาภิรมย์' },
+        { label: 'วัดราชบพิธ' },
+        { label: 'สำราญราษฎร์' },
+        { label: 'ศาลเจ้าพ่อเสือ' },
+        { label: 'เสาชิงช้า' },
+        { label: 'บวรนิเวศ' },
+        { label: 'ตลาดยอด' },
+        { label: 'ชนะสงคราม' },
+        { label: 'บ้านพานถม' },
+        { label: 'บางขุนพรหม' },
+        { label: 'วัดสามพระยา' },
+    ].map(tambons => arrayConvert(tambons)),
 }

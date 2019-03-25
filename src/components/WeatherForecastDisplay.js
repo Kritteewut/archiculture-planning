@@ -4,6 +4,7 @@ import WheatherForecastPlace from './WeatherForecastPlace'
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { TMDAPIKey } from '../config/TMD'
+const maxForecastDay = 30
 
 class WeatherForecastDisplay extends React.PureComponent {
     constructor(props) {
@@ -36,8 +37,8 @@ class WeatherForecastDisplay extends React.PureComponent {
             return
         }
         let setDay
-        if (day > 126) {
-            setDay = 126
+        if (day > maxForecastDay) {
+            setDay = maxForecastDay
         } else {
             setDay = day
         }

@@ -1109,6 +1109,7 @@ class ResponsiveDrawer extends React.Component {
                 bounds.extend(new window.google.maps.LatLng(coords))
             })
         })
+        console.log(bounds.getCenter())
         window.map.fitBounds(bounds)
     }
     onChangePolyStrokeColor = (color) => {

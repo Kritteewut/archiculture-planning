@@ -14,7 +14,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import Button from '@material-ui/core/Button';
 import { TMDAPIKey } from '../config/TMD';
-import { provinces, amphoes } from '../StaticValue/Places'
+import { provinces, amphoes,tambons } from '../StaticValue/Places'
 
 
 const styles = theme => ({
@@ -183,9 +183,13 @@ class WeatherForecast extends React.PureComponent {
         }
     }
     componentWillMount() {
-        // let url = `https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly/place?province=ร้อยเอ็ด&amphoe=${null}&tambon=${null}&starttime=2017-08-23T18:00:00,&endtime=2017-08-23T18:00:00`
-
-        let url = `https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly/place?province=กรุงเทพมหานคร&amphoe=จอมทอง&starttime=2019-03-25T00:00:00&endtime=2019-04-05T00:00:00`
+       
+    }
+    handleChange = name => value => {
+        this.setState({ [name]: value }, () => console.log(this.state.province));
+    };
+    onForecastWheaterFromPlace = () => {
+        let url = 'https://data.tmd.go.th/nwpapi/v1/forecast/location/daily/place?province=นครปฐม&amphoe=สามพราน&fields=tc_min,tc_max,rh,cond,rain&duration=30'
         fetch(url, {
             method: "get",
             headers: {
@@ -198,13 +202,7 @@ class WeatherForecast extends React.PureComponent {
                 console.log(result.WeatherForecasts)
             }, (error) => {
                 console.log(error)
-            })
-    }
-    handleChange = name => value => {
-        this.setState({ [name]: value }, () => console.log(this.state.province));
-    };
-    onForecastWheaterFromPlace = () => {
-        //let url = 
+            }) 
     }
     render() {
         const { classes, theme } = this.props;
@@ -260,8 +258,7 @@ class WeatherForecast extends React.PureComponent {
                         isDisabled={amphoe ? false : true}
                         classes={classes}
                         styles={selectStyles}
-                        options={provinces}
-                        options={amphoe ? tambon[tambon.value] : []}
+                        options={amphoe ? tambons[amphoe.value] : []}
                         components={components}
                         value={tambon}
                         onChange={this.handleChange('tambon')}
