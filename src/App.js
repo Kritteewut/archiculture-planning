@@ -30,11 +30,9 @@ import TransparentMaker from './components/TransparentMaker';
 import OverlayDetail from './components/OverlayDetail'
 import MapCenterFire from './components/MapCenterFire'
 import { isMobile } from 'react-device-detect';
-import axios from 'axios';
 import './App.css'
 import './components/SearchBoxStyles.css'
 import './components/PermanentDrawer.css';
-import { TMDAPIKey } from './config/TMD'
 
 const drawerWidth = 320;
 
@@ -1852,7 +1850,6 @@ class ResponsiveDrawer extends React.Component {
     }
     render() {
         const { classes, theme } = this.props;
-
         const drawer = (
             <div>
                 <PermanentDrawer

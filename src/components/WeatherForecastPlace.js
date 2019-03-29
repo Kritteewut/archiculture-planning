@@ -14,7 +14,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import Button from '@material-ui/core/Button';
 import { TMDAPIKey } from '../config/TMD';
-import { provinces, amphoes,tambons } from '../StaticValue/Places'
+import { provinces, amphoes, tambons } from '../StaticValue/Places'
 
 
 const styles = theme => ({
@@ -183,26 +183,26 @@ class WeatherForecast extends React.PureComponent {
         }
     }
     componentWillMount() {
-       
+
     }
     handleChange = name => value => {
         this.setState({ [name]: value }, () => console.log(this.state.province));
     };
     onForecastWheaterFromPlace = () => {
-        let url = 'https://data.tmd.go.th/nwpapi/v1/forecast/location/daily/place?province=นครปฐม&amphoe=สามพราน&fields=tc_min,tc_max,rh,cond,rain&duration=30'
-        fetch(url, {
-            method: "get",
-            headers: {
-                authorization: TMDAPIKey,
-                accept: "application/json",
-            },
-        })
-            .then(res => res.json())
-            .then((result) => {
-                console.log(result.WeatherForecasts)
-            }, (error) => {
-                console.log(error)
-            }) 
+        const { forecastDays, onFetchWheatherForecast } = this.props
+        const { province, amphoe, tambon } = this.state
+        let url = `https://data.tmd.go.th/nwpapi/v1/forecast/location/daily/place?fields=tc_min,tc_max,rh,cond,rain&duration=${forecastDays}`
+        if (province) {
+            url = url + `&province=${province.value}`
+        }
+        if (amphoe) {
+            url = url + `&amphoe=${amphoe.value}`
+        }
+        if (tambon) {
+            url = url + `&tambon=${tambon.value}`
+        }
+        console.log(url)
+        onFetchWheatherForecast(url)
     }
     render() {
         const { classes, theme } = this.props;
@@ -226,7 +226,7 @@ class WeatherForecast extends React.PureComponent {
                         components={components}
                         value={province}
                         onChange={this.handleChange('province')}
-                        placeholder="ค้นหาจังหวัด"
+                        placeholder="ใส่ชื่อจังหวัด"
                         isClearable
                         textFieldProps={{
                             label: 'จังหวัด',
@@ -244,7 +244,7 @@ class WeatherForecast extends React.PureComponent {
                         components={components}
                         value={amphoe}
                         onChange={this.handleChange('amphoe')}
-                        placeholder="ค้นหาอำเภอหรือเขต"
+                        placeholder="ใส่ชื่ออำเภอหรือเขต"
                         isClearable
                         textFieldProps={{
                             label: 'อำเภอหรือเขต',
@@ -262,7 +262,7 @@ class WeatherForecast extends React.PureComponent {
                         components={components}
                         value={tambon}
                         onChange={this.handleChange('tambon')}
-                        placeholder="ค้นหาตำบลหรือเขต"
+                        placeholder="ใส่ชื่อตำบลหรือเขต"
                         isClearable
                         textFieldProps={{
                             label: 'ตำบลหรือแขวง',
