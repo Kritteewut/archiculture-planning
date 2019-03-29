@@ -182,11 +182,8 @@ class WeatherForecast extends React.PureComponent {
             tambon: null,
         }
     }
-    componentWillMount() {
-
-    }
-    handleChange = name => value => {
-        this.setState({ [name]: value }, () => console.log(this.state.province));
+    handlePlaceChange = name => value => {
+        this.setState({ [name]: value });
     };
     onForecastWheaterFromPlace = () => {
         const { forecastDays, onFetchWheatherForecast } = this.props
@@ -201,7 +198,6 @@ class WeatherForecast extends React.PureComponent {
         if (tambon) {
             url = url + `&tambon=${tambon.value}`
         }
-        console.log(url)
         onFetchWheatherForecast(url)
     }
     render() {
@@ -225,7 +221,7 @@ class WeatherForecast extends React.PureComponent {
                         options={provinces}
                         components={components}
                         value={province}
-                        onChange={this.handleChange('province')}
+                        onChange={this.handlePlaceChange('province')}
                         placeholder="ใส่ชื่อจังหวัด"
                         isClearable
                         textFieldProps={{
@@ -243,7 +239,7 @@ class WeatherForecast extends React.PureComponent {
                         options={province ? amphoes[province.value] : []}
                         components={components}
                         value={amphoe}
-                        onChange={this.handleChange('amphoe')}
+                        onChange={this.handlePlaceChange('amphoe')}
                         placeholder="ใส่ชื่ออำเภอหรือเขต"
                         isClearable
                         textFieldProps={{
@@ -261,7 +257,7 @@ class WeatherForecast extends React.PureComponent {
                         options={amphoe ? tambons[amphoe.value] : []}
                         components={components}
                         value={tambon}
-                        onChange={this.handleChange('tambon')}
+                        onChange={this.handlePlaceChange('tambon')}
                         placeholder="ใส่ชื่อตำบลหรือเขต"
                         isClearable
                         textFieldProps={{
