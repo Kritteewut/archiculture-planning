@@ -12,7 +12,18 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import farm from '../components/Picture/Picfarm2.jpg'
-
+import './WheatherForecaseDisplay.css'
+import Sunny from './icons/sunny.png'
+import Hot from './icons/hot.png'
+import Cloudy from './icons/cloudy.png'
+import Snowflake from './icons/snowflake.png'
+import Snowflakes from './icons/snowflakes.png'
+import Storm_thunder from './icons/storm_thunder.png'
+import Rain from './icons/rain.png'
+import Clouds from './icons/clouds.png'
+import Cloud from './icons/cloud.png'
+import Warning from './icons/warning.png'
+import Weather_bachgound from './icons/weather_background.png'
 
 const maxForecastDay = 30
 
@@ -47,15 +58,16 @@ class WeatherForecastDisplay extends React.PureComponent {
                     const { tc_max, tc_min, rh, rain, cond } = forecast.data
                     avgRain += rain
                     return {
-                        tc_max: `อุณหภูมิสูงสุด ${Math.round(tc_max)} °C`,
-                        tc_min: `อุณหภูมิต่ำสุด ${Math.round(tc_min)} °C`,
-                        rh: `ความชื้นสัมพัทธเฉลี่ย ${rh} %`,
+                        tc_max: `สูงสุด ${Math.round(tc_max)} °C`,
+                        tc_min: `ต่ำสุด ${Math.round(tc_min)} °C`,
+                        rh: `ความชื้นสัมพัทธเฉลี่ย ${Math.round(rh)} %`,
                         rain: `ปริมาณฝนรวม 24 ชม. ${rain} มิลลิเมตร`,
                         cond: this.onCompareCond(cond),
-                        time: moment(forecast.time).format('ll'),
+                        time: moment(forecast.time).format('dd Do MMM'),
                         key
                     }
                 })
+                console.log(location, 'lo')
                 this.setState({ wheatherForecast: forecastResult, avgRain: `ปริมาณน้ำฝนเฉลี่ย ${forecastDays} วัน ${avgRain} มิลลิเมตร` })
             }, (error) => {
                 console.log(error)
@@ -66,55 +78,55 @@ class WeatherForecastDisplay extends React.PureComponent {
         switch (cond) {
             case 1:
                 condText = 'ท้องฟ้าแจ่มใส'
-                condPic = 1
+                condPic = Sunny
                 break;
             case 2:
                 condText = 'มีเมฆบางส่วน'
-                condPic = 1
+                condPic = Cloud
                 break;
             case 3:
                 condText = 'มีเมฆเป็นส่วนมาก'
-                condPic = 1
+                condPic = Clouds
                 break;
             case 4:
                 condText = 'มีเมฆมาก'
-                condPic = 1
+                condPic = Clouds
                 break;
             case 5:
                 condText = 'ฝนตกเล็กน้อย'
-                condPic = 1
+                condPic = Rain
                 break;
             case 6:
                 condText = 'ฝนปานกลาง '
-                condPic = 1
+                condPic = Rain
                 break;
             case 7:
                 condText = 'ฝนตกหนัก '
-                condPic = 1
+                condPic = Rain
                 break;
             case 8:
                 condText = 'ฝนฟ้าคะนอง '
-                condPic = 1
+                condPic = Storm_thunder
                 break;
             case 9:
                 condText = 'อากาศหนาวจัด'
-                condPic = 1
+                condPic = Snowflakes
                 break;
             case 10:
                 condText = 'อากาศหนาว'
-                condPic = 1
+                condPic = Snowflake
                 break;
             case 11:
                 condText = 'อากาศเย็น '
-                condPic = 1
+                condPic = Snowflake
                 break;
             case 12:
                 condText = 'อากาศร้อนจัด'
-                condPic = 1
+                condPic = Hot
                 break;
             default:
                 condText = 'ไม่พบสภาพอากาศ'
-                condPic = 1
+                condPic = Warning
                 break;
         }
         return { condPic, condText }
@@ -139,7 +151,8 @@ class WeatherForecastDisplay extends React.PureComponent {
     render() {
         const { forecastDays, wheatherForecast, avgRain, isWheaterOpen } = this.state
         return (
-            <div>
+
+            <div >
                 <Button variant="outlined" color="primary" onClick={this.handleToggleWheaterDialog}>
                     พยากรณ์อากาศ
                 </Button>
@@ -148,7 +161,7 @@ class WeatherForecastDisplay extends React.PureComponent {
                     onClose={this.handleToggleWheaterDialog}
                 >
                     <DialogTitle>{"พยากรณ์อากาศ"}</DialogTitle>
-                    <DialogContent>
+                    <DialogContent >
                         <TextField
                             id="standard-number"
                             label="จำนวนวันพยากรณ์"
@@ -170,36 +183,35 @@ class WeatherForecastDisplay extends React.PureComponent {
                         />
 
                         {avgRain}
-                        <div>
+                        <div >
+
                             {
                                 wheatherForecast.map(forecast => {
-                                    const { cond, rain, time, tc_max, tc_min, rh } = forecast
+                                    const { cond, rain, time, tc_max, tc_min, rh,key } = forecast
                                     const { condPic, condText } = cond
                                     return (
                                         <div
-                                            key={forecast.key}
+                                            key={key}
                                             style={{
                                                 float: 'left',
-                                                width: '33.33%',
-                                                height: '33.33%',
-                                                padding: '5px',
+                                                width: '30%',
+                                                padding: '10px',
                                                 textAlign: 'center',
-                                                border: 'solid',
                                             }}
                                         >
                                             <div>{time}</div>
+                                            <img src={condPic} />
                                             <div>{condText}</div>
-                                            <div>{rain}</div>
-                                            <div>{rh}</div>
                                             <div>{tc_max}</div>
                                             <div>{tc_min}</div>
+                                            <div>{rain}</div>
+                                            <div>{rh}</div>
+
                                         </div>
                                     )
                                 })
                             }
                         </div>
-
-
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleToggleWheaterDialog} color="primary" autoFocus>
