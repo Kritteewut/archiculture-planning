@@ -21,7 +21,7 @@
     "material-ui-next-pickers": "0.0.15",
     "material-ui-time-picker": "^1.0.0",
     "moment": "^2.22.2",
-    "nw": "^0.36.4",
+    "nw": "^0.37.1",
     "react": "^16.6.3",
     "react-ajax": "^0.1.1",
     "react-color": "^2.17.0",
