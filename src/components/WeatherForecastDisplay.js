@@ -25,7 +25,7 @@ import Cloud from './icons/cloud.png'
 import Warning from './icons/warning.png'
 import Weather_bachgound from './icons/weather_background.png'
 
-const maxForecastDay = 30
+const maxForecastDay = 126
 
 function inRange(x, min, max) {
     return ((x - min) * (x - max) <= 0);
@@ -36,12 +36,30 @@ class WeatherForecastDisplay extends React.PureComponent {
         this.state = {
             wheatherForecast: [],
             forecastDays: 7,
-            avgRain: 0,
+            avgRain: '',
             isWheaterOpen: false,
+            isFetchingWeather: false,
         }
+    }
+    componentWillMount() {
+        // let url = 'https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly'
+        // fetch(url, {
+        //     method: "get",
+        //     headers: {
+        //         authorization: TMDAPIKey,
+        //         accept: "application/json",
+        //     },
+        // })
+        //     .then(res => res.json())
+        //     .then((result) => {
+        //         console.log(result)
+        //     }, (error) => {
+        //         console.log(error)
+        //     })
     }
     onFetchWheatherForecast = (url) => {
         const { forecastDays } = this.state
+        this.onSetFetchingWeather()
         fetch(url, {
             method: "get",
             headers: {
@@ -51,27 +69,36 @@ class WeatherForecastDisplay extends React.PureComponent {
         })
             .then(res => res.json())
             .then((result) => {
+                console.log(result)
                 const { forecasts, location } = result.WeatherForecasts[0]
-                let avgRain = 0
+                let sumRain = 0
                 let forecastResult = forecasts.map(forecast => {
                     const key = shortid.generate()
                     const { tc_max, tc_min, rh, rain, cond } = forecast.data
-                    avgRain += rain
+                    sumRain += rain
                     return {
                         tc_max: `สูงสุด ${Math.round(tc_max)} °C`,
                         tc_min: `ต่ำสุด ${Math.round(tc_min)} °C`,
                         rh: `ความชื้นสัมพัทธเฉลี่ย ${Math.round(rh)} %`,
-                        rain: `ปริมาณฝนรวม 24 ชม. ${rain} มิลลิเมตร`,
+                        rain: `ปริมาณฝนรวม 24 ชม. ${Math.round(rain)} มิลลิเมตร`,
                         cond: this.onCompareCond(cond),
                         time: moment(forecast.time).format('dd Do MMM'),
                         key
                     }
                 })
-                console.log(location, 'lo')
-                this.setState({ wheatherForecast: forecastResult, avgRain: `ปริมาณน้ำฝนเฉลี่ย ${forecastDays} วัน ${avgRain} มิลลิเมตร` })
+
+                let avgRain = sumRain / forecasts.length
+                this.setState({
+                    wheatherForecast: forecastResult,
+                    avgRain: `ปริมาณน้ำฝนรวม ${forecastDays} วัน ${Math.round(sumRain)} มิลลิเมตร เฉลี่ย ${Math.round(avgRain)} มิลลิเมตรต่อวัน`,
+                    isFetchingWeather: false
+                })
             }, (error) => {
                 console.log(error)
             })
+    }
+    onSetFetchingWeather = () => {
+        this.setState({ isFetchingWeather: true })
     }
     onCompareCond = (cond) => {
         let condText, condPic
@@ -149,7 +176,7 @@ class WeatherForecastDisplay extends React.PureComponent {
         this.setState({ isWheaterOpen: !isWheaterOpen })
     }
     render() {
-        const { forecastDays, wheatherForecast, avgRain, isWheaterOpen } = this.state
+        const { forecastDays, wheatherForecast, avgRain, isWheaterOpen, isFetchingWeather } = this.state
         return (
 
             <div >
@@ -182,36 +209,43 @@ class WeatherForecastDisplay extends React.PureComponent {
                             onFetchWheatherForecast={this.onFetchWheatherForecast}
                         />
 
-                        {avgRain}
-                        <div >
+                        {
+                            isFetchingWeather ?
+                                'กำลังโหลด...' :
+                                <div>
+                                    {avgRain}
+                                    <div >
 
-                            {
-                                wheatherForecast.map(forecast => {
-                                    const { cond, rain, time, tc_max, tc_min, rh,key } = forecast
-                                    const { condPic, condText } = cond
-                                    return (
-                                        <div
-                                            key={key}
-                                            style={{
-                                                float: 'left',
-                                                width: '30%',
-                                                padding: '10px',
-                                                textAlign: 'center',
-                                            }}
-                                        >
-                                            <div>{time}</div>
-                                            <img src={condPic} />
-                                            <div>{condText}</div>
-                                            <div>{tc_max}</div>
-                                            <div>{tc_min}</div>
-                                            <div>{rain}</div>
-                                            <div>{rh}</div>
+                                        {
+                                            wheatherForecast.map(forecast => {
+                                                const { cond, rain, time, tc_max, tc_min, rh, key } = forecast
+                                                const { condPic, condText } = cond
+                                                return (
+                                                    <div
+                                                        key={key}
+                                                        style={{
+                                                            float: 'left',
+                                                            width: '30%',
+                                                            padding: '10px',
+                                                            textAlign: 'center',
+                                                        }}
+                                                    >
+                                                        <div>{time}</div>
+                                                        <img src={condPic} />
+                                                        <div>{condText}</div>
+                                                        <div>{tc_max}</div>
+                                                        <div>{tc_min}</div>
+                                                        <div>{rain}</div>
+                                                        <div>{rh}</div>
 
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                </div>
+                        }
+
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleToggleWheaterDialog} color="primary" autoFocus>
