@@ -24,12 +24,11 @@ import Clouds from './icons/clouds.png'
 import Cloud from './icons/cloud.png'
 import Warning from './icons/warning.png'
 import Weather_bachgound from './icons/weather_background.png'
+import WeatherAffectCrops from './WeatherAffectCrops'
 
 const maxForecastDay = 126
 
-function inRange(x, min, max) {
-    return ((x - min) * (x - max) <= 0);
-}
+
 class WeatherForecastDisplay extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -213,6 +212,9 @@ class WeatherForecastDisplay extends React.PureComponent {
                             isFetchingWeather ?
                                 'กำลังโหลด...' :
                                 <div>
+                                    <WeatherAffectCrops
+                                        {...this.state}
+                                    />
                                     {avgRain}
                                     <div >
 
