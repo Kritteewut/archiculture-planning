@@ -27,17 +27,52 @@ import Weather_bachgound from './icons/weather_background.png'
 import WeatherAffectCrops from './WeatherAffectCrops'
 
 const maxForecastDay = 126
-
+const rice = {
+    minGoodGrowth: 25,
+    maxGoodGrowth: 33,
+    minCanGrowth1: 34,
+    maxCanGrowth1: 40,
+    minCanGrowth2: 15,
+    maxCanGrowth2: 24,
+    minStopGrowth: 14,
+    maxStopGrowth: 41,
+}
+const corn = {
+    minStopGrowth: 20,
+    maxStopGrowth: 36,
+    minGoodGrowth: 21,
+    maxGoodGrowth: 27,
+    minCanGrowth: 28,
+    maxCanGrowth: 35,
+}
+const sugarcane = {
+    minGoodGrowth: 18,
+    maxGoodGrowth: 35,
+    minStopGrowth: 17,
+    maxStopGrowth: 36,
+}
+//มันสำปะหลัง
+const cassava = {
+    minStopGrowth: 15,
+    maxStopGrowth: 40,
+    minGoodGrowth: 25,
+    maxGoodGrowth: 29,
+    minCanGrowth1: 16,
+    maxCanGrowth1: 24,
+    minCanGrowth2: 30,
+    maxCanGrowth2: 39,
+}
 
 class WeatherForecastDisplay extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            wheatherForecast: [],
+            weatherForecast: [],
             forecastDays: 7,
             avgRain: '',
-            isWheaterOpen: false,
+            isWeaterOpen: false,
             isFetchingWeather: false,
+            plantCondition: []
         }
     }
     componentWillMount() {
@@ -86,9 +121,10 @@ class WeatherForecastDisplay extends React.PureComponent {
                     }
                 })
 
+                this.onSetPlantConditionText(forecasts)
                 let avgRain = sumRain / forecasts.length
                 this.setState({
-                    wheatherForecast: forecastResult,
+                    weatherForecast: forecastResult,
                     avgRain: `ปริมาณน้ำฝนรวม ${forecastDays} วัน ${Math.round(sumRain)} มิลลิเมตร เฉลี่ย ${Math.round(avgRain)} มิลลิเมตรต่อวัน`,
                     isFetchingWeather: false
                 })
@@ -170,21 +206,99 @@ class WeatherForecastDisplay extends React.PureComponent {
         }
         this.setState({ forecastDays: setDay })
     }
-    handleToggleWheaterDialog = () => {
-        const { isWheaterOpen } = this.state
-        this.setState({ isWheaterOpen: !isWheaterOpen })
+    handleToggleWeaterDialog = () => {
+        const { isWeaterOpen } = this.state
+        this.setState({ isWeaterOpen: !isWeaterOpen })
+    }
+    onCompareRiceCondition = (temperature) => {
+        const { minStopGrowth, maxStopGrowth, minGoodGrowth,
+            maxGoodGrowth, minCanGrowth1, maxCanGrowth1,
+            minCanGrowth2, maxCanGrowth2 } = rice
+        if (temperature < minStopGrowth || temperature > maxStopGrowth) {
+            return 'ข้าวอาจหยุดการเจริญเติบโต'
+        }
+        if (inRange(temperature, minGoodGrowth, maxGoodGrowth)) {
+            return 'ข้าวเจริญเติบโตได้ดี'
+        }
+        if (inRange(temperature, minCanGrowth1, maxCanGrowth1) || inRange(temperature, minCanGrowth2, maxCanGrowth2)) {
+            return 'ข้าวสามารถเติบโตได้'
+        }
+    }
+    onCompareCassavaCondition = (temperature) => {
+        const { minStopGrowth, maxStopGrowth, minGoodGrowth,
+            maxGoodGrowth, minCanGrowth1, maxCanGrowth1,
+            minCanGrowth2, maxCanGrowth2 } = cassava
+        if (temperature < minStopGrowth || temperature > maxStopGrowth) {
+            return 'มันสำปะหลังอาจหยุดการเจริญเติบโต'
+        }
+        if (inRange(temperature, minGoodGrowth, maxGoodGrowth)) {
+            return 'มันสำปะหลังเจริญเติบโตได้ดี'
+        }
+        if (inRange(temperature, minCanGrowth1, maxCanGrowth1) || inRange(temperature, minCanGrowth2, maxCanGrowth2)) {
+            return 'มันสำปะหลังสามารถเติบโตได้'
+        }
+    }
+    onCompareCornCondition = (temperature) => {
+        const { minStopGrowth, maxStopGrowth, minGoodGrowth,
+            maxGoodGrowth, minCanGrowth, maxCanGrowth, } = corn
+
+        if (temperature < minStopGrowth || temperature > maxStopGrowth) {
+            return 'ข้าวโพดอาจหยุดการเจริญเติบโต'
+        }
+        if (inRange(temperature, minGoodGrowth, maxGoodGrowth)) {
+            return 'ข้าวโพดหลังเจริญเติบโตได้ดี'
+        }
+        if (inRange(temperature, minCanGrowth, maxCanGrowth)) {
+            return 'ข้าวโพดหลังสามารถเติบโตได้'
+        }
+    }
+    onCompareSugarcaneCondition = (temperature) => {
+        const { minStopGrowth, maxStopGrowth, minGoodGrowth, maxGoodGrowth } = sugarcane
+        if (temperature < minStopGrowth || temperature > maxStopGrowth) {
+            return 'อ้อยอาจหยุดการเจริญเติบโต'
+        }
+        if (inRange(temperature, minGoodGrowth, maxGoodGrowth)) {
+            return 'อ้อยเจริญเติบโตได้ดี'
+        }
+    }
+    onSetPlantConditionText = (forecasts) => {
+        const { tc_max, tc_min } = forecasts[0].data
+        let plantCondition = []
+        let tmax = Math.round(tc_max)
+        let tmin = Math.round(tc_min)
+        plantCondition.push({
+            tc_max: `ที่อุณหภูมิ ${tmax} °C ${this.onCompareRiceCondition(tmax)}`,
+            tc_min: `ที่อุณหภูมิ ${tmin} ${this.onCompareRiceCondition(tmin)}`,
+            key: 'rice'
+        })
+        plantCondition.push({
+            tc_max: `ที่อุณหภูมิ ${tmax} °C ${this.onCompareCassavaCondition(tmax)}`,
+            tc_min: `ที่อุณหภูมิ ${tmin} °C ${this.onCompareCassavaCondition(tmin)}`,
+            key: 'cassava'
+        })
+        plantCondition.push({
+            tc_max: `ที่อุณหภูมิ ${tmax} °C ${this.onCompareSugarcaneCondition(tmax)}`,
+            tc_min: `ที่อุณหภูมิ ${tmin} °C ${this.onCompareSugarcaneCondition(tmin)}`,
+            key: 'sugarcane'
+        })
+        plantCondition.push({
+            tc_max: `ที่อุณหภูมิ ${tmax} °C ${this.onCompareCornCondition(tmax)}`,
+            tc_min: `ที่อุณหภูมิ ${tmin} °C ${this.onCompareCornCondition(tmin)}`,
+            key: 'corn'
+        })
+        this.setState({ plantCondition })
     }
     render() {
-        const { forecastDays, wheatherForecast, avgRain, isWheaterOpen, isFetchingWeather } = this.state
+        const { forecastDays, weatherForecast, avgRain, isWeaterOpen, isFetchingWeather, plantCondition } = this.state
         return (
 
             <div >
-                <Button variant="outlined" color="primary" onClick={this.handleToggleWheaterDialog}>
+                <Button variant="outlined" color="primary" onClick={this.handleToggleWeaterDialog}>
                     พยากรณ์อากาศ
                 </Button>
                 <Dialog
-                    open={isWheaterOpen}
-                    onClose={this.handleToggleWheaterDialog}
+                    open={isWeaterOpen}
+                    onClose={this.handleToggleWeaterDialog}
                 >
                     <DialogTitle>{"พยากรณ์อากาศ"}</DialogTitle>
                     <DialogContent >
@@ -212,14 +326,30 @@ class WeatherForecastDisplay extends React.PureComponent {
                             isFetchingWeather ?
                                 'กำลังโหลด...' :
                                 <div>
-                                    <WeatherAffectCrops
+                                    {/* <WeatherAffectCrops
                                         {...this.state}
-                                    />
+                                    /> */}
+                                    {
+                                        plantCondition.map(plant => {
+                                            return (
+                                                <div
+                                                    key={plant.key}
+                                                >
+                                                    <div>
+                                                        {plant.tc_max}
+                                                    </div>
+                                                    <div>
+                                                        {plant.tc_min}
+                                                    </div>
+                                                </div>
+                                            )
+                                        })
+                                    }
                                     {avgRain}
                                     <div >
 
                                         {
-                                            wheatherForecast.map(forecast => {
+                                            weatherForecast.map(forecast => {
                                                 const { cond, rain, time, tc_max, tc_min, rh, key } = forecast
                                                 const { condPic, condText } = cond
                                                 return (
@@ -250,7 +380,7 @@ class WeatherForecastDisplay extends React.PureComponent {
 
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.handleToggleWheaterDialog} color="primary" autoFocus>
+                        <Button onClick={this.handleToggleWeaterDialog} color="primary" autoFocus>
                             ปิด
                         </Button>
                     </DialogActions>
@@ -260,3 +390,8 @@ class WeatherForecastDisplay extends React.PureComponent {
     }
 }
 export default WeatherForecastDisplay
+
+
+function inRange(x, min, max) {
+    return ((x - min) * (x - max) <= 0);
+}

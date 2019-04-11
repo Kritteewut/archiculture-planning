@@ -39,18 +39,14 @@ class WeatherAffectCrops extends React.PureComponent {
     constructor(props) {
         super(props)
         this.state = {
-
+            riceMinCond: '',
         }
-    }
-    onCompareRiceCondition = () => {
-        const { wheatherForecast } = this.props
-        const { tc_max, tc_min } = wheatherForecast[0]
-        if (tc_max > rice.maxStopGrowth || tc_min < rice.minStopGrowth) {
-            return 'ข้าวหยุดการเจริญเติบโต'
-        }
-      
     }
     onSetRiceText = () => {
+        const { wheatherForecast } = this.props
+
+        const { tc_max, tc_min } = wheatherForecast[0]
+        this.onCompareRiceCondition(tc_max)
 
     }
     onSetSugarcaneText = () => {
@@ -65,20 +61,62 @@ class WeatherAffectCrops extends React.PureComponent {
         const { wheatherForecast } = this.props
         const { tc_max, tc_min } = wheatherForecast[0]
     }
-    onCompareCassavaCondition = () => {
-
+    onCompareRiceCondition = (temperature) => {
+        const { minStopGrowth, maxStopGrowth, minGoodGrowth,
+            maxGoodGrowth, minCanGrowth1, maxCanGrowth1,
+            minCanGrowth2, maxCanGrowth2 } = rice
+        if (temperature < minStopGrowth || temperature > maxStopGrowth) {
+            return 'ข้าวอาจหยุดการเจริญเติบโต'
+        }
+        if (inRange(temperature, minGoodGrowth, maxGoodGrowth)) {
+            return 'ข้าวเจริญเติบโตได้ดี'
+        }
+        if (inRange(temperature, minCanGrowth1, maxCanGrowth1) || inRange(temperature, minCanGrowth2, maxCanGrowth2)) {
+            return 'ข้าวสามารถเติบโตได้'
+        }
     }
-    onCompareCornCondition = () => {
-
+    onCompareCassavaCondition = (temperature) => {
+        const { minStopGrowth, maxStopGrowth, minGoodGrowth,
+            maxGoodGrowth, minCanGrowth1, maxCanGrowth1,
+            minCanGrowth2, maxCanGrowth2 } = cassava
+        if (temperature < minStopGrowth || temperature > maxStopGrowth) {
+            return 'มันสำปะหลังอาจหยุดการเจริญเติบโต'
+        }
+        if (inRange(temperature, minGoodGrowth, maxGoodGrowth)) {
+            return 'มันสำปะหลังเจริญเติบโตได้ดี'
+        }
+        if (inRange(temperature, minCanGrowth1, maxCanGrowth1) || inRange(temperature, minCanGrowth2, maxCanGrowth2)) {
+            return 'มันสำปะหลังสามารถเติบโตได้'
+        }
     }
-    onCompareSugarcaneCondition = () => {
+    onCompareCornCondition = (temperature) => {
+        const { minStopGrowth, maxStopGrowth, minGoodGrowth,
+            maxGoodGrowth, minCanGrowth, maxCanGrowth, } = corn
 
+        if (temperature < minStopGrowth || temperature > maxStopGrowth) {
+            return 'ข้าวโพดอาจหยุดการเจริญเติบโต'
+        }
+        if (inRange(temperature, minGoodGrowth, maxGoodGrowth)) {
+            return 'ข้าวโพดหลังเจริญเติบโตได้ดี'
+        }
+        if (inRange(temperature, minCanGrowth, maxCanGrowth)) {
+            return 'ข้าวโพดหลังสามารถเติบโตได้'
+        }
+    }
+    onCompareSugarcaneCondition = (temperature) => {
+        const { minStopGrowth, maxStopGrowth, minGoodGrowth, maxGoodGrowth } = cassava
+        if (temperature < minStopGrowth || temperature > maxStopGrowth) {
+            return 'อ้อยอาจหยุดการเจริญเติบโต'
+        }
+        if (inRange(temperature, minGoodGrowth, maxGoodGrowth)) {
+            return 'อ้อยเจริญเติบโตได้ดีได้'
+        }
     }
     render() {
         return (
             <div>
                 <div>
-                    w
+                    {this.onSetRiceText()}
                 </div>
                 <div>
                     a
