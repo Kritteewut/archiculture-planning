@@ -84,6 +84,7 @@ export const provinces = [
     { label: 'นราธิวาส' },
 ]
     .map(province => arrayConvert(province))
+
 export const amphoes = {
     กรุงเทพมหานคร: [
         { label: 'พระนคร' },
@@ -98,10 +99,629 @@ export const amphoes = {
         { label: 'มีนบุรี' },
         { label: 'ลาดกระบัง' },
         { label: 'ยานนาวา' },
+        { label: 'สัมพันธวงศ์' },
+        { label: 'พญาไท' },
+        { label: 'ธนบุรี' },
+        { label: 'บางกอกใหญ่' },
+        { label: 'ห้วยขวาง' },
+        { label: 'คลองสาน' },
+        { label: 'ตลิ่งชัน' },
+        { label: 'บางกอกน้อย' },
+        { label: 'บางขุนเทียน' },
+        { label: 'ภาษีเจริญ' },
+        { label: 'หนองแขม' },
+        { label: 'ราษฎร์บูรณะ' },
+        { label: 'บางพลัด' },
+        { label: 'ดินแดง' },
+        { label: 'บึงกุ่ม' },
+        { label: 'สาทร' },
+        { label: 'บางซื่อ' },
+        { label: 'จตุจักร' },
+        { label: 'บางคอแหลม' },
+        { label: 'ประเวศ' },
+        { label: 'คลองเตย' },
+        { label: 'สวนหลวง' },
+        { label: 'จอมทอง' },
+        { label: 'ดอนเมือง' },
+        { label: 'ราชเทวี' },
+        { label: 'ลาดพร้าว' },
+        { label: 'วัฒนา' },
+        { label: 'บางแค' },
+        { label: 'หลักสี่' },
+        { label: 'สายไหม' },
+        { label: 'คันนายาว' },
+        { label: 'สะพานสูง' },
+        { label: 'วังทองหลาง' },
+        { label: 'คลองสามวา' },
+        { label: 'บางนา' },
+        { label: 'ทวีวัฒนา' },
+        { label: 'ทุ่งครุ' },
+        { label: 'บางบอน' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    สมุทรปราการ: [
+        { label: 'เมืองสมุทรปราการ' },
+        { label: 'บางบ่อ' },
+        { label: 'บางพลี' },
+        { label: 'พระประแดง' },
+        { label: 'พระสมุทรเจดีย์' },
+        { label: 'บางเสาธง' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    นนทบุรี: [
+        { label: 'เมืองนนทบุรี' },
+        { label: 'บางกรวย' },
+        { label: 'บางใหญ่' },
+        { label: 'บางบัวทอง' },
+        { label: 'ไทรน้อย' },
+        { label: 'ปากเกร็ด' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    ปทุมธานี: [
+        { label: 'เมืองปทุมธานี' },
+        { label: 'คลองหลวง' },
+        { label: 'ธัญบุรี' },
+        { label: 'หนองเสือ' },
+        { label: 'ลาดหลุมแก้ว' },
+        { label: 'ลำลูกกา' },
+        { label: 'สามโคก' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    พระนครศรีอยุธยา: [
+        { label: 'พระนครศรีอยุธยา' },
+        { label: 'ท่าเรือ' },
+        { label: 'นครหลวง' },
+        { label: 'บางไทร' },
+        { label: 'บางบาล' },
+        { label: 'บางปะอิน' },
+        { label: 'บางปะหัน' },
+        { label: 'ผักไห่' },
+        { label: 'ภาชี' },
+        { label: 'ลาดบัวหลวง' },
+        { label: 'วังน้อย' },
+        { label: 'เสนา' },
+        { label: 'บางซ้าย' },
+        { label: 'อุทัย' },
+        { label: 'มหาราช' },
+        { label: 'บ้านแพรก' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    อ่างทอง: [
+        { label: 'เมืองอ่างทอง' },
+        { label: 'ไชโย' },
+        { label: 'ป่าโมก' },
+        { label: 'โพธิ์ทอง' },
+        { label: 'แสวงหา' },
+        { label: 'วิเศษชัยชาญ' },
+        { label: 'สามโก้' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    ลพบุรี: [
+        { label: 'เมืองลพบุรี' },
+        { label: 'พัฒนานิคม' },
+        { label: 'โคกสำโรง' },
+        { label: 'ชัยบาดาล' },
+        { label: 'ท่าวุ้ง' },
+        { label: 'บ้านหมี่' },
+        { label: 'ท่าหลวง' },
+        { label: 'สระโบสถ์' },
+        { label: 'โคกเจริญ' },
+        { label: 'ลำสนธิ' },
+        { label: 'หนองม่วง' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    สิงห์บุรี: [
+        { label: 'เมืองสิงห์บุรี' },
+        { label: 'บางระจัน' },
+        { label: 'ค่ายบางระจัน' },
+        { label: 'พรหมบุรี' },
+        { label: 'ท่าช้าง' },
+        { label: 'อินทร์บุรี' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    ชัยนาท: [
+        { label: 'เมืองชัยนาท' },
+        { label: 'มโนรมย์' },
+        { label: 'วัดสิงห์' },
+        { label: 'สรรพยา' },
+        { label: 'สรรคบุรี' },
+        { label: 'หันคา' },
+        { label: 'หนองมะโมง' },
+        { label: 'เนินขาม' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    สระบุรี: [
+        { label: 'เมืองสระบุรี' },
+        { label: 'แก่งคอย' },
+        { label: 'หนองแค' },
+        { label: 'วิหารแดง' },
+        { label: 'หนองแซง' },
+        { label: 'บ้านหมอ' },
+        { label: 'ดอนพุด' },
+        { label: 'หนองโดน' },
+        { label: 'พระพุทธบาท' },
+        { label: 'เสาไห้' },
+        { label: 'มวกเหล็ก' },
+        { label: 'วังม่วง' },
+        { label: 'เฉลิมพระเกียรติ' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    ชลบุรี: [
+        { label: 'เมืองชลบุรี' },
+        { label: 'บ้านบึง' },
+        { label: 'หนองใหญ่' },
+        { label: 'บางละมุง' },
+        { label: 'พานทอง' },
+        { label: 'พนัสนิคม' },
+        { label: 'ศรีราชา' },
+        { label: 'เกาะสีชัง' },
+        { label: 'สัตหีบ' },
+        { label: 'บ่อทอง' },
+        { label: 'เกาะจันทร์' },
+        { label: 'บางละมุง' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    ระยอง: [
+        { label: 'เมืองระยอง' },
+        { label: 'บ้านฉาง' },
+        { label: 'แกลง' },
+        { label: 'วังจันทร์' },
+        { label: 'บ้านค่าย' },
+        { label: 'ปลวกแดง' },
+        { label: 'เขาชะเมา' },
+        { label: 'นิคมพัฒนา' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    จันทบุรี: [
+        { label: 'เมืองจันทบุรี' },
+        { label: 'ขลุง' },
+        { label: 'ท่าใหม่' },
+        { label: 'โป่งน้ำร้อน' },
+        { label: 'มะขาม' },
+        { label: 'แหลมสิงห์' },
+        { label: 'สอยดาว' },
+        { label: 'แก่งหางแมว' },
+        { label: 'นายายอาม' },
+        { label: 'เขาคิชฌกูฏ' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    ตราด: [
+        { label: 'เมืองตราด' },
+        { label: 'คลองใหญ่' },
+        { label: 'เขาสมิง' },
+        { label: 'บ่อไร่' },
+        { label: 'แหลมงอบ' },
+        { label: 'เกาะกูด' },
+        { label: 'เกาะช้าง' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    ฉะเชิงเทรา: [
+        { label: 'เมืองฉะเชิงเทรา' },
+        { label: 'บางคล้า' },
+        { label: 'บางน้ำเปรี้ยว' },
+        { label: 'บางปะกง' },
+        { label: 'บ้านโพธิ์' },
+        { label: 'พนมสารคาม' },
+        { label: 'ราชสาส์น' },
+        { label: 'สนามชัยเขต' },
+        { label: 'แปลงยาว' },
+        { label: 'ท่าตะเกียบ' },
+        { label: 'คลองเขื่อน' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    ปราจีนบุรี: [
+        { label: 'เมืองปราจีนบุรี' },
+        { label: 'กบินทร์บุรี' },
+        { label: 'นาดี' },
+        { label: 'บ้านสร้าง' },
+        { label: 'ประจันตคาม' },
+        { label: 'ศรีมหาโพธิ' },
+        { label: 'ศรีมโหสถ' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    นครนายก: [
+        { label: 'เมืองนครนายก' },
+        { label: 'ปากพลี' },
+        { label: 'บ้านนา' },
+        { label: 'องครักษ์' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    สระแก้ว: [
+        { label: 'เมืองสระแก้ว' },
+        { label: 'คลองหาด' },
+        { label: 'ตาพระยา' },
+        { label: 'วังน้ำเย็น' },
+        { label: 'วัฒนานคร' },
+        { label: 'อรัญประเทศ' },
+        { label: 'เขาฉกรรจ์' },
+        { label: 'โคกสูง' },
+        { label: 'วังสมบูรณ์' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    นครราชสีมา: [
+        { label: 'เมืองนครราชสีมา' },
+        { label: 'ครบุรี' },
+        { label: 'เสิงสาง' },
+        { label: 'คง' },
+        { label: 'บ้านเหลื่อม' },
+        { label: 'จักราช' },
+        { label: 'โชคชัย' },
+        { label: 'ด่านขุนทด' },
+        { label: 'โนนไทย' },
+        { label: 'โนนสูง' },
+        { label: 'ขามสะแกแสง' },
+        { label: 'บัวใหญ่' },
+        { label: 'ประทาย' },
+        { label: 'ปักธงชัย' },
+        { label: 'พิมาย' },
+        { label: 'ห้วยแถลง' },
+        { label: 'ชุมพวง' },
+        { label: 'สูงเนิน' },
+        { label: 'ขามทะเลสอ' },
+        { label: 'สีคิ้ว' },
+        { label: 'ปากช่อง' },
+        { label: 'หนองบุญมาก' },
+        { label: 'แก้งสนามนาง' },
+        { label: 'โนนแดง' },
+        { label: 'วังน้ำเขียว' },
+        { label: 'เทพารัษ์' },
+        { label: 'เมืองยาง' },
+        { label: 'พระทองคำ' },
+        { label: 'ลำทะเมนชัย' },
+        { label: 'บัวลาย' },
+        { label: 'สีดา' },
+        { label: 'เฉลิมพระเกียรติ' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    บุรีรัมย์: [
+        { label: 'เมืองบุรีรัมย์' },
+        { label: 'คูเมือง' },
+        { label: 'กระสัง' },
+        { label: 'นางรอง' },
+        { label: 'หนองกี่' },
+        { label: 'ละหานทราย' },
+        { label: 'ประโคนชัย' },
+        { label: 'บ้านกรวด' },
+        { label: 'พุทไธสง' },
+        { label: 'ลำปลายมาศ' },
+        { label: 'สตึก' },
+        { label: 'ปะคำ' },
+        { label: 'นาโพธิ์' },
+        { label: 'หนองหงส์' },
+        { label: 'พลับพลาชัย' },
+        { label: 'ห้วยราช' },
+        { label: 'โนนสุวรรณ' },
+        { label: 'ชำนิ' },
+        { label: 'บ้านใหม่ไชยพจน์' },
+        { label: 'โนนดินแดง' },
+        { label: 'บ้านด่าน' },
+        { label: 'แคนดง' },
+        { label: 'เฉลิมพระเกียรติ' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    สุรินทร์: [
+        { label: 'เมืองสุรินทร์' },
+        { label: 'ชุมพลบุรี' },
+        { label: 'ท่าตูม' },
+        { label: 'จอมพระ' },
+        { label: 'ปราสาท' },
+        { label: 'กาบเชิง' },
+        { label: 'รัตนบุรี' },
+        { label: 'สนม' },
+        { label: 'ศีขรภูมิ' },
+        { label: 'สังขะ' },
+        { label: 'ลำดวน' },
+        { label: 'สำโรงทาบ' },
+        { label: 'บัวเชด' },
+        { label: 'พนมดงรัก' },
+        { label: 'ศรีณรงค์' },
+        { label: 'เขวาสินรินทร์' },
+        { label: 'โนนนารายณ์' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    ศรีสะเกษ: [
+        { label: 'เมืองศรีเกษ' },
+        { label: 'ยางชุมน้อย' },
+        { label: 'กันทรารมย์' },
+        { label: 'กันทรลักษ์' },
+        { label: 'ขุขันธ์' },
+        { label: 'ไพรบึง' },
+        { label: 'ปรางค์กู่' },
+        { label: 'ขุนหาญ' },
+        { label: 'ราษีไศล' },
+        { label: 'อุทุมพรพิสัย' },
+        { label: 'บึงบูรพ์' },
+        { label: 'ห้วยทับทัน' },
+        { label: 'โนนคูณ' },
+        { label: 'ศรีรัตนะ' },
+        { label: 'น้ำเกลี้ยง' },
+        { label: 'วังหิน' },
+        { label: 'ภูสิงห์' },
+        { label: 'เมืองจันทร์' },
+        { label: 'เบญจลักษ์' },
+        { label: 'พยุห์' },
+        { label: 'โพธิ์ศรีสุวรรณ' },
+        { label: 'ศิลาลาด' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    อุบลราชธานี: [
+        { label: 'เมืองอุบลราชธานี' },
+        { label: 'ศรีเมืองใหม่' },
+        { label: 'โขงเจียม' },
+        { label: 'เขื่องใน' },
+        { label: 'เขมราฐ' },
+        { label: 'เดชอุดม' },
+        { label: 'นาจะหลวย' },
+        { label: 'น้ำยืน' },
+        { label: 'บุณฑริก' },
+        { label: 'ตระการพืชผล' },
+        { label: 'กุดข้าวปุ้น' },
+        { label: 'ม่วงสามสิบ' },
+        { label: 'วารินชำราบ' },
+        { label: 'พิบูลมังสาหาร' },
+        { label: 'ตาลสุม' },
+        { label: 'โพธิ์ไทร' },
+        { label: 'สำโรง' },
+        { label: 'ดอนมดแดง' },
+        { label: 'สิรินธร' },
+        { label: 'ทุ่งศรีอุดม' },
+        { label: 'นาเยีย' },
+        { label: 'นาตาล' },
+        { label: 'เหล่าเสือโก้ก' },
+        { label: 'สว่างวีระวงศ์' },
+        { label: 'น้ำขุ่น' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    ยโสธร: [
+        { label: 'เมืองยโสธร' },
+        { label: 'ทรายมูล' },
+        { label: 'กุดชุม' },
+        { label: 'คำเขื่อนแก้ว' },
+        { label: 'ป่าติ้ว' },
+        { label: 'มหาชนะชัย' },
+        { label: 'ค้อวัง' },
+        { label: 'เลิงนกทา' },
+        { label: 'ไทยเจริญ' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    ชัยภูมิ: [
+        { label: 'เมืองหนองบัวลำภู' },
+        { label: 'บ้านเขว้า' },
+        { label: 'คอนสวรรค์' },
+        { label: 'เกษตรสมบูรณ์' },
+        { label: 'หนองบัวแดง' },
+        { label: 'จัตุรัส' },
+        { label: 'บำเหน็จณรงค์' },
+        { label: 'หนองบัวระเหว' },
+        { label: 'เทพสถิต' },
+        { label: 'ภูเขียว' },
+        { label: 'บ้านแท่น' },
+        { label: 'แก้งคร้อ' },
+        { label: 'คอนสาร' },
+        { label: 'ภักดีชุมพล' },
+        { label: 'เนินสง่า' },
+        { label: 'ซับใหญ่' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    อำนาจเจริญ: [
+        { label: 'เมืองอำนาจเจริญ' },
+        { label: 'ชานุมาน' },
+        { label: 'ปทุมราชวงศา' },
+        { label: 'พนา' },
+        { label: 'เสนางคนิคม' },
+        { label: 'หัวตะพาน' },
+        { label: 'ลืออำนาจ' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    บึงกาฬ: [
+        { label: 'บึงกาฬ' },
+        { label: 'พรเจริญ' },
+        { label: 'โซ่พิสัย' },
+        { label: 'เซกา' },
+        { label: 'ปากคาด' },
+        { label: 'บึงโขงหลง' },
+        { label: 'ศรีวิไล' },
+        { label: 'บุ่งคล้า' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    หนองบัวลำภู: [
+        { label: 'เมืองหนองบัวลำภู' },
+        { label: 'นากลาง' },
+        { label: 'โนนสัง' },
+        { label: 'ศรีบุญเรือง' },
+        { label: 'สุวรรณคูหา' },
+        { label: 'นาวัง' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    ขอนแก่น: [
+        { label: 'เมืองขอนแก่น' },
+        { label: 'บ้านฝาง' },
+        { label: 'พระยืน' },
+        { label: 'หนองเรือ' },
+        { label: 'ชุมแพ' },
+        { label: 'สีชมพู' },
+        { label: 'น้ำพอง' },
+        { label: 'อุบลรัตน์' },
+        { label: 'กระนวน' },
+        { label: 'บ้านไผ่' },
+        { label: 'เปือยน้อย' },
+        { label: 'พล' },
+        { label: 'แวงใหญ่' },
+        { label: 'แวงน้อย' },
+        { label: 'หนองสองห้อง' },
+        { label: 'เวียงเก่า' },
+        { label: 'มัญจาคีรี' },
+        { label: 'ชนบท' },
+        { label: 'เขาสวนกวาง' },
+        { label: 'ภูผาม่าน' },
+        { label: 'ซำสูง' },
+        { label: 'โคกโพธิ์' },
+        { label: 'หนองนา' },
+        { label: 'บ้านแฮ' },
+        { label: 'โนนศิลา' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    อุดรธานี: [
+        { label: 'เมืองอุดรธานี' },
+        { label: 'กุดจับ' },
+        { label: 'หนองวัวซอ' },
+        { label: 'กุมภวาปี' },
+        { label: 'โนนสะอาด' },
+        { label: 'หนองหาน' },
+        { label: 'ทุ่งฝน' },
+        { label: 'ไชยวาน' },
+        { label: 'ศรีธาตุ' },
+        { label: 'วังสามหมอ' },
+        { label: 'บ้านดุง' },
+        { label: 'บ้านผือ' },
+        { label: 'น้ำโสม' },
+        { label: 'เพ็ญ' },
+        { label: 'สร้างคอม' },
+        { label: 'หนองแสง' },
+        { label: 'นายูง' },
+        { label: 'พิบูลย์รักษ์' },
+        { label: 'กู่แก้ว' },
+        { label: 'ประจักษ์' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    เลย: [
+        { label: 'เมืองเลย' },
+        { label: 'นาด้วง' },
+        { label: 'เชียงคาน' },
+        { label: 'ปากชม' },
+        { label: 'ด่านซ้าย' },
+        { label: 'นาแห้ว' },
+        { label: 'ภูเรือ' },
+        { label: 'ท่าลี่' },
+        { label: 'วังสะพุง' },
+        { label: 'ภูกระดึง' },
+        { label: 'ภูหลวง' },
+        { label: 'ผาขาว' },
+        { label: 'เอราวัณ' },
+        { label: 'หนองหิน' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    หนองคาย: [
+        { label: 'เมืองหนองคาย' },
+        { label: 'ท่าบ่อ' },
+        { label: 'โพนพิสัย' },
+        { label: 'ศรีเชียงใหม่' },
+        { label: 'สังคม' },
+        { label: 'สระใคร' },
+        { label: 'เฝ้าไร่' },
+        { label: 'รัตนวาปี' },
+        { label: 'โพธิ์ตาก' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    มหาสารคาม: [
+        { label: 'เมืองมหาสารคาม' },
+        { label: 'แกดำ' },
+        { label: 'โกสุมพิสัย' },
+        { label: 'กันทรวิชัย' },
+        { label: 'เชียงยืน' },
+        { label: 'บรบือ' },
+        { label: 'นาเชือก' },
+        { label: 'พยัคฆภูมิพิสัย' },
+        { label: 'วาปีปทุม' },
+        { label: 'นาดูน' },
+        { label: 'ยางสีสุราช' },
+        { label: 'กุดรัง' },
+        { label: 'ชื่นชม' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    ร้อยเอ็ด: [
+        { label: 'เมืองร้อยเอ็ด' },
+        { label: 'ร้องกวาง' },
+        { label: 'ปทุมรัตต์' },
+        { label: 'จตุรพักตรพิมาน' },
+        { label: 'ธวัชบุรี' },
+        { label: 'พนมไพร' },
+        { label: 'โพนทอง' },
+        { label: 'โพธิ์ชัย' },
+        { label: 'หนองพอก' },
+        { label: 'เสลภูมิ' },
+        { label: 'สุวรรณภูมิ' },
+        { label: 'เมืองสรวง' },
+        { label: 'โพนทราย' },
+        { label: 'อาจสามารถ' },
+        { label: 'เมยวดี' },
+        { label: 'ศรีสมเด็จ' },
+        { label: 'จังหาร' },
+        { label: 'เชียงขวัญ' },
+        { label: 'หนองฮี' },
+        { label: 'ทุ่งเขาหลวง' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    กาฬสินธุ์: [
+        { label: 'เมืองกาฬสินธ์' },
+        { label: 'นามน' },
+        { label: 'กมลาไสย' },
+        { label: 'ร่องคำ' },
+        { label: 'กุฉินารายณ์' },
+        { label: 'เขาวง' },
+        { label: 'ยางตลาด' },
+        { label: 'ห้วยเม็ก' },
+        { label: 'สหัสขันธ์' },
+        { label: 'คำม่วง' },
+        { label: 'ท่าคันโท' },
+        { label: 'หนองกุงศรี' },
+        { label: 'สมเด็จ' },
+        { label: 'ห้วยผึ้ง' },
+        { label: 'สามชัย' },
+        { label: 'นาคู' },
+        { label: 'ดอนจาน' },
+        { label: 'ฆ้องชัยพัฒนา' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    สกลนคร: [
+        { label: 'เมืองสกลนคร' },
+        { label: 'กุสุมาลย์' },
+        { label: 'กุดบาก' },
+        { label: 'พรรณานิคม' },
+        { label: 'พังโคน' },
+        { label: 'วาริชภูมิ' },
+        { label: 'นิคมน้ำอูน' },
+        { label: 'วานรนิวาส' },
+        { label: 'คำตากล้า' },
+        { label: 'บ้านม่วง' },
+        { label: 'อากาศอำนวย' },
+        { label: 'สว่างแดนดิน' },
+        { label: 'ส่องดาว' },
+        { label: 'เต่างอย' },
+        { label: 'โคกศรีสุพรรณ' },
+        { label: 'เจริญศิลป์' },
+        { label: 'โพนนาแก้ว' },
+        { label: 'ภูพาน' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    นครพนม: [
+        { label: 'เมืองนครพนม' },
+        { label: 'ปลาปาก' },
+        { label: 'ท่าอุเทน' },
+        { label: 'บ้านแพง' },
+        { label: 'ธาตุพนม' },
+        { label: 'เรณูนคร' },
+        { label: 'นาแก' },
+        { label: 'ศรีสงคราม' },
+        { label: 'นาหว้า' },
+        { label: 'โพนสวรรค์' },
+        { label: 'นาทม' },
+        { label: 'วังยาง' },
+    ].map(amphoe => arrayConvert(amphoe)),
+
+    มุกดาหาร: [
+        { label: 'เมืองมุกดาหาร' },
+        { label: 'นิคมคำสร้อย' },
+        { label: 'ดอนตาล' },
+        { label: 'ดงหลวง' },
+        { label: 'คำชะอี' },
+        { label: 'ว่านใหญ่' },
+        { label: 'หนองสูง' },
     ].map(amphoe => arrayConvert(amphoe)),
 
 }
 export const tambons = {
+
     พระนคร: [
         { label: 'พระบรมมหาราชวัง' },
         { label: 'วังบูรพาภิรมย์' },
@@ -116,4 +736,301 @@ export const tambons = {
         { label: 'บางขุนพรหม' },
         { label: 'วัดสามพระยา' },
     ].map(tambons => arrayConvert(tambons)),
+
+    ดุสิต: [
+        { label: 'ดุสิต' },
+        { label: 'วชิรพยาบาล' },
+        { label: 'สวนจิตรลดา' },
+        { label: 'สี่แยกมหานาค' },
+        { label: 'ถนนนครไชยศรี' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    หนองจอก: [
+        { label: 'กระทุ่มราย' },
+        { label: 'หนองจอก' },
+        { label: 'คลองสิบ' },
+        { label: 'คลองสิบสอง' },
+        { label: 'โคกแฝด' },
+        { label: 'คู้ฝั่งเหนือ' },
+        { label: 'ลำผักชี' },
+        { label: 'ลำต้อยติ่ง' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    บางรัก: [
+        { label: 'มหาพฤฒาราม' },
+        { label: 'สีลม' },
+        { label: 'สุริยวงศ์' },
+        { label: 'บางรัก' },
+        { label: 'สี่พระยา' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    บางเขน: [
+        { label: 'อนุสาวรีย์' },
+        { label: 'ท่าแร้ง' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    บางกะปิ: [
+        { label: 'คลองจั่น' },
+        { label: 'หัวหมาก' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    ปทุมวัน: [
+        { label: 'รองเมือง' },
+        { label: 'วังใหม่' },
+        { label: 'ปทุมวัน' },
+        { label: 'ลุมพินี' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    ป้อมปราบศัตรูพ่าย: [
+        { label: 'ป้อมปราบ' },
+        { label: 'วัดเทพศิรินทร์' },
+        { label: 'คลองมหานาค' },
+        { label: 'บ้านบาตร' },
+        { label: 'วัดโสมนัส' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    พระโขนง: [
+        { label: 'บางจาก' }
+    ].map(tambons => arrayConvert(tambons)),
+
+    มีนบุรี: [
+        { label: 'มีนบุรี' },
+        { label: 'แสนแสบ' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    ลาดกระบัง: [
+        { label: 'ลาดกระบัง' },
+        { label: 'คลองสองต้นนุ่น' },
+        { label: 'คลองสามประเวศ' },
+        { label: 'ลำปลาทิว' },
+        { label: 'ทับยาว' },
+        { label: 'ขุมทอง' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    ยานนาวา: [
+        { label: 'ช่องนนทรี' },
+        { label: 'บางโพงพาง' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    สัมพันธวงศ์: [
+        { label: 'จักรวรรดิ' },
+        { label: 'สัมพันธวงศ์' },
+        { label: 'ตลาดน้อย' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    พญาไท: [
+        { label: 'สามเสนใน' }
+    ].map(tambons => arrayConvert(tambons)),
+
+    ธนบุรี: [
+        { label: 'วัดกัลยาณ์' },
+        { label: 'หิรัญรูจี' },
+        { label: 'บางยี่เรือ' },
+        { label: 'บุคคโล' },
+        { label: 'ตลาดพลู' },
+        { label: 'ดาวคะนอง' },
+        { label: 'สำเหร่' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    บางกอกใหญ่: [
+        { label: 'วัดอรุณ' },
+        { label: 'วัดท่าพระ' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    ห้วยขวาง: [
+        { label: 'ห้วยขวาง' },
+        { label: 'บางกะปิ' },
+        { label: 'สามเสนนอก' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    คลองสาน: [
+        { label: 'สมเด็จเจ้าพระยา' },
+        { label: 'คลองสาน' },
+        { label: 'บางลำภูล่าง' },
+        { label: 'คลองต้นไทร' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    ตลิ่งชัน: [
+        { label: 'คลองชักพระ' },
+        { label: 'ตลิ่งชัน' },
+        { label: 'ฉิมพลี' },
+        { label: 'บางพรม' },
+        { label: 'บางระมาด' },
+        { label: 'บางเชือกหนัง' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    บางกอกน้อย: [
+        { label: 'ศิริราช' },
+        { label: 'บ้านช่างหล่อ' },
+        { label: 'บางขุนนนท์' },
+        { label: 'บางขุนศรี' },
+        { label: 'อรุณอมรินทร์' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    บางขุนเทียน: [
+        { label: 'ท่าข้าม' },
+        { label: 'แสมดำ' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    ภาษีเจริญ: [
+        { label: 'บางหว้า' },
+        { label: 'บางด้วน' },
+        { label: 'บางจาก' },
+        { label: 'บางแวก' },
+        { label: 'คลองขวาง' },
+        { label: 'ปากคลองภาษีเจริญ' },
+        { label: 'คูหาสวรรค์' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    หนองแขม: [
+        { label: 'หนองแขม' },
+        { label: 'หนองค้างพลู' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    ราษฎร์บูรณะ: [
+        { label: 'ราษฎร์บูรณะ' },
+        { label: 'บางปะกอก' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    บางพลัด: [
+        { label: 'บางพลัด' },
+        { label: 'บางอ้อ' },
+        { label: 'บางบำหรุ' },
+        { label: 'บางยี่ขัน' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    ดินแดง: [
+        { label: 'ดินแดง' }
+    ].map(tambons => arrayConvert(tambons)),
+
+    บึงกุ่ม: [
+        { label: 'คลองกุ่ม' }
+    ].map(tambons => arrayConvert(tambons)),
+
+    สาทร: [
+        { label: 'ทุ่งวัดดอน' },
+        { label: 'ยานนาวา' },
+        { label: 'ทุ่งมหาเมฆ' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    บางซื่อ: [
+        { label: 'บางซื่อ' }
+    ].map(tambons => arrayConvert(tambons)),
+
+    จตุจักร: [
+        { label: 'ลาดยาว' },
+        { label: 'เสนานิคม' },
+        { label: 'จันทรเกษม' },
+        { label: 'จอมพล' },
+        { label: 'จตุจักร' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    บางคอแหลม: [
+        { label: 'บางคอแหลม' },
+        { label: 'วัดพระยาไกร' },
+        { label: 'บางโคล่' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    ประเวศ: [
+        { label: 'ประเวศ' },
+        { label: 'หนองบอน' },
+        { label: 'ดอกไม้' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    คลองเตย: [
+        { label: 'คลองเตย' },
+        { label: 'คลองตัน' },
+        { label: 'พระโขนง' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    สวนหลวง: [
+        { label: 'สวนหลวง' }
+    ].map(tambons => arrayConvert(tambons)),
+
+    จอมทอง: [
+        { label: 'บางขุนเทียน' },
+        { label: 'บางค้อ' },
+        { label: 'บางมด' },
+        { label: 'จอมทอง' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    ดอนเมือง: [
+        { label: 'สีกัน' }
+    ].map(tambons => arrayConvert(tambons)),
+
+    ราชเทวี: [
+        { label: 'ทุ่งพญาไท' },
+        { label: 'ถนนพญาไท' },
+        { label: 'ถนนเพชรบุรี' },
+        { label: 'มักกะสัน' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    ลาดพร้าว: [
+        { label: 'ลาดพร้าว' },
+        { label: 'จรเข้บัว' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    วัฒนา: [
+        { label: 'คลองเตยเหนือ' },
+        { label: 'คลองตันเหนือ' },
+        { label: 'พระโขนงเหนือ' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    บางแค: [
+        { label: 'บางแค' },
+        { label: 'บางแคเหนือ' },
+        { label: 'บางไผ่' },
+        { label: 'หลักสอง' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    หลักสี่: [
+        { label: 'ทุ่งสองห้อง' },
+        { label: 'ตลาดบางเขน' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    สายไหม: [
+        { label: 'สายไหม' },
+        { label: 'ออเงิน' },
+        { label: 'คลองถนน' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    คันนายาว: [
+        { label: 'คันนายาว' }
+    ].map(tambons => arrayConvert(tambons)),
+
+    สะพานสูง: [
+        { label: 'สะพานสูง' }
+    ].map(tambons => arrayConvert(tambons)),
+
+    วังทองหลาง: [
+        { label: 'วังทองหลาง' }
+    ].map(tambons => arrayConvert(tambons)),
+
+    คลองสามวา: [
+        { label: 'สามวาตะวันตก' },
+        { label: 'สามวาตะวันออก' },
+        { label: 'บางชัน' },
+        { label: 'ทรายกองดิน' },
+        { label: 'ทรายกองดินใต้' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    บางนา: [
+        { label: 'บางนา' }
+    ].map(tambons => arrayConvert(tambons)),
+
+    ทวีวัฒนา: [
+        { label: 'ทวีวัฒนา' },
+        { label: 'ศาลาธรรมสพน์' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    ทุ่งครุ: [
+        { label: 'บางมด' },
+        { label: 'ทุ่งครุ' },
+    ].map(tambons => arrayConvert(tambons)),
+
+    บางบอน: [
+        { label: 'บางบอน' }
+    ].map(tambons => arrayConvert(tambons)),
+
+
 }
