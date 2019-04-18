@@ -9,13 +9,10 @@ import shortid from 'shortid'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import farm from '../components/Picture/Picfarm2.jpg'
 import './WheatherForecaseDisplay.css'
 import Sunny from './icons/sunny.png'
 import Hot from './icons/hot.png'
-import Cloudy from './icons/cloudy.png'
 import Snowflake from './icons/snowflake.png'
 import Snowflakes from './icons/snowflakes.png'
 import Storm_thunder from './icons/storm_thunder.png'
@@ -23,8 +20,6 @@ import Rain from './icons/rain.png'
 import Clouds from './icons/clouds.png'
 import Cloud from './icons/cloud.png'
 import Warning from './icons/warning.png'
-import Weather_bachgound from './icons/weather_background.png'
-import WeatherAffectCrops from './WeatherAffectCrops'
 
 const maxForecastDay = 126
 const rice = {
@@ -63,6 +58,8 @@ const cassava = {
     maxCanGrowth2: 39,
 }
 
+//ความชื้น 80-85 % จะช่วยให้อ้อย ยืดโตอย่างรวดเร็ว และ ความชื้นระดับปานกลาง 45-65 % ที่ควบคู่กับการจัดการน้ำเป็นอย่างดี ช่วยให้ อ้อยในระยะอ้อยเติบโตเต็ม (อ้อยสุก) สร้างน้ำตาลได้ดี
+//มันสำ ดี 50-60%
 class WeatherForecastDisplay extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -72,7 +69,7 @@ class WeatherForecastDisplay extends React.PureComponent {
             avgRain: '',
             isWeaterOpen: false,
             isFetchingWeather: false,
-            plantCondition: []
+            plantCondition: [],
         }
     }
     componentWillMount() {
@@ -90,6 +87,7 @@ class WeatherForecastDisplay extends React.PureComponent {
         //     }, (error) => {
         //         console.log(error)
         //     })
+
     }
     onFetchWheatherForecast = (url) => {
         const { forecastDays } = this.state
@@ -103,29 +101,33 @@ class WeatherForecastDisplay extends React.PureComponent {
         })
             .then(res => res.json())
             .then((result) => {
-                console.log(result)
                 const { forecasts, location } = result.WeatherForecasts[0]
                 let sumRain = 0
                 let forecastResult = forecasts.map(forecast => {
                     const key = shortid.generate()
                     const { tc_max, tc_min, rh, rain, cond } = forecast.data
+                    let tc_maxR = Math.round(tc_max)
+                    let tc_minR = Math.round(tc_min)
+                    let rhR = Math.round(rh)
                     sumRain += rain
                     return {
-                        tc_max: `สูงสุด ${Math.round(tc_max)} °C`,
-                        tc_min: `ต่ำสุด ${Math.round(tc_min)} °C`,
-                        rh: `ความชื้นสัมพัทธเฉลี่ย ${Math.round(rh)} %`,
-                        rain: `ปริมาณฝนรวม 24 ชม. ${Math.round(rain)} มิลลิเมตร`,
+                        tc_max: `สูงสุด ${tc_maxR} °C`,
+                        tc_min: `ต่ำสุด ${tc_minR} °C`,
+                        rh: `ความชื้นสัมพัทธเฉลี่ย ${rhR} %`,
+                        rain: `ปริมาณฝนรวม 24 ชม. ${rain} มิลลิเมตร`,
                         cond: this.onCompareCond(cond),
                         time: moment(forecast.time).format('dd Do MMM'),
                         key
                     }
                 })
-
-                this.onSetPlantConditionText(forecasts)
+                const { tc_max, tc_min } = forecasts[0].data
+                let tc_maxR = Math.round(tc_max)
+                let tc_minR = Math.round(tc_min)
+                this.onSetPlantConditionText(tc_maxR, tc_minR)
                 let avgRain = sumRain / forecasts.length
                 this.setState({
                     weatherForecast: forecastResult,
-                    avgRain: `ปริมาณน้ำฝนรวม ${forecastDays} วัน ${Math.round(sumRain)} มิลลิเมตร เฉลี่ย ${Math.round(avgRain)} มิลลิเมตรต่อวัน`,
+                    avgRain: `ปริมาณน้ำฝนรวม ${forecastDays} วัน ${sumRain.toFixed(2)} มิลลิเมตร เฉลี่ย ${avgRain.toFixed(2)} มิลลิเมตรต่อวัน`,
                     isFetchingWeather: false
                 })
             }, (error) => {
@@ -261,31 +263,29 @@ class WeatherForecastDisplay extends React.PureComponent {
             return 'อ้อยเจริญเติบโตได้ดี'
         }
     }
-    onSetPlantConditionText = (forecasts) => {
-        const { tc_max, tc_min } = forecasts[0].data
-        let plantCondition = []
-        let tmax = Math.round(tc_max)
-        let tmin = Math.round(tc_min)
-        plantCondition.push({
-            tc_max: `ที่อุณหภูมิ ${tmax} °C ${this.onCompareRiceCondition(tmax)}`,
-            tc_min: `ที่อุณหภูมิ ${tmin} ${this.onCompareRiceCondition(tmin)}`,
-            key: 'rice'
-        })
-        plantCondition.push({
-            tc_max: `ที่อุณหภูมิ ${tmax} °C ${this.onCompareCassavaCondition(tmax)}`,
-            tc_min: `ที่อุณหภูมิ ${tmin} °C ${this.onCompareCassavaCondition(tmin)}`,
-            key: 'cassava'
-        })
-        plantCondition.push({
-            tc_max: `ที่อุณหภูมิ ${tmax} °C ${this.onCompareSugarcaneCondition(tmax)}`,
-            tc_min: `ที่อุณหภูมิ ${tmin} °C ${this.onCompareSugarcaneCondition(tmin)}`,
-            key: 'sugarcane'
-        })
-        plantCondition.push({
-            tc_max: `ที่อุณหภูมิ ${tmax} °C ${this.onCompareCornCondition(tmax)}`,
-            tc_min: `ที่อุณหภูมิ ${tmin} °C ${this.onCompareCornCondition(tmin)}`,
-            key: 'corn'
-        })
+    onSetPlantConditionText = (tmax, tmin) => {
+        let plantCondition = [
+            {
+                temperature: `ที่อุณหภูมิ ${tmax} °C`,
+                condition: [
+                    `${this.onCompareRiceCondition(tmax)}`,
+                    `${this.onCompareCassavaCondition(tmax)}`,
+                    `${this.onCompareSugarcaneCondition(tmax)}`,
+                    `${this.onCompareCornCondition(tmax)}`,
+                ],
+                key: shortid.generate()
+            },
+            {
+                temperature: `ที่อุณหภูมิ ${tmin} °C`,
+                condition: [
+                    `${this.onCompareRiceCondition(tmin)}`,
+                    `${this.onCompareCassavaCondition(tmin)}`,
+                    `${this.onCompareSugarcaneCondition(tmin)}`,
+                    `${this.onCompareCornCondition(tmin)}`,
+                ],
+                key: shortid.generate()
+            },
+        ]
         this.setState({ plantCondition })
     }
     render() {
@@ -326,21 +326,23 @@ class WeatherForecastDisplay extends React.PureComponent {
                             isFetchingWeather ?
                                 'กำลังโหลด...' :
                                 <div>
-                                    {/* <WeatherAffectCrops
-                                        {...this.state}
-                                    /> */}
                                     {
-                                        plantCondition.map(plant => {
+                                        plantCondition.map(data => {
                                             return (
                                                 <div
-                                                    key={plant.key}
+                                                    key={data.key}
                                                 >
                                                     <div>
-                                                        {plant.tc_max}
+                                                        {data.temperature}
                                                     </div>
-                                                    <div>
-                                                        {plant.tc_min}
-                                                    </div>
+                                                    {data.condition.map((cond, index) => {
+                                                        return (
+                                                            <div key={index}>
+                                                                {cond}
+                                                            </div>
+                                                        )
+                                                    })}
+
                                                 </div>
                                             )
                                         })
