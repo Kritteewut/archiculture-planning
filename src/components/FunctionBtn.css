@@ -59,6 +59,42 @@ List of CSS Design Class
     opacity: 1; 
 }
 
+.FunctionDesktop {
+    position: absolute;
+
+    top: 30px;
+    left: 10px;
+    
+    color: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%;
+    box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.60);
+    opacity: 0.9; 
+}
+
+.FunctionDesktop:hover {
+    background: linear-gradient(45deg, rgb(208, 255, 146) 40%, rgb(255, 235, 146)) 30%;
+    box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.60);
+    opacity: 1; 
+}
+
+.FunctionGPS {
+    position: absolute;
+
+    top: 40px;
+    left: 10px;
+    
+    color: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 30%;
+    box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.60);
+    opacity: 0.9; 
+}
+
+.FunctionGPS:hover {
+    background: linear-gradient(45deg, rgb(208, 255, 146) 40%, rgb(255, 235, 146)) 30%;
+    box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.60);
+    opacity: 1; 
+}
+
 /* ------------------- Background Group ------------------ */
 
 /* ------------------- Image Group ------------------ */

@@ -25,6 +25,7 @@ import Cloud from './icons/cloud.png'
 import Warning from './icons/warning.png'
 import Weather_bachgound from './icons/weather_background.png'
 import WeatherAffectCrops from './WeatherAffectCrops'
+import './PermanentDrawer.css';
 
 const maxForecastDay = 126
 const rice = {
@@ -292,10 +293,12 @@ class WeatherForecastDisplay extends React.PureComponent {
         const { forecastDays, weatherForecast, avgRain, isWeaterOpen, isFetchingWeather, plantCondition } = this.state
         return (
 
-            <div >
-                <Button variant="outlined" color="primary" onClick={this.handleToggleWeaterDialog}>
+            <div>
+                
+                <Button variant="contained" className="buttonWeather" onClick={this.handleToggleWeaterDialog}>
                     พยากรณ์อากาศ
                 </Button>
+
                 <Dialog
                     open={isWeaterOpen}
                     onClose={this.handleToggleWeaterDialog}
@@ -380,7 +383,7 @@ class WeatherForecastDisplay extends React.PureComponent {
 
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.handleToggleWeaterDialog} color="primary" autoFocus>
+                        <Button variant="contained" className="buttonCloseWeather" onClick={this.handleToggleWeaterDialog} autoFocus>
                             ปิด
                         </Button>
                     </DialogActions>
