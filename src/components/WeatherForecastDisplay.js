@@ -24,37 +24,38 @@ import Warning from './icons/warning.png'
 const maxForecastDay = 126
 const rice = {
     minGoodGrowth: 25,
-    maxGoodGrowth: 33,
     minCanGrowth1: 34,
-    maxCanGrowth1: 40,
     minCanGrowth2: 15,
-    maxCanGrowth2: 24,
     minStopGrowth: 14,
+    maxGoodGrowth: 33,
+    maxCanGrowth1: 40,
+    maxCanGrowth2: 24,
     maxStopGrowth: 41,
 }
 const corn = {
     minStopGrowth: 20,
-    maxStopGrowth: 36,
     minGoodGrowth: 21,
-    maxGoodGrowth: 27,
     minCanGrowth: 28,
+    maxStopGrowth: 36,
+    maxGoodGrowth: 27,
     maxCanGrowth: 35,
+
 }
 const sugarcane = {
     minGoodGrowth: 18,
-    maxGoodGrowth: 35,
     minStopGrowth: 17,
+    maxGoodGrowth: 35,
     maxStopGrowth: 36,
 }
 //มันสำปะหลัง
 const cassava = {
     minStopGrowth: 15,
-    maxStopGrowth: 40,
     minGoodGrowth: 25,
-    maxGoodGrowth: 29,
     minCanGrowth1: 16,
-    maxCanGrowth1: 24,
     minCanGrowth2: 30,
+    maxStopGrowth: 40,
+    maxGoodGrowth: 29,
+    maxCanGrowth1: 24,
     maxCanGrowth2: 39,
 }
 
@@ -111,8 +112,8 @@ class WeatherForecastDisplay extends React.PureComponent {
                     let rhR = Math.round(rh)
                     sumRain += rain
                     return {
-                        tc_max: `สูงสุด ${tc_maxR} °C`,
-                        tc_min: `ต่ำสุด ${tc_minR} °C`,
+                        tc_max: `${tc_maxR}`,
+                        tc_min: `${tc_minR}`,
                         rh: `ความชื้นสัมพัทธเฉลี่ย ${rhR} %`,
                         rain: `ปริมาณฝนรวม 24 ชม. ${rain} มิลลิเมตร`,
                         cond: this.onCompareCond(cond),
@@ -121,8 +122,8 @@ class WeatherForecastDisplay extends React.PureComponent {
                     }
                 })
                 const { tc_max, tc_min } = forecasts[0].data
-                let tc_maxR = Math.round(tc_max)
-                let tc_minR = Math.round(tc_min)
+                let tc_maxR = tc_max
+                let tc_minR = tc_min
                 this.onSetPlantConditionText(tc_maxR, tc_minR)
                 let avgRain = sumRain / forecasts.length
                 this.setState({
@@ -216,72 +217,74 @@ class WeatherForecastDisplay extends React.PureComponent {
         const { minStopGrowth, maxStopGrowth, minGoodGrowth,
             maxGoodGrowth, minCanGrowth1, maxCanGrowth1,
             minCanGrowth2, maxCanGrowth2 } = rice
-        if (temperature < minStopGrowth || temperature > maxStopGrowth) {
-            return 'ข้าวอาจหยุดการเจริญเติบโต'
+        if (temperature <= minStopGrowth || temperature >= maxStopGrowth) {
+            return 'ข้าวอาจเจริญเติบโตได้น้อยลง'
         }
         if (inRange(temperature, minGoodGrowth, maxGoodGrowth)) {
             return 'ข้าวเจริญเติบโตได้ดี'
         }
         if (inRange(temperature, minCanGrowth1, maxCanGrowth1) || inRange(temperature, minCanGrowth2, maxCanGrowth2)) {
-            return 'ข้าวสามารถเติบโตได้'
+            return 'ข้าวเจริญเติบโตได้'
         }
     }
     onCompareCassavaCondition = (temperature) => {
         const { minStopGrowth, maxStopGrowth, minGoodGrowth,
             maxGoodGrowth, minCanGrowth1, maxCanGrowth1,
             minCanGrowth2, maxCanGrowth2 } = cassava
-        if (temperature < minStopGrowth || temperature > maxStopGrowth) {
-            return 'มันสำปะหลังอาจหยุดการเจริญเติบโต'
+        if (temperature <= minStopGrowth || temperature >= maxStopGrowth) {
+            return 'มันสำปะหลังอาจเจริญเติบโตได้น้อยลง'
         }
         if (inRange(temperature, minGoodGrowth, maxGoodGrowth)) {
             return 'มันสำปะหลังเจริญเติบโตได้ดี'
         }
         if (inRange(temperature, minCanGrowth1, maxCanGrowth1) || inRange(temperature, minCanGrowth2, maxCanGrowth2)) {
-            return 'มันสำปะหลังสามารถเติบโตได้'
+            return 'มันสำปะหลังเจริญถเติบโตได้'
         }
     }
     onCompareCornCondition = (temperature) => {
         const { minStopGrowth, maxStopGrowth, minGoodGrowth,
             maxGoodGrowth, minCanGrowth, maxCanGrowth, } = corn
 
-        if (temperature < minStopGrowth || temperature > maxStopGrowth) {
-            return 'ข้าวโพดอาจหยุดการเจริญเติบโต'
+        if (temperature <= minStopGrowth || temperature >= maxStopGrowth) {
+            return 'ข้าวโพดอาจเจริญเติบโตได้น้อยลง'
         }
         if (inRange(temperature, minGoodGrowth, maxGoodGrowth)) {
-            return 'ข้าวโพดหลังเจริญเติบโตได้ดี'
+            return 'ข้าวโพดเจริญเติบโตได้ดี'
         }
         if (inRange(temperature, minCanGrowth, maxCanGrowth)) {
-            return 'ข้าวโพดหลังสามารถเติบโตได้'
+            return 'ข้าวโพดเจริญเติบโตได้'
         }
     }
     onCompareSugarcaneCondition = (temperature) => {
         const { minStopGrowth, maxStopGrowth, minGoodGrowth, maxGoodGrowth } = sugarcane
-        if (temperature < minStopGrowth || temperature > maxStopGrowth) {
-            return 'อ้อยอาจหยุดการเจริญเติบโต'
+        if (temperature <= minStopGrowth || temperature >= maxStopGrowth) {
+            return 'อ้อยอาจเจริญเติบโตได้น้อยลง'
         }
         if (inRange(temperature, minGoodGrowth, maxGoodGrowth)) {
             return 'อ้อยเจริญเติบโตได้ดี'
         }
     }
     onSetPlantConditionText = (tmax, tmin) => {
+        let tmaxR = Math.round(tmax)
+        let tminR = Math.round(tmin)
         let plantCondition = [
             {
-                temperature: `ที่อุณหภูมิ ${tmax} °C`,
+                temperature: `ที่อุณหภูมิ ${tmaxR} °C`,
                 condition: [
-                    `${this.onCompareRiceCondition(tmax)}`,
-                    `${this.onCompareCassavaCondition(tmax)}`,
-                    `${this.onCompareSugarcaneCondition(tmax)}`,
-                    `${this.onCompareCornCondition(tmax)}`,
+                    `${this.onCompareRiceCondition(tmaxR)}`,
+                    `${this.onCompareCassavaCondition(tmaxR)}`,
+                    `${this.onCompareSugarcaneCondition(tmaxR)}`,
+                    `${this.onCompareCornCondition(tmaxR)}`,
                 ],
                 key: shortid.generate()
             },
             {
-                temperature: `ที่อุณหภูมิ ${tmin} °C`,
+                temperature: `ที่อุณหภูมิ ${tminR} °C`,
                 condition: [
-                    `${this.onCompareRiceCondition(tmin)}`,
-                    `${this.onCompareCassavaCondition(tmin)}`,
-                    `${this.onCompareSugarcaneCondition(tmin)}`,
-                    `${this.onCompareCornCondition(tmin)}`,
+                    `${this.onCompareRiceCondition(tminR)}`,
+                    `${this.onCompareCassavaCondition(tminR)}`,
+                    `${this.onCompareSugarcaneCondition(tminR)}`,
+                    `${this.onCompareCornCondition(tminR)}`,
                 ],
                 key: shortid.generate()
             },
@@ -328,14 +331,15 @@ class WeatherForecastDisplay extends React.PureComponent {
                                 <div>
                                     {
                                         plantCondition.map(data => {
+                                            const { key, temperature, condition } = data
                                             return (
                                                 <div
-                                                    key={data.key}
+                                                    key={key}
                                                 >
                                                     <div>
-                                                        {data.temperature}
+                                                        {temperature}
                                                     </div>
-                                                    {data.condition.map((cond, index) => {
+                                                    {condition.map((cond, index) => {
                                                         return (
                                                             <div key={index}>
                                                                 {cond}
@@ -363,12 +367,13 @@ class WeatherForecastDisplay extends React.PureComponent {
                                                             padding: '10px',
                                                             textAlign: 'center',
                                                         }}
+                                                        onClick={() => this.onSetPlantConditionText(tc_max, tc_min)}
                                                     >
                                                         <div>{time}</div>
                                                         <img src={condPic} />
                                                         <div>{condText}</div>
-                                                        <div>{tc_max}</div>
-                                                        <div>{tc_min}</div>
+                                                        <div>สูงสุด {tc_max} °C</div>
+                                                        <div>ต่ำสุด {tc_min} °C</div>
                                                         <div>{rain}</div>
                                                         <div>{rh}</div>
 

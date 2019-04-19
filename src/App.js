@@ -129,7 +129,7 @@ class ResponsiveDrawer extends React.Component {
             if (user) { self.onSetUser(user) }
             self.setState({ isWaitingForUserResult: false })
         })
-       
+
     }
     componentDidMount() {
         // this.onAddBeforeUnloadListener()
@@ -175,7 +175,7 @@ class ResponsiveDrawer extends React.Component {
             const currentOverlay = overlayObject[drawingIndex]
             const coordsLength = currentOverlay.overlayCoords.length
             const overlayType = currentOverlay.overlayType
-            if ((overlayType === 'polygon' && coordsLength < 3) || (overlayType === 'polyline' && coordsLength < 2)) {
+            if ((overlayType === 'polygon' && coordsLength <= 2) || (overlayType === 'polyline' && coordsLength <= 1)) {
                 let spliceOverlay = update(overlayObject, { $splice: [[drawingIndex, 1]] })
                 let spliceDetail = update(distanceDetail, { $splice: [[detailIndex, 1]] })
                 if (overlayType === 'polygon') {
@@ -1108,7 +1108,6 @@ class ResponsiveDrawer extends React.Component {
                 bounds.extend(new window.google.maps.LatLng(coords))
             })
         })
-        console.log(bounds.getCenter())
         window.map.fitBounds(bounds)
     }
     onChangePolyStrokeColor = (color) => {
@@ -1531,6 +1530,7 @@ class ResponsiveDrawer extends React.Component {
         this.onAddRealTimeTaskUpdateListener()
     }
     onAddRealTimeOverlayUpdateListener = () => {
+        this.onRemoveRealTimeOverlay()
         var self = this
         this.overlayRealTimeUpdateRef = overlayRef.where("planId", "==", this.state.selectedPlan.planId)
             .onSnapshot(function (snapshot) {
@@ -1614,6 +1614,7 @@ class ResponsiveDrawer extends React.Component {
             });
     }
     onAddRealTimeTaskUpdateListener = () => {
+        this.onRemoveRealTimeOverlayTask()
         var self = this
         this.overlayTaskRealTimeUpdateRef = taskRef.where("planId", "==", this.state.selectedPlan.planId)
             .onSnapshot(function (snapshot) {
@@ -1830,8 +1831,8 @@ class ResponsiveDrawer extends React.Component {
     }
     onRemoveRealTimeUpdateListener = () => {
         this.setState({ isFirstOverlayQuery: true })
-        this.overlayRealTimeUpdateRef()
-        this.overlayTaskRealTimeUpdateRef()
+        this.onRemoveRealTimeOverlay()
+        this.onRemoveRealTimeOverlayTask()
         // ...
         // Stop listening to changes
     }
@@ -1840,6 +1841,16 @@ class ResponsiveDrawer extends React.Component {
         if (this.planMemberRealtimeUpdateRef) {
             this.planMemberRealtimeUpdateRef()
             // Stop listening to changes
+        }
+    }
+    onRemoveRealTimeOverlay = () => {
+        if (this.overlayRealTimeUpdateRef) {
+            this.overlayRealTimeUpdateRef()
+        }
+    }
+    onRemoveRealTimeOverlayTask = () => {
+        if (this.overlayTaskRealTimeUpdateRef) {
+            this.overlayTaskRealTimeUpdateRef()
         }
     }
     onDeletePlanMember = (member) => {
