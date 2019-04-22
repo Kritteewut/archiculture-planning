@@ -6,7 +6,6 @@ import OpenSide from '../components/openSideBtn';
 import Button from '@material-ui/core/Button'
 
 //Icon Import
-import IconForward from '@material-ui/icons/ArrowBack';
 import IconComplete from '@material-ui/icons/Check';
 
 // CSS Import
@@ -121,6 +120,7 @@ class ColorPicker extends React.PureComponent {
                     </div>
 
                     <Button
+                       
                         variant="fab"
                         color="default"
                         className="buttonCompleteInSlide"

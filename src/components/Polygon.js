@@ -1,5 +1,5 @@
 import React from 'react';
-
+//import MVCArrayBinder from './MVCArrayBinder'
 
 class Polygon extends React.PureComponent {
     constructor(props) {
@@ -39,3 +39,7 @@ class Polygon extends React.PureComponent {
     }
 }
 export default Polygon;
+
+function MVCArrayBinder(mvcArray) {
+    this.array_ = mvcArray;
+}

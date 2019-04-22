@@ -114,10 +114,13 @@ class SearchBox extends React.PureComponent {
         margin="normal"
         InputProps={{
           endAdornment: (
-            <InputAdornment position="end" className="Setsearchcancel">
+            <InputAdornment
+              position="end"
+              //className="Setsearchcancel"
+              >
 
               <IconButton
-                aria-label="Toggle password visibility"
+                aria-label="Clear search place text"
                 onClick={this.onClearPlaceMarker}
 
               >

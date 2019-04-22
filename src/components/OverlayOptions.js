@@ -123,6 +123,7 @@ class OverlayOptions extends React.PureComponent {
     render() {
         return (
             <div>
+                
                 {
                     this.props.selectedOverlay ?
                         this.drawOverlayDetail()

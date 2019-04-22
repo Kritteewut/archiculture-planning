@@ -27,6 +27,7 @@ import MergeOverlay from './MergeOverlay';
 import AddPlan from './AddPlan';
 import OpenSide from '../components/openSideBtn'
 import HowTo from './HowTo'
+import SearchBox from './SearchBox'
 
 // Icon Group
 import Pic from './Picture/User.png';
@@ -429,13 +430,6 @@ class PermanentDrawer extends React.PureComponent {
     render() {
         const { isWaitingForUserResult } = this.props;
         return (
-            // <Drawer
-            //     variant="persistent"
-            //     anchor='left'
-            //     open={this.props.openSide}
-            //     classes={{ paper: "drawerPaper", }}
-            // //className={classes.drawerPaper}
-            // >
             <div
                 style={{
                     width: '100%',
