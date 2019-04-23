@@ -17,10 +17,10 @@ import icon_point from './components/icons/icon_point.png';
 import update from 'immutability-helper';
 import shortid from 'shortid'
 import { auth, userRef } from './config/firebase'
+import SearchBox from './components/SearchBox';
 import Marker from './components/Marker';
 import Polygon from './components/Polygon';
 import Polyline from './components/Polyline';
-import SearchBox from './components/SearchBox';
 import OpenSide from './components/openSideBtn';
 import ExampleLine from './components/ExampleLine';
 import FunctionBtn from './components/FunctionBtn'

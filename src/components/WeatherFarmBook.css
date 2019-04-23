@@ -1,0 +1,39 @@
+
+.buttonHowtoUse {
+    width: 300px;
+    height: 50px;
+    top: 10px;
+    left: 10px;
+    background: linear-gradient(40deg, rgb(171, 255, 74) 20%, rgb(255, 192, 76)) 20%;
+    box-shadow: 0px 0px 0px 3px rgba(183, 255, 89, 0.6);
+    opacity: 0.7; 
+}
+
+.buttonHowtoUse:hover {
+    background: linear-gradient(20deg, rgb(255, 215, 105) 40%, rgb(208, 255, 132)) 30%;
+    box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.6);
+    opacity: 1; 
+}
+
+.paperHowto {
+    overflow: auto;
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    margin: auto;
+    top: 5%;
+    left: 5%;
+    background: linear-gradient(20deg, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.9)) 60%;
+    box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.30);
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+.picHowto {
+    position: initial;
+    width: 100%;
+    margin: auto;
+}

@@ -312,7 +312,7 @@ class WeatherForecastDisplay extends React.PureComponent {
                 >
                     <DialogTitle>{"พยากรณ์อากาศ"}</DialogTitle>
                     <DialogContent >
-                        <div
+                        <div 
                             style={{
                                 //  alignItems: 'center',
                                 // display: 'flex',
@@ -348,10 +348,10 @@ class WeatherForecastDisplay extends React.PureComponent {
                                             plantCondition.map(data => {
                                                 const { key, temperature, condition } = data
                                                 return (
-                                                    <div
+                                                    <div className="FrameWeatherData"
                                                         key={key}
                                                     >
-                                                        <div>
+                                                        <div >
                                                             {temperature}
                                                         </div>
                                                         {condition.map((cond, index) => {
@@ -366,7 +366,9 @@ class WeatherForecastDisplay extends React.PureComponent {
                                                 )
                                             })
                                         }
+                                        <div className="FrameWeatherRain">
                                         {avgRain}
+                                        </div>
                                         <div>
                                             {
                                                 weatherForecast.map(forecast => {
@@ -375,12 +377,7 @@ class WeatherForecastDisplay extends React.PureComponent {
                                                     return (
                                                         <div
                                                             key={key}
-                                                            style={{
-                                                                float: 'left',
-                                                                padding: '3px',
-                                                                borderRadius: '25px',
-                                                                background: '#73AD21',
-                                                            }}
+                                                            className="FrameCardWeather"
                                                             onClick={() => this.onSetPlantConditionText(tc_max, tc_min)}
                                                         >
                                                             <div>{time}</div>

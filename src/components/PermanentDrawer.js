@@ -25,9 +25,10 @@ import EditPlan from './EditPlan';
 import DeletePlan from './DeletePlan';
 import MergeOverlay from './MergeOverlay';
 import AddPlan from './AddPlan';
-import OpenSide from '../components/openSideBtn'
-import HowTo from './HowTo'
-import SearchBox from './SearchBox'
+import OpenSide from '../components/openSideBtn';
+import HowTo from './HowTo';
+import WeatherFarmBook from './WeatherFarmBook';
+import SearchBox from './SearchBox';
 
 // Icon Group
 import Pic from './Picture/User.png';
@@ -218,6 +219,7 @@ class PermanentDrawer extends React.PureComponent {
                         </Button>
                          */}
                             <HowTo />
+                            <WeatherFarmBook />
                         </div>
                         <div
                         //className="container"
