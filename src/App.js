@@ -20,7 +20,7 @@ import { auth, userRef } from './config/firebase'
 import Marker from './components/Marker';
 import Polygon from './components/Polygon';
 import Polyline from './components/Polyline';
-import SearchBox from './components/searchBox';
+import SearchBox from './components/SearchBox';
 import OpenSide from './components/openSideBtn';
 import ExampleLine from './components/ExampleLine';
 import FunctionBtn from './components/FunctionBtn'

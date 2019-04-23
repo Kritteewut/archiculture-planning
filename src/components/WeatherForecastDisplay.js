@@ -378,7 +378,8 @@ class WeatherForecastDisplay extends React.PureComponent {
                                                             style={{
                                                                 float: 'left',
                                                                 padding: '3px',
-                                                                textAlign: 'center',
+                                                                borderRadius: '25px',
+                                                                background: '#73AD21',
                                                             }}
                                                             onClick={() => this.onSetPlantConditionText(tc_max, tc_min)}
                                                         >
