@@ -3,7 +3,7 @@ import React from 'react';
 //Material Import
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
-import IconBook from '@material-ui/icons/Book';
+import IconBook from '@material-ui/icons/ImportContacts';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -52,7 +52,7 @@ class HowTo extends React.PureComponent {
                 <Button
                     variant="contained"
                     color="default"
-                    className="buttonHowtoUse"
+                    className="buttonFarmBook"
                     onClick={this.onToggleHowToOpen}
                 >
 
@@ -72,14 +72,14 @@ class HowTo extends React.PureComponent {
                     open={this.state.isHowToOpen}
                     onClose={this.onToggleHowToOpen}
                 >
-                    <div className="paperHowto">
+                    <div className="paperFarmBook">
                         {
                             howToPic.map((pic, key) => {
                                 return (
                                     <ListItem
                                         key={key}
                                     >
-                                        <img src={pic} className="picHowto"/>
+                                        <img src={pic} className="picFarmBook"/>
                                     </ListItem>
                                 )
                             })

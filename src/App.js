@@ -141,7 +141,7 @@ class ResponsiveDrawer extends React.Component {
             // Cancel the event as stated by the standard.
             event.preventDefault();
             // Chrome requires returnValue to be set.
-            //event.returnValue = 'เซฟก่อนไหมพ่อหนุ่ม'
+            //event.returnValue = 'เซฟก่อนไหมพ่อหนุ่ม'.
         });
     }
     onDrawingBtnTypeChange = (type) => {
