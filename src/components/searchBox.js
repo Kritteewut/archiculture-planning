@@ -116,7 +116,7 @@ class SearchBox extends React.PureComponent {
           endAdornment: (
             <InputAdornment
               position="end"
-              //className="Setsearchcancel"
+              className="Setsearchcancel"
               >
 
               <IconButton
