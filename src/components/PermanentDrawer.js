@@ -32,20 +32,14 @@ import SearchBox from './SearchBox';
 
 // Icon Group
 import Pic from './Picture/User.png';
-import IconBook from '@material-ui/icons/Book';
 import IconLogout from '@material-ui/icons/PhonelinkErase';
-import IconForward from '@material-ui/icons/ArrowBack';
 import ViewOnly from '@material-ui/icons/Visibility'
 import OpenWith from '@material-ui/icons/LocationOn';
 import CoppiedIcon from '@material-ui/icons/LibraryBooks'
 
-//Picture Group
-import Picbackground from './Picture/Profile Background.jpg';
-
 // CSS Import
 import './Design.css';
 import './PermanentDrawer.css';
-import WeatherForecast from './WeatherForecastPlace';
 import WeatherForecastDisplay from './WeatherForecastDisplay';
 
 class PermanentDrawer extends React.PureComponent {
@@ -220,6 +214,7 @@ class PermanentDrawer extends React.PureComponent {
                          */}
                             <HowTo />
                             <WeatherFarmBook />
+                            <WeatherForecastDisplay />
                         </div>
                         <div
                         //className="container"
@@ -376,7 +371,7 @@ class PermanentDrawer extends React.PureComponent {
                             handleAcceptToDeletePlan={this.handleAcceptToDeletePlan}
                         />
                     </div>
-                    <WeatherForecastDisplay />
+                  
                 </div>
 
                 :

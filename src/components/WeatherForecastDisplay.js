@@ -21,6 +21,8 @@ import Clouds from './icons/clouds.png'
 import Cloud from './icons/cloud.png'
 import Warning from './icons/warning.png'
 import './PermanentDrawer.css';
+import './Design.css';
+import IconWeather from '@material-ui/icons/WbSunny';
 
 const maxForecastDay = 126
 const rice = {
@@ -300,7 +302,14 @@ class WeatherForecastDisplay extends React.PureComponent {
             <div>
 
                 <Button variant="contained" className="buttonWeather" onClick={this.handleToggleWeaterDialog}>
-                    พยากรณ์อากาศ
+                    <div className="leftIcon ButtonHowtoIconColor">
+                        <IconWeather/>
+                    </div>
+
+
+                    <div className="TextLargeSize">
+                        พยากรณ์อากาศ
+                    </div>
                 </Button>
 
                 <Dialog
@@ -312,7 +321,7 @@ class WeatherForecastDisplay extends React.PureComponent {
                 >
                     <DialogTitle>{"พยากรณ์อากาศ"}</DialogTitle>
                     <DialogContent >
-                        <div 
+                        <div
                             style={{
                                 //  alignItems: 'center',
                                 // display: 'flex',
@@ -367,7 +376,7 @@ class WeatherForecastDisplay extends React.PureComponent {
                                             })
                                         }
                                         <div className="FrameWeatherRain">
-                                        {avgRain}
+                                            {avgRain}
                                         </div>
                                         <div>
                                             {
