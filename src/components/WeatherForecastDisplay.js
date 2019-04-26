@@ -23,6 +23,7 @@ import Warning from './icons/warning.png'
 import './PermanentDrawer.css';
 import './Design.css';
 import IconWeather from '@material-ui/icons/WbSunny';
+import WeatherForecastInterface from './WeatherForecastInterface';
 
 const maxForecastDay = 126
 const rice = {
@@ -76,71 +77,42 @@ class WeatherForecastDisplay extends React.PureComponent {
             plantCondition: [],
         }
     }
-    componentWillMount() {
-        // let url = 'https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly'
-        // fetch(url, {
-        //     method: "get",
-        //     headers: {
-        //         authorization: TMDAPIKey,
-        //         accept: "application/json",
-        //     },
-        // })
-        //     .then(res => res.json())
-        //     .then((result) => {
-        //         console.log(result)
-        //     }, (error) => {
-        //         console.log(error)
-        //     })
-
-    }
-    onFetchWheatherForecast = (url) => {
-        const { forecastDays } = this.state
-        this.onSetFetchingWeather()
-        fetch(url, {
-            method: "get",
-            headers: {
-                authorization: TMDAPIKey,
-                accept: "application/json",
-            },
-        })
-            .then(res => res.json())
-            .then((result) => {
-                const { forecasts, location } = result.WeatherForecasts[0]
-                let sumRain = 0
-                let forecastResult = forecasts.map(forecast => {
-                    const key = shortid.generate()
-                    const { tc_max, tc_min, rh, rain, cond } = forecast.data
-                    let tc_maxR = Math.round(tc_max)
-                    let tc_minR = Math.round(tc_min)
-                    let rhR = Math.round(rh)
-                    sumRain += rain
-                    return {
-                        tc_max: `${tc_maxR}`,
-                        tc_min: `${tc_minR}`,
-                        rh: `ความชื้นสัมพัทธเฉลี่ย ${rhR}%`,
-                        rain: `ปริมาณฝน ${rain} มม.`,
-                        cond: this.onCompareCond(cond),
-                        time: moment(forecast.time).format('dd Do MMM'),
-                        key
-                    }
-                })
-                const { tc_max, tc_min } = forecasts[0].data
-                let tc_maxR = tc_max
-                let tc_minR = tc_min
-                this.onSetPlantConditionText(tc_maxR, tc_minR)
-                let avgRain = sumRain / forecasts.length
-                this.setState({
-                    weatherForecast: forecastResult,
-                    avgRain: `ปริมาณน้ำฝนรวม ${forecastDays} วัน ${sumRain.toFixed(2)} มิลลิเมตร เฉลี่ย ${avgRain.toFixed(2)} มิลลิเมตรต่อวัน`,
-                    isFetchingWeather: false
-                })
-            }, (error) => {
-                console.log(error)
-                alert('เกิดข้อผิดพลาดกรุณาลองใหม่')
+    onGetWeatherForecastResult = (result, forecastDays) => {
+        if (result) {
+            const { forecasts } = result.WeatherForecasts[0]
+            let sumRain = 0
+            let forecastResult = forecasts.map(forecast => {
+                const key = shortid.generate()
+                const { tc_max, tc_min, rh, rain, cond } = forecast.data
+                let tc_maxR = Math.round(tc_max)
+                let tc_minR = Math.round(tc_min)
+                let rhR = Math.round(rh)
+                sumRain += rain
+                return {
+                    tc_max: `${tc_maxR}`,
+                    tc_min: `${tc_minR}`,
+                    rh: `ความชื้นสัมพัทธเฉลี่ย ${rhR}%`,
+                    rain: `ปริมาณฝน ${rain} มม.`,
+                    cond: this.onCompareCond(cond),
+                    time: moment(forecast.time).format('dd Do MMM'),
+                    key
+                }
             })
-    }
-    onSetFetchingWeather = () => {
-        this.setState({ isFetchingWeather: true })
+            const { tc_max, tc_min } = forecasts[0].data
+            let tc_maxR = tc_max
+            let tc_minR = tc_min
+            this.onSetPlantConditionText(tc_maxR, tc_minR)
+            let avgRain = sumRain / forecasts.length
+            this.setState({
+                weatherForecast: forecastResult,
+                avgRain: `ปริมาณน้ำฝนรวม ${forecastDays} วัน ${sumRain.toFixed(2)} มิลลิเมตร เฉลี่ย ${avgRain.toFixed(2)} มิลลิเมตรต่อวัน`,
+                isFetchingWeather: false
+            })
+        } else {
+
+        }
+
+
     }
     onCompareCond = (cond) => {
         let condText, condPic
@@ -199,19 +171,6 @@ class WeatherForecastDisplay extends React.PureComponent {
                 break;
         }
         return { condPic, condText }
-    }
-    handleForecastDayChange = (event) => {
-        const day = event.target.value
-        if (isNaN(day) || day === '' || day < 1) {
-            return
-        }
-        let setDay
-        if (day > maxForecastDay) {
-            setDay = maxForecastDay
-        } else {
-            setDay = day
-        }
-        this.setState({ forecastDays: setDay })
     }
     handleToggleWeaterDialog = () => {
         const { isWeaterOpen } = this.state
@@ -295,6 +254,12 @@ class WeatherForecastDisplay extends React.PureComponent {
         ]
         this.setState({ plantCondition })
     }
+    onSetFetchingWeahter = () => {
+        this.setState({ isFetchingWeather: true })
+    }
+    onSetFinishFetchWeather = () => {
+        this.setState({ isFetchingWeather: false })
+    }
     render() {
         const { forecastDays, weatherForecast, avgRain, isWeaterOpen, isFetchingWeather, plantCondition } = this.state
         return (
@@ -303,7 +268,7 @@ class WeatherForecastDisplay extends React.PureComponent {
 
                 <Button variant="contained" className="buttonWeather" onClick={this.handleToggleWeaterDialog}>
                     <div className="leftIcon ButtonHowtoIconColor">
-                        <IconWeather/>
+                        <IconWeather />
                     </div>
 
 
@@ -321,34 +286,13 @@ class WeatherForecastDisplay extends React.PureComponent {
                 >
                     <DialogTitle>{"พยากรณ์อากาศ"}</DialogTitle>
                     <DialogContent >
-                        <div
-                            style={{
-                                //  alignItems: 'center',
-                                // display: 'flex',
-                                // alignContent: 'center',
-                                textAlign: 'center,'
-                            }}
-                        >
-                            <TextField
-                                id="standard-number"
-                                label="จำนวนวันพยากรณ์"
-                                value={forecastDays}
-                                onChange={this.handleForecastDayChange}
-                                type="number"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                margin="normal"
+                        <div>
+                            <WeatherForecastInterface
+                                onGetWeatherForecastResult={this.onGetWeatherForecastResult}
+                                onSetFetchingWeahter={this.onSetFetchingWeahter}
+                                onSetFinishFetchWeather={this.onSetFinishFetchWeather}
+                                isFetchingWeather={this.state.isFetchingWeather}
                             />
-                            <WheatherForecastLatLng
-                                {...this.state}
-                                onFetchWheatherForecast={this.onFetchWheatherForecast}
-                            />
-                            <WheatherForecastPlace
-                                {...this.state}
-                                onFetchWheatherForecast={this.onFetchWheatherForecast}
-                            />
-
                             {
                                 isFetchingWeather ?
                                     'กำลังโหลด...' :
