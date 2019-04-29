@@ -43,7 +43,7 @@ class WeatherForecastInterface extends React.PureComponent {
         )
     }
     onFetchWheatherForecast = (url) => {
-        this.props.onSetFetchingWeahter()
+        this.props.onSetFetchingWeather()
         fetch(url, {
             method: "get",
             headers: {
@@ -75,8 +75,7 @@ class WeatherForecastInterface extends React.PureComponent {
 }
 WeatherForecastInterface.propTypes = {
     onGetWeatherForecastResult: PropTypes.func.isRequired,
-    onSetFetchingWeahter: PropTypes.func.isRequired,
-    onSetFinishFetchWeather: PropTypes.func.isRequired,
+    onSetFetchingWeather: PropTypes.func.isRequired,
     isFetchingWeather: PropTypes.bool.isRequired,
 };
 

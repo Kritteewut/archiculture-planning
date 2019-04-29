@@ -418,6 +418,7 @@ class PermanentDrawer extends React.PureComponent {
                         overlAllFiltertask={this.props.overlAllFiltertask}
                         onAddListenerGrabBtn={this.props.onAddListenerGrabBtn}
                         handleDrawerToggle={this.props.handleDrawerToggle}
+                        onEditOverlayPlantDate={this.props.onEditOverlayPlantDate}
                     />
                 )
             default: return;

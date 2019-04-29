@@ -1,9 +1,5 @@
 import React from 'react'
-import WheatherForecastLatLng from './WeatherForecastLatLng'
-import WheatherForecastPlace from './WeatherForecastPlace'
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import { TMDAPIKey } from '../config/TMD'
 import moment from 'moment';
 import shortid from 'shortid'
 import Dialog from '@material-ui/core/Dialog';
@@ -254,14 +250,14 @@ class WeatherForecastDisplay extends React.PureComponent {
         ]
         this.setState({ plantCondition })
     }
-    onSetFetchingWeahter = () => {
+    onSetFetchingWeather = () => {
         this.setState({ isFetchingWeather: true })
     }
     onSetFinishFetchWeather = () => {
         this.setState({ isFetchingWeather: false })
     }
     render() {
-        const { forecastDays, weatherForecast, avgRain, isWeaterOpen, isFetchingWeather, plantCondition } = this.state
+        const {  weatherForecast, avgRain, isWeaterOpen, isFetchingWeather, plantCondition } = this.state
         return (
 
             <div>
@@ -289,8 +285,7 @@ class WeatherForecastDisplay extends React.PureComponent {
                         <div>
                             <WeatherForecastInterface
                                 onGetWeatherForecastResult={this.onGetWeatherForecastResult}
-                                onSetFetchingWeahter={this.onSetFetchingWeahter}
-                                onSetFinishFetchWeather={this.onSetFinishFetchWeather}
+                                onSetFetchingWeather={this.onSetFetchingWeather}
                                 isFetchingWeather={this.state.isFetchingWeather}
                             />
                             {
@@ -334,7 +329,7 @@ class WeatherForecastDisplay extends React.PureComponent {
                                                             onClick={() => this.onSetPlantConditionText(tc_max, tc_min)}
                                                         >
                                                             <div>{time}</div>
-                                                            <img src={condPic} alt='condition image' />
+                                                            <img src={condPic} alt='condition' />
                                                             <div>{condText}</div>
                                                             <div>สูงสุด {tc_max} °C</div>
                                                             <div>ต่ำสุด {tc_min} °C</div>

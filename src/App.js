@@ -129,7 +129,6 @@ class ResponsiveDrawer extends React.Component {
             if (user) { self.onSetUser(user) }
             self.setState({ isWaitingForUserResult: false })
         })
-
     }
     componentDidMount() {
         // this.onAddBeforeUnloadListener()
@@ -527,17 +526,21 @@ class ResponsiveDrawer extends React.Component {
     }
     onResetSelectedOverlay = () => {
         this.onResetDetail()
-        const { selectedOverlay } = this.state
-        if (selectedOverlay) {
-            if (selectedOverlay.overlayType === 'polygon' || selectedOverlay.overlayType === 'polyline') {
-                selectedOverlay.setOptions({ editable: false, })
+        this.setState((state) => {
+            const { selectedOverlay } = state
+            if (selectedOverlay) {
+                if (selectedOverlay.overlayType === 'polygon' || selectedOverlay.overlayType === 'polyline') {
+                    selectedOverlay.setOptions({ editable: false, })
+                }
+                if (selectedOverlay.overlayType === 'marker') {
+                    //
+                    selectedOverlay.setOptions({ draggable: false, animation: null })
+                }
+                //this.setState({ selectedOverlay: null })
+                return { selectedOverlay: null }
             }
-            if (selectedOverlay.overlayType === 'marker') {
-                //
-                selectedOverlay.setOptions({ draggable: false, animation: null })
-            }
-            this.setState({ selectedOverlay: null })
-        }
+        })
+
     }
     addMarkerListener = (marker) => {
         var self = this
@@ -810,31 +813,38 @@ class ResponsiveDrawer extends React.Component {
             const updatePlanIndex = this.state.planData.findIndex(plan => plan.planId === planId)
             shouldSaveOverlay.forEach((overlay) => {
                 const { overlayCoords, overlayType, overlayName, overlayDetail,
-                    fillColor, strokeColor, icon, overlaySource, overlayId } = overlay
-                const data = { editorId, overlayCoords, overlayType, overlayName, overlayDetail, planId }
-                var saveData
+                    fillColor, strokeColor, icon, overlaySource, overlayId, overlayPlantDate
+                } = overlay
+                const overlayProps = {
+                    editorId, overlayCoords, overlayType, overlayName, overlayDetail, planId,
+                    overlayPlantDate,
+                }
+                var saveProps
                 if ((overlayType === 'polygon') && (overlayCoords.length > 2)) {
-                    saveData = {
+                    saveProps = {
                         fillColor,
                         strokeColor,
-                        ...data
+                        ...overlayProps
                     }
                 }
                 if ((overlayType === 'polyline') && (overlayCoords.length > 1)) {
-                    saveData = {
+                    saveProps = {
                         strokeColor,
-                        ...data
+                        ...overlayProps
                     }
                 }
                 if (overlayType === 'marker') {
-                    saveData = {
+                    saveProps = {
                         icon,
-                        ...data
+                        ...overlayProps
                     }
                 }
-                if (saveData) {
+                if (saveProps.overlayPlantDate === undefined) {
+                    delete saveProps.overlayPlantDate
+                }
+                if (saveProps) {
                     if (overlaySource === 'local') {
-                        overlayRef.add(saveData).then(function (doc) {
+                        overlayRef.add(saveProps).then(function (doc) {
                             const id = doc.id
                             self.onUpdatePlanLoadingProgress(updatePlanIndex)
                             if (self.state.selectedPlan.planId === planId) {
@@ -859,7 +869,7 @@ class ResponsiveDrawer extends React.Component {
                                 throw ('there is something went wrong', error)
                             })
                     } else {
-                        overlayRef.doc(overlayId).set(saveData
+                        overlayRef.doc(overlayId).set(saveProps
                             , { merge: true }).then(function () {
                                 self.onUpdatePlanLoadingProgress(updatePlanIndex)
                                 if (self.state.selectedPlan.planId === planId) {
@@ -1240,7 +1250,7 @@ class ResponsiveDrawer extends React.Component {
     };
     onEditOverlayDetail = (editData) => {
         var self = this
-        const { selectedOverlay, overlayObject } = this.state
+        const { selectedOverlay, overlayObject, selectedPlan } = this.state
         const { overlayId } = selectedOverlay
         const { overlayName, overlayDetail } = editData
         const editIndex = overlayObject.findIndex(overlay => overlay.overlayId === overlayId)
@@ -1255,7 +1265,27 @@ class ResponsiveDrawer extends React.Component {
             overlayName: { $set: overlayName },
             overlayDetail: { $set: overlayDetail },
         })
-        self.setState({ overlayObject: updateOverlay, selectedOverlay: updateSelectedOverlay })
+        self.setState({ overlayObject: updateOverlay, selectedOverlay: updateSelectedOverlay }, () => {
+            this.onSaveToFirestore(selectedPlan)
+        })
+
+    }
+    onEditOverlayPlantDate = (plantDate) => {
+        let self = this
+        const { selectedOverlay, overlayObject, selectedPlan } = this.state
+        const { overlayId } = selectedOverlay
+        const editIndex = overlayObject.findIndex(overlay => overlay.overlayId === overlayId)
+        const updateOverlay = update(overlayObject, {
+            [editIndex]: {
+                overlayPlantDate: { $set: plantDate },
+                isOverlaySave: { $set: false }
+            }
+        })
+        self.setState({ overlayObject: updateOverlay, },
+            () => {
+                this.onSaveToFirestore(selectedPlan)
+            })
+
     }
     onChangeDrawPage = (page) => {
         this.setState({ drawerPage: page })
@@ -1539,10 +1569,10 @@ class ResponsiveDrawer extends React.Component {
                     self.setState({ isFirstOverlayQuery: false })
                 }
                 snapshot.docChanges().forEach(function (change) {
-                    const { editorId, overlayCoords, overlayType } = change.doc.data()
+                    const { editorId, overlayCoords, overlayType, overlayPlantDate } = change.doc.data()
                     const overlayId = change.doc.id
                     const actionIndex = self.state.overlayObject.findIndex(overlay => overlay.overlayId === overlayId)
-                    const data = {
+                    let data = {
                         overlaySource: 'server',
                         undoCoords: [overlayCoords],
                         redoCoords: [],
@@ -1550,6 +1580,9 @@ class ResponsiveDrawer extends React.Component {
                         clickable: true,
                         overlayId,
                         ...change.doc.data(),
+                    }
+                    if (overlayPlantDate && overlayPlantDate != '') {
+                        data = { ...data, overlayPlantDate: overlayPlantDate.toDate() }
                     }
                     if (change.type === "added") {
                         if (self.state.isFirstOverlayQuery) {
@@ -1897,6 +1930,7 @@ class ResponsiveDrawer extends React.Component {
                     handleDrawerOpen={this.handleDrawerOpen}
                     handleDrawerToggle={this.handleDrawerToggle}
                     onAddListenerGrabBtn={this.onAddListenerGrabBtn}
+                    onEditOverlayPlantDate={this.onEditOverlayPlantDate}
                     {...this.state}
                 />
             </div>

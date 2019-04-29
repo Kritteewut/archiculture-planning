@@ -7,6 +7,7 @@ import IconPicker from './IconPicker';
 import EditOverlay from './EditOverlay';
 import DeleteOverlay from './DeleteOverlay';
 import OverlayTask from './OverlayTask'
+import WeatherAffectRice from './WeatherAffectRice'
 
 // CSS Import
 import './OverlayOptions.css';
@@ -90,6 +91,10 @@ class OverlayOptions extends React.PureComponent {
                 <Button variant="contained" className="buttonredowork" onClick={() => onRedoCoords(selectedOverlay)}>
                     Redo
                 </Button>
+                <WeatherAffectRice 
+                selectedOverlay={selectedOverlay}
+                onEditOverlayPlantDate={this.props.onEditOverlayPlantDate}
+                />
                 <EditOverlay
                     isEditOverlayOpen={this.state.isEditOverlayOpen}
                     selectedOverlay={selectedOverlay}
@@ -117,13 +122,13 @@ class OverlayOptions extends React.PureComponent {
                     isWaitingForTaskToggle={this.props.isWaitingForTaskToggle}
                     overlAllFiltertask={this.props.overlAllFiltertask}
                 />
-            </div>
+            </div >
         )
     }
     render() {
         return (
             <div>
-                
+
                 {
                     this.props.selectedOverlay ?
                         this.drawOverlayDetail()
@@ -136,7 +141,7 @@ class OverlayOptions extends React.PureComponent {
                             <IconPicker
                                 onAddListenerGrabBtn={this.props.onAddListenerGrabBtn}
                                 onSetSelectedIcon={this.props.onSetSelectedIcon}
-                                handleDrawerToggle={this.props.handleDrawerToggle} 
+                                handleDrawerToggle={this.props.handleDrawerToggle}
                             />
                         </div>
                         :
@@ -149,7 +154,7 @@ class OverlayOptions extends React.PureComponent {
                                 selectedOverlay={this.props.selectedOverlay}
                                 fillColor={this.props.fillColor}
                                 strokeColor={this.props.strokeColor}
-                                handleDrawerToggle={this.props.handleDrawerToggle} 
+                                handleDrawerToggle={this.props.handleDrawerToggle}
                             />
                             {
                                 (!this.props.isFirstDraw) ?
@@ -181,8 +186,5 @@ class OverlayOptions extends React.PureComponent {
         )
     }
 }
-
-OverlayOptions.propTypes = {
-};
 
 export default (OverlayOptions);
