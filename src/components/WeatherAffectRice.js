@@ -8,6 +8,16 @@ import TextField from '@material-ui/core/TextField';
 import WeatherForecastInterface from './WeatherForecastInterface';
 import moment from 'moment';
 
+const rice = {
+    minGoodGrowth: 25,
+    minCanGrowth1: 34,
+    minCanGrowth2: 15,
+    minStopGrowth: 14,
+    maxGoodGrowth: 33,
+    maxCanGrowth1: 40,
+    maxCanGrowth2: 24,
+    maxStopGrowth: 41,
+}
 
 class WeatherAffectRice extends React.PureComponent {
     constructor(props) {
@@ -19,22 +29,17 @@ class WeatherAffectRice extends React.PureComponent {
             plantDate: '',
         }
     }
-    // componentWillReceiveProps(props) {
-    //     const { overlayPlantDate } = props.selectedOverlay
-    //     if (overlayPlantDate) {
-    //         this.setState({ plantDate: moment(overlayPlantDate).format().split('T')[0], })
-    //     }
-    // }
-    componentDidMount() {
-    }
     handleToggleWeatherAffectRiceOpen = () => {
         const { overlayPlantDate } = this.props.selectedOverlay
-        this.setState({
-            isWeatherAffectRiceOpen: !this.state.isWeatherAffectRiceOpen
-        }) 
+        let plantDate = ''
         if (overlayPlantDate) {
-            this.setState({ plantDate: moment(overlayPlantDate).format().split('T')[0], })
-        } 
+            plantDate = moment(overlayPlantDate).format().split('T')[0]
+        }
+        this.setState({
+            isWeatherAffectRiceOpen: !this.state.isWeatherAffectRiceOpen,
+            plantDate,
+        })
+
     }
     handlePlantDateChange = (event) => {
         const plantDate = event.target.value
@@ -64,13 +69,47 @@ class WeatherAffectRice extends React.PureComponent {
             let diffDate = moment().diff(moment(plantDate), 'd')
             let showText = ''
             if (diffDate >= 0) {
-                showText = `พืชมีอายุ ${diffDate} วัน`
+                showText = `ข้าวมีอายุ ${diffDate} วัน`
             } else {
-                showText = `พืชยังไม่ถูกปลูก`
+                showText = `ข้าวยังไม่ถูกปลูก`
             }
             return showText
         }
+    }
+    onGetRiceGuide = (days) => {
+        if (days >= 140) {
+            return 
+        }
+        if (inRange(days, 100, 139)) {
+            return
+        }
+        if (inRange(days, 70, 99)) {
+            return
+        }
+        if (inRange(days, 60, 69)) {
+            return
+        }
+        if (inRange(days, 30, 59)) {
+            return
+        }
+        if (inRange(days, 7, 14)) {
+            return
+        }
 
+    }
+    onCompareRiceCondition = (temperature) => {
+        const { minStopGrowth, maxStopGrowth, minGoodGrowth,
+            maxGoodGrowth, minCanGrowth1, maxCanGrowth1,
+            minCanGrowth2, maxCanGrowth2 } = rice
+        if (temperature <= minStopGrowth || temperature >= maxStopGrowth) {
+            return 'ข้าวอาจเติบโตได้น้อยลง'
+        }
+        if (inRange(temperature, minGoodGrowth, maxGoodGrowth)) {
+            return 'ข้าวเติบโตได้ดี'
+        }
+        if (inRange(temperature, minCanGrowth1, maxCanGrowth1) || inRange(temperature, minCanGrowth2, maxCanGrowth2)) {
+            return 'ข้าวเติบโตได้'
+        }
     }
     render() {
         const { isWeatherAffectRiceOpen, isFetchingWeather, plantDate } = this.state
@@ -130,3 +169,7 @@ class WeatherAffectRice extends React.PureComponent {
     }
 }
 export default WeatherAffectRice
+
+function inRange(x, min, max) {
+    return ((x - min) * (x - max) <= 0);
+}
