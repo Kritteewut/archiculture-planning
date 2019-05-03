@@ -123,14 +123,13 @@ class ResponsiveDrawer extends React.Component {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
     };
     componentWillMount() {
-        var self = this
         auth.onAuthStateChanged((user) => {
-            if (user) { self.onSetUser(user) }
-            self.setState({ isWaitingForUserResult: false })
+            if (user) { this.onSetUser(user) }
         })
     }
     componentDidMount() {
         // this.onAddBeforeUnloadListener()
+
     }
     componentWillUnmount() {
     }
@@ -1150,7 +1149,7 @@ class ResponsiveDrawer extends React.Component {
         this.setState({ fillColor: color })
     }
     onSetUser = (user) => {
-        this.setState({ user }, () => {
+        this.setState({ user, isWaitingForUserResult: false }, () => {
             this.onQueryPlanFromFirestore()
             this.onCheckUser(user)
         })
@@ -2108,5 +2107,6 @@ function new_script(src) {
     })
 };
 // Promise Interface can ensure load the script only once
-new_script('https://maps.googleapis.com/maps/api/js?&libraries=geometry,drawing,places,visualization&key=&callback=initMap');
-//AIzaSyDsVFar03bgXY8xkPmzQ-NxqcEzzscdLnc
+new_script('https://maps.googleapis.com/maps/api/js?&libraries=geometry,drawing,places,visualization&key=AIzaSyCCVW7cPKvdEu6HneVzZ5x7COskURXpC2s&callback=initMap');
+//AIzaSyCCVW7cPKvdEu6HneVzZ5x7COskURXpC2s
+

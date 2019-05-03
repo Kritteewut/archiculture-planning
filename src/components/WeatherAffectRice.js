@@ -25,7 +25,7 @@ class WeatherAffectRice extends React.PureComponent {
         this.state = {
             isWeatherAffectRiceOpen: false,
             isFetchingWeather: false,
-            weatherForecast: [],
+            riceCondition: [],
             plantDate: '',
         }
     }
@@ -47,7 +47,26 @@ class WeatherAffectRice extends React.PureComponent {
     }
     onGetWeatherForecastResult = (result, forecastDays) => {
         if (result) {
-
+            const { forecasts } = result.WeatherForecasts[0]
+            // let sumRain = 0
+            // let forecastResult = forecasts.map(forecast => {
+            //     const key = shortid.generate()
+            //     const { tc_max, tc_min, rh, rain, cond } = forecast.data
+            //     let tc_maxR = Math.round(tc_max)
+            //     let tc_minR = Math.round(tc_min)
+            //     let rhR = Math.round(rh)
+            //     sumRain += rain
+            //     return {
+            //         tc_max: `${tc_maxR}`,
+            //         tc_min: `${tc_minR}`,
+            //         rh: `ความชื้นสัมพัทธเฉลี่ย ${rhR}%`,
+            //         rain: `ปริมาณฝน ${rain} มม.`,
+            //         cond: this.onCompareCond(cond),
+            //         time: moment(forecast.time).format('dd Do MMM'),
+            //         key
+            //     }
+            // })
+            //this.setState({ riceCondition, isFetchingWeather: false })
         }
     }
     onSetFetchingWeather = () => {
@@ -76,24 +95,28 @@ class WeatherAffectRice extends React.PureComponent {
             return showText
         }
     }
-    onGetRiceGuide = (days) => {
-        if (days >= 140) {
-            return 
-        }
-        if (inRange(days, 100, 139)) {
-            return
-        }
-        if (inRange(days, 70, 99)) {
-            return
-        }
-        if (inRange(days, 60, 69)) {
-            return
-        }
-        if (inRange(days, 30, 59)) {
-            return
-        }
-        if (inRange(days, 7, 14)) {
-            return
+    onGetRiceGuide = () => {
+        const { plantDate } = this.state
+        if (plantDate) {
+            let days = moment().diff(moment(plantDate), 'd')
+            if (inRange(days, 7, 14)) {
+                return 'ช่วง 7-14 วัน หลังต้นกล้างอกปล่อยน้ำเข้านาไม่ให้ลึกเกิน 5 ซม. จากหน้าดิน'
+            }
+            if (inRange(days, 30, 59)) {
+                return '30 วัน ปล่อยน้ำเข้านาให้สูงขึ้นเป็น 10 ซม. จากหน้าดินแล้วใส่ปุ๋ยเพื่อเร่งให้ข้าวแตกกอ'
+            }
+            if (inRange(days, 60, 69)) {
+                return '60 วัน ระบายน้ำออกให้แห้ง'
+            }
+            if (inRange(days, 70, 99)) {
+                return '70 วัน ปล่อยน้ำเข้านาสูง 10 ซม. สลับกับแห้ง 7 ครั้ง'
+            }
+            if (inRange(days, 100, 139)) {
+                return '100 วัน ปล่อยน้ำเข้านาสูง 10 ซม. ในช่วงนี้แมลงศัตรูพเริ่มระบาด ต้องตรวขสอบแปลงบ่อย'
+            }
+            if (days >= 140) {
+                return '140 วัน ระบายน้ำออกจากแปลงให้แห้ง รอเก็บเกี่ยว หลังจากข้าวออกดอก 30 วันให้เก็บเกี่ยวได้'
+            }
         }
 
     }
@@ -135,9 +158,17 @@ class WeatherAffectRice extends React.PureComponent {
                                 shrink: true,
                             }}
                         />
-                        {
-                            this.onShowOverlayPlantDate()
-                        }
+                        <div>
+                            {
+                                this.onShowOverlayPlantDate()
+                            }
+                        </div>
+                        <div>
+                            {
+                                this.onGetRiceGuide()
+                            }
+                        </div>
+
                         <WeatherForecastInterface
                             onGetWeatherForecastResult={this.onGetWeatherForecastResult}
                             onSetFetchingWeather={this.onSetFetchingWeather}
