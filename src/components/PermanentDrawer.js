@@ -28,7 +28,7 @@ import AddPlan from './AddPlan';
 import OpenSide from '../components/openSideBtn';
 import HowTo from './HowTo';
 import WeatherFarmBook from './WeatherFarmBook';
-import SearchBox from './SearchBox';
+import SearchBox from './searchBox';
 
 // Icon Group
 import Pic from './Picture/User.png';

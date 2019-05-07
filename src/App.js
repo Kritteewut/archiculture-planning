@@ -17,7 +17,7 @@ import icon_point from './components/icons/icon_point.png';
 import update from 'immutability-helper';
 import shortid from 'shortid'
 import { auth, userRef } from './config/firebase'
-import SearchBox from './components/SearchBox';
+import SearchBox from './components/searchBox';
 import Marker from './components/Marker';
 import Polygon from './components/Polygon';
 import Polyline from './components/Polyline';
