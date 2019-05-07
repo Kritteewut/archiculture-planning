@@ -67,7 +67,7 @@ class WeatherForecastDisplay extends React.PureComponent {
         this.state = {
             weatherForecast: [],
             forecastDays: 7,
-            avgRain: '',
+            avgRain: null,
             isWeaterOpen: false,
             isFetchingWeather: false,
             plantCondition: [],
@@ -107,8 +107,6 @@ class WeatherForecastDisplay extends React.PureComponent {
         } else {
 
         }
-
-
     }
     onCompareCond = (cond) => {
         let condText, condPic
@@ -257,7 +255,7 @@ class WeatherForecastDisplay extends React.PureComponent {
         this.setState({ isFetchingWeather: false })
     }
     render() {
-        const {  weatherForecast, avgRain, isWeaterOpen, isFetchingWeather, plantCondition } = this.state
+        const { weatherForecast, avgRain, isWeaterOpen, isFetchingWeather, plantCondition } = this.state
         return (
 
             <div>
@@ -314,9 +312,9 @@ class WeatherForecastDisplay extends React.PureComponent {
                                                 )
                                             })
                                         }
-                                        <div className="FrameWeatherRain">
+                                        {avgRain && <div className="FrameWeatherRain">
                                             {avgRain}
-                                        </div>
+                                        </div>}
                                         <div>
                                             {
                                                 weatherForecast.map(forecast => {

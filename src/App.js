@@ -129,6 +129,7 @@ class ResponsiveDrawer extends React.Component {
                 this.setState({ isWaitingForUserResult: false })
             }
         })
+       
     }
     componentDidMount() {
         // this.onAddBeforeUnloadListener()

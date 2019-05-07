@@ -7,6 +7,16 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import WeatherForecastInterface from './WeatherForecastInterface';
 import moment from 'moment';
+import Sunny from './icons/sunny.png'
+import Hot from './icons/hot.png'
+import Snowflake from './icons/snowflake.png'
+import Snowflakes from './icons/snowflakes.png'
+import Storm_thunder from './icons/storm_thunder.png'
+import Rain from './icons/rain.png'
+import Clouds from './icons/clouds.png'
+import Cloud from './icons/cloud.png'
+import Warning from './icons/warning.png'
+import shortid from 'shortid'
 
 const rice = {
     minGoodGrowth: 25,
@@ -27,6 +37,10 @@ class WeatherAffectRice extends React.PureComponent {
             isFetchingWeather: false,
             riceCondition: [],
             plantDate: '',
+            weatherForecast: [],
+            avgRain: '',
+            plantCondition: [],
+            rainWarning: '',
         }
     }
     handleToggleWeatherAffectRiceOpen = () => {
@@ -48,29 +62,124 @@ class WeatherAffectRice extends React.PureComponent {
     onGetWeatherForecastResult = (result, forecastDays) => {
         if (result) {
             const { forecasts } = result.WeatherForecasts[0]
-            // let sumRain = 0
-            // let forecastResult = forecasts.map(forecast => {
-            //     const key = shortid.generate()
-            //     const { tc_max, tc_min, rh, rain, cond } = forecast.data
-            //     let tc_maxR = Math.round(tc_max)
-            //     let tc_minR = Math.round(tc_min)
-            //     let rhR = Math.round(rh)
-            //     sumRain += rain
-            //     return {
-            //         tc_max: `${tc_maxR}`,
-            //         tc_min: `${tc_minR}`,
-            //         rh: `ความชื้นสัมพัทธเฉลี่ย ${rhR}%`,
-            //         rain: `ปริมาณฝน ${rain} มม.`,
-            //         cond: this.onCompareCond(cond),
-            //         time: moment(forecast.time).format('dd Do MMM'),
-            //         key
-            //     }
-            // })
-            //this.setState({ riceCondition, isFetchingWeather: false })
+            let sumRain = 0
+            let forecastResult = forecasts.map(forecast => {
+                const key = shortid.generate()
+                const { tc_max, tc_min, rh, rain, cond } = forecast.data
+                let tc_maxR = Math.round(tc_max)
+                let tc_minR = Math.round(tc_min)
+                let rhR = Math.round(rh)
+                sumRain += rain
+                return {
+                    tc_max: `${tc_maxR}`,
+                    tc_min: `${tc_minR}`,
+                    rh: `ความชื้นสัมพัทธเฉลี่ย ${rhR}%`,
+                    rain: rain,
+                    cond: this.onCompareCond(cond),
+                    time: moment(forecast.time).format('dd Do MMM'),
+                    key
+                }
+            })
+            const { tc_max, tc_min, rain } = forecasts[0].data
+            let tc_maxR = tc_max
+            let tc_minR = tc_min
+            this.onSetPlantConditionText(tc_maxR, tc_minR, rain)
+            let avgRain = sumRain / forecasts.length
+            this.setState({
+                weatherForecast: forecastResult,
+                avgRain: `ปริมาณน้ำฝนรวม ${forecastDays} วัน ${sumRain.toFixed(2)} มิลลิเมตร เฉลี่ย ${avgRain.toFixed(2)} มิลลิเมตรต่อวัน`,
+                isFetchingWeather: false,
+
+            })
+        } else {
+
         }
+    }
+    onSetPlantConditionText = (tmax, tmin, rain) => {
+        let tmaxR = Math.round(tmax)
+        let tminR = Math.round(tmin)
+        let plantCondition = [
+            {
+                temperature: `ที่อุณหภูมิ ${tmaxR} °C`,
+                condition: [
+                    `${this.onCompareRiceCondition(tmaxR)}`,
+                ],
+                key: shortid.generate()
+            },
+            {
+                temperature: `ที่อุณหภูมิ ${tminR} °C`,
+                condition: [
+                    `${this.onCompareRiceCondition(tminR)}`,
+                ],
+                key: shortid.generate()
+            },
+        ]
+        console.log(rain)
+        this.setState({
+            plantCondition,
+            rainWarning: rain > 0 ? 'วันนี้มีฝนตก โปรดระวังระดับน้ำในนา' : ''
+        })
     }
     onSetFetchingWeather = () => {
         this.setState({ isFetchingWeather: true })
+    }
+    onCompareCond = (cond) => {
+        let condText, condPic
+        switch (cond) {
+            case 1:
+                condText = 'ท้องฟ้าแจ่มใส'
+                condPic = Sunny
+                break;
+            case 2:
+                condText = 'มีเมฆบางส่วน'
+                condPic = Cloud
+                break;
+            case 3:
+                condText = 'มีเมฆเป็นส่วนมาก'
+                condPic = Clouds
+                break;
+            case 4:
+                condText = 'มีเมฆมาก'
+                condPic = Clouds
+                break;
+            case 5:
+                condText = 'ฝนตกเล็กน้อย'
+                condPic = Rain
+                break;
+            case 6:
+                condText = 'ฝนปานกลาง '
+                condPic = Rain
+                break;
+            case 7:
+                condText = 'ฝนตกหนัก '
+                condPic = Rain
+                break;
+            case 8:
+                condText = 'ฝนฟ้าคะนอง '
+                condPic = Storm_thunder
+                break;
+            case 9:
+                condText = 'อากาศหนาวจัด'
+                condPic = Snowflakes
+                break;
+            case 10:
+                condText = 'อากาศหนาว'
+                condPic = Snowflake
+                break;
+            case 11:
+                condText = 'อากาศเย็น '
+                condPic = Snowflake
+                break;
+            case 12:
+                condText = 'อากาศร้อนจัด'
+                condPic = Hot
+                break;
+            default:
+                condText = 'ไม่พบสภาพอากาศ'
+                condPic = Warning
+                break;
+        }
+        return { condPic, condText }
     }
     onSubmitEditPlantDate = () => {
         const { plantDate } = this.state
@@ -135,7 +244,8 @@ class WeatherAffectRice extends React.PureComponent {
         }
     }
     render() {
-        const { isWeatherAffectRiceOpen, isFetchingWeather, plantDate } = this.state
+        const { isWeatherAffectRiceOpen, isFetchingWeather, plantDate, weatherForecast,
+            avgRain, plantCondition, rainWarning } = this.state
         return (
             <div>
                 <Button onClick={this.handleToggleWeatherAffectRiceOpen}>
@@ -148,6 +258,11 @@ class WeatherAffectRice extends React.PureComponent {
                 >
                     <DialogTitle id="alert-dialog-title">{"สภาพอากาศที่มีผลกระต่อข้าว"}</DialogTitle>
                     <DialogContent>
+                        <WeatherForecastInterface
+                            onGetWeatherForecastResult={this.onGetWeatherForecastResult}
+                            onSetFetchingWeather={this.onSetFetchingWeather}
+                            isFetchingWeather={this.state.isFetchingWeather}
+                        />
                         <TextField
                             onChange={this.handlePlantDateChange}
                             id="date"
@@ -168,12 +283,6 @@ class WeatherAffectRice extends React.PureComponent {
                                 this.onGetRiceGuide()
                             }
                         </div>
-
-                        <WeatherForecastInterface
-                            onGetWeatherForecastResult={this.onGetWeatherForecastResult}
-                            onSetFetchingWeather={this.onSetFetchingWeather}
-                            isFetchingWeather={this.state.isFetchingWeather}
-                        />
                         {
                             isFetchingWeather ?
                                 'กำลังโหลด...'
@@ -182,6 +291,55 @@ class WeatherAffectRice extends React.PureComponent {
 
                                 </div>
                         }
+                        {
+                            plantCondition.map(data => {
+                                const { key, temperature, condition } = data
+                                return (
+                                    <div className="FrameWeatherData"
+                                        key={key}
+                                    >
+                                        <div >
+                                            {temperature}
+                                        </div>
+                                        {condition.map((cond, index) => {
+                                            return (
+                                                <div key={index}>
+                                                    {cond}
+                                                </div>
+                                            )
+                                        })}
+
+                                    </div>
+                                )
+                            })
+                        }
+                        {rainWarning}
+                        {avgRain && <div className="FrameWeatherRain">
+                            {avgRain}
+                        </div>}
+                        <div>
+                            {
+                                weatherForecast.map(forecast => {
+                                    const { cond, rain, time, tc_max, tc_min, rh, key } = forecast
+                                    const { condPic, condText } = cond
+                                    return (
+                                        <div
+                                            key={key}
+                                            className="FrameCardWeather"
+                                            onClick={() => this.onSetPlantConditionText(tc_max, tc_min, rain)}
+                                        >
+                                            <div>{time}</div>
+                                            <img src={condPic} alt='condition' />
+                                            <div>{condText}</div>
+                                            <div>สูงสุด {tc_max} °C</div>
+                                            <div>ต่ำสุด {tc_min} °C</div>
+                                            <div>ปริมาณฝน {rain} มม</div>
+                                            <div>{rh}</div>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
                     </DialogContent>
 
                     <DialogActions>

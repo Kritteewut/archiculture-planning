@@ -79,7 +79,7 @@ class HowTo extends React.PureComponent {
                                     <ListItem
                                         key={key}
                                     >
-                                        <img src={pic} className="picFarmBook"/>
+                                        <img src={pic} alt="guide" className="picFarmBook"/>
                                     </ListItem>
                                 )
                             })
