@@ -593,7 +593,6 @@ class ResponsiveDrawer extends React.Component {
             self.onSetPolyOptions()
             self.onSetSelectedOverlay(polyline)
             self.onPolyLengthCompute(polyline)
-            console.log(polyline, 'poly')
         })
         window.google.maps.event.addListener(polyline, 'mouseup', function (event) {
             if (event.vertex !== undefined || event.edge !== undefined) {
@@ -2107,6 +2106,6 @@ function new_script(src) {
     })
 };
 // Promise Interface can ensure load the script only once
-new_script('https://maps.googleapis.com/maps/api/js?&libraries=geometry,drawing,places,visualization&key=AIzaSyCCVW7cPKvdEu6HneVzZ5x7COskURXpC2s&callback=initMap');
+new_script('https://maps.googleapis.com/maps/api/js?&libraries=geometry,drawing,places,visualization&key=&callback=initMap');
 //AIzaSyCCVW7cPKvdEu6HneVzZ5x7COskURXpC2s
 

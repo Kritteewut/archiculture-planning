@@ -176,7 +176,7 @@ class WeatherAffectRice extends React.PureComponent {
                         />
                         {
                             isFetchingWeather ?
-                                'กำลังโหลด'
+                                'กำลังโหลด...'
                                 :
                                 <div>
 
