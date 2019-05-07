@@ -1,5 +1,5 @@
 import firebase from 'firebase'
-require('firebase/firestore')
+//require('firebase/firestore')
 const config = {
     apiKey: "AIzaSyDGRHQBn0XP7hpqHX_lNDi01yJFQxBFJhg",
     authDomain: "agriculture-planning-672f0.firebaseapp.com",
