@@ -17,7 +17,7 @@ import icon_point from './components/icons/icon_point.png';
 import update from 'immutability-helper';
 import shortid from 'shortid'
 import { auth, userRef } from './config/firebase'
-import SearchBox from './components/searchBox';
+import searchBox from './components/searchBox'
 import Marker from './components/Marker';
 import Polygon from './components/Polygon';
 import Polyline from './components/Polyline';
@@ -132,7 +132,7 @@ class ResponsiveDrawer extends React.Component {
        
     }
     componentDidMount() {
-        // this.onAddBeforeUnloadListener()
+        // this.onAddBeforeUnloadListener().
 
     }
     componentWillUnmount() {
@@ -2032,7 +2032,7 @@ class ResponsiveDrawer extends React.Component {
                             }
 
 
-                            <SearchBox />
+                            <searchBox />
                             <OpenSide
                                 handleDrawerToggle={this.handleDrawerToggle}
                             />
@@ -2110,6 +2110,6 @@ function new_script(src) {
     })
 };
 // Promise Interface can ensure load the script only once
-new_script('https://maps.googleapis.com/maps/api/js?&libraries=geometry,drawing,places,visualization&key=&callback=initMap');
+//new_script('https://maps.googleapis.com/maps/api/js?&libraries=geometry,drawing,places,visualization&key=&callback=initMap');
 //AIzaSyCCVW7cPKvdEu6HneVzZ5x7COskURXpC2s
 
