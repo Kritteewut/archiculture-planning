@@ -17,6 +17,9 @@ import Clouds from './icons/clouds.png'
 import Cloud from './icons/cloud.png'
 import Warning from './icons/warning.png'
 import shortid from 'shortid'
+import './WeatherAffect.css';
+import './Design.css';
+import IconWeather from '@material-ui/icons/WbSunny';
 
 const rice = {
     minGoodGrowth: 25,
@@ -248,8 +251,11 @@ class WeatherAffectRice extends React.PureComponent {
             avgRain, plantCondition, rainWarning } = this.state
         return (
             <div>
-                <Button onClick={this.handleToggleWeatherAffectRiceOpen}>
-                    ผลกระทบจากสภาพอากาศ
+                <Button variant="contained" className="buttonWeatherAffect" onClick={this.handleToggleWeatherAffectRiceOpen}>
+                    ผลกระทบจากสภาพอากาศ . . . 
+                    <div className="rightIcon ButtonHowtoIconColor">
+                        <IconWeather />
+                    </div>
                 </Button>
                 <Dialog
                     fullWidth
@@ -344,11 +350,16 @@ class WeatherAffectRice extends React.PureComponent {
 
                     <DialogActions>
                         <Button
+                            variant="contained" 
+                            className="buttonContinueUpdate"
                             onClick={this.onSubmitEditPlantDate}
-                            color="primary">
+                            >
                             บันทึกการเปลี่ยนแปลง
                         </Button>
-                        <Button onClick={this.handleToggleWeatherAffectRiceOpen} color="primary" autoFocus>
+                        <Button 
+                            variant="contained" 
+                            className="buttonNopeUpdate"
+                            onClick={this.handleToggleWeatherAffectRiceOpen} autoFocus>
                             ยกเลิก
                         </Button>
                     </DialogActions>
