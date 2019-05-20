@@ -1,0 +1,127 @@
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - -
+List of CSS Design Class
+
+- Layer Group 
+
+- Text Group
+
+- Button Group
+
+- Background Group
+
+- Image Group
+
+- Forms Group
+
+- Gridview Group
+
+- Dropdown Group
+- - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/* ------------------- Layer Group ------------------ */
+
+/* ------------------- Text Group ------------------ */
+
+.textField {
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 200px;
+}
+
+/* ------------------- Button Group ------------------ */
+
+.buttonWeatherAffect {
+    width:265px;
+    height:50px;
+    top: 30px;
+    left: 0px;
+    
+    color: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(20deg, rgb(255, 255, 255) 40%, rgb(255, 255, 255)) 30%;
+    box-shadow: 0px 0px 0px 3px rgba(80, 80, 80, 0.6);
+    opacity: 0.9; 
+}
+
+.buttonWeatherAffect:hover {
+    background: linear-gradient(20deg, rgb(149, 255, 241) 40%, rgb(164, 255, 187)) 30%;
+    box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.6);
+    opacity: 1; 
+}
+
+.buttonContinueUpdate {
+    
+    color: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(20deg, rgb(255, 255, 255) 40%, rgb(255, 255, 255)) 30%;
+    box-shadow: 0px 0px 0px 3px rgba(80, 80, 80, 0.6);
+    opacity: 0.9; 
+}
+
+.buttonContinueUpdate:hover {
+    background: linear-gradient(20deg, rgb(151, 149, 255) 40%, rgb(164, 252, 255)) 30%;
+    box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.6);
+    opacity: 1; 
+}
+
+.buttonNopeUpdate {
+
+    color: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(20deg, rgb(255, 255, 255) 40%, rgb(255, 255, 255)) 30%;
+    box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.60);
+    opacity: 0.9; 
+}
+
+.buttonNopeUpdate:hover {
+    background: linear-gradient(20deg, rgb(255, 156, 156) 40%, rgb(255, 160, 197)) 30%;
+    box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.6);
+    opacity: 1; 
+}
+
+
+/* ------------------- Background Group ------------------ */
+
+/* ------------------- Image Group ------------------ */
+
+/* ------------------- Forms Group ------------------ */
+
+.drawerPaper {
+    position: relative;
+    width: 320px;      /* แก้ไขขนาดของ Permance Drawer*/
+    height: 100%;
+}
+
+
+.card {
+    max-width: 320px;
+}
+
+.media {
+    object-fit: cover;
+}
+
+.paper {
+    position: absolute;
+    width: 500px;
+    background-color: rgba(255, 247, 247, 0);
+    box-shadow: rgb(255, 247, 247);
+    padding: 0%;
+    top: 50%;
+    left: 50%;
+
+}
+
+.FrameTaskData {
+    width: 300px;     /* เมื่อต้องปรับต้องตั้งค่าให้เห็น Frame เป็นปกติก่อน */
+    height: 200px;
+    top: 500px;
+    left: 10px;
+    right: 0px;
+    /* Layer Group*/
+    position: absolute;
+    z-index: 0;
+    cursor: pointer;
+    background-color: rgb(255, 82, 82,0)
+}
+
+/* ------------------- Gridview Group ------------------ */
+
+/* ------------------- Dropdown Group ------------------ */
