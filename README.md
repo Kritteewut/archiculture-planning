@@ -1,4 +1,4 @@
 requirement
-node.js v.10.0+
+node.js version 10.0+
 $npm install 
 $npm start
