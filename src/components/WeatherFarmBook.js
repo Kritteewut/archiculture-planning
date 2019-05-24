@@ -105,7 +105,7 @@ class HowTo extends React.PureComponent {
 
                 >
                     <DialogTitle id="alert-dialog-title">
-                        {"คู่มือการดูแล"}
+                        {"คู่มือการดูแล : "}
                         <Select
                             value={this.state.plantType}
                             onChange={this.onPlantTypeChange}
