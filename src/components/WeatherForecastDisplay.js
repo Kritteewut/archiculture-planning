@@ -290,7 +290,7 @@ class WeatherForecastDisplay extends React.PureComponent {
                                 isFetchingWeather ?
                                     'กำลังโหลด...' :
                                     <div>
-                                        {
+                                        {//
                                             plantCondition.map(data => {
                                                 const { key, temperature, condition } = data
                                                 return (

@@ -68,34 +68,28 @@ class WeatherAffectRice extends React.PureComponent {
             let sumRain = 0
             let forecastResult = forecasts.map(forecast => {
                 const key = shortid.generate()
-                const { tc_max, tc_min, rh, rain, cond } = forecast.data
+                const { tc_max, tc_min, rain } = forecast.data
                 let tc_maxR = Math.round(tc_max)
                 let tc_minR = Math.round(tc_min)
-                let rhR = Math.round(rh)
                 sumRain += rain
                 return {
-                    tc_max: `${tc_maxR}`,
-                    tc_min: `${tc_minR}`,
-                    rh: `ความชื้นสัมพัทธเฉลี่ย ${rhR}%`,
-                    rain: rain,
-                    cond: this.onCompareCond(cond),
                     time: moment(forecast.time).format('dd Do MMM'),
+                    tc_max: `${tc_maxR}`,
+                    tc_max_cod: this.onCompareRiceCondition(tc_maxR),
+                    tc_min: `${tc_minR}`,
+                    tc_min_cod: this.onCompareRiceCondition(tc_minR),
+                    rain: rain,
+                    rain_warning: rain > 0 ? 'อาจมีฝนตก ระวังระดับน้ำในนา' : null,
                     key
                 }
             })
-            const { tc_max, tc_min, rain } = forecasts[0].data
-            let tc_maxR = tc_max
-            let tc_minR = tc_min
-            this.onSetPlantConditionText(tc_maxR, tc_minR, rain)
+            console.log(forecastResult)
             let avgRain = sumRain / forecasts.length
             this.setState({
                 weatherForecast: forecastResult,
                 avgRain: `ปริมาณน้ำฝนรวม ${forecastDays} วัน ${sumRain.toFixed(2)} มิลลิเมตร เฉลี่ย ${avgRain.toFixed(2)} มิลลิเมตรต่อวัน`,
                 isFetchingWeather: false,
-
             })
-        } else {
-
         }
     }
     onSetPlantConditionText = (tmax, tmin, rain) => {
@@ -117,7 +111,6 @@ class WeatherAffectRice extends React.PureComponent {
                 key: shortid.generate()
             },
         ]
-        console.log(rain)
         this.setState({
             plantCondition,
             rainWarning: rain > 0 ? 'วันนี้มีฝนตก โปรดระวังระดับน้ำในนา' : ''
@@ -252,7 +245,7 @@ class WeatherAffectRice extends React.PureComponent {
         return (
             <div>
                 <Button variant="contained" className="buttonWeatherAffect" onClick={this.handleToggleWeatherAffectRiceOpen}>
-                    ผลกระทบจากสภาพอากาศ . . . 
+                    ผลกระทบจากสภาพอากาศ . . .
                     <div className="rightIcon ButtonHowtoIconColor">
                         <IconWeather />
                     </div>
@@ -294,70 +287,24 @@ class WeatherAffectRice extends React.PureComponent {
                                 'กำลังโหลด...'
                                 :
                                 <div>
-
+                                    {avgRain && <div className="FrameWeatherRain">
+                                        {avgRain}
+                                    </div>}
                                 </div>
                         }
-                        {
-                            plantCondition.map(data => {
-                                const { key, temperature, condition } = data
-                                return (
-                                    <div className="FrameWeatherData"
-                                        key={key}
-                                    >
-                                        <div >
-                                            {temperature}
-                                        </div>
-                                        {condition.map((cond, index) => {
-                                            return (
-                                                <div key={index}>
-                                                    {cond}
-                                                </div>
-                                            )
-                                        })}
 
-                                    </div>
-                                )
-                            })
-                        }
-                        {rainWarning}
-                        {avgRain && <div className="FrameWeatherRain">
-                            {avgRain}
-                        </div>}
-                        <div>
-                            {
-                                weatherForecast.map(forecast => {
-                                    const { cond, rain, time, tc_max, tc_min, rh, key } = forecast
-                                    const { condPic, condText } = cond
-                                    return (
-                                        <div
-                                            key={key}
-                                            className="FrameCardWeather"
-                                            onClick={() => this.onSetPlantConditionText(tc_max, tc_min, rain)}
-                                        >
-                                            <div>{time}</div>
-                                            <img src={condPic} alt='condition' />
-                                            <div>{condText}</div>
-                                            <div>สูงสุด {tc_max} °C</div>
-                                            <div>ต่ำสุด {tc_min} °C</div>
-                                            <div>ปริมาณฝน {rain} มม</div>
-                                            <div>{rh}</div>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
                     </DialogContent>
 
                     <DialogActions>
                         <Button
-                            variant="contained" 
+                            variant="contained"
                             className="buttonContinueUpdate"
                             onClick={this.onSubmitEditPlantDate}
-                            >
+                        >
                             บันทึกการเปลี่ยนแปลง
                         </Button>
-                        <Button 
-                            variant="contained" 
+                        <Button
+                            variant="contained"
                             className="buttonNopeUpdate"
                             onClick={this.handleToggleWeatherAffectRiceOpen} autoFocus>
                             ยกเลิก

@@ -1950,7 +1950,6 @@ class ResponsiveDrawer extends React.Component {
                             open={this.state.mobileOpen}
                             onClose={this.handleDrawerToggle}
                             classes={{
-                                //paper: "drawerPaper",
                                 paper: classes.drawerPaper,
                             }}
                             ModalProps={{
@@ -1964,8 +1963,8 @@ class ResponsiveDrawer extends React.Component {
                     <Hidden xsDown implementation="css">
                         <Drawer
                             classes={{
-                                //paper: "drawerPaper",
                                 paper: classes.drawerPaper,
+                               
                             }}
                             variant="permanent"
                         >
