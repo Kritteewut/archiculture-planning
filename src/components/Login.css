@@ -450,6 +450,11 @@ p.sansserif {
   -o-border-radius: 5px;
 }
 
+.OpenSideButton {
+  left: 80%;
+  position: absolute;
+}
+
 /* ------------------- Gridview Group ------------------ */
 
 /* ------------------- Dropdown Group ------------------ */

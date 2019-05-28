@@ -12,6 +12,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import Button from '@material-ui/core/Button';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import OpenSide from '../components/openSideBtn';
 
 //Icon import
 import logo from './Picture/Logo App.png'
@@ -103,6 +104,12 @@ class Login extends React.PureComponent {
 
                     <div className="container wrapper LoginFont ">
 
+                        <div className ="OpenSideButton">
+                        <OpenSide
+                            handleDrawerToggle={this.props.handleDrawerToggle}
+                        />
+                        </div>
+                        
                         <p className="logoFrame logo TextThemedarkColor">
 
                             <img src={logo} className="logo App-logo" alt="logo" />
@@ -157,8 +164,8 @@ class Login extends React.PureComponent {
 
                         <div className="LoginButton">
                             <button type="submit" onClick={this.loginEmail} className="loginBtnforEmail loginBtn--L TextThemedarkColor">
-                            
-                            <div className="TextThemeButton">Log In with email</div>
+
+                                <div className="TextThemeButton">Log In with email</div>
 
                             </button>
 

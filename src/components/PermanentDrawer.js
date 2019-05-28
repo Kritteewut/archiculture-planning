@@ -379,6 +379,7 @@ class PermanentDrawer extends React.PureComponent {
                 <Login
                     onSetUser={onSetUser}
                     onQueryPlanFromFirestore={this.props.onQueryPlanFromFirestore}
+                    handleDrawerToggle={this.props.handleDrawerToggle}
                 />
 
         )
