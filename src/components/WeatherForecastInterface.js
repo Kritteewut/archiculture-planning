@@ -43,6 +43,7 @@ class WeatherForecastInterface extends React.PureComponent {
         )
     }
     onFetchWheatherForecast = (url) => {
+        //console.log(url)
         this.props.onSetFetchingWeather()
         fetch(url, {
             method: "get",

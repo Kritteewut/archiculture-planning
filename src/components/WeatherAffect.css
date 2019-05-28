@@ -121,6 +121,23 @@ List of CSS Design Class
     cursor: pointer;
     background-color: rgb(255, 82, 82,0)
 }
+.RiceCond{
+    width: 94%;
+    height: auto;
+
+    padding: 20px;
+    margin: 10px;
+
+    left: 0%;
+    position: relative;
+
+    float: left;
+    border-radius: 10px; 
+    
+    background: linear-gradient(40deg, rgb(253, 255, 126) 20%, rgb(149, 243, 113)) 20%;
+    box-shadow: 0px 0px 0px 3px rgba(229, 255, 254, 0.623);
+    opacity: 0.85;
+}
 
 /* ------------------- Gridview Group ------------------ */
 

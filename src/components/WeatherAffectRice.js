@@ -44,7 +44,15 @@ class WeatherAffectRice extends React.PureComponent {
             avgRain: '',
             plantCondition: [],
             rainWarning: '',
+            currentTime: moment().format('ll'),
         }
+        this.currentTimeRef = null
+    }
+    componentDidMount() {
+        //this.currentTimeRef = setInterval(this.onGetCurrentTime, 1000);
+    }
+    componentWillUnmount() {
+        clearInterval(this.currentTimeRef);
     }
     handleToggleWeatherAffectRiceOpen = () => {
         const { overlayPlantDate } = this.props.selectedOverlay
@@ -56,7 +64,6 @@ class WeatherAffectRice extends React.PureComponent {
             isWeatherAffectRiceOpen: !this.state.isWeatherAffectRiceOpen,
             plantDate,
         })
-
     }
     handlePlantDateChange = (event) => {
         const plantDate = event.target.value
@@ -79,7 +86,7 @@ class WeatherAffectRice extends React.PureComponent {
                     tc_min: `${tc_minR}`,
                     tc_min_cod: this.onCompareRiceCondition(tc_minR),
                     rain: rain,
-                    rain_warning: rain > 0 ? 'อาจมีฝนตก ระวังระดับน้ำในนา' : null,
+                    rain_warning: rain > 0 ? 'อาจมีฝนตก ระวังระดับน้ำในนา' : ' ',
                     key
                 }
             })
@@ -119,64 +126,6 @@ class WeatherAffectRice extends React.PureComponent {
     onSetFetchingWeather = () => {
         this.setState({ isFetchingWeather: true })
     }
-    onCompareCond = (cond) => {
-        let condText, condPic
-        switch (cond) {
-            case 1:
-                condText = 'ท้องฟ้าแจ่มใส'
-                condPic = Sunny
-                break;
-            case 2:
-                condText = 'มีเมฆบางส่วน'
-                condPic = Cloud
-                break;
-            case 3:
-                condText = 'มีเมฆเป็นส่วนมาก'
-                condPic = Clouds
-                break;
-            case 4:
-                condText = 'มีเมฆมาก'
-                condPic = Clouds
-                break;
-            case 5:
-                condText = 'ฝนตกเล็กน้อย'
-                condPic = Rain
-                break;
-            case 6:
-                condText = 'ฝนปานกลาง '
-                condPic = Rain
-                break;
-            case 7:
-                condText = 'ฝนตกหนัก '
-                condPic = Rain
-                break;
-            case 8:
-                condText = 'ฝนฟ้าคะนอง '
-                condPic = Storm_thunder
-                break;
-            case 9:
-                condText = 'อากาศหนาวจัด'
-                condPic = Snowflakes
-                break;
-            case 10:
-                condText = 'อากาศหนาว'
-                condPic = Snowflake
-                break;
-            case 11:
-                condText = 'อากาศเย็น '
-                condPic = Snowflake
-                break;
-            case 12:
-                condText = 'อากาศร้อนจัด'
-                condPic = Hot
-                break;
-            default:
-                condText = 'ไม่พบสภาพอากาศ'
-                condPic = Warning
-                break;
-        }
-        return { condPic, condText }
-    }
     onSubmitEditPlantDate = () => {
         const { plantDate } = this.state
         let formatedDate
@@ -197,30 +146,37 @@ class WeatherAffectRice extends React.PureComponent {
             } else {
                 showText = `ข้าวยังไม่ถูกปลูก`
             }
-            return showText
+            return (
+                <div className="FrameWeatherRain">
+                    <div>{showText}</div>
+                    <div>{this.onGetRiceGuide()}</div>
+                </div>)
         }
     }
     onGetRiceGuide = () => {
         const { plantDate } = this.state
         if (plantDate) {
             let days = moment().diff(moment(plantDate), 'd')
-            if (inRange(days, 7, 14)) {
-                return 'ช่วง 7-14 วัน หลังต้นกล้างอกปล่อยน้ำเข้านาไม่ให้ลึกเกิน 5 ซม. จากหน้าดิน'
+            if (inRange(days, 0, 14)) {
+                return 'ระยะเตรียมเมล็ดพันธุ์ข้าวและปลูกด้วยการหยอด'
+            }
+            if (inRange(days, 15, 29)) {
+                return 'ระยะต้นกล้างอก ปล่อยน้ำเข้านา วัดจากหน้าดินสูงไม่เกิน 5 ซม.'
             }
             if (inRange(days, 30, 59)) {
-                return '30 วัน ปล่อยน้ำเข้านาให้สูงขึ้นเป็น 10 ซม. จากหน้าดินแล้วใส่ปุ๋ยเพื่อเร่งให้ข้าวแตกกอ'
+                return 'ระยะแตกกอ ปล่อยน้ำเข้าให้สูงขึ้นวัดจากหน้าดินสูง 10 ซม. ใส่ปุ๋ยครั้งแรกเพื่อเร่งให้ข้าวแตกกอ'
             }
             if (inRange(days, 60, 69)) {
-                return '60 วัน ระบายน้ำออกให้แห้ง'
+                return 'ปล่อยให้แปลงให้แห้ง'
             }
             if (inRange(days, 70, 99)) {
-                return '70 วัน ปล่อยน้ำเข้านาสูง 10 ซม. สลับกับแห้ง 7 ครั้ง'
+                return 'ปล่อยน้ำเข้านาสูง 10 ซม. และปล่อยให้แปลงแห้ง ทำต่อเนื่อง 7 ครั้ง'
             }
-            if (inRange(days, 100, 139)) {
-                return '100 วัน ปล่อยน้ำเข้านาสูง 10 ซม. ในช่วงนี้แมลงศัตรูพเริ่มระบาด ต้องตรวขสอบแปลงบ่อย'
+            if (inRange(days, 100, 130)) {
+                return 'ปล่อยน้ำเข้านาสูง 10 ซม. ในช่วงนี้แมลงศัตรูพเริ่มระบาด ต้องตรวขสอบแปลงบ่อย'
             }
-            if (days >= 140) {
-                return '140 วัน ระบายน้ำออกจากแปลงให้แห้ง รอเก็บเกี่ยว หลังจากข้าวออกดอก 30 วันให้เก็บเกี่ยวได้'
+            if (days >= 131) {
+                return 'ระบายน้ำออกจากแปลงให้แห้ง รอเก็บเกี่ยว หลังจากข้าวออกดอก 28-30 วัน ให้เก็บเกี่ยวได้'
             }
         }
 
@@ -239,9 +195,12 @@ class WeatherAffectRice extends React.PureComponent {
             return 'ข้าวเติบโตได้'
         }
     }
+    onGetCurrentTime = () => {
+        this.setState({ currentTime: moment().format('LLLL') })
+    }
     render() {
         const { isWeatherAffectRiceOpen, isFetchingWeather, plantDate, weatherForecast,
-            avgRain, plantCondition, rainWarning } = this.state
+            avgRain, currentTime } = this.state
         return (
             <div>
                 <Button variant="contained" className="buttonWeatherAffect" onClick={this.handleToggleWeatherAffectRiceOpen}>
@@ -262,10 +221,13 @@ class WeatherAffectRice extends React.PureComponent {
                             onSetFetchingWeather={this.onSetFetchingWeather}
                             isFetchingWeather={this.state.isFetchingWeather}
                         />
+                        <div className="FrameWeatherRain">วันนี้วันที่ {currentTime}</div>
                         <TextField
+
+                            fullWidth
                             onChange={this.handlePlantDateChange}
                             id="date"
-                            label="วันที่ปลูก"
+                            label="ต้นกล้างอก"
                             type="date"
                             value={plantDate}
                             InputLabelProps={{
@@ -277,11 +239,6 @@ class WeatherAffectRice extends React.PureComponent {
                                 this.onShowOverlayPlantDate()
                             }
                         </div>
-                        <div>
-                            {
-                                this.onGetRiceGuide()
-                            }
-                        </div>
                         {
                             isFetchingWeather ?
                                 'กำลังโหลด...'
@@ -290,6 +247,24 @@ class WeatherAffectRice extends React.PureComponent {
                                     {avgRain && <div className="FrameWeatherRain">
                                         {avgRain}
                                     </div>}
+                                    {weatherForecast.length > 0 ?
+                                        weatherForecast.map(forecast => {
+                                            const { time, key, tc_max, tc_min, tc_max_cod, tc_min_cod, rain, rain_warning } = forecast
+                                            return (
+                                                <div key={key} className="RiceCond">
+                                                    <div>{time}</div>
+                                                    <div>อุณหภูมิสูงสุด {tc_max} °C</div>
+                                                    <div>{tc_max_cod}</div>
+                                                    <div>อุณภูมิต่ำสุด {tc_min} °C</div>
+                                                    <div>{tc_min_cod}</div>
+                                                    <div>ปริมาณน้ำฝน {rain} มม.</div>
+                                                    <div>{rain_warning}</div>
+                                                </div>)
+                                        })
+                                        :
+                                        'กดปุ่มพยากรณ์อากาศเพื่อดูผลกระทบ'
+                                    }
+
                                 </div>
                         }
 
