@@ -227,7 +227,7 @@ class WeatherAffectRice extends React.PureComponent {
                             fullWidth
                             onChange={this.handlePlantDateChange}
                             id="date"
-                            label="ต้นกล้างอก"
+                            label="อายุข้าว"
                             type="date"
                             value={plantDate}
                             InputLabelProps={{
